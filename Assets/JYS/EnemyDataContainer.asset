@@ -20,6 +20,7 @@ MonoBehaviour:
     moveDistance: 1
     attackRange: 10
     damage: 10
+    type: 4
   - id: 1
     name: SwordEnemy
     prefab: {fileID: 5706048864065907321, guid: 7cb86518b3cbc4ad28b3c0bcca334ff3, type: 3}
@@ -27,6 +28,7 @@ MonoBehaviour:
     moveDistance: 5
     attackRange: 3
     damage: 10
+    type: 6
   - id: 2
     name: MagicEnemy
     prefab: {fileID: 5893159754575481693, guid: 8e345065e07dd455697a4cf796a29539, type: 3}
@@ -34,3 +36,4 @@ MonoBehaviour:
     moveDistance: 5
     attackRange: 20
     damage: 10
+    type: 3

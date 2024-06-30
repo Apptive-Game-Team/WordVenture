@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TurnBattle;
 using UnityEngine;
 
 namespace Enemy
@@ -31,17 +32,19 @@ namespace Enemy
 
         public void PlayTurn()
         {
+            InitList(enemies);
             foreach(Enemy enemy in enemies)
             {
                 enemy.PlayTurnAction(enemy.transform.position.x - player.transform.position.x);
             }
+            TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.PlayerTurn);
         }
 
         public void SpawnEnemies()
         {
-            enemyPoolController.SpawnObject(new Vector3(0, -3, 0), 0);
-            enemyPoolController.SpawnObject(new Vector3(4, -3, 0), 1);
-            enemyPoolController.SpawnObject(new Vector3(8, -3, 0), 2);
+            enemyPoolController.SpawnObject(0, 0);
+            enemyPoolController.SpawnObject(4, 1);
+            enemyPoolController.SpawnObject(8, 2);
             InitList(enemies);
         }
 

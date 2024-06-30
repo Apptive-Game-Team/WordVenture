@@ -17,36 +17,20 @@ MonoBehaviour:
     percent: 10
     tag: Spell
     magicType: 0
-  - name: Heal
-    percent: 0
-    tag: Spell
-    magicType: 1
   - name: Drop
-    percent: 0
-    tag: Spell
-    magicType: 3
-  - name: Summon
-    percent: 0
+    percent: 5
     tag: Spell
     magicType: 2
-  - name: Me
-    percent: 0
-    tag: Target
-    magicType: 10
-  - name: Ally
-    percent: 0
-    tag: Target
-    magicType: 9
-  - name: Enemy
-    percent: 15
-    tag: Target
-    magicType: 8
+  - name: Summon
+    percent: 5
+    tag: Spell
+    magicType: 1
   - name: Fire
     percent: 8
     tag: MagicType
     magicType: 4
   - name: Rock
-    percent: 0
+    percent: 8
     tag: MagicType
     magicType: 6
   - name: Ice
@@ -57,3 +41,7 @@ MonoBehaviour:
     percent: 0
     tag: MagicType
     magicType: 7
+  - name: Holy
+    percent: 0
+    tag: MagicType
+    magicType: 3

@@ -17,7 +17,7 @@ namespace Enemy
             base.Attack(distanceToPlayer);
             if (distanceToPlayer < attackRange)
             {
-                PlayerTestForEnemy.Player().TakeHit(damage);
+                Player.PlayerInt().TakeHit(damage);
             }
         }
     }

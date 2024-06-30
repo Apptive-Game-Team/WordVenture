@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe8c7ac2a4e3b461db822f93e77d7529, type: 3}
+  m_Name: PlainBattleWaveData
+  m_EditorClassIdentifier: 
+  battleWaveDatas:
+  - enemySpawnDatasInWave:
+    - SpawnPositionX: 7
+      EnemyId: 0
+  - enemySpawnDatasInWave:
+    - SpawnPositionX: 7
+      EnemyId: 1
+  - enemySpawnDatasInWave:
+    - SpawnPositionX: 6
+      EnemyId: 1
+    - SpawnPositionX: 7
+      EnemyId: 0

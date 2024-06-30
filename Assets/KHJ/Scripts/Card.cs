@@ -11,17 +11,13 @@ namespace Deck_Manage {
     public enum MagicType
     {
         Shoot,
-        Heal,
         Summon,
         Drop,
+        Holy,
         Fire,
         Ice,
         Rock,
-        Lightning,
-        Enemy,
-        Ally,
-        Me
-
+        Lightning
     }
 
     public class Card : MonoBehaviour

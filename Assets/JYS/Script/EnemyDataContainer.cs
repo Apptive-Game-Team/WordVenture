@@ -15,6 +15,7 @@ namespace Enemy
         [SerializeField] public float moveDistance;
         [SerializeField] public float attackRange;
         [SerializeField] public int damage;
+        [SerializeField] public Deck_Manage.MagicType type;
     }
 
 

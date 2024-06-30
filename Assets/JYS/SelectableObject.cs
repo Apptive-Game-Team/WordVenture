@@ -5,7 +5,7 @@ using UnityEngine;
 public class SelectableObject : MonoBehaviour
 {
     private Vector3 Scale;
-    private bool selectable = true;
+    private bool selectable = false;
     CombineZone combineZone;
 
     private void Start()

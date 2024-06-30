@@ -32,13 +32,13 @@ namespace TurnBattle
     {
         public override void OnStart() // When Enemy Turn End...
         {
-            Debug.Log("Player Turn Start!");
+            //Debug.Log("Player Turn Start!");
             //Draw Cards.
             TurnBattleSystem.Instance.cardManager.AddCard();
         }
         public override void OnEnd() //When Player Hit End button...
         {
-            Debug.Log("Player Turn End!");
+            //Debug.Log("Player Turn End!");
         }
 
     }
@@ -46,14 +46,15 @@ namespace TurnBattle
     {
         public override void OnStart() // When Player Turn End...
         {
-            Debug.Log("Enemy Turn Start!");
+            //Debug.Log("Enemy Turn Start!");
             TurnBattleSystem.Instance.enemyManager.PlayTurn();
+            //TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.PlayerTurn);
             OnEnd();
         }
 
         public override void OnEnd() // When Enemy Action End...
         {
-            Debug.Log("Enemy Turn End!");
+            //Debug.Log("Enemy Turn End!");
         }
     }
 

@@ -41,6 +41,8 @@ namespace MagicAAffinity
                     return 2;
                 case MagicType.Rock:
                     return 3;
+                case MagicType.Holy:
+                    return 4;
             }
             return -1;
         }

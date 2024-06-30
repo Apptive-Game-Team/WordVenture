@@ -9,11 +9,33 @@ public class CombineZone : MonoBehaviour
 {
     public List<GameObject> spellCards = new List<GameObject>();
     public List<GameObject> magicTypeCards = new List<GameObject>();
-    public List<GameObject> targetCards = new List<GameObject>();
+
+    private List<SelectableObject> allSelectableObjects = new List<SelectableObject>();
+
+    void InitSelectableObjectList()
+    {
+        allSelectableObjects.Clear();
+        
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject gameObject in gameObjects)
+        {
+            allSelectableObjects.Add(gameObject.GetComponent<SelectableObject>());
+        }
+        allSelectableObjects.Add(GameObject.FindGameObjectWithTag("Me").GetComponent<SelectableObject>());
+    }
+
+    void SetAllSelectable(bool selectable)
+    {
+        foreach (SelectableObject gameObject in allSelectableObjects)
+        {
+            gameObject.SetSelectable(selectable);
+        }
+    }
+
+    [SerializeField] MagicAAffinity.MagicAffinityTable magicAffinityTable;
 
     public Button activateButton;
     public GameObject Shoot;
-    public GameObject Heal;
     public GameObject Drop;
     public GameObject Summon;
 
@@ -32,11 +54,6 @@ public class CombineZone : MonoBehaviour
         {
             magicTypeCards.Add(card);
         }
-        //else if (card.CompareTag("Target") && targetCards.Count < 1)
-        //{
-        //    targetCards.Add(card);
-        //}
-
         if (spellCards.Count == 1 && magicTypeCards.Count == 1) // && targetCards.Count == 1)
         {
             activateButton.gameObject.SetActive(true);
@@ -57,9 +74,10 @@ public class CombineZone : MonoBehaviour
     }
     IEnumerator CastSpell()
     {
+        InitSelectableObjectList();
+        SetAllSelectable(true);
         Deck_Manage.MagicType spellType = spellCards[0].GetComponent<Deck_Manage.Card>().cardType;
         Deck_Manage.MagicType magicType = magicTypeCards[0].GetComponent<Deck_Manage.Card>().cardType;
-        Deck_Manage.MagicType targetType = new Deck_Manage.MagicType();//targetCards[0].GetComponent<Deck_Manage.Card>().cardType;
 
         while (target == null)
         {
@@ -69,20 +87,17 @@ public class CombineZone : MonoBehaviour
         if (spellType == Deck_Manage.MagicType.Shoot)
         {
 
-            Shoot.GetComponent<Shoot>().shoot(magicType, targetType, target);
-        }
-        else if (spellType == Deck_Manage.MagicType.Heal)
-        {
-            Heal.GetComponent<Heal>().heal(magicType, targetType, target);
+            Shoot.GetComponent<Shoot>().shoot(magicType, target, magicAffinityTable);
         }
         else if (spellType == Deck_Manage.MagicType.Drop)
         {
-            Drop.GetComponent<Drop>().drop(magicType, targetType, target);
+            Drop.GetComponent<Drop>().drop(magicType, target, magicAffinityTable);
         }
         else if (spellType == Deck_Manage.MagicType.Summon)
         {
-            Summon.GetComponent<Summon>().summon(magicType);
+            Summon.GetComponent<Summon>().summon(magicType, target, magicAffinityTable);
         }
+        SetAllSelectable(false);
         target = null;
     }
 
@@ -112,19 +127,11 @@ public class CombineZone : MonoBehaviour
                 Destroy(card);
             }  
         }
-        foreach (GameObject card in targetCards)
-        {
-            if(card != null)
-            {
-                Deck_Manage.Card targetCard = card.GetComponent<Deck_Manage.Card>();
-                Deck_Manage.CardManager.Inst.PopCard(targetCard);
-                Destroy(card);
-            }
-                
-        }
+
+        Deck_Manage.CardManager.Inst.CardAlignment();
+
         spellCards.Clear();
         magicTypeCards.Clear();
-        targetCards.Clear();
         activateButton.gameObject.SetActive(false);
     }
 }

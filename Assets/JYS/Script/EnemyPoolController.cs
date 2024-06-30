@@ -45,7 +45,7 @@ namespace Enemy
         }
 
 
-        public GameObject SpawnObject(Vector3 position, int id)
+        public GameObject SpawnObject(float positionX, int id)
         {
             if (enemyPools[id].Count > 0)
             {
@@ -53,7 +53,7 @@ namespace Enemy
                 bady.SetActive(true);
                 enemyPools[id].RemoveAt(0);
 
-                bady.GetComponent<Transform>().position = new Vector3(position.x, position.y, 0);
+                bady.GetComponent<Transform>().position = new Vector3(positionX, -2, 0);
                 return bady;
             }
             else

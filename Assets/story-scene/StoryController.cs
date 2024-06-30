@@ -51,11 +51,11 @@ public class StoryController : MonoBehaviour
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
         }
 
-        LoadTitleScene();
+        LoadStoryScene();
     }
 
-    private void LoadTitleScene()
+    private void LoadStoryScene()
     {
-        SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("StoryScene");
     }
 }

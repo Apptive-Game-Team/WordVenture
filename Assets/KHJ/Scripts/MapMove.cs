@@ -16,7 +16,7 @@ namespace Map_scene
         [SerializeField] GameObject boss;
         [SerializeField] Text Stage;
         int position = 0;
-        int StagePosition = 0;
+        public static int StagePosition = 0;
 
         void Update()
         {
