@@ -24,6 +24,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene_MSP.unity
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/HIS/Scenes/SampleScene.unity
+    path: Assets/ArtResource/The Legend of Slim/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

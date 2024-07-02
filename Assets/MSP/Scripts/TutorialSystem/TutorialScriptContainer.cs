@@ -23,14 +23,9 @@ namespace TutorialSystem
 
         [SerializeField] List<TutorialChatData> script = new List<TutorialChatData>();
 
-        public TutorialChatData GetScriptData(int n)
+        public TutorialChatData GetScriptData(TutorialFlag flag)
         {
-            if (n == -1)
-            {
-                return new TutorialChatData();
-            }
-
-            return script[n];
+            return script.Find(x=>x.tutorialFlag.Equals(flag));
         }
 
         public int GetScriptNum()

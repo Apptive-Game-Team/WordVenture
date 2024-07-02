@@ -1,31 +1,91 @@
 using System.Collections;
 using System.Collections.Generic;
 using TutorialSystem;
+using UnityEditor.UIElements;
 using UnityEngine;
 
-public class TutorialController : StoryController
+namespace TutorialSystem
 {
-    [SerializeField] TutorialChatWindow tutorialChatWindow;
-    [SerializeField] TutorialScriptContainer tutorialScript;
 
-    private void Awake()
+    public interface ITutorialCondition
     {
-        DontDestroyOnLoad(this);
+        public bool IsTutorialCondition();
     }
 
-    void Start()
+    public class TutorialConditon_000 : ITutorialCondition
     {
-        StartCoroutine(StoryTelling());
-    }
-
-    IEnumerator StoryTelling()
-    {
-        for (int i = 0; i < tutorialScript.GetScriptNum(); i++)
+        public bool IsTutorialCondition()
         {
-            tutorialChatWindow.UpdateChatStream(tutorialScript.GetScriptData(i).name, tutorialScript.GetScriptData(i).text);
-
-            yield return new WaitForSeconds(tutorialScript.GetScriptData(i).text.Length * 0.1f);
-            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+            return true;
         }
     }
+
+    public class TutorialController : StoryController
+    {
+        public static TutorialController Instance;
+
+        [SerializeField] TutorialChatWindow tutorialChatWindow;
+        [SerializeField] TutorialScriptContainer tutorialScript;
+
+        [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_START_TUTORIAL;
+        ITutorialCondition tutorialCondition;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+            DontDestroyOnLoad(this);
+        }
+
+        void Start()
+        {
+            StoryTelling();
+            tutorialCondition = new TutorialConditon_000();
+        }
+
+        public void OnTriggerTutorial()
+        {
+            GoNextFlag();
+            StoryTelling();
+        }
+
+        void GoNextFlag()
+        {
+            currentFlag = currentFlag.Next();
+        }
+
+        void StoryTelling()
+        {
+            tutorialChatWindow.UpdateChatStream(tutorialScript.GetScriptData(currentFlag).name, tutorialScript.GetScriptData(currentFlag).text);
+        }
+
+        public void ProceedTutorial()
+        {
+            if(tutorialCondition.IsTutorialCondition())
+            {
+                OnTriggerTutorial();
+            }
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ProceedTutorial();
+            }
+        }
+
+        public bool IsFlagEqual(TutorialFlag flag)
+        {
+            return currentFlag.Equals(flag);
+        }
+    }
+
 }
+

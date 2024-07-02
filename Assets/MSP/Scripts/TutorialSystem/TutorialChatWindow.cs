@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,6 +6,19 @@ using UnityEngine;
 
 namespace TutorialSystem
 {
+    public static class Extensions
+    {
+
+        public static T Next<T>(this T src) where T : struct
+        {
+            if (!typeof(T).IsEnum) throw new ArgumentException(String.Format("Argument {0} is not an Enum", typeof(T).FullName));
+
+            T[] Arr = (T[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<T>(Arr, src) + 1;
+            return (Arr.Length == j) ? Arr[0] : Arr[j];
+        }
+    }
+
 
     public enum TutorialFlag
     {
@@ -23,7 +37,7 @@ namespace TutorialSystem
         FLAG_NEXT_ENEMY = 11,
         FLAG_END_BATTLE = 12,
         FLAG_END_TUTORIAL = 13,
-
+        END = 14,
     }
 
     public class TutorialChatWindow : ChatWindowController
