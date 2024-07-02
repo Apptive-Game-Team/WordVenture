@@ -7,11 +7,11 @@ public class SelectableObject : MonoBehaviour
     private Vector3 Scale;
     private bool selectable = false;
     CombineZone combineZone;
-
+    
     private void Start()
     {
         Scale = transform.localScale;
-        combineZone = GameObject.Find("CombineZone").GetComponent<CombineZone>();
+        combineZone = CombineZone.Instance;
     }
 
     public bool GetSelectable()

@@ -11,15 +11,19 @@ public class StoryController : MonoBehaviour
 
     [SerializeField] List<GameObject> backgorunds = new List<GameObject>();
 
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip badMood;
 
     void Start()
     {
         InitBackground();
         StartCoroutine(StoryTelling());
+        
     }
 
     private void InitBackground()
     {
+
         backgorunds[0].SetActive(true);
         for (int i = 1; i < backgorunds.Count; i++)
         {
@@ -34,8 +38,17 @@ public class StoryController : MonoBehaviour
             if (i == id)
             {
                 backgorunds[i].SetActive(true);
-            } else
+            }
+            else
+            {
                 backgorunds[i].SetActive(false);
+            }
+                
+        }
+        if (id == 1)
+        {
+            audioSource.clip = badMood;
+            audioSource.Play();
         }
     }
 
@@ -47,15 +60,15 @@ public class StoryController : MonoBehaviour
             SwitchBackground(scriptContainer.GetScriptData(i).background);
             chatWindowController.UpdateChatStream(scriptContainer.GetScriptData(i).name, scriptContainer.GetScriptData(i).text);
 
-            yield return new WaitForSeconds(scriptContainer.GetScriptData(i).text.Length * 0.1f);
+            yield return new WaitForSeconds(scriptContainer.GetScriptData(i).text.Length * 0.03f);
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
         }
 
-        LoadStoryScene();
+        LoadMapScene();
     }
 
-    private void LoadStoryScene()
+    private void LoadMapScene()
     {
-        SceneManager.LoadScene("StoryScene");
+        SceneManager.LoadScene("Map_scene");
     }
 }

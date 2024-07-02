@@ -35,6 +35,7 @@ namespace TurnBattle
             //Debug.Log("Player Turn Start!");
             //Draw Cards.
             TurnBattleSystem.Instance.cardManager.AddCard();
+            TurnBattleSystem.Instance.cardManager.AddCard();
         }
         public override void OnEnd() //When Player Hit End button...
         {
@@ -46,17 +47,24 @@ namespace TurnBattle
     {
         public override void OnStart() // When Player Turn End...
         {
-            //Debug.Log("Enemy Turn Start!");
-            TurnBattleSystem.Instance.enemyManager.PlayTurn();
+            Debug.Log("Enemy Turn Start!");
+
             //TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.PlayerTurn);
-            OnEnd();
+            TurnBattleSystem.Instance.enemyManager.PlayTurn();
+            TurnBattleSystem.Instance.StartEnemyTurnCounter();
+
         }
 
         public override void OnEnd() // When Enemy Action End...
         {
-            //Debug.Log("Enemy Turn End!");
+            Debug.Log("Enemy Turn End!");
+            
         }
+
+
     }
+
+   
 
 
     public class TurnBattleSystem : MonoBehaviour
@@ -65,7 +73,7 @@ namespace TurnBattle
 
         public static PlayerTurn PlayerTurn;
         public static EnemyTurn EnemyTurn;
-
+        public static float turnTime = 1f;
         Turn currentTurn;
 
         [SerializeField] public CardManager cardManager;
@@ -94,11 +102,39 @@ namespace TurnBattle
             currentTurn.OnStart();
         }
 
+        //private void Update()
+        //{
+        //    print(currentTurn);
+        //}
+
         public void ChangeTurn(Turn turn)
         {
             currentTurn.OnEnd();
             currentTurn = turn;
+            print(currentTurn);
             currentTurn.OnStart();
+        }
+
+        public void TurnEndButton()
+        {
+            if (currentTurn == PlayerTurn)
+            {
+                ChangeTurn(EnemyTurn);
+            }
+            
+        }
+
+
+        public void StartEnemyTurnCounter()
+        {
+            StartCoroutine(EnemyTurnCounter());
+        }
+
+        IEnumerator EnemyTurnCounter()
+        {
+            print("waiting");
+            yield return new WaitForSecondsRealtime(1f);
+            ChangeTurn(PlayerTurn);
         }
 
     }

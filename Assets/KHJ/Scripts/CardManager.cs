@@ -65,7 +65,7 @@ namespace Deck_Manage {
 
         void Start()
         {
-            Map_scene.MapMove.StagePosition = 0;
+            //Map_scene.MapMove.StagePosition = 0;
             WordOS_state();
             SetupWordBuffer();
         }
@@ -134,6 +134,9 @@ namespace Deck_Manage {
                 //targetCard.originPRS = new PRS(Vector3.zero, Util.QI, new Vector3(1.896733f, 2.910432f, 1));
                 targetCard.MoveTransform(targetCard.originPRS,true,0.7f);
             }
+
+            CombineZone.Instance.spellCards.Clear();
+            CombineZone.Instance.magicTypeCards.Clear(); 
         }
 
         List<PRS> RoundAlignment(Transform Left, Transform Right, int objCount, float height, Vector3 scale)
@@ -177,16 +180,34 @@ namespace Deck_Manage {
                 case 1:
                     wordSO.words[1].percent = 5;
                     wordSO.words[2].percent = 5;
+                    wordSO.words[4].percent = 0;
+                    wordSO.words[5].percent = 0;
+                    wordSO.words[6].percent = 0;
+                    wordSO.words[7].percent = 0;
                     break;
                 case 2:
-                    wordSO.words[4].percent = 8;
+                    wordSO.words[1].percent = 5;
+                    wordSO.words[2].percent = 5;
+                    wordSO.words[4].percent = 10;
+                    wordSO.words[5].percent = 0;
+                    wordSO.words[6].percent = 0;
+                    wordSO.words[7].percent = 0;
                     break;
                 case 3:
-                    wordSO.words[5].percent = 8;
-                    wordSO.words[6].percent = 8;
+                    wordSO.words[1].percent = 5;
+                    wordSO.words[2].percent = 5;
+                    wordSO.words[4].percent = 10;
+                    wordSO.words[5].percent = 10;
+                    wordSO.words[6].percent = 10;
+                    wordSO.words[7].percent = 0;
                     break;
                 case 4:
-                    wordSO.words[7].percent = 8;
+                    wordSO.words[1].percent = 5;
+                    wordSO.words[2].percent = 5;
+                    wordSO.words[4].percent = 10;
+                    wordSO.words[5].percent = 10;
+                    wordSO.words[6].percent = 10;
+                    wordSO.words[7].percent = 10;
                     break;
                 default:
                     break;
@@ -236,6 +257,8 @@ namespace Deck_Manage {
             }
             else
             {
+                CombineZone.Instance.spellCards.Clear();
+                CombineZone.Instance.magicTypeCards.Clear();
                 selectCard.MoveTransform(selectCard.originPRS, false);
             }
         }

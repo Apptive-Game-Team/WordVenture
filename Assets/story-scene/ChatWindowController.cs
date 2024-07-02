@@ -7,7 +7,6 @@ public class ChatWindowController : MonoBehaviour
 {
     private TMP_Text chatName;
     private TMP_Text chatText;
-    
     private void Awake()
     {
         InitTmp_text();
@@ -22,7 +21,7 @@ public class ChatWindowController : MonoBehaviour
     {
         for (int i = 0; i< text.Length; i++)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.03f);
             chatText.SetText(text.Substring(0, i));
         }
     }

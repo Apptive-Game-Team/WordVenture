@@ -37,7 +37,6 @@ namespace Enemy
             {
                 enemy.PlayTurnAction(enemy.transform.position.x - player.transform.position.x);
             }
-            TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.PlayerTurn);
         }
 
         public void SpawnEnemies()

@@ -7,6 +7,11 @@ using static BattleSystem.Player;
 
 public class CombineZone : MonoBehaviour
 {
+
+    [SerializeField] AudioSource magicEffectSource;
+
+    public static CombineZone Instance;
+
     public List<GameObject> spellCards = new List<GameObject>();
     public List<GameObject> magicTypeCards = new List<GameObject>();
 
@@ -39,9 +44,14 @@ public class CombineZone : MonoBehaviour
     public GameObject Drop;
     public GameObject Summon;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         activateButton.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void AddCard(GameObject card)
@@ -84,6 +94,9 @@ public class CombineZone : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
+        Enemy.Player.PlayerInt().AttackAnima();
+        yield return new WaitForSeconds(0.5f);
+        magicEffectSource.Play();
         if (spellType == Deck_Manage.MagicType.Shoot)
         {
 
@@ -98,6 +111,7 @@ public class CombineZone : MonoBehaviour
             Summon.GetComponent<Summon>().summon(magicType, target, magicAffinityTable);
         }
         SetAllSelectable(false);
+        
         target = null;
     }
 

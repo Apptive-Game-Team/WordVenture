@@ -76,7 +76,7 @@ namespace Enemy
         public float attackRange = 3;
 
         private Vector3 tempVector3 = new Vector3();
-        float turnTime = 2;
+        float turnTime;
 
         [SerializeField] private List<EnemyAction> enemyActions = new List<EnemyAction>();
         
@@ -132,9 +132,9 @@ namespace Enemy
             while (movedDistance <= distance)
             {
                 
-                yield return new WaitForSeconds(0.1f);
-                movedDistance += moveSpeed * 0.1f;
-                Move(-1, moveSpeed * 0.1f);
+                yield return new WaitForSeconds(0.01f);
+                movedDistance += moveSpeed * 0.01f;
+                Move(-1, moveSpeed * 0.01f);
             }
             StopMove();
         }
@@ -148,6 +148,7 @@ namespace Enemy
         protected virtual void Start()
         {
             animator = GetComponent<Animator>();
+            turnTime = TurnBattle.TurnBattleSystem.turnTime;
         }
 
    
@@ -215,21 +216,6 @@ namespace Enemy
             hpText.SetText(maxHp.ToString());
         }
 
-        //private void OnTriggerEnter2D(Collider2D other) 
-        //{
-        //    if (other.CompareTag("Attack"))
-        //    {
-        //        hp -= 1;
-        //    } 
-        //    if (other.CompareTag("Heal"))
-        //    {
-        //        hp += 1;
-        //    }
-        //    if (hp <= 0)
-        //    {
-        //        Death();
-        //    }
-        //} 
     }
 }
 

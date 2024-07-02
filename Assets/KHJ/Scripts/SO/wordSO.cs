@@ -15,7 +15,7 @@ namespace Deck_Manage
     }
 
 
-    [CreateAssetMenu(fileName = "WordSO", menuName = "Scriptable Object/wordSO")]
+    [CreateAssetMenu(fileName = "WordSO", menuName = "Scriptable Object/WordSO")]
     public class WordSO : ScriptableObject
     {
         public Word[] words;

@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 namespace Enemy{
     public class Player : MonoBehaviour
     {
+        Animator animator;
 
         public static Player PlayerInt()
         {
@@ -32,14 +33,20 @@ namespace Enemy{
         private void Awake()
         {
             InitIndicators();
+            animator = GetComponent<Animator>();
             instance = this;
         }
 
+        public void AttackAnima()
+        {
+            animator.SetTrigger("Attack");
+        }
 
 
         protected void Death()
         {
-            gameObject.SetActive(false);
+            animator.SetTrigger("Death");
+            //gameObject.SetActive(false);
             SceneManager.LoadScene("GameOverScene");
         }
 
@@ -53,6 +60,7 @@ namespace Enemy{
             }
             else
             {
+                animator.SetTrigger("GetHit");
                 print(hp);
                 UpdateIndicator();
             }

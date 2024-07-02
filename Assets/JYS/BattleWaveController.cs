@@ -5,17 +5,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class BattleWaveController : MonoBehaviour
 {
-    [SerializeField] BattleScriptContainer battleScript;
+    public BattleScriptContainer battleScript;
     Enemy.EnemyPoolController ememyPool;
     List<GameObject> activatedEnemies = new List<GameObject>();
     int wave = 0;
 
 
-    private void Start()
+    public void Start1()
     {
         ememyPool = gameObject.GetComponent<Enemy.EnemyPoolController>();
         StartWave(wave);
-        TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.EnemyTurn);
     }
 
     private void StartWave(int wave)
@@ -59,6 +58,7 @@ public class BattleWaveController : MonoBehaviour
             StartWave(wave);
         else
         {
+            Map_scene.MapMove.StagePosition++;
             SceneManager.LoadScene("GameClearScene");
         }
     }
