@@ -7,19 +7,6 @@ using UnityEngine;
 namespace TutorialSystem
 {
 
-    public interface ITutorialCondition
-    {
-        public bool IsTutorialCondition();
-    }
-
-    public class TutorialConditon_000 : ITutorialCondition
-    {
-        public bool IsTutorialCondition()
-        {
-            return true;
-        }
-    }
-
     public class TutorialController : StoryController
     {
         public static TutorialController Instance;
@@ -46,7 +33,7 @@ namespace TutorialSystem
         void Start()
         {
             StoryTelling();
-            tutorialCondition = new TutorialConditon_000();
+            tutorialCondition = new TutorialConditon_002();
         }
 
         public void OnTriggerTutorial()
@@ -67,7 +54,7 @@ namespace TutorialSystem
 
         public void ProceedTutorial()
         {
-            if(tutorialCondition.IsTutorialCondition())
+            if(tutorialCondition.isMeetCondition())
             {
                 OnTriggerTutorial();
             }
@@ -75,10 +62,11 @@ namespace TutorialSystem
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if(currentFlag.Equals(TutorialFlag.FLAG_END_TUTORIAL)) 
             {
-                ProceedTutorial();
+                gameObject.SetActive(false);
             }
+            ProceedTutorial();
         }
 
         public bool IsFlagEqual(TutorialFlag flag)

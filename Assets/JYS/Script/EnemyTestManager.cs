@@ -63,6 +63,12 @@ namespace Enemy
                 }
             }
         }
+
+        //MSP
+        public List<Enemy> GetEnemies()
+        {
+            return enemies;
+        }
     }
 }
 
