@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace TutorialSystem
 {
-
+    
     public interface ITutorialCondition
     {
         public bool isMeetCondition();

@@ -252,8 +252,11 @@ MonoBehaviour:
   chatWindowController: {fileID: 0}
   scriptContainer: {fileID: 0}
   backgorunds: []
+  audioSource: {fileID: 0}
+  badMood: {fileID: 0}
   tutorialChatWindow: {fileID: 8153041966857089447}
   tutorialScript: {fileID: 11400000, guid: 53b95564a4dfdf74193339b674940924, type: 2}
+  currentFlag: 1
 --- !u!1 &4122150926431636598
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,8 +425,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -240}
-  m_SizeDelta: {x: 1920, y: 500}
+  m_AnchoredPosition: {x: 0, y: -340}
+  m_SizeDelta: {x: 1920, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4631785543512012232
 CanvasRenderer:

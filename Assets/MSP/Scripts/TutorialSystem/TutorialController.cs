@@ -15,7 +15,7 @@ namespace TutorialSystem
         [SerializeField] TutorialScriptContainer tutorialScript;
 
         [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_START_TUTORIAL;
-        ITutorialCondition tutorialCondition;
+        [SerializeField] ITutorialCondition tutorialCondition;
 
         private void Awake()
         {
@@ -40,6 +40,7 @@ namespace TutorialSystem
         {
             GoNextFlag();
             StoryTelling();
+            tutorialCondition = tutorialCondition.GetNextCondition();
         }
 
         void GoNextFlag()
