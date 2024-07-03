@@ -41,9 +41,9 @@ namespace Enemy
 
         public void SpawnEnemies()
         {
-            enemyPoolController.SpawnObject(0, 0);
-            enemyPoolController.SpawnObject(4, 1);
-            enemyPoolController.SpawnObject(8, 2);
+            enemyPoolController.SpawnObject(0, 1, 0);
+            enemyPoolController.SpawnObject(4, 2, 1);
+            enemyPoolController.SpawnObject(8, 3, 2);
             InitList(enemies);
         }
 

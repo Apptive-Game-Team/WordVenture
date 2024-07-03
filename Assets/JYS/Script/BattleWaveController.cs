@@ -24,7 +24,7 @@ public class BattleWaveController : MonoBehaviour
         for (int i = 0; i < battleWaveData.enemySpawnDatasInWave.Count; i++)
         {
             print(i);
-            activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].SpawnPositionX, battleWaveData.enemySpawnDatasInWave[i].EnemyId));
+            activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].SpawnPositionX, i , battleWaveData.enemySpawnDatasInWave[i].EnemyId));
         }
 
         StartCoroutine(WaveEndSensor());

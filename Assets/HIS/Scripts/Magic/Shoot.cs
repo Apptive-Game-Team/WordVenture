@@ -37,7 +37,7 @@ public class Shoot : MonoBehaviour
 
         if (prefabToInstantiate != null)
         {
-            GameObject obj = Instantiate(prefabToInstantiate, Enemy.Player.PlayerInt().transform.position + new Vector3(0, 1), prefabToInstantiate.transform.rotation);
+            GameObject obj = Instantiate(prefabToInstantiate, Enemy.Player.PlayerInt().transform.position, prefabToInstantiate.transform.rotation);
             
             obj.GetComponent<SpellObj>().InitSpell(MagicType.Shoot, magicType1, target, magicAffinityTable);
         }
