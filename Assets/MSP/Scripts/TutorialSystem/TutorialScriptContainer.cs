@@ -33,6 +33,11 @@ namespace TutorialSystem
         {
             return script.Count;
         }
+
+        public Sprite GetSprite(int id)
+        {
+            return speakerImage[id]; 
+        }
     }
 
 }

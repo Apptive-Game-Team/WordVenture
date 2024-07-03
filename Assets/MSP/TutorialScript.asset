@@ -83,3 +83,5 @@ MonoBehaviour:
     text: "\uC218\uACE0\uD574\uB77C. \uD654\uC774\uD305!"
     portraitID: 0
     tutorialFlag: 13
+  speakerImage:
+  - {fileID: 21300000, guid: ada482f9dde5a3740818bac27712dfd4, type: 3}

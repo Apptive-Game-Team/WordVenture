@@ -21,7 +21,7 @@ namespace TutorialSystem
         {
             return (StageDataSingleton.Instance.StagePosition == 0) &&
                 SceneManager.GetActiveScene().name == turnBattleScene
-                && TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_START_TUTORIAL);
+                && TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_001_START_TUTORIAL);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -34,7 +34,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_BATTLE_START);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_002_BATTLE_START);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -47,8 +47,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_TURN_START)
-                && CombineZone.Instance.gameObject.activeSelf;
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_003_TURN_START);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -61,7 +60,8 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_COMBINATION);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_004_COMBINATION)
+                && CombineZone.Instance.gameObject.activeSelf;
         }
 
         public ITutorialCondition GetNextCondition()
@@ -74,7 +74,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_COMBINATION_DESCRIPT)
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_005_COMBINATION_DESCRIPT)
                 && CombineZone.Instance.spellCards.Count == 1;
         }
 
@@ -88,7 +88,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_SET_MAGIC) 
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_006_SET_MAGIC) 
                 && CombineZone.Instance.spellCards.Count == 1
                 && CombineZone.Instance.magicTypeCards.Count == 1;
         }
@@ -103,7 +103,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_SET_ELEMENTAL)
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_007_SET_ELEMENTAL)
                 && CombineZone.Instance.spellCards.Count == 1
                 && CombineZone.Instance.magicTypeCards.Count == 1;
         }
@@ -118,7 +118,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_CAST_SPELL) 
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_008_CAST_SPELL) 
                 && CombineZone.Instance.spellCards.Count == 0
                 && CombineZone.Instance.magicTypeCards.Count == 0;
         }
@@ -132,7 +132,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_CAST_END);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_009_CAST_END);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -145,7 +145,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_CLICK_TO_SELECT);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_010_CLICK_TO_SELECT);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -158,7 +158,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_FINISH_SPELL)
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_011_FINISH_SPELL)
                 && TurnBattleSystem.Instance.enemyManager.GetEnemies().Count == 0;
         }
 
@@ -172,7 +172,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_NEXT_ENEMY);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_012_NEXT_ENEMY);
         }
 
         public ITutorialCondition GetNextCondition()
@@ -185,7 +185,7 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_END_BATTLE);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_013_END_BATTLE);
         }
 
         public ITutorialCondition GetNextCondition()

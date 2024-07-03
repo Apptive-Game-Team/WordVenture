@@ -13,7 +13,7 @@ namespace TutorialSystem
         [SerializeField] TutorialChatWindow tutorialChatWindow;
         [SerializeField] TutorialScriptContainer tutorialScript;
 
-        [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_START_TUTORIAL;
+        [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_001_START_TUTORIAL;
         [SerializeField] ITutorialCondition tutorialCondition;
 
         private void Awake()
@@ -37,6 +37,7 @@ namespace TutorialSystem
 
         public void OnTriggerTutorial()
         {
+            tutorialChatWindow.gameObject.SetActive(true);
             GoNextFlag();
             StoryTelling();
             tutorialCondition = tutorialCondition.GetNextCondition();
@@ -49,12 +50,14 @@ namespace TutorialSystem
 
         void StoryTelling()
         {
-            tutorialChatWindow.UpdateChatStream(tutorialScript.GetScriptData(currentFlag).name, tutorialScript.GetScriptData(currentFlag).text);
+            TutorialChatData tutorialChatData = tutorialScript.GetScriptData(currentFlag);
+            tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(tutorialChatData.portraitID));
+            tutorialChatWindow.UpdateChatStream(tutorialChatData.name, tutorialChatData.text);
         }
 
         public void ProceedTutorial()
         {
-            if(tutorialCondition.isMeetCondition() && tutorialChatWindow.ChatStatus == ChatStatus.DEFAULT)
+            if(tutorialCondition.isMeetCondition())
             {
                 OnTriggerTutorial();
             }
@@ -62,11 +65,19 @@ namespace TutorialSystem
 
         private void Update()
         {
-            if(currentFlag.Equals(TutorialFlag.FLAG_END_TUTORIAL)) 
+            if(currentFlag.Equals(TutorialFlag.FLAG_014_END_TUTORIAL)) 
             {
                 gameObject.SetActive(false);
             }
-            ProceedTutorial();
+
+            if (Time.time > tutorialChatWindow.chatRemainTime && tutorialChatWindow.ChatStatus.Equals(ChatStatus.DEFAULT))
+            {
+                ProceedTutorial();
+            }
+            else if (Time.time > tutorialChatWindow.chatCloseTime && tutorialChatWindow.ChatStatus.Equals(ChatStatus.DEFAULT))
+            {
+                tutorialChatWindow.gameObject.SetActive(false);
+            }
         }
 
         public bool IsFlagEqual(TutorialFlag flag)

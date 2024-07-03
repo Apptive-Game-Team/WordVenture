@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TutorialSystem
 {
@@ -19,24 +20,29 @@ namespace TutorialSystem
         }
     }
 
+    public class Constant
+    {
+        public static float CHAT_CLOSE_TIME = 5f;
+        public static float CHAT_REMAIN_TIME = 3f;
+    }
 
     public enum TutorialFlag
     {
         NONE = 0,
-        FLAG_START_TUTORIAL = 1,
-        FLAG_BATTLE_START = 2,
-        FLAG_TURN_START = 3,
-        FLAG_COMBINATION = 4,
-        FLAG_COMBINATION_DESCRIPT = 5,
-        FLAG_SET_MAGIC = 6,
-        FLAG_SET_ELEMENTAL = 7,
-        FLAG_CAST_SPELL = 8,
-        FLAG_CAST_END = 9,
-        FLAG_CLICK_TO_SELECT = 10,
-        FLAG_FINISH_SPELL = 11,
-        FLAG_NEXT_ENEMY = 12,
-        FLAG_END_BATTLE = 13,
-        FLAG_END_TUTORIAL = 14,
+        FLAG_001_START_TUTORIAL = 1,
+        FLAG_002_BATTLE_START = 2,
+        FLAG_003_TURN_START = 3,
+        FLAG_004_COMBINATION = 4,
+        FLAG_005_COMBINATION_DESCRIPT = 5,
+        FLAG_006_SET_MAGIC = 6,
+        FLAG_007_SET_ELEMENTAL = 7,
+        FLAG_008_CAST_SPELL = 8,
+        FLAG_009_CAST_END = 9,
+        FLAG_010_CLICK_TO_SELECT = 10,
+        FLAG_011_FINISH_SPELL = 11,
+        FLAG_012_NEXT_ENEMY = 12,
+        FLAG_013_END_BATTLE = 13,
+        FLAG_014_END_TUTORIAL = 14,
         END = 15,
     }
 
@@ -50,9 +56,11 @@ namespace TutorialSystem
     {
         private TMP_Text nameText;
         private TMP_Text descriptText;
+        [SerializeField] Image speakerImage;
         
         ChatStatus status;
-
+        public float chatCloseTime;
+        public float chatRemainTime;
         public ChatStatus ChatStatus 
         { 
             get { return status; }
@@ -61,7 +69,7 @@ namespace TutorialSystem
 
         private void Awake()
         {
-            InitTmp_text();
+            InitSetting();
         }
 
         public new void UpdateChatStream(string name, string text)
@@ -81,10 +89,16 @@ namespace TutorialSystem
             }
 
             ChatStatus = ChatStatus.DEFAULT;
+            chatCloseTime = Time.time + Constant.CHAT_CLOSE_TIME;
+            chatRemainTime = Time.time + Constant.CHAT_REMAIN_TIME;
         }
 
+        public void SetSpeakerImage(Sprite image)
+        {
+            speakerImage.sprite = image;
+        }
 
-        private void InitTmp_text()
+        private void InitSetting()
         {
             TMP_Text[] tempTexts = GetComponentsInChildren<TMP_Text>();
             if (tempTexts[0].name == "ChatName")
