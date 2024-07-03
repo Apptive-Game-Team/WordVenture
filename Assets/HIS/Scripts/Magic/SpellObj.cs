@@ -60,7 +60,7 @@ public class SpellObj : MonoBehaviour
     }
     float speed = 10;
     Vector3 moveVector;
-    int damage = 10;
+    int damage = 10 + 5 * (Map_scene.MapMove.StagePosition / 2);
 
     public void InitProjectileDamage(int damage)
     {

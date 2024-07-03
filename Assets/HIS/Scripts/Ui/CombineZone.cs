@@ -54,6 +54,19 @@ public class CombineZone : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (spellCards.Count == 1 && magicTypeCards.Count == 1) // && targetCards.Count == 1)
+        {
+            activateButton.gameObject.SetActive(true);
+            activateButton.onClick.RemoveAllListeners();
+            activateButton.onClick.AddListener(OnButtonClick);
+        } else
+        {
+            activateButton.gameObject.SetActive(false);
+        }
+    }
+
     public void AddCard(GameObject card)
     {
         if (card.CompareTag("Spell") && spellCards.Count < 1)

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/JYS/Prefab/Projectile/DarkRedProjectile.prefab.meta
 guid: 487d8c5237e134749828b83db420a82f
+========
+guid: 07417b916a4434c3e824974d43979296
+>>>>>>>> develop:Assets/JYS/Prefab/Projectile/DarkProjectile.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
