@@ -33,16 +33,18 @@ namespace MagicAAffinity
         {
             switch (type)
             {
-                case MagicType.Ice:
-                    return 0;
-                case MagicType.Lightning:
-                    return 1;
                 case MagicType.Fire:
-                    return 2;
+                    return 0;
+                case MagicType.Ice:
+                    return 1;
                 case MagicType.Rock:
+                    return 2;
+                case MagicType.Lightning:
                     return 3;
                 case MagicType.Holy:
                     return 4;
+                case MagicType.Undead:
+                    return 5;
             }
             return -1;
         }

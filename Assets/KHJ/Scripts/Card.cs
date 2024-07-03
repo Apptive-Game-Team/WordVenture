@@ -17,7 +17,8 @@ namespace Deck_Manage {
         Fire,
         Ice,
         Rock,
-        Lightning
+        Lightning,
+        Undead
     }
 
     public class Card : MonoBehaviour

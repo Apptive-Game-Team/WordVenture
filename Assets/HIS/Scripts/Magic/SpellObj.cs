@@ -103,10 +103,10 @@ public class SpellObj : MonoBehaviour
         float result = damage;
         if (spellType == Deck_Manage.MagicType.Drop)
         {
-            result *= 0.7f;
+            result *= 0.8f;
         } else if(spellType == Deck_Manage.MagicType.Summon)
         {
-            result *= 0.5f;
+            result *= 0.67f;
         }
 
         result *= magicAffinityTable.GetAffinity(magicType, enemyMagicType);
