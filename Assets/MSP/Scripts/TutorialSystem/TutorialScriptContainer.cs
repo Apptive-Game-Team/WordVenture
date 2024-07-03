@@ -22,6 +22,7 @@ namespace TutorialSystem
     {
 
         [SerializeField] List<TutorialChatData> script = new List<TutorialChatData>();
+        [SerializeField] List<Sprite> speakerImage = new List<Sprite>();
 
         public TutorialChatData GetScriptData(TutorialFlag flag)
         {

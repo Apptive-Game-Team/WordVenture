@@ -74,7 +74,8 @@ namespace TutorialSystem
     {
         public bool isMeetCondition()
         {
-            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_COMBINATION_DESCRIPT);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_COMBINATION_DESCRIPT)
+                && CombineZone.Instance.spellCards.Count == 1;
         }
 
         public ITutorialCondition GetNextCondition()
@@ -88,7 +89,8 @@ namespace TutorialSystem
         public bool isMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_SET_MAGIC) 
-                && CombineZone.Instance.spellCards.Count == 1;
+                && CombineZone.Instance.spellCards.Count == 1
+                && CombineZone.Instance.magicTypeCards.Count == 1;
         }
 
         public ITutorialCondition GetNextCondition()

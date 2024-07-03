@@ -40,10 +40,24 @@ namespace TutorialSystem
         END = 15,
     }
 
+    public enum ChatStatus
+    {
+        DEFAULT = 0,
+        UPDATING = 1,
+    }
+
     public class TutorialChatWindow : ChatWindowController
     {
         private TMP_Text nameText;
-        private TMP_Text chatText;
+        private TMP_Text descriptText;
+        
+        ChatStatus status;
+
+        public ChatStatus ChatStatus 
+        { 
+            get { return status; }
+            set { status = value; }
+        }
 
         private void Awake()
         {
@@ -58,11 +72,15 @@ namespace TutorialSystem
 
         IEnumerator UpdateStreamingChat(string text)
         {
+            ChatStatus = ChatStatus.UPDATING;
+
             for (int i = 0; i < text.Length; i++)
             {
                 yield return new WaitForSeconds(0.1f);
-                chatText.SetText(text.Substring(0, i));
+                descriptText.SetText(text.Substring(0, i));
             }
+
+            ChatStatus = ChatStatus.DEFAULT;
         }
 
 
@@ -72,12 +90,12 @@ namespace TutorialSystem
             if (tempTexts[0].name == "ChatName")
             {
                 nameText = tempTexts[0];
-                chatText = tempTexts[1];
+                descriptText = tempTexts[1];
             }
             else
             {
                 nameText = tempTexts[1];
-                chatText = tempTexts[0];
+                descriptText = tempTexts[0];
             }
         }
     }

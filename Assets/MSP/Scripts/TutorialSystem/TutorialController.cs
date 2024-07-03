@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace TutorialSystem
 {
-
     public class TutorialController : StoryController
     {
         public static TutorialController Instance;
@@ -55,7 +54,7 @@ namespace TutorialSystem
 
         public void ProceedTutorial()
         {
-            if(tutorialCondition.isMeetCondition())
+            if(tutorialCondition.isMeetCondition() && tutorialChatWindow.ChatStatus == ChatStatus.DEFAULT)
             {
                 OnTriggerTutorial();
             }
