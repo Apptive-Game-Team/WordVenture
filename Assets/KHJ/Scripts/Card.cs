@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 namespace Deck_Manage {
 
@@ -66,14 +67,49 @@ namespace Deck_Manage {
 
         void OnMouseDown() 
         {
-            CardManager.Inst.CardMouseDown();
-            CardManager.Inst.selectCard = this;
+            // CardManager.Inst.CardMouseDown();
+            // CardManager.Inst.selectCard = this;
+            CheckHighestCard();
         }
         
         void OnMouseUp()
         {
             CardManager.Inst.CardMouseUp();
             CardManager.Inst.selectCard = this;
+        }
+
+        void CheckHighestCard()
+        {
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(worldPoint, Vector2.zero);
+            
+            if (hits.Length > 0)
+            {
+                RaycastHit2D topLayerHit = hits[0];
+                SpriteRenderer topSpriteRenderer = topLayerHit.transform.gameObject.GetComponent<SpriteRenderer>();
+
+                int highestSortingOrder = (topSpriteRenderer != null) ? topSpriteRenderer.sortingOrder : int.MinValue;
+
+                foreach (RaycastHit2D hit in hits)
+                {
+                    SpriteRenderer spriteRenderer = hit.transform.gameObject.GetComponent<SpriteRenderer>();
+                    if (spriteRenderer != null)
+                    {
+                        if (spriteRenderer.sortingOrder > highestSortingOrder)
+                        {
+                            highestSortingOrder = spriteRenderer.sortingOrder;
+                            topLayerHit = hit;
+                        }
+                    }
+                }
+
+                Card card = topLayerHit.transform.gameObject.GetComponent<Card>();
+                if (card != null)
+                {
+                    CardManager.Inst.CardMouseDown();
+                    CardManager.Inst.selectCard = card;
+                }
+            }
         }
     }
 }
