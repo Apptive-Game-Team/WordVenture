@@ -104,8 +104,8 @@ namespace TutorialSystem
         public bool isMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_007_SET_ELEMENTAL)
-                && CombineZone.Instance.spellCards.Count == 1
-                && CombineZone.Instance.magicTypeCards.Count == 1;
+                && CombineZone.Instance.spellCards.Count == 0
+                && CombineZone.Instance.magicTypeCards.Count == 0;
         }
 
         public ITutorialCondition GetNextCondition()
@@ -119,8 +119,7 @@ namespace TutorialSystem
         public bool isMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_008_CAST_SPELL) 
-                && CombineZone.Instance.spellCards.Count == 0
-                && CombineZone.Instance.magicTypeCards.Count == 0;
+                && Input.anyKeyDown;
         }
 
         public ITutorialCondition GetNextCondition()
@@ -159,7 +158,7 @@ namespace TutorialSystem
         public bool isMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_011_FINISH_SPELL)
-                && TurnBattleSystem.Instance.enemyManager.GetEnemies().Count == 0;
+                && SceneManager.GetActiveScene().name.Equals("GameClearScene");
         }
 
         public ITutorialCondition GetNextCondition()
