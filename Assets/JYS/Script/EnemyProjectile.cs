@@ -10,6 +10,8 @@ namespace Enemy
         Vector3 moveVector;
         int damage;
 
+        
+
         public void InitProjectileDamage(int damage)
         {
             this.damage = damage;
@@ -17,7 +19,9 @@ namespace Enemy
 
         void Start()
         {
+            
             moveVector = new Vector3(-1 * speed, 0, 0);
+            
         }
 
         void Update()
@@ -33,7 +37,6 @@ namespace Enemy
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Me")) {
-                print(collision.gameObject.tag);
                 Player.PlayerInt().TakeHit(damage);
                 Destroy(gameObject);
             }

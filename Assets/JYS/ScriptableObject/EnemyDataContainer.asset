@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7213c759c7844c3ac71bec45ce0ce0, type: 3}
+  m_Name: EnemyDataContainer
+  m_EditorClassIdentifier: 
+  enemyDatas:
+  - id: 0
+    name: S0_Ranged_Slime
+    prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
+    maxHp: 10
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 4
+  - id: 1
+    name: S0_Melee_Slime
+    prefab: {fileID: 3875069317159495427, guid: 9eaf74541e43044e5a7d01379fff83d4, type: 3}
+    maxHp: 20
+    moveDistance: 1
+    attackRange: 3
+    damage: 10
+    type: 4
+  - id: 2
+    name: S0_Boss_Slime
+    prefab: {fileID: 1380314620153829809, guid: 056c6580aef7a40369058e3309577396, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 4
+  - id: 3
+    name: S1_Ranged_Slime
+    prefab: {fileID: 1197030555564479174, guid: a1d21b3baf172466b9a77b53e3c97624, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 5
+  - id: 4
+    name: S1_Melee_Slime
+    prefab: {fileID: 3011871007109280695, guid: fc242352f9ca64931a39153bf8cacd63, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 1
+    damage: 10
+    type: 5
+  - id: 5
+    name: S1_Boss_Slime
+    prefab: {fileID: 6439746551030919793, guid: 4932124741aac40dfa173dee0eb68cb6, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 5
+  - id: 6
+    name: S2_Ranged_Slime
+    prefab: {fileID: 5260748899496303554, guid: be15f7520e6bd4f83b8c8688c436578f, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 6
+  - id: 7
+    name: S2_Melee_Slime
+    prefab: {fileID: 3875069317159495427, guid: 9eaf74541e43044e5a7d01379fff83d4, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 1
+    damage: 10
+    type: 6
+  - id: 8
+    name: S2_Boss_Slime
+    prefab: {fileID: 788844158664530751, guid: 2345231749abb4420975a2ad0293e5b6, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 6
+  - id: 9
+    name: S3_Ranged_Slime
+    prefab: {fileID: 5468929451589641127, guid: 27d904c5eea894a0087b06aac93e9b38, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 7
+  - id: 10
+    name: S3_Melee_Slime
+    prefab: {fileID: 5185469052702614032, guid: 6ba52dbeac0b546ad9e989afe6d5943d, type: 3}
+    maxHp: 30
+    moveDistance: 10
+    attackRange: 1
+    damage: 10
+    type: 7
+  - id: 11
+    name: S3_Boss_Slime
+    prefab: {fileID: 431560386325625679, guid: e0484e8c18b80473da18d564cf822763, type: 3}
+    maxHp: 30
+    moveDistance: 10
+    attackRange: 10
+    damage: 10
+    type: 7
+  - id: 12
+    name: S4_Ranged_Slime
+    prefab: {fileID: 5602786518308742389, guid: fc49b018e847244868444de9882e92be, type: 3}
+    maxHp: 25
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 3
+  - id: 13
+    name: S4_Melee_Slime
+    prefab: {fileID: 4671744952956411435, guid: 695144d46623249eb905af52faa8905f, type: 3}
+    maxHp: 35
+    moveDistance: 10
+    attackRange: 1
+    damage: 10
+    type: 3
+  - id: 14
+    name: SlimeKing1
+    prefab: {fileID: 7553110375488349761, guid: 62e86b2c908f74fa2af9e2ff69941c1c, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 20
+    damage: 10
+    type: 3
+  - id: 15
+    name: SlimeKing2
+    prefab: {fileID: 7553110375488349761, guid: 62e86b2c908f74fa2af9e2ff69941c1c, type: 3}
+    maxHp: 40
+    moveDistance: 5
+    attackRange: 20
+    damage: 10
+    type: 3

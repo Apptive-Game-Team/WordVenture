@@ -10,6 +10,8 @@ namespace Enemy
         [SerializeField] EnemyDataContainer enemyDataContainer;
 
         [SerializeField] protected List<List<GameObject>> enemyPools = new List<List<GameObject>>();
+        
+        int stagePosition = StageDataSingleton.Instance.StagePosition;
 
         private void Start()
         {
@@ -37,10 +39,14 @@ namespace Enemy
             
             for (int i = 0; i < num; i++)
             {
-                GameObject temp = Instantiate(enemyData.prefab, new Vector3(10, 10, 0), Quaternion.identity);
-                temp.GetComponent<Enemy>().InitEnemyData(enemyData);
-                pool.Add(temp);
-                pool[i].SetActive(false);
+                if(enemyData.id/3 == stagePosition || (stagePosition==4 && enemyData.id>11))
+                {
+                    GameObject temp = Instantiate(enemyData.prefab, new Vector3(10, 10, 0), Quaternion.identity);
+                    temp.GetComponent<Enemy>().InitEnemyData(enemyData);
+                    pool.Add(temp);
+                    pool[i].SetActive(false);
+                }
+                
             }
         }
 

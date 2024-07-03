@@ -61,7 +61,6 @@ namespace Enemy{
             else
             {
                 animator.SetTrigger("GetHit");
-                print(hp);
                 UpdateIndicator();
             }
 

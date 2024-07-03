@@ -1161,7 +1161,6 @@ GameObject:
   - component: {fileID: 855569416}
   - component: {fileID: 855569415}
   - component: {fileID: 855569414}
-  - component: {fileID: 855569417}
   m_Layer: 5
   m_Name: TurnEndButton
   m_TagString: Untagged
@@ -1233,9 +1232,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 855569417}
-        m_TargetAssemblyTypeName: TurnBattle.TurnBattleDebugButton, Assembly-CSharp
-        m_MethodName: EndPlayerTurn
+      - m_Target: {fileID: 1888851174}
+        m_TargetAssemblyTypeName: TurnBattle.TurnBattleSystem, Assembly-CSharp
+        m_MethodName: TurnEndButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1283,18 +1282,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 855569412}
   m_CullTransparentMesh: 1
---- !u!114 &855569417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855569412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac7e23bd3b69f2c438740bbd8dbb3807, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &878051406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1937,7 +1924,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageDataList:
-  - {fileID: 11400000, guid: ab2cb458f8f60b048b7d6d11bf3619ef, type: 2}
   - {fileID: 11400000, guid: da316eaa41faf6b4f85295198fa9c568, type: 2}
   - {fileID: 11400000, guid: a4136a57bf5d82549b1cd92ecb8af01c, type: 2}
   - {fileID: 11400000, guid: afa5de4f03a9fb646ae3c5452db3bf95, type: 2}
