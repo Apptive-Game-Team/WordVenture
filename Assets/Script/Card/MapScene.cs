@@ -167,8 +167,7 @@ namespace Map_scene
             //         position--;
             //     }
             // }
-            int Position = position;
-            StageMove[Position]();
+            StageMove[position]();
 
             // 스테이지 선택 시 씬 로드
             if (Input.GetKeyDown(KeyCode.Return))
