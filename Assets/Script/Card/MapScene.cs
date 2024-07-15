@@ -8,7 +8,7 @@ using TMPro;
 
 namespace Map_scene
 {
-    public class MapMove : MonoBehaviour
+    public class MapScene : MonoBehaviour
     {
         [SerializeField] GameObject character;
         [SerializeField] GameObject Background;

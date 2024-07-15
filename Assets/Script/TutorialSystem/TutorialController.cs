@@ -30,7 +30,7 @@ namespace TutorialSystem
 
         void Start()
         {
-            if (Map_scene.MapMove.StagePosition > 0)
+            if (Map_scene.MapScene.StagePosition > 0)
             {
                 gameObject.SetActive(false);
                 return;

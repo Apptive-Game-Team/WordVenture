@@ -43,7 +43,7 @@ public class SaveLoadController : MonoBehaviour
 
     public void SavePlayData()
     {
-        PlayerPrefs.SetInt("StagePosition", Map_scene.MapMove.StagePosition);
+        PlayerPrefs.SetInt("StagePosition", Map_scene.MapScene.StagePosition);
     }
 
     public void QuitGame()
@@ -57,8 +57,8 @@ public class SaveLoadController : MonoBehaviour
 
     public int LoadPlayData()
     {
-        Map_scene.MapMove.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
-        return Map_scene.MapMove.StagePosition;
+        Map_scene.MapScene.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
+        return Map_scene.MapScene.StagePosition;
     }
 
     private void OnApplicationQuit()

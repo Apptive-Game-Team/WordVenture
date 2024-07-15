@@ -168,7 +168,7 @@ namespace Deck_Manage {
 
         void WordOS_state()
         {
-            switch(Map_scene.MapMove.StagePosition)
+            switch(Map_scene.MapScene.StagePosition)
             {
                 case 0:
                     wordSO.words[0].percent = 1;

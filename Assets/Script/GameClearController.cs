@@ -63,9 +63,9 @@ public class GameClearController : MonoBehaviour
 
     void ShowGettedCard()
     {
-        print(Map_scene.MapMove.StagePosition);
+        print(Map_scene.MapScene.StagePosition);
         print(StageDataSingleton.Instance.StagePosition);
-        if (Map_scene.MapMove.StagePosition - 1 == StageDataSingleton.Instance.StagePosition)
+        if (Map_scene.MapScene.StagePosition - 1 == StageDataSingleton.Instance.StagePosition)
         {
             switch (StageDataSingleton.Instance.StagePosition)
             {
