@@ -24,10 +24,12 @@ namespace Map_scene
         [SerializeField] Sprite Stage4;
         int position = 0;
         public static int StagePosition;
+        Dictionary<int,System.Action> StageMove;
 
         private void Start()
         {
             InitShowBattles();
+            InitStageMove();
         }
 
         void Update()
@@ -38,63 +40,135 @@ namespace Map_scene
             //Clear();
         }
 
+        void InitStageMove()
+        {
+            StageMove = new Dictionary<int,System.Action>()
+            {
+                {0, () => {
+                        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)
+                        {
+                            character.transform.DOMove(battle1.transform.position, 1);
+                            position++;
+                        }
+                    }
+                },
+                {1, () => {
+                        if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 2)
+                        {
+                            character.transform.DOMove(battle2.transform.position, 1);
+                            position++;
+                        }
+                        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+                        {
+                            character.transform.DOMove(village.transform.position, 1);
+                            position--;
+                        }
+                    }
+                },
+                {2, () => {
+                        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 3)
+                        {
+                            character.transform.DOMove(battle3.transform.position, 1);
+                            position++;
+                        }
+                        if (Input.GetKeyDown(KeyCode.LeftArrow))
+                        {
+                            character.transform.DOMove(battle1.transform.position, 1);
+                            position--;
+                        }
+                    }
+                },
+                {3, () => {
+                        if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 4)
+                        {
+                            character.transform.DOMove(boss.transform.position, 1);
+                            position++;
+                        }
+                        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+                        {
+                            character.transform.DOMove(battle2.transform.position, 1);
+                            position--;
+                        }
+                    }
+                },
+                {4, () => {
+                        if (Input.GetKeyDown(KeyCode.LeftArrow))
+                        {
+                            character.transform.DOMove(battle3.transform.position, 1);
+                            position--;
+                        }
+                    }
+                },
+                {5, () => {
+                        if (Input.GetKeyDown(KeyCode.LeftArrow))
+                        {
+                            character.transform.DOMove(battle3.transform.position, 1);
+                            position--;
+                        }
+                    }
+                }
+            };
+        }
+
         void CharacterMove()
         {
-            if (position == 0)
-            {
-                if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)
-                {
-                    character.transform.DOMove(battle1.transform.position, 1);
-                    position++;
-                }
-            }
-            else if (position == 1)
-            {
-                if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 2)
-                {
-                    character.transform.DOMove(battle2.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    character.transform.DOMove(village.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 2)
-            {
-                if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 3)
-                {
-                    character.transform.DOMove(battle3.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    character.transform.DOMove(battle1.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 3)
-            {
-                if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 4)
-                {
-                    character.transform.DOMove(boss.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    character.transform.DOMove(battle2.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 4 || position == 5)
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    character.transform.DOMove(battle3.transform.position, 1);
-                    position--;
-                }
-            }
+            // if (position == 0)
+            // {
+            //     if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)
+            //     {
+            //         character.transform.DOMove(battle1.transform.position, 1);
+            //         position++;
+            //     }
+            // }
+            // else if (position == 1)
+            // {
+            //     if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 2)
+            //     {
+            //         character.transform.DOMove(battle2.transform.position, 1);
+            //         position++;
+            //     }
+            //     if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            //     {
+            //         character.transform.DOMove(village.transform.position, 1);
+            //         position--;
+            //     }
+            // }
+            // else if (position == 2)
+            // {
+            //     if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 3)
+            //     {
+            //         character.transform.DOMove(battle3.transform.position, 1);
+            //         position++;
+            //     }
+            //     if (Input.GetKeyDown(KeyCode.LeftArrow))
+            //     {
+            //         character.transform.DOMove(battle1.transform.position, 1);
+            //         position--;
+            //     }
+            // }
+            // else if (position == 3)
+            // {
+            //     if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 4)
+            //     {
+            //         character.transform.DOMove(boss.transform.position, 1);
+            //         position++;
+            //     }
+            //     if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            //     {
+            //         character.transform.DOMove(battle2.transform.position, 1);
+            //         position--;
+            //     }
+            // }
+            // else if (position == 4 || position == 5)
+            // {
+            //     if (Input.GetKeyDown(KeyCode.LeftArrow))
+            //     {
+            //         character.transform.DOMove(battle3.transform.position, 1);
+            //         position--;
+            //     }
+            // }
+            int Position = position;
+            StageMove[Position]();
 
             // 스테이지 선택 시 씬 로드
             if (Input.GetKeyDown(KeyCode.Return))
