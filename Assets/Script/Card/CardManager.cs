@@ -21,6 +21,7 @@ namespace Deck_Manage {
         [SerializeField] Transform cardSpawnPoint;
         [SerializeField] Transform CardLeft;
         [SerializeField] Transform CardRight;
+        [SerializeField] GameObject CardArea;
         [SerializeField] GameObject PushArea1;
         [SerializeField] GameObject PushArea2;
         [SerializeField] GameObject PushArea3;
@@ -288,14 +289,20 @@ namespace Deck_Manage {
         void DetectCardArea()
         {
             RaycastHit2D[] hits = Physics2D.RaycastAll(Util.MousePos, Vector3.forward);
-            int Cardlayer = LayerMask.NameToLayer("CardArea");
-            int Pushlayer1 = LayerMask.NameToLayer("PushArea1");
-            int Pushlayer2 = LayerMask.NameToLayer("PushArea2");
-            int Pushlayer3 = LayerMask.NameToLayer("PushArea3");
-            onCardArea = Array.Exists(hits, x => x.collider.gameObject.layer == Cardlayer);
-            onPushArea1 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer1);
-            onPushArea2 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer2);
-            onPushArea3 = Array.Exists(hits, x => x.collider.gameObject.layer == Pushlayer3);
+
+            onCardArea = false;
+            onPushArea1 = false;
+            onPushArea2 = false;
+
+            foreach (var hit in hits)
+            {
+                if (hit.collider.gameObject == CardArea)
+                    onCardArea = true;
+                else if (hit.collider.gameObject == PushArea1)
+                    onPushArea1 = true;
+                else if (hit.collider.gameObject == PushArea2)
+                    onPushArea2 = true;
+            }
         }
 
         void EnlargeCard(bool isEnlarge, Card card)

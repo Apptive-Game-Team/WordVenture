@@ -273,6 +273,7 @@ MonoBehaviour:
   cardSpawnPoint: {fileID: 801747277}
   CardLeft: {fileID: 879934599}
   CardRight: {fileID: 789372286}
+  CardArea: {fileID: 797682972}
   PushArea1: {fileID: 775722856}
   PushArea2: {fileID: 1935962192}
   PushArea3: {fileID: 0}
@@ -1871,6 +1872,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: CombineZone
       objectReference: {fileID: 0}
+    - target: {fileID: 2520500219881860805, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Size.x
+      value: 131.1478
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520500219881860805, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Size.y
+      value: 204.00935
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520500219881860805, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.45640564
+      objectReference: {fileID: 0}
+    - target: {fileID: 2520500219881860805, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Offset.y
+      value: -2.165306
+      objectReference: {fileID: 0}
     - target: {fileID: 2563521360743389802, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_Name
       value: Button
@@ -1963,6 +1980,22 @@ PrefabInstance:
       propertyPath: combineZone
       value: 
       objectReference: {fileID: 3310924405177554153}
+    - target: {fileID: 8486754818718062088, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Size.x
+      value: 131.78102
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486754818718062088, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Size.y
+      value: 204.00935
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486754818718062088, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Offset.x
+      value: 3.9389248
+      objectReference: {fileID: 0}
+    - target: {fileID: 8486754818718062088, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
+      propertyPath: m_Offset.y
+      value: -2.165306
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2188875645855579087, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
