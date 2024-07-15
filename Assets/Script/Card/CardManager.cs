@@ -227,22 +227,6 @@ namespace Deck_Manage {
 
         #region MyCard
 
-        public void CardMouseOver(Card card)
-        {
-            if(onCardArea)
-            {
-                EnlargeCard(true, card);
-            }
-        }
-
-        public void CardMouseExit(Card card)
-        {
-            if(!onPushArea1 && !onPushArea2 && !onPushArea3)
-            {
-                EnlargeCard(false, card);
-            }
-        }
-
         public void CardMouseDown()
         {
             isMyCardDrag = true;
@@ -303,19 +287,6 @@ namespace Deck_Manage {
                 else if (hit.collider.gameObject == PushArea2)
                     onPushArea2 = true;
             }
-        }
-
-        void EnlargeCard(bool isEnlarge, Card card)
-        {
-            // if (isEnlarge)
-            // {
-            //     Vector3 enlargePos = new Vector3(card.originPRS.pos.x, -3f, -10f);
-            //     card.MoveTransform(new PRS(enlargePos, Util.QI, new Vector3(1.896733f, 2.1f, 1) * 0.6f), false);
-            // }
-            // else
-            //     card.MoveTransform(card.originPRS, false);
-
-            // card.GetComponent<Order>().SetMostFrontOrder(isEnlarge);
         }
 
         #endregion
