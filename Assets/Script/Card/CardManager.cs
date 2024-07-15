@@ -123,7 +123,7 @@ namespace Deck_Manage {
         public void CardAlignment()
         {
             List<PRS> originCardPRSs = new List<PRS>();
-            originCardPRSs = RoundAlignment(CardLeft, CardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
+            originCardPRSs = CardAlignment(CardLeft, CardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
 
             var targetCards = myCards;
 
@@ -140,7 +140,7 @@ namespace Deck_Manage {
             CombineZone.Instance.magicTypeCards.Clear(); 
         }
 
-        List<PRS> RoundAlignment(Transform Left, Transform Right, int objCount, float height, Vector3 scale)
+        List<PRS> CardAlignment(Transform Left, Transform Right, int objCount, float height, Vector3 scale)
         {
             float[] objLerps = new float[objCount];
             List<PRS> results = new List<PRS>(objCount);
