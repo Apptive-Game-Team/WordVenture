@@ -1,0 +1,54 @@
+name: Build and Deploy to Game Ping
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  buildWebGL:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Docker prune
+        run: docker system prune -af
+
+      - name: Cache Library folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-WebGL-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-WebGL-
+            Library-
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 2022.3.22f1
+          targetPlatform: WebGL
+          customParameters: -logFile -
+            
+      - uses: dev-yunseong/game-ping-cicd@v2
+        with:
+          email: ${{ secrets.GAME_PING_EMAIL }}
+          password: ${{ secrets.GAME_PING_PASSWORD }}
+          game_slug: ${{ secrets.GAME_SLUG }}
+          zip_path: ../build/WebGL/WebGL
