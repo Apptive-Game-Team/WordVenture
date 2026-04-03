@@ -46,7 +46,7 @@ jobs:
           targetPlatform: WebGL
           customParameters: -logFile -
             
-      - uses: dev-yunseong/game-ping-cicd@v2
+      - uses: dev-yunseong/game-ping-cicd@v3
         with:
           email: ${{ secrets.GAME_PING_EMAIL }}
           password: ${{ secrets.GAME_PING_PASSWORD }}
