@@ -51,4 +51,7 @@ jobs:
           email: ${{ secrets.GAME_PING_EMAIL }}
           password: ${{ secrets.GAME_PING_PASSWORD }}
           game_slug: ${{ secrets.GAME_SLUG }}
+          game_title: WordVenture
+          game_version: 1.0.0
+          publisher: personal
           zip_path: ../build/WebGL/WebGL
