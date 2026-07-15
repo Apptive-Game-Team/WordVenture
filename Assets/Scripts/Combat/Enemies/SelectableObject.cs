@@ -1,0 +1,64 @@
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using WordVenture.Cards;
+using WordVenture.Combat.Stage;
+using WordVenture.Combat.UI;
+
+namespace WordVenture.Combat.Enemies
+{
+
+    public class SelectableObject : MonoBehaviour
+    {
+        private Vector3 Scale;
+        private bool selectable = false;
+        CombineZone combineZone;
+
+        private void Start()
+        {
+            Scale = transform.localScale;
+            combineZone = CombineZone.Instance;
+        }
+
+        public bool GetSelectable()
+        {
+            return selectable;
+        }
+
+        public void SetSelectable(bool selectable)
+        {
+            this.selectable = selectable;
+        }
+
+        private void OnMouseEnter()
+        {
+            if (selectable)
+            {
+                ChangeSize(true);
+            }
+        }
+
+        private void OnMouseDown()
+        {
+            if (selectable)
+            {
+                combineZone.SetTarget(this);
+            }
+        }
+
+        private void OnMouseExit()
+        {
+            ChangeSize(false);
+        }
+
+
+        private void ChangeSize(bool bigSide)
+        {
+            if (bigSide)
+                transform.localScale = Scale * 1.2f;
+            else
+                transform.localScale = Scale;
+        }
+    }
+
+}

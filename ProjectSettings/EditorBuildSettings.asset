@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/EndingScene.unity
     guid: 6595bd12cf8d8fa4993561a64cfb8714
   - enabled: 0
-    path: Assets/HIS/Scenes/3.2.Test_06.30.unity
+    path: Assets/Scenes/Legacy/HIS/3.2.Test_06.30.unity
     guid: 070e9f17a3560744289c46d2647fbe19
   - enabled: 0
     path: Assets/Scenes/Scene_MSP.unity

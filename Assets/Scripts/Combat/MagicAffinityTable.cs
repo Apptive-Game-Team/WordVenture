@@ -1,0 +1,58 @@
+using System.Collections.Generic;
+using System.Collections;
+using System;
+using UnityEngine;
+using WordVenture.Cards;
+using WordVenture.Combat.Enemies;
+
+namespace WordVenture.Combat
+{
+    [Serializable]
+    public class FloatList
+    {
+        public List<float> targets = new List<float>();
+    }
+
+    [Serializable]
+    public class Table
+    {
+        public List<FloatList> rows = new List<FloatList>();
+    }
+
+
+    [CreateAssetMenu]
+    public class MagicAffinityTable : ScriptableObject
+    {
+        //[SerializeField] Dictionary<MagicType ,Dictionary<MagicType, float>> table = new Dictionary<MagicType, Dictionary<MagicType, float>>();
+        //[SerializeField] List<List<float>> table = new List<List<float>>();
+        [SerializeField]
+        private Table table = new Table();
+
+        private int MagicToNum(MagicType type)
+        {
+            switch (type)
+            {
+                case MagicType.Fire:
+                    return 0;
+                case MagicType.Ice:
+                    return 1;
+                case MagicType.Rock:
+                    return 2;
+                case MagicType.Lightning:
+                    return 3;
+                case MagicType.Holy:
+                    return 4;
+                case MagicType.Undead:
+                    return 5;
+            }
+            return -1;
+        }
+
+        public float GetAffinity(MagicType magic, MagicType target)
+        {
+            return table.rows[MagicToNum(magic)].targets[MagicToNum(target)];
+        }
+    }
+
+}
+
