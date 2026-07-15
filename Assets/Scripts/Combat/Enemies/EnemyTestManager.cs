@@ -1,0 +1,79 @@
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using WordVenture.Battle.Turns;
+using WordVenture.Cards;
+using WordVenture.Combat.Stage;
+using WordVenture.Combat.UI;
+
+namespace WordVenture.Combat.Enemies
+{
+    public class EnemyTestManager : MonoBehaviour
+    {
+
+        [SerializeField] GameObject player;
+
+        EnemyPoolController enemyPoolController;
+
+        List<Enemy> enemies = new List<Enemy>();
+        void Start()
+        {
+            InitList(enemies);
+            enemyPoolController = gameObject.GetComponent<EnemyPoolController>();
+
+        }
+
+        private void InitList(List<Enemy> enemies)
+        {
+            enemies.Clear();
+            GameObject[] temp = GameObject.FindGameObjectsWithTag("Enemy");
+            if (temp == null) return;
+            for(int i = 0; i < temp.Length; i++)
+            {
+                enemies.Add(temp[i].GetComponent<Enemy>());
+            }
+        }
+
+        public void PlayTurn()
+        {
+            InitList(enemies);
+            foreach(Enemy enemy in enemies)
+            {
+                enemy.PlayTurnAction(enemy.transform.position.x - player.transform.position.x);
+            }
+        }
+
+        public void SpawnEnemies()
+        {
+            enemyPoolController.SpawnObject(0, 1, 0);
+            enemyPoolController.SpawnObject(4, 2, 1);
+            enemyPoolController.SpawnObject(8, 3, 2);
+            InitList(enemies);
+        }
+
+        void Update()
+        {
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    PlayTurn();
+            //} else if (Input.GetKeyDown(KeyCode.Return))
+            //{
+            //    SpawnEnemies();
+            //} else if (Input.GetKeyDown(KeyCode.D))
+            //{
+            //    foreach (Enemy enemy in enemies)
+            //    {
+            //        enemy.TakeHit(1);
+            //    }
+            //}
+        }
+
+        //MSP
+        public List<Enemy> GetEnemies()
+        {
+            return enemies;
+        }
+    }
+}
+
+

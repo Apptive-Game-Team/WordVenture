@@ -1,0 +1,50 @@
+using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using WordVenture.Cards;
+using WordVenture.Combat.Stage;
+using WordVenture.Combat.UI;
+
+namespace WordVenture.Combat.Enemies
+{
+    public class EnemyProjectile : MonoBehaviour
+    {
+        float speed = 10;
+        Vector3 moveVector;
+        int damage;
+
+
+
+        public void InitProjectileDamage(int damage)
+        {
+            this.damage = damage;
+        }
+
+        void Start()
+        {
+
+            moveVector = new Vector3(-1 * speed, 0, 0);
+
+        }
+
+        void Update()
+        {
+            if (transform.position.x < -10)
+            {
+                Destroy(gameObject);
+            }
+            else
+                transform.position = transform.position + moveVector * Time.deltaTime;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Me")) {
+                Player.PlayerInt().TakeHit(damage);
+                Destroy(gameObject);
+            }
+        }
+    }
+}
+
+
