@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Collections;
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Battle.Turns
+namespace Battle.Turns
 {
     public enum TurnStatus
     {
@@ -72,7 +71,7 @@ namespace WordVenture.Battle.Turns
 
         public static PlayerTurn PlayerTurn;
         public static EnemyTurn EnemyTurn;
-        public static float turnTime = 1f;
+        public static float TurnTime = 1f;
         Turn currentTurn;
 
         [SerializeField] public CardManager cardManager;

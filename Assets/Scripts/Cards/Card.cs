@@ -1,14 +1,10 @@
+using Core;
 using DG.Tweening;
-using JetBrains.Annotations;
-using System.Collections.Generic;
-using System.Collections;
 using TMPro;
-using UnityEngine.EventSystems;
 using UnityEngine;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
+using UnityEngine.Serialization;
 
-namespace WordVenture.Cards
+namespace Cards
 {
     public enum MagicType
     {
@@ -26,27 +22,27 @@ namespace WordVenture.Cards
     public class Card : MonoBehaviour
     {
         [SerializeField] TMP_Text nameTMP;
-        [SerializeField] Sprite MagicCard;
-        [SerializeField] Sprite TypeCard;
+        [FormerlySerializedAs("MagicCard")] [SerializeField] Sprite magicCard;
+        [FormerlySerializedAs("TypeCard")] [SerializeField] Sprite typeCard;
 
         public MagicType cardType;
 
         public Word word;
-        public PRS originPRS;
+        [FormerlySerializedAs("originPRS")] public Prs originPrs;
 
         public void Setup(Word word)
         {
             this.word = word;
             if (word.tag == "Spell")
-                this.GetComponent<SpriteRenderer>().sprite = MagicCard;
+                this.GetComponent<SpriteRenderer>().sprite = magicCard;
             else
-                this.GetComponent<SpriteRenderer>().sprite = TypeCard;
+                this.GetComponent<SpriteRenderer>().sprite = typeCard;
             nameTMP.text = this.word.name;
             cardType = this.word.magicType;
             gameObject.tag = this.word.tag;
         }
 
-        public void MoveTransform(PRS prs, bool useDotween, float dotweenTime = 0)
+        public void MoveTransform(Prs prs, bool useDotween, float dotweenTime = 0)
         {
             if (useDotween)
             {
@@ -64,6 +60,11 @@ namespace WordVenture.Cards
 
         void OnMouseOver()
         {
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             CardManager.Inst.CardMouseOver(this);
         }
 
@@ -74,6 +75,12 @@ namespace WordVenture.Cards
 
         void OnMouseDown()
         {
+            // 튜토리얼 대화창은 UI라서 콜라이더 클릭을 가리지 못한다. 직접 막는다.
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             // CardManager.Inst.CardMouseDown();
             // CardManager.Inst.selectCard = this;
             CheckHighestCard();
@@ -81,6 +88,11 @@ namespace WordVenture.Cards
 
         void OnMouseUp()
         {
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             CardManager.Inst.CardMouseUp();
             CardManager.Inst.selectCard = this;
         }

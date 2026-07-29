@@ -1,21 +1,20 @@
-using System.Collections.Generic;
-using System.Collections;
+using Map;
 using UnityEngine;
 
-namespace WordVenture.Core
+namespace Core
 {
 
     public class SaveLoadController : MonoBehaviour
     {
 
-        private static SaveLoadController instance = null;
+        private static SaveLoadController _instance = null;
 
         void Awake()
         {
-            if (null == instance)
+            if (null == _instance)
             {
                 //이 클래스 인스턴스가 탄생했을 때 전역변수 instance에 게임매니저 인스턴스가 담겨있지 않다면, 자신을 넣어준다.
-                instance = this;
+                _instance = this;
 
                 //씬 전환이 되더라도 파괴되지 않게 한다.
                 //gameObject만으로도 이 스크립트가 컴포넌트로서 붙어있는 Hierarchy상의 게임오브젝트라는 뜻이지만,
@@ -36,17 +35,17 @@ namespace WordVenture.Core
         {
             get
             {
-                if (null == instance)
+                if (null == _instance)
                 {
                     return null;
                 }
-                return instance;
+                return _instance;
             }
         }
 
         public void SavePlayData()
         {
-            PlayerPrefs.SetInt("StagePosition", WordVenture.Map.MapMove.StagePosition);
+            PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
         }
 
         public void QuitGame()
@@ -60,8 +59,8 @@ namespace WordVenture.Core
 
         public int LoadPlayData()
         {
-            WordVenture.Map.MapMove.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
-            return WordVenture.Map.MapMove.StagePosition;
+            MapMove.StagePosition = PlayerPrefs.GetInt("StagePosition", -1);
+            return MapMove.StagePosition;
         }
 
         private void OnApplicationQuit()

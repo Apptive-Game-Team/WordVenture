@@ -1,11 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.Spells;
 
-namespace WordVenture.Combat.UI
+namespace Combat.UI
 {
 
     public class DropZone : MonoBehaviour

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
+using System.Collections.Generic;
+using Cards;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat
+namespace Combat
 {
     [Serializable]
     public class FloatList

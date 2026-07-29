@@ -1,20 +1,17 @@
 using System.Collections.Generic;
-using System.Collections;
+using Combat.Stage;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public class EnemyPoolController : MonoBehaviour
     {
 
         [SerializeField] EnemyDataContainer enemyDataContainer;
 
-        [SerializeField] protected List<List<GameObject>> enemyPools = new List<List<GameObject>>();
+        [SerializeField] protected List<List<GameObject>> EnemyPools = new List<List<GameObject>>();
 
-        int stagePosition = StageDataSingleton.Instance.StagePosition;
+        int stagePosition = StageDataSingleton.Instance.stagePosition;
 
         private void Start()
         {
@@ -26,15 +23,15 @@ namespace WordVenture.Combat.Enemies
             for (int i = 0; i < enemyDataContainer.GetGearNum(); i++)
             {
                 EnemyData enemyData = enemyDataContainer.GetGearData(i);
-                enemyPools.Add(new List<GameObject>());
-                MakeObjects(enemyData, 5, enemyPools[i]);
+                EnemyPools.Add(new List<GameObject>());
+                MakeObjects(enemyData, 5, EnemyPools[i]);
 
             }
         }
 
-        public void AddToPool(GameObject Object, int id)
+        public void AddToPool(GameObject @object, int id)
         {
-            enemyPools[id].Add(Object);
+            EnemyPools[id].Add(@object);
         }
 
         protected void MakeObjects(EnemyData enemyData, int num, List<GameObject> pool)
@@ -56,11 +53,11 @@ namespace WordVenture.Combat.Enemies
 
         public GameObject SpawnObject(float positionX, float positionZ, int id)
         {
-            if (enemyPools[id].Count > 0)
+            if (EnemyPools[id].Count > 0)
             {
-                GameObject bady = enemyPools[id][0];
+                GameObject bady = EnemyPools[id][0];
                 bady.SetActive(true);
-                enemyPools[id].RemoveAt(0);
+                EnemyPools[id].RemoveAt(0);
 
                 bady.GetComponent<Transform>().position = new Vector3(positionX, -3, positionZ);
                 return bady;

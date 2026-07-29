@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
-using TMPro;
-using UnityEngine.UI;
+using Story;
 using UnityEngine;
-using WordVenture.Combat.UI;
-using WordVenture.Story;
+using UnityEngine.UI;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     public static class Extensions
     {
@@ -16,17 +12,10 @@ namespace WordVenture.Tutorial
         {
             if (!typeof(T).IsEnum) throw new ArgumentException(String.Format("Argument {0} is not an Enum", typeof(T).FullName));
 
-            T[] Arr = (T[])Enum.GetValues(src.GetType());
-            int j = Array.IndexOf<T>(Arr, src) + 1;
-            return (Arr.Length == j) ? Arr[0] : Arr[j];
+            T[] arr = (T[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<T>(arr, src) + 1;
+            return (arr.Length == j) ? arr[0] : arr[j];
         }
-    }
-
-    public class Constant
-    {
-        public static float CHAT_CLOSE_TIME = 5f;
-        public static float CHAT_REMAIN_TIME = 3f;
-        public static float TUTORIAL_TEXT_TIME = 0.03f;
     }
 
     public enum TutorialFlag
@@ -49,73 +38,14 @@ namespace WordVenture.Tutorial
         END = 15,
     }
 
-    public enum ChatStatus
-    {
-        DEFAULT = 0,
-        UPDATING = 1,
-    }
-
     public class TutorialChatWindow : ChatWindowController
     {
-        private TMP_Text nameText;
-        private TMP_Text descriptText;
         [SerializeField] Image speakerImage;
-
-        ChatStatus status;
-        public float chatCloseTime;
-        public float chatRemainTime;
-        public ChatStatus ChatStatus
-        {
-            get { return status; }
-            set { status = value; }
-        }
-
-        private void Awake()
-        {
-            InitSetting();
-        }
-
-        public new void UpdateChatStream(string name, string text)
-        {
-            nameText.SetText(name);
-            StartCoroutine(UpdateStreamingChat(text + " "));
-        }
-
-        IEnumerator UpdateStreamingChat(string text)
-        {
-            ChatStatus = ChatStatus.UPDATING;
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                yield return new WaitForSeconds(Constant.TUTORIAL_TEXT_TIME);
-                descriptText.SetText(text.Substring(0, i));
-            }
-
-            ChatStatus = ChatStatus.DEFAULT;
-            chatCloseTime = Time.time + Constant.CHAT_CLOSE_TIME;
-            chatRemainTime = Time.time + Constant.CHAT_REMAIN_TIME;
-        }
 
         public void SetSpeakerImage(Sprite image)
         {
             speakerImage.sprite = image;
         }
-
-        private void InitSetting()
-        {
-            TMP_Text[] tempTexts = GetComponentsInChildren<TMP_Text>();
-            if (tempTexts[0].name == "ChatName")
-            {
-                nameText = tempTexts[0];
-                descriptText = tempTexts[1];
-            }
-            else
-            {
-                nameText = tempTexts[1];
-                descriptText = tempTexts[0];
-            }
-        }
     }
 
 }
-

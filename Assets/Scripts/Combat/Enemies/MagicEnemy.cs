@@ -1,11 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public class MagicEnemy : Enemy
     {
@@ -18,9 +13,9 @@ namespace WordVenture.Combat.Enemies
 
         public override void Attack(float distanceToPlayer)
         {
-            animator.RangeAttack();
+            Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position,Quaternion.identity);
-            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage(damage);
+            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage(Damage);
         }
         //private void OnTriggerEnter2D(Collider2D other)
         //{

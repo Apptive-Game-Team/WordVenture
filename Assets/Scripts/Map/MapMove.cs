@@ -1,29 +1,27 @@
+using Combat.Stage;
+using Core;
 using DG.Tweening;
-using System.Collections.Generic;
-using System.Collections;
 using TMPro;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine;
-using WordVenture.Combat.Stage;
-using WordVenture.Core;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
-namespace WordVenture.Map
+namespace Map
 {
     public class MapMove : MonoBehaviour
     {
         [SerializeField] GameObject character;
-        [SerializeField] GameObject Background;
+        [FormerlySerializedAs("Background")] [SerializeField] GameObject background;
         [SerializeField] GameObject village;
         [SerializeField] GameObject battle1;
         [SerializeField] GameObject battle2;
         [SerializeField] GameObject battle3;
         [SerializeField] GameObject boss;
-        [SerializeField] TextMeshProUGUI Stage;
-        [SerializeField] Sprite Stage1;
-        [SerializeField] Sprite Stage2;
-        [SerializeField] Sprite Stage3;
-        [SerializeField] Sprite Stage4;
+        [FormerlySerializedAs("Stage")] [SerializeField] TextMeshProUGUI stage;
+        [FormerlySerializedAs("Stage1")] [SerializeField] Sprite stage1;
+        [FormerlySerializedAs("Stage2")] [SerializeField] Sprite stage2;
+        [FormerlySerializedAs("Stage3")] [SerializeField] Sprite stage3;
+        [FormerlySerializedAs("Stage4")] [SerializeField] Sprite stage4;
         int position = 0;
         public static int StagePosition;
 
@@ -42,6 +40,12 @@ namespace WordVenture.Map
 
         void CharacterMove()
         {
+            // 튜토리얼 대사를 넘기는 키가 스테이지 이동·입장으로도 먹히면 안 된다.
+            if (InteractionLock.IsLocked)
+            {
+                return;
+            }
+
             if (position == 0)
             {
                 if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)
@@ -107,12 +111,12 @@ namespace WordVenture.Map
 
         void ShowStage()
         {
-            Stage.text = "Stage : " + StagePosition;
+            stage.text = "Stage : " + StagePosition;
         }
 
         public void SelectStage(int stagePosition)
         {
-            StageDataSingleton.Instance.StagePosition = stagePosition;
+            StageDataSingleton.Instance.stagePosition = stagePosition;
             SceneManager.LoadScene("TurnBattleScene");
         }
 
@@ -125,34 +129,34 @@ namespace WordVenture.Map
             WordPosition(StagePosition);
         }
 
-        void ShowBattle(int StagePosition)
+        void ShowBattle(int stagePosition)
         {
-            switch (StagePosition)
+            switch (stagePosition)
             {
                 case 1:
-                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = Stage1;
+                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = stage1;
                     break;
                 case 2:
-                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = Stage2;
+                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = stage2;
                     break;
                 case 3:
-                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = Stage3;
+                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = stage3;
                     break;
                 case 4:
-                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = Stage4;
+                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = stage4;
                     break;
                 case 5:
-                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = Stage4;
+                    GameObject.Find("Background").GetComponent<SpriteRenderer>().sprite = stage4;
                     break;
                 default:
                     break;
             }
         }
 
-        void WordPosition(int StagePosition)
+        void WordPosition(int stagePosition)
         {
-            position = StagePosition;
-            switch (StagePosition)
+            position = stagePosition;
+            switch (stagePosition)
             {
                 case 0:
                     break;

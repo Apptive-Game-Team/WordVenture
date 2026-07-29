@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Collections;
+using Combat.Enemies;
 using UnityEngine;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
     public class StageManager : MonoBehaviour
@@ -20,7 +19,7 @@ namespace WordVenture.Combat.Stage
         {
             battleWaveController = FindObjectOfType<BattleWaveController>();
 
-            int stagePosition = StageDataSingleton.Instance.StagePosition;
+            int stagePosition = StageDataSingleton.Instance.stagePosition;
             LoadStage(stagePosition);
             SetupBattle(currentStageData, stagePosition);
         }

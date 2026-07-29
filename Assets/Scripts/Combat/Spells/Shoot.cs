@@ -1,20 +1,19 @@
-using System.Collections.Generic;
-using System.Collections;
+using Cards;
+using Combat.Enemies;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
+using UnityEngine.Serialization;
 
-namespace WordVenture.Combat.Spells
+namespace Combat.Spells
 {
     public class Shoot : MonoBehaviour
     {
-        public GameObject ShootfirePrefab;
-        public GameObject ShooticePrefab;
-        public GameObject ShootrockPrefab;
-        public GameObject ShootlightningPrefab;
-        public GameObject ShootHolyPrefab;
+        [FormerlySerializedAs("ShootfirePrefab")] public GameObject shootfirePrefab;
+        [FormerlySerializedAs("ShooticePrefab")] public GameObject shooticePrefab;
+        [FormerlySerializedAs("ShootrockPrefab")] public GameObject shootrockPrefab;
+        [FormerlySerializedAs("ShootlightningPrefab")] public GameObject shootlightningPrefab;
+        [FormerlySerializedAs("ShootHolyPrefab")] public GameObject shootHolyPrefab;
 
-        public void shoot(MagicType magicType1, SelectableObject target, WordVenture.Combat.MagicAffinityTable magicAffinityTable)
+        public void Run(MagicType magicType1, SelectableObject target, MagicAffinityTable magicAffinityTable)
         {
 
             GameObject prefabToInstantiate = null;
@@ -22,25 +21,25 @@ namespace WordVenture.Combat.Spells
             switch (magicType1)
             {
                 case MagicType.Fire:
-                    prefabToInstantiate = ShootfirePrefab;
+                    prefabToInstantiate = shootfirePrefab;
                     break;
                 case MagicType.Ice:
-                    prefabToInstantiate = ShooticePrefab;
+                    prefabToInstantiate = shooticePrefab;
                     break;
                 case MagicType.Rock:
-                    prefabToInstantiate = ShootrockPrefab;
+                    prefabToInstantiate = shootrockPrefab;
                     break;
                 case MagicType.Lightning:
-                    prefabToInstantiate = ShootlightningPrefab;
+                    prefabToInstantiate = shootlightningPrefab;
                     break;
                 case MagicType.Holy:
-                    prefabToInstantiate = ShootHolyPrefab;
+                    prefabToInstantiate = shootHolyPrefab;
                     break;
             }
 
             if (prefabToInstantiate != null)
             {
-                GameObject obj = Instantiate(prefabToInstantiate, WordVenture.Combat.Enemies.Player.PlayerInt().transform.position, prefabToInstantiate.transform.rotation);
+                GameObject obj = Instantiate(prefabToInstantiate, Player.PlayerInt().transform.position, prefabToInstantiate.transform.rotation);
 
                 obj.GetComponent<SpellObj>().InitSpell(MagicType.Shoot, magicType1, target, magicAffinityTable);
             }

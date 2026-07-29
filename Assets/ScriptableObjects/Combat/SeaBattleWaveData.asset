@@ -14,17 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleWaveDatas:
   - enemySpawnDatasInWave:
-    - SpawnPositionX: 7
-      EnemyId: 3
+    - spawnPositionX: 7
+      enemyId: 3
   - enemySpawnDatasInWave:
-    - SpawnPositionX: 7
-      EnemyId: 3
-    - SpawnPositionX: 6
-      EnemyId: 4
+    - spawnPositionX: 7
+      enemyId: 3
+    - spawnPositionX: 6
+      enemyId: 4
   - enemySpawnDatasInWave:
-    - SpawnPositionX: 6
-      EnemyId: 3
-    - SpawnPositionX: 5
-      EnemyId: 4
-    - SpawnPositionX: 7
-      EnemyId: 5
+    - spawnPositionX: 6
+      enemyId: 3
+    - spawnPositionX: 5
+      enemyId: 4
+    - spawnPositionX: 7
+      enemyId: 5

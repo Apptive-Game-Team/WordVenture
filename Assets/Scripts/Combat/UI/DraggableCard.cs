@@ -1,10 +1,7 @@
-using UnityEngine.EventSystems;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.Spells;
+using UnityEngine.EventSystems;
 
-namespace WordVenture.Combat.UI
+namespace Combat.UI
 {
 
     public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler

@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
+using Core;
+using Map;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Core;
+using UnityEngine.SceneManagement;
 
-namespace WordVenture.Scenes
+namespace Scenes
 {
 
     public class TitleSceneManager : MonoBehaviour
@@ -27,7 +25,7 @@ namespace WordVenture.Scenes
         {
             if (saveLoadController.LoadPlayData() == -1)
             {
-                WordVenture.Map.MapMove.StagePosition = 0;
+                MapMove.StagePosition = 0;
                 saveLoadController.SavePlayData();
                 SceneManager.LoadScene("StoryScene");
 

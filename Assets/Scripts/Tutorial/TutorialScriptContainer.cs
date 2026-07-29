@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using WordVenture.Combat.Enemies;
-using WordVenture.Combat.UI;
-using WordVenture.Story;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     [Serializable]
     public struct TutorialChatData
