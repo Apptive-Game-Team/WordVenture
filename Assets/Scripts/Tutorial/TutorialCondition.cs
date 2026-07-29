@@ -1,60 +1,60 @@
+using Combat.Stage;
+using Combat.UI;
 using UnityEngine.SceneManagement;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Tutorial
+namespace Tutorial
 {
     public interface ITutorialCondition
     {
-        public bool isMeetCondition();
+        public bool IsMeetCondition();
         public ITutorialCondition GetNextCondition();
     }
 
-    public class TutorialConditon_002 : ITutorialCondition
+    public class TutorialConditon002 : ITutorialCondition
     {
         string turnBattleScene = "TurnBattleScene";
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
-            return (StageDataSingleton.Instance.StagePosition == 0) &&
+            return (StageDataSingleton.Instance.stagePosition == 0) &&
                 SceneManager.GetActiveScene().name == turnBattleScene
                 && TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_001_START_TUTORIAL);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_003();
+            return new TutorialConditon003();
         }
 
     }
-    public class TutorialConditon_003 : ITutorialCondition
+    public class TutorialConditon003 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_002_BATTLE_START);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_004();
+            return new TutorialConditon004();
         }
 
     }
-    public class TutorialConditon_004 : ITutorialCondition
+    public class TutorialConditon004 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_003_TURN_START);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_005();
+            return new TutorialConditon005();
         }
 
     }
-    public class TutorialConditon_005 : ITutorialCondition
+    public class TutorialConditon005 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_004_COMBINATION)
                 && CombineZone.Instance.gameObject.activeSelf;
@@ -62,13 +62,13 @@ namespace WordVenture.Tutorial
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_006();
+            return new TutorialConditon006();
         }
 
     }
-    public class TutorialConditon_006 : ITutorialCondition
+    public class TutorialConditon006 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_005_COMBINATION_DESCRIPT)
                 && CombineZone.Instance.spellCards.Count == 1;
@@ -76,13 +76,13 @@ namespace WordVenture.Tutorial
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_007();
+            return new TutorialConditon007();
         }
 
     }
-    public class TutorialConditon_007 : ITutorialCondition
+    public class TutorialConditon007 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_006_SET_MAGIC)
                 && CombineZone.Instance.spellCards.Count == 1
@@ -91,13 +91,13 @@ namespace WordVenture.Tutorial
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_008();
+            return new TutorialConditon008();
         }
 
     }
-    public class TutorialConditon_008 : ITutorialCondition
+    public class TutorialConditon008 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_007_SET_ELEMENTAL)
                 && CombineZone.Instance.spellCards.Count == 0
@@ -106,51 +106,51 @@ namespace WordVenture.Tutorial
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_009();
+            return new TutorialConditon009();
         }
 
     }
-    public class TutorialConditon_009 : ITutorialCondition
+    public class TutorialConditon009 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_008_CAST_SPELL);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_010();
+            return new TutorialConditon010();
         }
     }
-    public class TutorialConditon_010 : ITutorialCondition
+    public class TutorialConditon010 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_009_CAST_END);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_011();
+            return new TutorialConditon011();
         }
 
     }
-    public class TutorialConditon_011 : ITutorialCondition
+    public class TutorialConditon011 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_010_CLICK_TO_SELECT);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_012();
+            return new TutorialConditon012();
         }
 
     }
-    public class TutorialConditon_012 : ITutorialCondition
+    public class TutorialConditon012 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_011_FINISH_SPELL)
                 && SceneManager.GetActiveScene().name.Equals("GameClearScene");
@@ -158,45 +158,45 @@ namespace WordVenture.Tutorial
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_013();
+            return new TutorialConditon013();
         }
 
     }
-    public class TutorialConditon_013 : ITutorialCondition
+    public class TutorialConditon013 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_012_NEXT_ENEMY);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_014();
+            return new TutorialConditon014();
         }
 
     }
-    public class TutorialConditon_014 : ITutorialCondition
+    public class TutorialConditon014 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_013_END_BATTLE);
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_015();
+            return new TutorialConditon015();
         }
     }
-    public class TutorialConditon_015 : ITutorialCondition
+    public class TutorialConditon015 : ITutorialCondition
     {
-        public bool isMeetCondition()
+        public bool IsMeetCondition()
         {
             return true;
         }
 
         public ITutorialCondition GetNextCondition()
         {
-            return new TutorialConditon_015();
+            return new TutorialConditon015();
         }
 
     }

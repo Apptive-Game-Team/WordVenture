@@ -274,15 +274,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameTMP: {fileID: 5983846026167542626}
-  MagicCard: {fileID: 21300000, guid: 34d13fd59bd2331429ec78a2906bb85a, type: 3}
-  TypeCard: {fileID: 21300000, guid: 67dddb50041e0a445b50402656eff439, type: 3}
+  magicCard: {fileID: 21300000, guid: 34d13fd59bd2331429ec78a2906bb85a, type: 3}
+  typeCard: {fileID: 21300000, guid: 67dddb50041e0a445b50402656eff439, type: 3}
   cardType: 0
   word:
     name: 
     percent: 0
     tag: 
     magicType: 0
-  originPRS:
+  originPrs:
     pos: {x: 0, y: 0, z: 0}
     rot: {x: 0, y: 0, z: 0, w: 0}
     scale: {x: 0, y: 0, z: 0}

@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
 
-namespace WordVenture.Cards
+namespace Cards
 {
     public class Order : MonoBehaviour
     {

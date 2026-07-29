@@ -1,11 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
 
-namespace WordVenture.Cards
+namespace Cards
 {
     [System.Serializable]
     public class Word

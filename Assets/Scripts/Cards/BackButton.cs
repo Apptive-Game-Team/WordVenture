@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.SceneManagement;
+using Core;
 using UnityEngine;
-using WordVenture.Combat.UI;
-using WordVenture.Core;
+using UnityEngine.SceneManagement;
 
-namespace WordVenture.Cards
+namespace Cards
 {
 
     public class BackButton : MonoBehaviour

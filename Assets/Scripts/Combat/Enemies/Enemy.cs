@@ -1,20 +1,18 @@
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using Battle.Turns;
+using Cards;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     public abstract class EnemyAction
     {
-        protected Enemy enemy;
+        protected Enemy Enemy;
         protected EnemyAction(Enemy enemy)
         {
-            this.enemy = enemy;
+            this.Enemy = enemy;
         }
         public abstract void PlayAction(float distanceToPlayer);
 
@@ -27,7 +25,7 @@ namespace WordVenture.Combat.Enemies
 
         public override void PlayAction(float distanceToPlayer)
         {
-            enemy.Attack(distanceToPlayer);
+            Enemy.Attack(distanceToPlayer);
         }
     }
 
@@ -40,16 +38,16 @@ namespace WordVenture.Combat.Enemies
 
             float tempMoveDistance;
 
-            if (distanceToPlayer > enemy.moveDistance + enemy.attackRange)
+            if (distanceToPlayer > Enemy.moveDistance + Enemy.attackRange)
             {
-                tempMoveDistance = enemy.moveDistance;
+                tempMoveDistance = Enemy.moveDistance;
             }
             else
             {
-                tempMoveDistance = distanceToPlayer - enemy.attackRange;
+                tempMoveDistance = distanceToPlayer - Enemy.attackRange;
             }
 
-            enemy.StartCoroutine(enemy.MoveDistance(tempMoveDistance));
+            Enemy.StartCoroutine(Enemy.MoveDistance(tempMoveDistance));
         }
     }
 
@@ -62,16 +60,16 @@ namespace WordVenture.Combat.Enemies
 
     public class Enemy : MonoBehaviour
     {
-        protected SlimeAnimator animator;
+        protected SlimeAnimator Animator;
 
-        protected TMP_Text hpText;
+        protected TMP_Text HpText;
 
-        public WordVenture.Cards.MagicType enemyType;
+        public MagicType enemyType;
 
         [SerializeField] protected int id;
-        protected int hp = 1;
-        protected int maxHp = 1;
-        protected int damage;
+        protected int Hp = 1;
+        protected int MaxHp = 1;
+        protected int Damage;
 
         public float moveDistance = 5;
 
@@ -85,11 +83,11 @@ namespace WordVenture.Combat.Enemies
         public void InitEnemyData(EnemyData enemyData)
         {
             id = enemyData.id;
-            maxHp = enemyData.maxHp;
-            hp = maxHp;
+            MaxHp = enemyData.maxHp;
+            Hp = MaxHp;
             moveDistance = enemyData.moveDistance;
             attackRange = enemyData.attackRange;
-            damage = enemyData.damage;
+            Damage = enemyData.damage;
             enemyType = enemyData.type;
             UpdateIndicator();
         }
@@ -116,7 +114,7 @@ namespace WordVenture.Combat.Enemies
 
         public void UpdateIndicator()
         {
-            hpText.SetText(hp.ToString());
+            HpText.SetText(Hp.ToString());
         }
 
 
@@ -129,7 +127,7 @@ namespace WordVenture.Combat.Enemies
 
         public IEnumerator MoveDistance(float distance)
         {
-            animator.MoveStart();
+            Animator.MoveStart();
             float moveSpeed = moveDistance / turnTime;
             float movedDistance = 0;
             while (movedDistance <= distance)
@@ -150,8 +148,8 @@ namespace WordVenture.Combat.Enemies
 
         protected virtual void Start()
         {
-            animator = GetComponent<SlimeAnimator>();
-            turnTime = WordVenture.Battle.Turns.TurnBattleSystem.turnTime;
+            Animator = GetComponent<SlimeAnimator>();
+            turnTime = TurnBattleSystem.TurnTime;
         }
 
 
@@ -183,17 +181,17 @@ namespace WordVenture.Combat.Enemies
 
         protected virtual void StopMove()
         {
-            animator.MoveEnd();
+            Animator.MoveEnd();
         }
 
         virtual public void Attack(float distanceToPlayer)
         {
-            animator.Attack();
+            Animator.Attack();
         }
 
         protected void Death()
         {
-            animator.Death();
+            Animator.Death();
             StartCoroutine(DeathCounter());
         }
         IEnumerator DeathCounter()
@@ -204,14 +202,14 @@ namespace WordVenture.Combat.Enemies
 
         public void TakeHit(int damage)
         {
-            hp -= damage;
-            if (hp <= 0)
+            Hp -= damage;
+            if (Hp <= 0)
             {
                 Death();
                 return;
             }
             else {
-                animator.TakeHit();
+                Animator.TakeHit();
                 UpdateIndicator();
             }
 
@@ -219,8 +217,8 @@ namespace WordVenture.Combat.Enemies
 
         private void InitIndicators()
         {
-            hpText = gameObject.GetComponentInChildren<TMP_Text>();
-            hpText.SetText(maxHp.ToString());
+            HpText = gameObject.GetComponentInChildren<TMP_Text>();
+            HpText.SetText(MaxHp.ToString());
         }
 
     }

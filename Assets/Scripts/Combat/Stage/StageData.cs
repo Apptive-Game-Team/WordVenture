@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using WordVenture.Combat.Enemies;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
     [CreateAssetMenu(fileName = "StageData", menuName = "ScriptableObjects/StageData", order = 1)]

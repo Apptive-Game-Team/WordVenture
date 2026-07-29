@@ -1,13 +1,13 @@
 using UnityEngine;
-using WordVenture.Combat.Enemies;
+using UnityEngine.Serialization;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
     public class StageDataSingleton : MonoBehaviour
     {
         public static StageDataSingleton Instance { get; private set; }
-        public int StagePosition;
+        [FormerlySerializedAs("StagePosition")] public int stagePosition;
 
         private void Awake()
         {

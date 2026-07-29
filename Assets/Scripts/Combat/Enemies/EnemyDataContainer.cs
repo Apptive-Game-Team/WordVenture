@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
+using System.Collections.Generic;
+using Cards;
 using UnityEngine;
-using WordVenture.Cards;
-using WordVenture.Combat.Stage;
-using WordVenture.Combat.UI;
 
-namespace WordVenture.Combat.Enemies
+namespace Combat.Enemies
 {
     [Serializable]
     public struct EnemyData
@@ -18,7 +15,7 @@ namespace WordVenture.Combat.Enemies
         [SerializeField] public float moveDistance;
         [SerializeField] public float attackRange;
         [SerializeField] public int damage;
-        [SerializeField] public WordVenture.Cards.MagicType type;
+        [SerializeField] public MagicType type;
     }
 
 

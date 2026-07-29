@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-using System.Collections;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using WordVenture.Combat.Enemies;
+using UnityEngine.Serialization;
 
-namespace WordVenture.Combat.Stage
+namespace Combat.Stage
 {
 
 
@@ -16,8 +15,8 @@ namespace WordVenture.Combat.Stage
 
     [Serializable]
     public struct EnemySpawnData{
-        public float SpawnPositionX;
-        public int EnemyId;
+        [FormerlySerializedAs("SpawnPositionX")] public float spawnPositionX;
+        [FormerlySerializedAs("EnemyId")] public int enemyId;
     }
 
 
