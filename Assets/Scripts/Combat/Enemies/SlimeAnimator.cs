@@ -10,6 +10,12 @@ namespace Combat.Enemies
         [SerializeField] List<Sprite> sprites = new List<Sprite>();
         SpriteRenderer spriteRenderer;
 
+        // Idling과 Moving은 끝없이 돌기 때문에 대기 객체를 그때그때 만들면 살아 있는
+        // 적 수만큼 GC 쓰레기가 계속 쌓인다. WaitForSeconds는 남은 시간을 들고 있지
+        // 않아 인스턴스를 공유해도 안전하다.
+        static readonly WaitForSeconds LongFrameHold = new WaitForSeconds(0.25f);
+        static readonly WaitForSeconds ShortFrameHold = new WaitForSeconds(0.15f);
+
         private void Start()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -56,25 +62,25 @@ namespace Combat.Enemies
         IEnumerator RangeAttacking()
         {
             spriteRenderer.sprite = sprites[6];
-            yield return new WaitForSeconds(0.15f);
+            yield return ShortFrameHold;
             spriteRenderer.sprite = sprites[7];
-            yield return new WaitForSeconds(0.25f);
+            yield return LongFrameHold;
             StartCoroutine(Idling());
         }
 
         IEnumerator TakeHitting()
         {
             spriteRenderer.sprite = sprites[4];
-            yield return new WaitForSeconds(0.25f);
+            yield return LongFrameHold;
             StartCoroutine(Idling());
         }
 
         IEnumerator Attacking()
         {
             spriteRenderer.sprite = sprites[2];
-            yield return new WaitForSeconds(0.25f);
+            yield return LongFrameHold;
             spriteRenderer.sprite = sprites[3];
-            yield return new WaitForSeconds(0.15f);
+            yield return ShortFrameHold;
             StartCoroutine(Idling());
         }
 
@@ -83,9 +89,9 @@ namespace Combat.Enemies
             while (true)
             {
                 spriteRenderer.sprite = sprites[2];
-                yield return new WaitForSeconds(0.25f);
+                yield return LongFrameHold;
                 spriteRenderer.sprite = sprites[3];
-                yield return new WaitForSeconds(0.15f);
+                yield return ShortFrameHold;
             }
         }
 
@@ -96,9 +102,9 @@ namespace Combat.Enemies
             while (true)
             {
                 spriteRenderer.sprite = sprites[0];
-                yield return new WaitForSeconds(0.25f);
+                yield return LongFrameHold;
                 spriteRenderer.sprite = sprites[1];
-                yield return new WaitForSeconds(0.25f);
+                yield return LongFrameHold;
             }
         }
 
