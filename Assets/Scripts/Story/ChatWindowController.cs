@@ -9,6 +9,9 @@ namespace Story
     {
         private const float TextStreamInterval = 0.03f;
 
+        // 글자마다 새로 만들면 대사 한 줄에 길이만큼 할당이 쌓인다.
+        private static readonly WaitForSeconds TextStreamDelay = new WaitForSeconds(TextStreamInterval);
+
         [SerializeField] GameObject anyKeyPrompt;
 
         private TMP_Text chatName;
@@ -58,7 +61,7 @@ namespace Story
         {
             for (int i = 0; i < streamingText.Length; i++)
             {
-                yield return new WaitForSeconds(TextStreamInterval);
+                yield return TextStreamDelay;
                 chatText.SetText(streamingText.Substring(0, i));
             }
 

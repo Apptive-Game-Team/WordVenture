@@ -13,11 +13,16 @@ namespace Tutorial
     public class TutorialConditon002 : ITutorialCondition
     {
         string turnBattleScene = "TurnBattleScene";
+
+        // Scene.name은 접근할 때마다 문자열을 새로 만든다. 이 조건은 매 프레임
+        // 검사되므로, 가장 싸고 선별력이 높은 플래그 검사를 앞에 두어 플래그가
+        // 맞는 프레임에만 씬 이름을 읽게 한다. 피연산자에 부수 효과가 없어
+        // 순서를 바꿔도 결과는 같다.
         public bool IsMeetCondition()
         {
-            return (StageDataSingleton.Instance.stagePosition == 0) &&
-                SceneManager.GetActiveScene().name == turnBattleScene
-                && TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_001_START_TUTORIAL);
+            return TutorialController.Instance.IsFlagEqual(TutorialFlag.FLAG_001_START_TUTORIAL)
+                && StageDataSingleton.Instance.stagePosition == 0
+                && SceneManager.GetActiveScene().name == turnBattleScene;
         }
 
         public ITutorialCondition GetNextCondition()

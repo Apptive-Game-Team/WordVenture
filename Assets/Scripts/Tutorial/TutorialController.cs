@@ -83,7 +83,7 @@ namespace Tutorial
 
         private void Update()
         {
-            if(currentFlag.Equals(TutorialFlag.FLAG_014_END_TUTORIAL))
+            if(currentFlag == TutorialFlag.FLAG_014_END_TUTORIAL)
             {
                 gameObject.SetActive(false);
                 return;
@@ -155,9 +155,11 @@ namespace Tutorial
             InteractionLock.IsLocked = false;
         }
 
+        // Enum.Equals(object)는 양쪽 피연산자를 박싱한다. 이 검사는 튜토리얼이 도는
+        // 동안 매 프레임 여러 번 불리므로 == 로 비교해 할당을 없앤다.
         public bool IsFlagEqual(TutorialFlag flag)
         {
-            return currentFlag.Equals(flag);
+            return currentFlag == flag;
         }
     }
 

@@ -14,7 +14,30 @@ namespace Cards
     public class CardManager : MonoBehaviour
     {
         public static CardManager Inst {get; private set;}
-        void Awake() => Inst = this;
+
+        // 레이어 이름은 실행 중 바뀌지 않는다. NameToLayer는 문자열 조회라 매 프레임
+        // 부를 이유가 없다.
+        int cardAreaLayer;
+        int pushArea1Layer;
+        int pushArea2Layer;
+        int pushArea3Layer;
+
+        // RaycastAll은 호출마다 새 배열을 만든다. 결과 List와 필터를 재사용하면
+        // 프레임당 할당이 사라진다.
+        readonly List<RaycastHit2D> areaHits = new List<RaycastHit2D>();
+        ContactFilter2D areaHitFilter;
+
+        void Awake()
+        {
+            Inst = this;
+
+            cardAreaLayer = LayerMask.NameToLayer("CardArea");
+            pushArea1Layer = LayerMask.NameToLayer("PushArea1");
+            pushArea2Layer = LayerMask.NameToLayer("PushArea2");
+            pushArea3Layer = LayerMask.NameToLayer("PushArea3");
+
+            areaHitFilter = new ContactFilter2D().NoFilter();
+        }
 
         [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;
         [SerializeField] GameObject cardPrefab;
@@ -91,13 +114,14 @@ namespace Cards
                 return;
             }
 
-            DetectCardArea();
+            // Util.MousePos는 접근할 때마다 Camera.main 조회와 좌표 변환을 다시 한다.
+            // 한 프레임에 한 번만 구해서 돌려쓴다.
+            Vector3 mouseWorldPosition = Util.MousePos;
+
+            DetectCardArea(mouseWorldPosition);
             if (isMyCardDrag)
             {
-                // Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                // mousePosition = new Vector3(mousePosition.x, mousePosition.y, selectCard.transform.position.z);
-                // selectCard.transform.position = mousePosition;
-                DragCard();
+                DragCard(mouseWorldPosition);
             }
 
         }
@@ -303,22 +327,45 @@ namespace Cards
             }
         }
 
-        void DragCard()
+        void DragCard(Vector3 mouseWorldPosition)
         {
-            selectCard.MoveTransform(new Prs(Util.MousePos, Util.Qi, selectCard.originPrs.scale), false);
+            selectCard.MoveTransform(new Prs(mouseWorldPosition, Util.Qi, selectCard.originPrs.scale), false);
         }
 
-        void DetectCardArea()
+        void DetectCardArea(Vector3 mouseWorldPosition)
         {
-            RaycastHit2D[] hits = Physics2D.RaycastAll(Util.MousePos, Vector3.forward);
-            int cardlayer = LayerMask.NameToLayer("CardArea");
-            int pushlayer1 = LayerMask.NameToLayer("PushArea1");
-            int pushlayer2 = LayerMask.NameToLayer("PushArea2");
-            int pushlayer3 = LayerMask.NameToLayer("PushArea3");
-            onCardArea = Array.Exists(hits, x => x.collider.gameObject.layer == cardlayer);
-            onPushArea1 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer1);
-            onPushArea2 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer2);
-            onPushArea3 = Array.Exists(hits, x => x.collider.gameObject.layer == pushlayer3);
+            onCardArea = false;
+            onPushArea1 = false;
+            onPushArea2 = false;
+            onPushArea3 = false;
+
+            // 원래 방향 인자는 Vector3.forward였는데, Vector2로 변환되며 z가 잘려
+            // 사실상 Vector2.zero였다. 같은 값을 그대로 명시한다.
+            Physics2D.Raycast(mouseWorldPosition, Vector2.zero, areaHitFilter, areaHits);
+
+            // 레이어별로 Array.Exists를 따로 돌리면 결과를 네 번 훑고 그때마다
+            // 지역 변수를 캡처한 델리게이트가 새로 할당된다. 한 번만 순회한다.
+            for (int i = 0; i < areaHits.Count; i++)
+            {
+                int layer = areaHits[i].collider.gameObject.layer;
+
+                if (layer == cardAreaLayer)
+                {
+                    onCardArea = true;
+                }
+                else if (layer == pushArea1Layer)
+                {
+                    onPushArea1 = true;
+                }
+                else if (layer == pushArea2Layer)
+                {
+                    onPushArea2 = true;
+                }
+                else if (layer == pushArea3Layer)
+                {
+                    onPushArea3 = true;
+                }
+            }
         }
 
         void EnlargeCard(bool isEnlarge, Card card)

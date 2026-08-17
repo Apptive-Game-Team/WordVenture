@@ -72,8 +72,6 @@ namespace Scenes
 
         void ShowGettedCard()
         {
-            print(MapMove.StagePosition);
-            print(StageDataSingleton.Instance.stagePosition);
             if (MapMove.StagePosition - 1 == StageDataSingleton.Instance.stagePosition)
             {
                 switch (StageDataSingleton.Instance.stagePosition)

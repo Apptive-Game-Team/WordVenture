@@ -125,6 +125,10 @@ namespace Combat.Enemies
         }
 
 
+        // moveSpeed는 turnTime 안에 moveDistance를 지나도록 정해진다. 그런데 대기는
+        // 0.01초를 요청하면서 실제 프레임은 그보다 길고, 이동량은 프레임 시간이 아닌
+        // 0.01을 썼다. 그래서 60fps에서 적이 의도한 속도의 60% 정도로 움직이고 이동이
+        // turnTime을 넘겨, 1초 뒤 턴을 넘기는 TurnBattleSystem의 타이머를 침범했다.
         public IEnumerator MoveDistance(float distance)
         {
             Animator.MoveStart();
@@ -132,10 +136,11 @@ namespace Combat.Enemies
             float movedDistance = 0;
             while (movedDistance <= distance)
             {
+                yield return null;
 
-                yield return new WaitForSeconds(0.01f);
-                movedDistance += moveSpeed * 0.01f;
-                Move(-1, moveSpeed * 0.01f);
+                float moveStep = moveSpeed * Time.deltaTime;
+                movedDistance += moveStep;
+                Move(-1, moveStep);
             }
             StopMove();
         }

@@ -18,12 +18,6 @@ namespace Combat.UI
         //    }
         //}
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         public void OnButtonClick()
         {
             if (!combineZone.activeSelf)
