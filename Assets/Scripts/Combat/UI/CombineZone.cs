@@ -117,9 +117,12 @@ namespace Combat.UI
             Cards.MagicType spellType = spellCards[0].GetComponent<Card>().cardType;
             Cards.MagicType magicType = magicTypeCards[0].GetComponent<Card>().cardType;
 
+            // 대상을 고를 때까지 기다린다. 0.01초는 프레임 간격보다 짧아 어차피 한
+            // 프레임마다 깨어났고, 그때마다 대기 객체만 새로 만들어졌다. 대기가
+            // 얼마나 길어질지는 플레이어에게 달렸으므로 그동안 계속 쌓인다.
             while (target == null)
             {
-                yield return new WaitForSeconds(0.01f);
+                yield return null;
             }
 
             Player.PlayerInt().AttackAnima();
