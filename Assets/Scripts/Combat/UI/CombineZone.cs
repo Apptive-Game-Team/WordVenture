@@ -53,23 +53,38 @@ namespace Combat.UI
         {
             Instance = this;
         }
+        // activateButton의 현재 표시 상태. SetActive를 같은 값으로 다시 부르지 않기 위해
+        // 따로 들고 있는다.
+        bool activateButtonVisible;
+
         void Start()
         {
-            activateButton.gameObject.SetActive(false);
+            // 리스너는 여기서 한 번만 연결한다. 매 프레임 RemoveAllListeners와
+            // AddListener를 반복하면 델리게이트와 UnityEvent 내부 호출 목록이
+            // 프레임마다 새로 만들어진다.
+            activateButton.onClick.RemoveAllListeners();
+            activateButton.onClick.AddListener(OnButtonClick);
+
+            SetActivateButtonVisible(false);
             gameObject.SetActive(false);
         }
 
         private void Update()
         {
-            if (spellCards.Count == 1 && magicTypeCards.Count == 1) // && targetCards.Count == 1)
+            // 카드는 ClearDropZone을 거치지 않고 빠지기도 한다. CardManager가 조합 영역
+            // 밖에 카드를 놓으면 목록만 비우므로, 버튼 상태는 여기서 계속 맞춰야 한다.
+            SetActivateButtonVisible(spellCards.Count == 1 && magicTypeCards.Count == 1);
+        }
+
+        void SetActivateButtonVisible(bool visible)
+        {
+            if (activateButtonVisible == visible)
             {
-                activateButton.gameObject.SetActive(true);
-                activateButton.onClick.RemoveAllListeners();
-                activateButton.onClick.AddListener(OnButtonClick);
-            } else
-            {
-                activateButton.gameObject.SetActive(false);
+                return;
             }
+
+            activateButtonVisible = visible;
+            activateButton.gameObject.SetActive(visible);
         }
 
         public void AddCard(GameObject card)
@@ -82,12 +97,7 @@ namespace Combat.UI
             {
                 magicTypeCards.Add(card);
             }
-            if (spellCards.Count == 1 && magicTypeCards.Count == 1) // && targetCards.Count == 1)
-            {
-                activateButton.gameObject.SetActive(true);
-                activateButton.onClick.RemoveAllListeners();
-                activateButton.onClick.AddListener(OnButtonClick);
-            }
+            SetActivateButtonVisible(spellCards.Count == 1 && magicTypeCards.Count == 1);
         }
 
         SelectableObject target = null;
@@ -164,7 +174,7 @@ namespace Combat.UI
 
             spellCards.Clear();
             magicTypeCards.Clear();
-            activateButton.gameObject.SetActive(false);
+            SetActivateButtonVisible(false);
         }
     }
 
