@@ -86,7 +86,6 @@ namespace Combat.Spells
             if (collision.CompareTag(target.gameObject.tag))
             {
                 moveVector = Vector3.zero;
-                print(collision.gameObject.tag);
                 animator.SetTrigger("Hit");
                 if (collision.CompareTag("Enemy"))
                 {

@@ -45,7 +45,6 @@ namespace Battle.Turns
     {
         public override void OnStart() // When Player Turn End...
         {
-            Debug.Log("Enemy Turn Start!");
 
             //TurnBattleSystem.Instance.ChangeTurn(TurnBattleSystem.PlayerTurn);
             TurnBattleSystem.Instance.enemyManager.PlayTurn();
@@ -55,7 +54,6 @@ namespace Battle.Turns
 
         public override void OnEnd() // When Enemy Action End...
         {
-            Debug.Log("Enemy Turn End!");
 
         }
 
@@ -109,7 +107,6 @@ namespace Battle.Turns
         {
             currentTurn.OnEnd();
             currentTurn = turn;
-            print(currentTurn);
             currentTurn.OnStart();
         }
 
@@ -130,7 +127,6 @@ namespace Battle.Turns
 
         IEnumerator EnemyTurnCounter()
         {
-            print("waiting");
             yield return new WaitForSecondsRealtime(1f);
             ChangeTurn(PlayerTurn);
         }

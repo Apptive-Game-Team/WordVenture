@@ -24,10 +24,8 @@ namespace Combat.Enemies
         private void StartWave(int wave)
         {
             BattleWaveData battleWaveData = battleScript.GetBattleWaveDatas()[wave];
-            print(battleWaveData.enemySpawnDatasInWave.Count);
             for (int i = 0; i < battleWaveData.enemySpawnDatasInWave.Count; i++)
             {
-                print(i);
                 activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].spawnPositionX, i , battleWaveData.enemySpawnDatasInWave[i].enemyId));
             }
 
