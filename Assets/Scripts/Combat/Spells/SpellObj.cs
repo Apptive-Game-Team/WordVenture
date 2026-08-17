@@ -51,14 +51,16 @@ namespace Combat.Spells
         float maxTime = 5;
 
 
+        // 0.01초 간격으로 0.01초 분량만 움직이는 루프였다. 0.01초는 프레임 간격보다
+        // 짧아 실제로는 한 프레임에 한 번 돌면서 이동량은 프레임 시간이 아닌 0.01을
+        // 썼다. 그래서 발사체가 speed(초당 10)보다 느리게 날고, maxTime 5초도 60fps에서
+        // 8초가 넘게 걸렸다. 느린 기기일수록 더 느려진다.
         IEnumerator ShootAction()
         {
-            for (float i = 0; i < maxTime;)
+            for (float elapsed = 0; elapsed < maxTime; elapsed += Time.deltaTime)
             {
-                i += 0.01f;
-                transform.position += moveVector * 0.01f;
-                yield return new WaitForSeconds(0.01f);
-
+                transform.position += moveVector * Time.deltaTime;
+                yield return null;
             }
 
             Destroy(gameObject);
