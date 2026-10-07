@@ -48,7 +48,7 @@ namespace Story
                 }
 
             }
-            if (id == 1)
+            if (id == 1 && badMood != null && audioSource != null)
             {
                 audioSource.clip = badMood;
                 audioSource.Play();
