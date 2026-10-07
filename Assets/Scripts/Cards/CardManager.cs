@@ -307,7 +307,12 @@ namespace Cards
 
         public void CardMouseUp()
         {
-            if (!isMyCardDrag || selectCard == null) return;
+            // 창을 닫아 취소된 드래그의 MouseUp은 조합 영역에 다시 놓지 않는다.
+            if (!isMyCardDrag || selectCard == null)
+            {
+                return;
+            }
+
             isMyCardDrag = false;
             if (onPushArea1 && selectCard.CompareTag("Spell") && (CombineZone.Instance.spellCards.Count == 0 || CombineZone.Instance.spellCards.Contains(selectCard.gameObject)))
             {
@@ -337,6 +342,16 @@ namespace Cards
 
                 selectCard.MoveTransform(selectCard.originPrs, false);
             }
+        }
+
+        public void ReturnCardsToHand()
+        {
+            CancelDrag();
+            selectCard = null;
+            onPushArea1 = false;
+            onPushArea2 = false;
+            onPushArea3 = false;
+            CardAlignment();
         }
 
         public void CancelDrag()

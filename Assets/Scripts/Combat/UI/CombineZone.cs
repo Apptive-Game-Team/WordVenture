@@ -91,6 +91,19 @@ namespace Combat.UI
             SetActivateButtonVisible(spellCards.Count == 1 && magicTypeCards.Count == 1);
         }
 
+        private void OnDisable()
+        {
+            // 카드는 조합창의 자식이 아니므로 창을 숨겨도 직접 손패로 돌려야 한다.
+            if (CardManager.Inst != null)
+            {
+                CardManager.Inst.ReturnCardsToHand();
+            }
+
+            spellCards.Clear();
+            magicTypeCards.Clear();
+            SetActivateButtonVisible(false);
+        }
+
         void SetActivateButtonVisible(bool visible)
         {
             if (activateButtonVisible == visible)
