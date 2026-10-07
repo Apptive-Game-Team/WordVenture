@@ -1120,6 +1120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 822222108}
   creditsFont: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
+  creditsCanvas: {fileID: 1589729168}
 --- !u!4 &1927760947
 Transform:
   m_ObjectHideFlags: 0

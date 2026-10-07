@@ -12,11 +12,16 @@ namespace Scenes
         SaveLoadController saveLoadController;
         [SerializeField] GameObject continueButton;
         [SerializeField] TMP_FontAsset creditsFont;
+        [SerializeField] Canvas creditsCanvas;
+
+        private void Awake()
+        {
+            var credits = creditsCanvas.gameObject.AddComponent<TitleCredits>();
+            credits.Initialize(creditsFont);
+        }
 
         private void Start()
         {
-            var credits = continueButton.GetComponentInParent<Canvas>().gameObject.AddComponent<TitleCredits>();
-            credits.Initialize(creditsFont);
             saveLoadController = GameObject.Find("SaveLoadController").GetComponent<SaveLoadController>();
             if (saveLoadController.LoadPlayData() == -1)
             {
