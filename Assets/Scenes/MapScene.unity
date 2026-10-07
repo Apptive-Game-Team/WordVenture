@@ -1700,7 +1700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Enter \uD0A4\uB85C \uC2A4\uD14C\uC774\uC9C0 \uC785\uC7A5"
+  m_text: "\uD074\uB9AD: \uC774\uB3D9 / \uB2E4\uC2DC \uD074\uB9AD \uB610\uB294 Enter: \uC785\uC7A5"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}

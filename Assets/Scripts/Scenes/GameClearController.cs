@@ -53,7 +53,7 @@ namespace Scenes
                     }
                     else
                     {
-                        SceneManager.LoadScene("Map_scene");
+                        SceneManager.LoadScene("MapScene");
                     }
 
                 }
@@ -62,7 +62,7 @@ namespace Scenes
                 if (Input.anyKeyDown)
                 {
 
-                    SceneManager.LoadScene("Map_scene");
+                    SceneManager.LoadScene("MapScene");
 
                 }
             }

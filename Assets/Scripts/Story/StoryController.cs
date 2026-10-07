@@ -99,7 +99,7 @@ namespace Story
             if (MapMove.StagePosition == 5)
                 SceneManager.LoadScene("TitleScene");
             else
-                SceneManager.LoadScene("Map_scene");
+                SceneManager.LoadScene("MapScene");
         }
     }
 }
