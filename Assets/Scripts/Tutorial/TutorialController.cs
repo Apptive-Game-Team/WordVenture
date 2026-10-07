@@ -1,8 +1,15 @@
 using System.Collections;
+using Cards;
+using Combat.Enemies;
+using Combat.Stage;
+using Combat.UI;
 using Core;
 using Map;
 using Story;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Battle.Turns;
 
 namespace Tutorial
 {
@@ -12,155 +19,326 @@ namespace Tutorial
 
         [SerializeField] TutorialChatWindow tutorialChatWindow;
         [SerializeField] TutorialScriptContainer tutorialScript;
-
-        // 대화창 뒤의 UI(카드, Back 버튼 등) 클릭을 막는 전체 화면 이미지.
         [SerializeField] GameObject inputBlocker;
-
+        [SerializeField] TutorialOverlay overlay;
         [SerializeField] TutorialFlag currentFlag = TutorialFlag.FLAG_001_START_TUTORIAL;
+        [SerializeField] bool waitingForAcknowledge;
+        [SerializeField] bool castStarted;
+        [SerializeField] bool targetSelected;
 
-        // 인터페이스는 Unity가 직렬화하지 못한다. Start에서만 채우면 플레이 중 스크립트가
-        // 다시 컴파일될 때(도메인 리로드) null이 되고, Update가 매 프레임 NRE를 던진다.
-        // 필드 초기화로 두면 객체가 다시 만들어질 때 같이 복구된다.
-        ITutorialCondition tutorialCondition = new TutorialConditon002();
+        CombineZone battleZone;
+        CombineButton combineButton;
+        TurnBattleSystem turnSystem;
+        Button turnEndButton;
+        bool turnEnded;
+        bool confirmingSkip;
+        bool finished;
+        Coroutine unlockCoroutine;
 
-        // 대사를 다 읽었다는 확인 입력을 기다리는 중인지. 확인 입력을 받기 전에는
-        // 다음 대사로 넘어가지 않는다.
-        bool waitingForAcknowledge;
-
-        private void Awake()
+        void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
+                return;
             }
-            DontDestroyOnLoad(this);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+        void OnEnable()
+        {
+            if (Instance == this)
+                SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         void Start()
         {
-            if (MapMove.StagePosition > 0)
+            if (Instance != this) return;
+            if (MapMove.StagePosition > 0 || SaveLoadController.IsTutorialEnded)
             {
-                gameObject.SetActive(false);
+                finished = true;
+                Destroy(gameObject);
                 return;
             }
-            SetChatWindowVisible(true);
+            overlay.Initialize(this);
+            inputBlocker.transform.SetAsFirstSibling();
+            BindBattle();
             StoryTelling();
+        }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (mode == LoadSceneMode.Additive) return;
+            overlay.ClearGuidance();
+            if (scene.name == "TitleScene" || scene.name == "GameOverScene")
+            {
+                Destroy(gameObject);
+                return;
+            }
+            if (scene.name == "TurnBattleScene")
+            {
+                castStarted = false;
+                targetSelected = false;
+                turnEnded = false;
+            }
+            BindBattle();
+        }
+
+        void BindBattle()
+        {
+            UnbindBattle();
+            battleZone = FindObjectOfType<CombineZone>(true);
+            combineButton = FindObjectOfType<CombineButton>(true);
+            turnSystem = FindObjectOfType<TurnBattleSystem>(true);
+            if (turnSystem != null)
+            {
+                turnSystem.PlayerTurnEnded += OnPlayerTurnEnded;
+                foreach (Button button in FindObjectsOfType<Button>(true))
+                    for (int i = 0; i < button.onClick.GetPersistentEventCount(); i++)
+                        if (button.onClick.GetPersistentTarget(i) == turnSystem
+                            && button.onClick.GetPersistentMethodName(i) == nameof(TurnBattleSystem.TurnEndButton))
+                            turnEndButton = button;
+            }
+            if (battleZone == null) return;
+            battleZone.SpellCastStarted += OnSpellCastStarted;
+            battleZone.TargetSelected += OnTargetSelected;
+        }
+
+        void UnbindBattle()
+        {
+            if (turnSystem != null) turnSystem.PlayerTurnEnded -= OnPlayerTurnEnded;
+            turnSystem = null;
+            turnEndButton = null;
+            if (battleZone != null)
+            {
+                battleZone.SpellCastStarted -= OnSpellCastStarted;
+                battleZone.TargetSelected -= OnTargetSelected;
+            }
+            battleZone = null;
+            combineButton = null;
+        }
+
+        void OnSpellCastStarted() { castStarted = true; }
+        void OnTargetSelected(SelectableObject target) { targetSelected = true; }
+        void OnPlayerTurnEnded() { turnEnded = true; }
+
+        TutorialActionState ReadActionState()
+        {
+            return new TutorialActionState
+            {
+                battleStarted = SceneManager.GetActiveScene().name == "TurnBattleScene"
+                    && StageDataSingleton.Instance != null && StageDataSingleton.Instance.stagePosition == 0,
+                handReady = CardManager.Inst != null && CardManager.Inst.HandCards.Count >= 2,
+                combineOpen = battleZone != null && battleZone.gameObject.activeInHierarchy,
+                hasSpell = battleZone != null && battleZone.spellCards.Count == 1,
+                hasElemental = battleZone != null && battleZone.magicTypeCards.Count == 1,
+                castStarted = castStarted,
+                targetSelected = targetSelected,
+                turnEnded = turnEnded,
+                battleCleared = SceneManager.GetActiveScene().name == "GameClearScene"
+            };
         }
 
         public void OnTriggerTutorial()
         {
-            SetChatWindowVisible(true);
-            GoNextFlag();
-            StoryTelling();
-            tutorialCondition = tutorialCondition.GetNextCondition();
-        }
-
-        void GoNextFlag()
-        {
+            if (finished || confirmingSkip || waitingForAcknowledge) return;
             currentFlag = currentFlag.Next();
+            StoryTelling();
         }
 
         void StoryTelling()
         {
-            TutorialChatData tutorialChatData = tutorialScript.GetScriptData(currentFlag);
-            tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(tutorialChatData.portraitID));
+            overlay.ClearGuidance();
+            TutorialChatData data = tutorialScript.GetScriptData(currentFlag);
+            SetChatWindowVisible(true);
+            tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(data.portraitID));
             tutorialChatWindow.SetAnyKeyPromptVisible(false);
-            tutorialChatWindow.UpdateChatStream(tutorialChatData.name, tutorialChatData.text);
+            tutorialChatWindow.UpdateChatStream(data.name, data.text);
             waitingForAcknowledge = true;
         }
 
         public void ProceedTutorial()
         {
-            if(tutorialCondition.IsMeetCondition())
-            {
+            if (!finished && !confirmingSkip && !waitingForAcknowledge
+                && TutorialCondition.CanAdvance(currentFlag, ReadActionState()))
                 OnTriggerTutorial();
-            }
         }
 
-        private void Update()
+        void Update()
         {
-            if(currentFlag == TutorialFlag.FLAG_014_END_TUTORIAL)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
-
+            if (Instance != this || finished || confirmingSkip) return;
+            UpdateGuidance();
             if (waitingForAcknowledge)
             {
-                if (!IsAdvanceKeyDown())
-                {
-                    return;
-                }
-
-                // 타이핑 중이면 첫 입력은 연출 스킵으로 쓴다. 연타로 대사가 통째로 날아가지 않게 한다.
-                if (tutorialChatWindow.IsStreaming)
-                {
-                    tutorialChatWindow.CompleteStream();
-                    return;
-                }
-
-                waitingForAcknowledge = false;
-                tutorialChatWindow.SetAnyKeyPromptVisible(false);
-                SetChatWindowVisible(false);
+                if (!IsAdvanceKeyDown()) return;
+                if ((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
+                    && overlay.IsSkipPointer(Input.mousePosition)) return;
+                AcknowledgeDialogue();
                 return;
             }
-
             ProceedTutorial();
         }
 
-        /// <summary>
-        /// 대화창과 입력 차단을 함께 켜고 끈다. 창만 켜면 뒤의 카드·버튼이 그대로 눌린다.
-        /// </summary>
-        void SetChatWindowVisible(bool visible)
+        public void AcknowledgeDialogue()
         {
-            tutorialChatWindow.gameObject.SetActive(visible);
-
-            if (inputBlocker != null)
+            if (!waitingForAcknowledge || confirmingSkip || finished) return;
+            if (tutorialChatWindow.IsStreaming)
             {
-                inputBlocker.SetActive(visible);
-            }
-
-            if (visible)
-            {
-                InteractionLock.IsLocked = true;
+                tutorialChatWindow.CompleteStream();
                 return;
             }
-
-            if (!isActiveAndEnabled)
-            {
-                InteractionLock.IsLocked = false;
-                return;
-            }
-
-            StartCoroutine(UnlockAfterFrame());
+            waitingForAcknowledge = false;
+            tutorialChatWindow.SetAnyKeyPromptVisible(false);
+            if (currentFlag == TutorialFlag.FLAG_013_END_BATTLE) FinishTutorial();
+            else SetChatWindowVisible(false);
         }
 
-        /// <summary>
-        /// 확인 입력이 발생한 프레임에는 잠금을 유지한다. 같은 프레임에 Map의 Enter 처리 같은
-        /// 다른 Update가 이어서 돌면, 대사를 넘긴 키가 게임플레이 입력으로도 먹힌다.
-        /// </summary>
-        IEnumerator UnlockAfterFrame()
+        void UpdateGuidance()
+        {
+            if (waitingForAcknowledge)
+            {
+                overlay.ClearGuidance();
+                return;
+            }
+            TutorialActionState state = ReadActionState();
+            if (currentFlag == TutorialFlag.FLAG_010_END_TURN && !state.turnEnded && !state.battleCleared)
+            {
+                overlay.ShowGuidance(null, turnEndButton != null ? turnEndButton.transform : null,
+                    "Turn End 버튼을 눌러 턴을 마치세요.", true);
+                return;
+            }
+            if (currentFlag >= TutorialFlag.FLAG_004_COMBINATION
+                && currentFlag <= TutorialFlag.FLAG_007_SET_ELEMENTAL && !state.castStarted)
+            {
+                if (!state.combineOpen)
+                {
+                    overlay.ShowGuidance(null, combineButton != null ? combineButton.transform : null, "조합 버튼을 눌러 조합창을 여세요.", true);
+                    return;
+                }
+                if (currentFlag == TutorialFlag.FLAG_004_COMBINATION)
+                {
+                    overlay.ClearGuidance();
+                    return;
+                }
+                if (!state.hasSpell)
+                {
+                    GuideCard("Spell", "마법 카드를 첫 번째 칸으로 끌어 놓으세요.");
+                    return;
+                }
+                if (currentFlag >= TutorialFlag.FLAG_006_SET_MAGIC && !state.hasElemental)
+                {
+                    GuideCard("MagicType", "Fire 속성 카드를 두 번째 칸으로 끌어 놓으세요.");
+                    return;
+                }
+                if (currentFlag == TutorialFlag.FLAG_007_SET_ELEMENTAL)
+                {
+                    overlay.ShowGuidance(null, battleZone.activateButton.transform, "조합 버튼을 눌러 마법을 시전하세요.", true);
+                    return;
+                }
+            }
+            if ((currentFlag == TutorialFlag.FLAG_008_CAST_SPELL || currentFlag == TutorialFlag.FLAG_009_CAST_END)
+                && state.castStarted && !state.targetSelected && battleZone != null)
+            {
+                overlay.ShowGuidance(null, battleZone.GetTutorialTarget(), "강조된 적을 클릭해 공격 대상을 선택하세요.", true);
+                return;
+            }
+            overlay.ClearGuidance();
+        }
+
+        void GuideCard(string tag, string message)
+        {
+            CardManager manager = CardManager.Inst;
+            Card card = manager != null ? manager.GetTutorialCard(tag) : null;
+            Transform slot = manager != null ? manager.GetTutorialSlot(tag) : null;
+            overlay.ShowGuidance(card != null ? card.transform : null, slot,
+                card != null ? message : (tag == "Spell" ? "마법 카드가 필요해요. 카드를 뽑으면 안내할게요." : "Fire 속성 카드가 필요해요. 카드를 뽑으면 안내할게요."));
+        }
+
+        public void RequestSkip()
+        {
+            if (finished || confirmingSkip) return;
+            confirmingSkip = true;
+            LockInput();
+            if (CardManager.Inst != null) CardManager.Inst.CancelDrag();
+            overlay.ShowConfirmation(true);
+        }
+
+        public void CancelSkip()
+        {
+            if (!confirmingSkip || finished) return;
+            confirmingSkip = false;
+            overlay.ShowConfirmation(false);
+            SetChatWindowVisible(waitingForAcknowledge);
+        }
+
+        public void ConfirmSkip()
+        {
+            if (confirmingSkip) FinishTutorial();
+        }
+
+        void FinishTutorial()
+        {
+            if (finished) return;
+            finished = true;
+            confirmingSkip = false;
+            currentFlag = TutorialFlag.FLAG_014_END_TUTORIAL;
+            SaveLoadController.MarkTutorialEnded();
+            UnbindBattle();
+            tutorialChatWindow.CompleteStream();
+            tutorialChatWindow.gameObject.SetActive(false);
+            inputBlocker.SetActive(false);
+            overlay.Hide();
+            LockInput();
+            StartCoroutine(FinishAfterFrame());
+        }
+
+        IEnumerator FinishAfterFrame()
         {
             yield return null;
             InteractionLock.IsLocked = false;
+            Destroy(gameObject);
         }
 
-        // 튜토리얼이 끝나거나 오브젝트가 꺼지면 코루틴이 죽으므로 잠금을 직접 푼다.
-        private void OnDisable()
+        void LockInput()
         {
+            if (unlockCoroutine != null) StopCoroutine(unlockCoroutine);
+            unlockCoroutine = null;
+            InteractionLock.IsLocked = true;
+        }
+
+        void SetChatWindowVisible(bool visible)
+        {
+            tutorialChatWindow.gameObject.SetActive(visible);
+            inputBlocker.SetActive(visible);
+            LockInput();
+            if (!visible) unlockCoroutine = StartCoroutine(UnlockAfterFrame());
+        }
+
+        IEnumerator UnlockAfterFrame()
+        {
+            yield return null;
+            unlockCoroutine = null;
+            if (!confirmingSkip && !waitingForAcknowledge && !finished)
+                InteractionLock.IsLocked = false;
+        }
+
+        void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            UnbindBattle();
+            if (Instance != this) return;
+            StopAllCoroutines();
+            unlockCoroutine = null;
             InteractionLock.IsLocked = false;
+            if (overlay != null) overlay.Hide();
         }
 
-        // Enum.Equals(object)는 양쪽 피연산자를 박싱한다. 이 검사는 튜토리얼이 도는
-        // 동안 매 프레임 여러 번 불리므로 == 로 비교해 할당을 없앤다.
-        public bool IsFlagEqual(TutorialFlag flag)
+        void OnDestroy()
         {
-            return currentFlag == flag;
+            if (Instance == this) Instance = null;
         }
-    }
 
+        public bool IsFlagEqual(TutorialFlag flag) { return currentFlag == flag; }
+    }
 }

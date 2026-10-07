@@ -94,7 +94,6 @@ namespace Cards
             }
 
             CardManager.Inst.CardMouseUp();
-            CardManager.Inst.selectCard = this;
         }
 
         void CheckHighestCard()
@@ -125,8 +124,8 @@ namespace Cards
                 Card card = topLayerHit.transform.gameObject.GetComponent<Card>();
                 if (card != null)
                 {
-                    CardManager.Inst.CardMouseDown();
                     CardManager.Inst.selectCard = card;
+                    CardManager.Inst.CardMouseDown();
                 }
             }
         }

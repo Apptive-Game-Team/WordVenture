@@ -30,7 +30,7 @@ namespace Tutorial
         FLAG_007_SET_ELEMENTAL = 7,
         FLAG_008_CAST_SPELL = 8,
         FLAG_009_CAST_END = 9,
-        FLAG_010_CLICK_TO_SELECT = 10,
+        FLAG_010_END_TURN = 10,
         FLAG_011_FINISH_SPELL = 11,
         FLAG_012_NEXT_ENEMY = 12,
         FLAG_013_END_BATTLE = 13,

@@ -6,6 +6,14 @@ namespace Core
 
     public class SaveLoadController : MonoBehaviour
     {
+        public const string TutorialEndedKey = "TutorialEnded";
+        public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
+
+        public static void MarkTutorialEnded()
+        {
+            PlayerPrefs.SetInt(TutorialEndedKey, 1);
+            PlayerPrefs.Save();
+        }
 
         private static SaveLoadController _instance = null;
 
@@ -71,6 +79,8 @@ namespace Core
         public void InitPlayData()
         {
             PlayerPrefs.SetInt("StagePosition", -1);
+            PlayerPrefs.DeleteKey(TutorialEndedKey);
+            PlayerPrefs.Save();
         }
     }
 

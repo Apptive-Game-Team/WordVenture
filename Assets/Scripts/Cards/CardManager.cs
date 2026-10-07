@@ -56,6 +56,29 @@ namespace Cards
         bool onPushArea1;
         bool onPushArea2;
         bool onPushArea3;
+        Prs dragStartPrs;
+
+        public IReadOnlyList<Card> HandCards => myCards;
+        public bool IsDraggingCard => isMyCardDrag;
+
+        public Card GetTutorialCard(string tag)
+        {
+            foreach (Card card in myCards)
+            {
+                if (card == null || !card.gameObject.activeInHierarchy || !card.CompareTag(tag)) continue;
+                if (CombineZone.Instance != null && (CombineZone.Instance.spellCards.Contains(card.gameObject)
+                    || CombineZone.Instance.magicTypeCards.Contains(card.gameObject))) continue;
+                if (tag == "MagicType" && card.cardType != MagicType.Fire) continue;
+                return card;
+            }
+            return null;
+        }
+
+        public Transform GetTutorialSlot(string tag)
+        {
+            GameObject slot = tag == "Spell" ? pushArea1 : pushArea2;
+            return slot != null ? slot.transform : null;
+        }
 
 
         public Word PopWord()
@@ -277,6 +300,8 @@ namespace Cards
 
         public void CardMouseDown()
         {
+            if (selectCard == null) return;
+            dragStartPrs = new Prs(selectCard.transform.position, selectCard.transform.rotation, selectCard.transform.localScale);
             isMyCardDrag = true;
         }
 
@@ -289,12 +314,12 @@ namespace Cards
             }
 
             isMyCardDrag = false;
-            if (onPushArea1 && selectCard.CompareTag("Spell") && CombineZone.Instance.spellCards.Count == 0)
+            if (onPushArea1 && selectCard.CompareTag("Spell") && (CombineZone.Instance.spellCards.Count == 0 || CombineZone.Instance.spellCards.Contains(selectCard.gameObject)))
             {
                 pushArea1.GetComponent<DropZone>().GetCard(selectCard.gameObject);
                 selectCard.MoveTransform(new Prs(pushArea1.transform.position, Util.Qi, selectCard.originPrs.scale), false);
             }
-            else if (onPushArea2 && selectCard.CompareTag("MagicType") && CombineZone.Instance.magicTypeCards.Count == 0)
+            else if (onPushArea2 && selectCard.CompareTag("MagicType") && (CombineZone.Instance.magicTypeCards.Count == 0 || CombineZone.Instance.magicTypeCards.Contains(selectCard.gameObject)))
             {
                 pushArea2.GetComponent<DropZone>().GetCard(selectCard.gameObject);
                 selectCard.MoveTransform(new Prs(pushArea2.transform.position, Util.Qi, selectCard.originPrs.scale), false);
@@ -308,11 +333,11 @@ namespace Cards
             {
                 if (selectCard.CompareTag("Spell"))
                 {
-                    CombineZone.Instance.spellCards.Clear();
+                    CombineZone.Instance.spellCards.Remove(selectCard.gameObject);
                 }
                 if (selectCard.CompareTag("MagicType"))
                 {
-                    CombineZone.Instance.magicTypeCards.Clear();
+                    CombineZone.Instance.magicTypeCards.Remove(selectCard.gameObject);
                 }
 
                 selectCard.MoveTransform(selectCard.originPrs, false);
@@ -329,7 +354,7 @@ namespace Cards
             CardAlignment();
         }
 
-        void CancelDrag()
+        public void CancelDrag()
         {
             if (!isMyCardDrag)
             {
@@ -339,7 +364,7 @@ namespace Cards
             isMyCardDrag = false;
             if (selectCard != null)
             {
-                selectCard.MoveTransform(selectCard.originPrs, false);
+                selectCard.MoveTransform(dragStartPrs, false);
             }
         }
 
