@@ -1,7 +1,64 @@
 # 기여 가이드
 
 WordVenture를 함께 개발할 때 따르는 협업 규칙입니다.
-개발 환경과 프로젝트 실행 방법은 [README](README.md#unity에서-프로젝트-열기)를 확인해 주세요.
+게임 소개와 플레이 방법은 [README](README.md)를 확인해 주세요.
+
+## Unity에서 프로젝트 열기
+
+### 개발 환경
+
+| 항목 | 구성 |
+| --- | --- |
+| 엔진 | Unity **2022.3.34f1** |
+| 언어 | C# |
+| UI | Unity UI, TextMesh Pro |
+| 데이터 | ScriptableObject |
+| 진행 저장 | PlayerPrefs |
+| 테스트 | Unity Test Framework · EditMode / PlayMode |
+| 자동 빌드 | GitHub Actions, GameCI |
+
+### 실행 순서
+
+1. Unity Hub에서 **Unity 2022.3.34f1**을 설치합니다. 직접 빌드할 플랫폼의 Build Support 모듈도 함께 설치합니다.
+2. 저장소를 복제합니다.
+
+   ```bash
+   git clone https://github.com/Apptive-Game-Team/WordVenture.git
+   ```
+
+3. Unity Hub에서 복제한 `WordVenture` 폴더를 프로젝트로 추가하고 엽니다.
+4. 패키지 설치와 에셋 임포트가 끝나면 `Assets/Scenes/TitleScene.unity`를 엽니다.
+5. 에디터의 **Play** 버튼을 눌러 타이틀부터 실행합니다.
+
+직접 빌드할 때는 **File → Build Settings**에서 대상 플랫폼을 선택합니다.
+저장소의 빌드 설정에는 타이틀, 스토리, 맵, 전투, 게임 클리어, 게임 오버, 엔딩 씬이 등록되어 있습니다.
+
+### 테스트
+
+**Window → General → Test Runner**에서 EditMode와 PlayMode 테스트를 실행할 수 있습니다.
+테스트 코드는 `Assets/Tests`에 있으며, 씬 빌드 설정, 프리팹 연결, 스테이지·적 데이터와 튜토리얼 동작을 확인합니다.
+
+## 프로젝트 구조
+
+```text
+Assets/
+├── Art/                 게임 아트, UI, 폰트, 애니메이션
+├── Prefabs/             재사용 게임 오브젝트와 UI
+├── Scenes/              타이틀, 스토리, 맵, 전투, 엔딩 등
+├── ScriptableObjects/   게임 데이터와 대사
+├── Scripts/
+│   ├── Battle/          턴 진행
+│   ├── Cards/           카드 데이터와 관리
+│   ├── Combat/          마법, 적, 스테이지, 전투 UI
+│   ├── Core/            저장·불러오기와 공통 기능
+│   ├── Map/             맵 이동
+│   ├── Scenes/          씬별 흐름과 타이틀 크레딧
+│   ├── Story/           스토리와 대화
+│   └── Tutorial/        튜토리얼 진행과 행동 안내
+├── Tests/               EditMode / PlayMode 테스트
+├── ThirdParty/          외부 리소스
+└── WebGLTemplates/      웹 빌드 템플릿
+```
 
 ## 브랜치 흐름
 
