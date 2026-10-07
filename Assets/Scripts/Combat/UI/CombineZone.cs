@@ -1,6 +1,8 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using Cards;
+using Core;
 using Combat.Enemies;
 using Combat.Spells;
 using UnityEngine;
@@ -16,6 +18,19 @@ namespace Combat.UI
         [SerializeField] AudioSource magicEffectSource;
 
         public static CombineZone Instance;
+        public event Action SpellCastStarted;
+        public event Action<SelectableObject> TargetSelected;
+        public bool IsAwaitingTarget { get; private set; }
+        bool isCasting;
+
+        public Transform GetTutorialTarget()
+        {
+            foreach (SelectableObject selectable in allSelectableObjects)
+                if (selectable != null && selectable.gameObject.activeInHierarchy
+                    && selectable.CompareTag("Enemy") && selectable.GetSelectable())
+                    return selectable.transform;
+            return null;
+        }
 
         public List<GameObject> spellCards = new List<GameObject>();
         public List<GameObject> magicTypeCards = new List<GameObject>();
@@ -102,13 +117,14 @@ namespace Combat.UI
 
         SelectableObject target = null;
 
-        public async void OnButtonClick()
+        public void OnButtonClick()
         {
-            if (spellCards.Count == 1 && magicTypeCards.Count == 1)// && targetCards.Count == 1)
-            {
-                StartCoroutine(CastSpell());
-            }
+            if (InteractionLock.IsLocked || isCasting || spellCards.Count != 1 || magicTypeCards.Count != 1) return;
+            isCasting = true;
+            // 조합창을 닫아도 대상 선택 중인 주문은 유지한다. 카드 관리자는 전투 씬과 수명이 같다.
+            CardManager.Inst.StartCoroutine(CastSpell());
             ClearDropZone();
+            SpellCastStarted?.Invoke();
         }
         IEnumerator CastSpell()
         {
@@ -116,6 +132,7 @@ namespace Combat.UI
             SetAllSelectable(true);
             Cards.MagicType spellType = spellCards[0].GetComponent<Card>().cardType;
             Cards.MagicType magicType = magicTypeCards[0].GetComponent<Card>().cardType;
+            IsAwaitingTarget = true;
 
             // 대상을 고를 때까지 기다린다. 0.01초는 프레임 간격보다 짧아 어차피 한
             // 프레임마다 깨어났고, 그때마다 대기 객체만 새로 만들어졌다. 대기가
@@ -144,11 +161,16 @@ namespace Combat.UI
             SetAllSelectable(false);
 
             target = null;
+            isCasting = false;
         }
 
         public void SetTarget(SelectableObject selectableObject)
         {
+            if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null
+                || !selectableObject.GetSelectable()) return;
             target = selectableObject;
+            IsAwaitingTarget = false;
+            TargetSelected?.Invoke(selectableObject);
         }
 
         public void ClearDropZone()

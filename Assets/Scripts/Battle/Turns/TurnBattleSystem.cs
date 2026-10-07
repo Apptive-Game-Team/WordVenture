@@ -1,6 +1,8 @@
 using System.Collections;
 using Cards;
 using Combat.Enemies;
+using Core;
+using Combat.UI;
 using UnityEngine;
 
 namespace Battle.Turns
@@ -71,6 +73,7 @@ namespace Battle.Turns
         public static EnemyTurn EnemyTurn;
         public static float TurnTime = 1f;
         Turn currentTurn;
+        public event System.Action PlayerTurnEnded;
 
         [SerializeField] public CardManager cardManager;
         [SerializeField] public EnemyTestManager enemyManager;
@@ -112,9 +115,13 @@ namespace Battle.Turns
 
         public void TurnEndButton()
         {
+            if (InteractionLock.IsLocked) return;
+            CombineZone zone = FindObjectOfType<CombineZone>(true);
+            if (zone != null && zone.IsAwaitingTarget) return;
             if (currentTurn == PlayerTurn)
             {
                 ChangeTurn(EnemyTurn);
+                PlayerTurnEnded?.Invoke();
             }
 
         }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Core;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ namespace Combat.UI
 
         public void OnButtonClick()
         {
+            if (InteractionLock.IsLocked) return;
             if (!combineZone.activeSelf)
             {
                 combineZone.SetActive(true);

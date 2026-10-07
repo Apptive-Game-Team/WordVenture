@@ -35,13 +35,7 @@ MonoBehaviour:
     portraitID: 0
     tutorialFlag: 4
   - name: "\uD560\uC544\uBC84\uC9C0"
-    text: "\uC870\uD569 \uCC3D\uC740 \uB9C8\uBC95 \uCE78\uACFC, \uC18D\uC131 \uCE78\uC73C\uB85C
-      \uC774\uB8E8\uC5B4\uC838\uC788\uB2E8\uB2E4. \uB9C8\uBC95\uC5D0 \uB530\uB77C
-      \uB2E4\uB978 \uCE78\uB4E4\uC774 \uB354 \uC788\uC744 \uC218\uB3C4 \uC788\uB2E8\uB2E4. "
-    portraitID: 0
-    tutorialFlag: 4
-  - name: "\uD560\uC544\uBC84\uC9C0"
-    text: "\uCCAB \uBC88\uC9F8 \uCE78\uC5D0 \uB9C8\uBC95 \uCE74\uB4DC\uB97C \uB193\uC544\uBCF4\uC790."
+    text: "조합창에는 마법 칸과 속성 칸이 있단다. 마법에 따라 다른 칸이 더 있을 수도 있지. 첫 번째 칸에 마법 카드를 끌어 놓아보자."
     portraitID: 0
     tutorialFlag: 5
   - name: "\uD560\uC544\uBC84\uC9C0"
@@ -67,7 +61,7 @@ MonoBehaviour:
     portraitID: 0
     tutorialFlag: 9
   - name: "\uD560\uC544\uBC84\uC9C0"
-    text: "\uC74C, \uC81C\uB300\uB85C \uC775\uC5C8\uAD6C\uB9CC\u2026"
+    text: "음, 제대로 익혔구나. 행동을 마쳤다면 오른쪽 위의 Turn End 버튼을 눌러 턴을 끝내 보아라. 그러면 적이 행동한 뒤 다시 네 턴이 돌아온단다."
     portraitID: 0
     tutorialFlag: 10
   - name: "\uD560\uC544\uBC84\uC9C0"
