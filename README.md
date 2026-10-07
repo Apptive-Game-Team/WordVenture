@@ -50,4 +50,3 @@ Unity **2022.3.34f1**에서 프로젝트를 열고 `Assets/Scenes/TitleScene.uni
 ### 아트 사용 안내
 
 **이 게임에는 AI로 생성된 아트가 사용되었습니다.**
-
