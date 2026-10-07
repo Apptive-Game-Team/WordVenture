@@ -4,6 +4,7 @@ using UnityEngine.UI;
 namespace Scenes
 {
     // 타이틀 나무판의 색과 각진 테두리를 공유하는 크기 조절 가능한 UI.
+    [RequireComponent(typeof(CanvasRenderer))]
     public class CreditsWoodPanel : MaskableGraphic
     {
         protected override void OnPopulateMesh(VertexHelper mesh)

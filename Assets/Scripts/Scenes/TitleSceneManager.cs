@@ -1,6 +1,5 @@
 using Core;
 using Map;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,14 +10,6 @@ namespace Scenes
     {
         SaveLoadController saveLoadController;
         [SerializeField] GameObject continueButton;
-        [SerializeField] TMP_FontAsset creditsFont;
-        [SerializeField] Canvas creditsCanvas;
-
-        private void Awake()
-        {
-            var credits = creditsCanvas.gameObject.AddComponent<TitleCredits>();
-            credits.Initialize(creditsFont);
-        }
 
         private void Start()
         {
