@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uBB34 \uD0A4\uB098 \uB204\uB974\uC138\uC694"
+  m_text: "아무 키나 입력하세요"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.48}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -356,6 +356,7 @@ GameObject:
   - component: {fileID: 2616659782831865599}
   - component: {fileID: 8333352522143099620}
   - component: {fileID: 2591203149540365966}
+  - component: {fileID: 1010000000000000020}
   m_Layer: 5
   m_Name: TutorialController
   m_TagString: Untagged
@@ -467,6 +468,7 @@ MonoBehaviour:
   tutorialChatWindow: {fileID: 8153041966857089447}
   tutorialScript: {fileID: 11400000, guid: 53b95564a4dfdf74193339b674940924, type: 2}
   inputBlocker: {fileID: 1010000000000000011}
+  overlay: {fileID: 1010000000000000020}
   currentFlag: 1
 --- !u!1 &4122150926431636598
 GameObject:
@@ -807,3 +809,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speakerImage: {fileID: 9188150128716240315}
   anyKeyPrompt: {fileID: 1010000000000000001}
+
+--- !u!114 &1010000000000000020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026519814890935555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a1254f6e0d4405ab37dc8b77e0ea81, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
+  dragHand: {fileID: 21300000, guid: 7b7c40bd8c2342bc83172ecadf47de6b, type: 3}
