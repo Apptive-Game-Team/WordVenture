@@ -1410,8 +1410,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
-  m_fontSizeBase: 34
+  m_fontSize: 44
+  m_fontSizeBase: 44
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1640,8 +1640,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44
-  m_fontSizeBase: 44
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1757,8 +1757,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "문성필  <size=22>개발자</size>"
+  m_text: "문성필  <size=30>개발자</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -1987,8 +1987,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2188,7 +2188,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "김현진  <size=22>개발자</size>"
+  m_text: "김현진  <size=30>개발자</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -2217,8 +2217,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2418,7 +2418,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "정윤성  <size=22>개발자</size>"
+  m_text: "정윤성  <size=30>개발자</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -2447,8 +2447,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2648,7 +2648,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "정진욱  <size=22>디자이너 / 개발자</size>"
+  m_text: "정진욱  <size=30>디자이너 / 개발자</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -2677,8 +2677,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2878,7 +2878,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "황인섭  <size=22>개발자</size>"
+  m_text: "황인섭  <size=30>개발자</size>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   m_sharedMaterial: {fileID: -8058157673588997135, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
@@ -2907,8 +2907,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3024,8 +3024,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3254,8 +3254,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 38
+  m_fontSizeBase: 38
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
