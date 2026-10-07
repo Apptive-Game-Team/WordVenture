@@ -1,40 +1,63 @@
-# WordVenture
+# WordVenture · 워드의 모험
 
-**Team 6203**의 GIGDC 2024 출품작 워드의 모험(WordVenture)(가칭) 제작을 위한 저장소입니다. 여기는 Main!
+**마법 카드와 속성 카드를 조합해 싸우는 2D 턴제 전투 게임.**
 
-[대회 설명](https://www.gigdc.or.kr/sub01/sub02.php)
+Team 6203의 GIGDC 2024 출품작입니다.
 
+[다운로드 / 웹 플레이 안내](https://github.com/Apptive-Game-Team/WordVenture/releases) · [기여 가이드](CONTRIBUTING.md)
 
-## 이렇게 사용하세요.
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/title.jpg" alt="WordVenture 타이틀 화면" /></td>
+    <td width="50%"><img src="docs/images/combat.jpg" alt="마법 카드와 속성 카드를 조합하는 전투 화면" /></td>
+  </tr>
+  <tr>
+    <td align="center">타이틀</td>
+    <td align="center">카드 조합 · 턴제 전투</td>
+  </tr>
+</table>
 
-1. 기능을 추가하려면 기능별 브랜치를 만들어서 작업해주세요.
-2. 작업이 끝났다면 본인 브랜치에 develop 브랜치를 먼저 병합하고, 오류가 있다면 오류를 해결해주세요.
-3. 문제가 다 해결되었다면, develop 브랜치에 병합해주세요.
-4. 하나의 버전이 병합 후 안정적으로 완성이 되었다면, 메인 브랜치에 병합해주세요.
+## 플레이
 
-## 이렇게 정리합시다.
-1. 본인의 폴더를 만들어서 스크립트나 리소스를 정리합시다.
+마우스 클릭과 드래그로 조작합니다.
 
-## 이렇게 코딩합시다.
+1. 조합창에 마법 카드와 속성 카드를 놓습니다.
+2. 조합을 실행하고 마법의 대상을 선택합니다.
+3. 행동을 마치면 **Turn End**로 턴을 넘깁니다.
 
-1. 네임스페이스 적용해서 본인 코드 짜기
-```C#
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+속성 상성을 활용해 스테이지를 진행하세요. 튜토리얼과 이어하기를 지원합니다.
 
-namespace TurnBattle
-{
-    public class TurnBattleSystem : MonoBehaviour
-    {
-      ...
-    }
+## 개발 실행
 
-}
+Unity **2022.3.34f1**에서 프로젝트를 열고 `Assets/Scenes/TitleScene.unity`를 실행합니다.
+자세한 설정과 테스트 방법은 [기여 가이드](CONTRIBUTING.md#unity에서-프로젝트-열기)를 참고하세요.
 
-다른 네임스페이스 참조하려면 using TurnBattle; 사용! 
+## 제작진 · Team 6203
 
-```   
-2. [C# Naming Convention](https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-classes-structs-and-interfaces#naming-enumerations) 를 참조하여 이름을 정해봅시다.
+<table>
+  <tr>
+    <th align="center">문성필</th>
+    <th align="center">김현진</th>
+    <th align="center">정윤성</th>
+    <th align="center">정진욱</th>
+    <th align="center">황인섭</th>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Monolong"><img src="https://avatars.githubusercontent.com/u/83206119?v=4" width="120" alt="문성필 프로필" /></a></td>
+    <td align="center"><a href="https://github.com/Gimlocal"><img src="https://avatars.githubusercontent.com/u/127363458?v=4" width="120" alt="김현진 프로필" /></a></td>
+    <td align="center"><a href="https://github.com/dev-yunseong"><img src="https://avatars.githubusercontent.com/u/88422717?v=4" width="120" alt="정윤성 프로필" /></a></td>
+    <td align="center"><a href="https://github.com/Jinwook700"><img src="https://avatars.githubusercontent.com/u/127014921?v=4" width="120" alt="정진욱 프로필" /></a></td>
+    <td align="center"><a href="https://github.com/hwanginseop"><img src="https://avatars.githubusercontent.com/u/163392234?v=4" width="120" alt="황인섭 프로필" /></a></td>
+  </tr>
+  <tr>
+    <td align="center">개발자<br /><a href="https://github.com/Monolong">@Monolong</a></td>
+    <td align="center">개발자<br /><a href="https://github.com/Gimlocal">@Gimlocal</a></td>
+    <td align="center">개발자<br /><a href="https://github.com/dev-yunseong">@dev-yunseong</a></td>
+    <td align="center">디자이너 / 개발자<br /><a href="https://github.com/Jinwook700">@Jinwook700</a></td>
+    <td align="center">개발자<br /><a href="https://github.com/hwanginseop">@hwanginseop</a></td>
+  </tr>
+</table>
 
-3. [UML Diagram](https://velog.io/@jungmyeong96/UML-다이어그램-작성법) 을 참조하여 본인이 작성한 코드를 정리해봅시다. 협업할 때 이해가 잘 되고 피드백도 수월해질 것 입니다.
+### 아트 사용 안내
+
+**이 게임에는 AI로 생성된 아트가 사용되었습니다.**
