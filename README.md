@@ -6,6 +6,17 @@ Team 6203의 GIGDC 2024 출품작입니다.
 
 [다운로드 / 웹 플레이 안내](https://github.com/Apptive-Game-Team/WordVenture/releases) · [기여 가이드](CONTRIBUTING.md)
 
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/title.jpg" alt="WordVenture 타이틀 화면" /></td>
+    <td width="50%"><img src="docs/images/combat.jpg" alt="마법 카드와 속성 카드를 조합하는 전투 화면" /></td>
+  </tr>
+  <tr>
+    <td align="center">타이틀</td>
+    <td align="center">카드 조합 · 턴제 전투</td>
+  </tr>
+</table>
+
 ## 플레이
 
 마우스 클릭과 드래그로 조작합니다.
