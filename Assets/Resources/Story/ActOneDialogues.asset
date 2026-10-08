@@ -232,3 +232,49 @@ MonoBehaviour:
     - wordSpeaking: 1
       narration: 0
       text: "할아버지께 먼저 다녀올게요. …그다음엔, 꼭 들를게요."
+  - stageID: 5
+    moment: 1
+    wave: 0
+    title: "서리 마을 · 얼어붙은 길"
+    speakerName: "서리 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "할아버지의 비석 앞에서 돌아선 지 며칠 뒤, 북쪽 서리 마을에서 구조 요청이 왔다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "마을로 가는 길이 얼어붙었어요. 아직 안에 사람들이 있어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "길을 열게요. 돌아올 때는 모두 함께예요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "하지만 슬라임이 너무 많아요. 혼자서는…"
+    - wordSpeaking: 1
+      narration: 0
+      text: "혼자가 아니에요. 할아버지의 기록에 있던 마법이에요. Spawn 카드에 속성 카드를 붙이면 슬라임이 제 편이 돼요."
+    - wordSpeaking: 0
+      narration: 1
+      text: "Spawn으로 부른 아군 슬라임은 턴을 마칠 때 가장 앞의 적을 공격하고, 적의 공격을 대신 받는다. 아군 자리는 세 칸이다."
+  - stageID: 5
+    moment: 0
+    wave: 0
+    title: "서리 마을 · 돌아온 사람들"
+    speakerName: "서리 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "왜 여기까지 와 준 거예요?"
+    - wordSpeaking: 1
+      narration: 0
+      text: "누군가 와 주기를 기다리는 마음을 알아요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "그러고 보니 남쪽 협곡에서도 번개가 그치지 않는대요. 마법이 이상해진 건 여기만이 아닌가 봐요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "그럼 거기도 가 볼게요."

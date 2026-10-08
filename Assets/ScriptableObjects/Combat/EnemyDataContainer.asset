@@ -141,3 +141,27 @@ MonoBehaviour:
     attackRange: 3
     damage: 10
     type: 8
+  - id: 16
+    name: S5_Ranged_Slime
+    prefab: {fileID: 1197030555564479174, guid: a1d21b3baf172466b9a77b53e3c97624, type: 3}
+    maxHp: 25
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 5
+  - id: 17
+    name: S5_Melee_Slime
+    prefab: {fileID: 3940572424292676689, guid: 2aeab4c36574d41bfb99725c793062c9, type: 3}
+    maxHp: 40
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 6
+  - id: 18
+    name: S5_Elite_Slime
+    prefab: {fileID: 431560386325625679, guid: e0484e8c18b80473da18d564cf822763, type: 3}
+    maxHp: 45
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 7

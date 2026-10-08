@@ -38,16 +38,16 @@ namespace Combat.Stage
 
         void SetupBattle(StageData stageData, int stagePosition)
         {
-            SetBackground(stageData.background, stagePosition);
+            SetBackground(stageData, stagePosition);
 
             battleWaveController.battleScript = stageData.waveData.enemyWaves[0];
             battleWaveController.Start1();
         }
 
-        void SetBackground(Sprite background, int stagePosition)
+        void SetBackground(StageData stageData, int stagePosition)
         {
             GameObject backgroundObject = GameObject.Find("PlainBackground");
-            audioSource.clip = audioClips[stagePosition];
+            audioSource.clip = stageData.music != null ? stageData.music : audioClips[stagePosition];
             audioSource.Play();
             if (stagePosition == 3)
             {
@@ -65,7 +65,7 @@ namespace Combat.Stage
                 SpriteRenderer renderer = backgroundObject.GetComponent<SpriteRenderer>();
                 if (renderer != null)
                 {
-                    renderer.sprite = background;
+                    renderer.sprite = stageData.background;
                 }
             }
         }
