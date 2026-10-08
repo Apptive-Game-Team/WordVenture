@@ -14,7 +14,7 @@ namespace Combat.Enemies
         {
             this.Enemy = enemy;
         }
-        public abstract void PlayAction(float distanceToPlayer);
+        public abstract void PlayAction(float distanceToFrontLine);
 
     }
 
@@ -23,9 +23,9 @@ namespace Combat.Enemies
 
         public EnemyAttackAction(Enemy enemy) : base(enemy) { }
 
-        public override void PlayAction(float distanceToPlayer)
+        public override void PlayAction(float distanceToFrontLine)
         {
-            Enemy.Attack(distanceToPlayer);
+            Enemy.Attack(distanceToFrontLine);
         }
     }
 
@@ -33,18 +33,18 @@ namespace Combat.Enemies
     {
 
         public EnemyMoveAction(Enemy enemy) : base(enemy) { }
-        public override void PlayAction(float distanceToPlayer)
+        public override void PlayAction(float distanceToFrontLine)
         {
 
             float tempMoveDistance;
 
-            if (distanceToPlayer > Enemy.moveDistance + Enemy.attackRange)
+            if (distanceToFrontLine > Enemy.moveDistance + Enemy.attackRange)
             {
                 tempMoveDistance = Enemy.moveDistance;
             }
             else
             {
-                tempMoveDistance = distanceToPlayer - Enemy.attackRange;
+                tempMoveDistance = distanceToFrontLine - Enemy.attackRange;
             }
 
             Enemy.StartCoroutine(Enemy.MoveDistance(tempMoveDistance));
@@ -112,10 +112,10 @@ namespace Combat.Enemies
 
 
 
-        private ActionType MakeActionDecision(float distanceToPlayer)
+        private ActionType MakeActionDecision(float distanceToFrontLine)
         {
 
-            if (distanceToPlayer > attackRange)
+            if (distanceToFrontLine > attackRange)
             {
                 return ActionType.MOVE;
             } else
@@ -175,7 +175,8 @@ namespace Combat.Enemies
 
 
 
-        public void PlayTurnAction(float distanceToPlayer)
+        // distanceToFrontLine은 맨 앞 아군 슬라임까지의 거리다. 아군이 없으면 워드까지의 거리다.
+        public void PlayTurnAction(float distanceToFrontLine)
         {
             if (!IsAlive) return;
             tookTurn = true;
@@ -184,7 +185,7 @@ namespace Combat.Enemies
                 UpdateStatusIndicator();
                 return;
             }
-            enemyActions[(int) MakeActionDecision(distanceToPlayer)].PlayAction(distanceToPlayer);
+            enemyActions[(int) MakeActionDecision(distanceToFrontLine)].PlayAction(distanceToFrontLine);
         }
 
 
@@ -256,7 +257,7 @@ namespace Combat.Enemies
             Animator.MoveEnd();
         }
 
-        virtual public void Attack(float distanceToPlayer)
+        virtual public void Attack(float distanceToFrontLine)
         {
             Animator.Attack();
         }

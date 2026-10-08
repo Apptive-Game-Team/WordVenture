@@ -1,5 +1,6 @@
 using System.Collections;
 using Cards;
+using Combat.Allies;
 using Combat.Enemies;
 using Core;
 using Combat.UI;
@@ -74,6 +75,8 @@ namespace Battle.Turns
         public static EnemyTurn EnemyTurn;
         public static float TurnTime = 1f;
         Turn currentTurn;
+        bool endingPlayerTurn;
+        public bool IsEndingPlayerTurn => endingPlayerTurn;
         public event System.Action PlayerTurnEnded;
 
         [SerializeField] public CardManager cardManager;
@@ -120,12 +123,23 @@ namespace Battle.Turns
             CombineZone zone = FindObjectOfType<CombineZone>(true);
             if (zone != null && (zone.IsAwaitingTarget || zone.IsCasting)) return;
             if (SpellObj.HasActiveSpells) return;
-            if (currentTurn == PlayerTurn)
+            if (currentTurn == PlayerTurn && !endingPlayerTurn)
             {
-                ChangeTurn(EnemyTurn);
-                PlayerTurnEnded?.Invoke();
+                StartCoroutine(EndPlayerTurn());
             }
 
+        }
+
+        // 아군 슬라임은 플레이어 턴과 적 턴 사이에 공격한다. 아군이 없으면 기다리지 않고 바로 적 턴이 된다.
+        IEnumerator EndPlayerTurn()
+        {
+            endingPlayerTurn = true;
+            AllyFormation formation = AllyFormation.Current;
+            if (formation != null && formation.Allies.Count > 0)
+                yield return formation.AttackFrontEnemies(enemyManager.FindFrontEnemy);
+            endingPlayerTurn = false;
+            ChangeTurn(EnemyTurn);
+            PlayerTurnEnded?.Invoke();
         }
 
 

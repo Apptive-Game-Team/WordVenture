@@ -16,9 +16,14 @@ namespace Combat.Enemies
         static readonly WaitForSeconds LongFrameHold = new WaitForSeconds(0.25f);
         static readonly WaitForSeconds ShortFrameHold = new WaitForSeconds(0.15f);
 
-        private void Start()
+        // 소환된 프레임에 바로 공격이나 피격 애니메이션을 부를 수 있으므로 참조는 Awake에서 잡는다.
+        private void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        private void Start()
+        {
             StartCoroutine(Idling());
         }
 

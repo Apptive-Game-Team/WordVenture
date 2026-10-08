@@ -39,6 +39,10 @@ namespace Cards
             areaHitFilter = new ContactFilter2D().NoFilter();
         }
 
+        // Spawn 카드는 2부 첫 지역(서리 마을, 스테이지 5)부터 손패에 섞인다.
+        const int SpawnUnlockStage = 5;
+        const int SpawnCardPercent = 3;
+
         [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;
         [SerializeField] GameObject cardPrefab;
         [SerializeField] List<Card> myCards;
@@ -137,6 +141,14 @@ namespace Cards
                 return;
             }
 
+#if UNITY_EDITOR
+            // 테스트용: 에디터에서 S 키로 Spawn 카드를 한 장 받는다. 빌드에는 들어가지 않는다.
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                AddCard(FindWord(MagicType.Spawn));
+            }
+#endif
+
             // Util.MousePos는 접근할 때마다 Camera.main 조회와 좌표 변환을 다시 한다.
             // 한 프레임에 한 번만 구해서 돌려쓴다.
             Vector3 mouseWorldPosition = Util.MousePos;
@@ -151,9 +163,15 @@ namespace Cards
 
         public void AddCard()
         {
+            AddCard(PopWord());
+        }
+
+        void AddCard(Word word)
+        {
+            if (word == null) return;
             var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
             var card = cardObject.GetComponent<Card>();
-            card.Setup(PopWord());
+            card.Setup(word);
             myCards.Add(card);
 
             SetOriginOrder();
@@ -278,6 +296,17 @@ namespace Cards
                 default:
                     break;
             }
+
+            Word spawnWord = FindWord(MagicType.Spawn);
+            if (spawnWord != null)
+            {
+                spawnWord.percent = MapMove.StagePosition >= SpawnUnlockStage ? SpawnCardPercent : 0;
+            }
+        }
+
+        Word FindWord(MagicType magicType)
+        {
+            return Array.Find(wordSo.words, word => word.magicType == magicType);
         }
 
         #region MyCard
