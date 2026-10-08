@@ -4,19 +4,24 @@
 
 ## 진행
 
-| 지역 완료 | 대화의 역할 |
-| --- | --- |
-| 평원 | 워드도 주민도 돌아갈 집을 잃었다는 공통점 |
-| 해안 | 워드의 이름을 알려 주고 피난민의 안전을 먼저 묻는 작은 변화 |
-| 고원 | 뒤처진 주민을 챙기고, 워드에게도 돌아와 쉬라는 초대 |
-| 빗길 | 복수와 함께 더 이상의 피해를 막고 싶다는 동기 |
-| 마왕 | 주민의 감사와 귀향. 워드도 돌아갈 관계가 생겼음을 보여 줌 |
+| 시점 | 상대 | 대화의 역할 |
+| --- | --- | --- |
+| 평원 완료 | 평원 마을 주민 | 워드도 주민도 돌아갈 집을 잃었다는 공통점. 주민은 남쪽의 안전한 마을로 피한다 |
+| 해안 완료 | 해안 어부 | 워드가 이름을 알려 주고 피난민의 안전을 먼저 묻는 작은 변화 |
+| 고원 완료 | 고원 양치기 소년 | 놓친 동생을 찾아 주고, 남쪽 마을에 들러 쉬라는 초대를 받음 |
+| 빗길 완료 | 빗길 경비병 | 복수와 함께 더 이상의 피해를 막고 싶다는 동기 |
+| 마왕 성 입장 | 워드 혼자 | "드디어"로 시작하는 각오. 할아버지와 길에서 만난 사람들을 떠올림 |
+| 마왕 등장 직전 (wave 2) | 슬라임 마왕 | 샌즈에게 당한 동족의 복수라는 마왕의 명분과, 아무도 집을 잃지 않게 하겠다는 워드의 답 |
+| 언데드 부활 직전 (wave 3) | 언데드 슬라임 마왕 | 원한 때문에 죽어서도 일어난 마왕. 워드는 원한과 복수를 함께 끝내자고 한다 |
+| 마왕 처치 후 | 평원 마을 주민 | 남쪽 마을에서 다시 만나 감사와 귀향. 워드도 돌아갈 관계가 생겼음을 보여 줌 |
 
-주민 초상화는 피난민 일행의 대표인 같은 인물이다. 해안에서 같은 피난 경로를 따라왔음을 밝히고, 고원과 빗길에서는 다른 피난민을 돕는다. 최종전 뒤에는 길 아래에서 기다리던 주민이 워드를 맞이한다. 호위나 구조 전투 규칙을 추가하지 않고 전후 대사로 표현한다.
+지역마다 다른 피난민을 만나고, 평원에서 처음 만난 주민만 마지막에 한 번 다시 만난다. 마지막 대화에서 어부와 양치기 소년도 남쪽 마을에 와 있다고 알려 준다. 호위나 구조 전투 규칙을 추가하지 않고 전후 대사로 표현한다.
 
-일반 지역은 기존 카드 보상 화면을 본 뒤 맵으로 나가기 전에 대화한다. 보스는 지역 대화 뒤 귀향 엔딩으로 넘어간다. 튜토리얼 종료 대화가 먼저 끝나야 진행하며, 클릭이나 아무 키로 타이핑 완료/다음 대사를 구분한다. 마지막 입력은 한 프레임 소비해서 다음 화면으로 넘어가지 않는다.
+일반 지역은 기존 카드 보상 화면을 본 뒤 맵으로 나가기 전에 대화한다. 마왕 성은 맵에서 들어갈 때 대화한 뒤 전투 씬으로 넘어간다. 마왕 전투에서는 `BossBattleWaveData` 의 wave 2(`SlimeKing1`)와 wave 3(`SlimeKing2`)를 시작하기 직전에 대화하고, 대화가 끝나야 적이 나온다. 전투 중 대화는 배경 그림 없이 반투명 막만 깔아 전투 화면이 비쳐 보이게 한다. 보스는 클리어 대화 뒤 귀향 엔딩으로 넘어간다. 튜토리얼 종료 대화가 먼저 끝나야 진행하며, 클릭이나 아무 키로 타이핑 완료/다음 대사를 구분한다. 마지막 입력은 한 프레임 소비해서 다음 화면으로 넘어가지 않는다.
 
-읽음 기록은 `ActOneDialogueSeen` 비트 마스크로 저장한다. 같은 지역의 읽은 대화는 반복하지 않고 새 게임에서 초기화한다. 대화를 끝내기 전에 나가면 읽음 처리하지 않는다. 기존 세이브에는 키가 없어도 정상 동작하며, 이전에 지나간 지역의 대화를 자동으로 몰아서 재생하지 않는다.
+대화마다 `stageID`, `moment`(`Clear`·`Enter`·`Wave`), `wave` 로 재생 시점을 정하고, `speakerName`·`speakerPortrait` 로 상대를 정한다.
+
+읽음 기록은 `ActOneDialogueSeen` 비트 마스크로 저장한다. 클리어 대화는 0~4번, 입장 대화는 5~9번, wave 대화는 10~29번 비트(10 + stageID × 4 + wave)를 쓴다. 클리어 비트는 이전 버전과 같아서 기존 세이브의 읽음 기록이 유지된다. 같은 대화는 반복하지 않고 새 게임에서 초기화한다. 대화를 끝내기 전에 나가면 읽음 처리하지 않는다. 기존 세이브에는 키가 없어도 정상 동작하며, 이전에 지나간 지역의 대화를 자동으로 몰아서 재생하지 않는다.
 
 ## 수정 위치
 
@@ -24,11 +29,13 @@
 - 대화 화면: `Assets/Scripts/Story/StageDialogueView.cs`
 - 공통 창 디자인·본문 폰트: `Assets/Scripts/Story/DialogueWindowPresentation.cs`, `Assets/Resources/Story/DialogueWindowStyle.asset`
 - 클리어 후 연결: `Assets/Scripts/Scenes/GameClearController.cs`
+- 마왕 성 입장 연결: `Assets/Scripts/Map/MapMove.cs` 의 `SelectStage`
+- 마왕 wave 연결: `Assets/Scripts/Combat/Enemies/BattleWaveController.cs` 의 `WaveEndSensor`
 - 읽음 저장/초기화: `Assets/Scripts/Core/SaveLoadController.cs`
 - 귀향 엔딩: `Assets/ScriptableObjects/EndingScript.asset`
-- 초상화: `Assets/Art/Story/Portraits/WordDialogue.png`, `VillagerDialogue.png`, 튜토리얼 할아버지 `GuideDialogue.png`
+- 초상화(`Assets/Art/Story/Portraits/`): 워드 `WordDialogue.png`, 평원 마을 주민 `VillagerDialogue.png`, 해안 어부 `FishermanDialogue.png`, 고원 양치기 소년 `ShepherdDialogue.png`, 빗길 경비병 `GuardDialogue.png`, 슬라임 마왕 `SlimeKingDialogue.png`, 언데드 슬라임 마왕 `UndeadSlimeKingDialogue.png`, 튜토리얼 할아버지 `GuideDialogue.png`
 
-생성 이미지는 기존 전투 워드의 붉은 단발, 노란 리본, 보라색 눈, 짙은 망토를 참조했다. 두 초상화를 내장 image_gen 도구로 개별 생성하고 투명 알파를 보존해 저장했다. Unity에서는 Sprite, Point 필터, 무압축으로 사용한다. 화자 초상화는 밝게, 듣는 사람은 어둡게 표시한다.
+생성 이미지는 기존 전투 워드의 붉은 단발, 노란 리본, 보라색 눈, 짙은 망토를 참조했다. 워드와 평원 주민 초상화를 내장 image_gen 도구로 개별 생성하고 투명 알파를 보존해 저장했다. 나머지 초상화는 이 두 장을 그림체 참조로 삼아 agy(Gemini)로 마젠타 배경에 생성한 뒤 배경을 투명하게 지우고 1254×1254 캔버스 아래쪽에 맞췄다. 마왕 두 장은 전투 스프라이트 `Boss_Devil`, `Boss_Undead` 를 모습 참조로 썼다. Unity에서는 Sprite, Point 필터, 무압축으로 사용한다. 화자 초상화는 밝게, 듣는 사람은 어둡게 표시한다.
 
 이 디자인을 기준으로 스토리·엔딩·튜토리얼도 [공통 대화창](shared-dialogue-window.md)을 사용한다.
 
@@ -44,8 +51,13 @@ Use case: stylized-concept. Generate one NEW transparent dialogue portrait, matc
 
 ## 검증
 
-`StageDialoguePlayTests`는 실제 GameClearScene에서 대화 진입, 두 초상화 연결, 입력 잠금, 대화 완료 후 맵 전환, 읽음 저장 및 재도전 생략, 보스 대화 후 EndingScene 전환, 새 게임 초기화를 확인한다. 렌더링 미리보기는 `docs/design/act-one-dialogue-preview.png`에 저장한다.
+`StageDialoguePlayTests` 는 다음을 확인한다.
 
-Unity 2022.3.34f1의 검증용 프로젝트 복사본에서 위 PlayMode 테스트 3개가 모두 통과했다. 두 PNG는 1254×1254이며 모서리 알파가 0인 것을 확인했다. 실제 렌더링에서 초상화, 한글 폰트, 대화창 배치를 확인했다.
+- 실제 GameClearScene 에서 대화 진입, 두 초상화 연결, 입력 잠금, 대화 완료 후 맵 전환, 읽음 저장 및 재도전 생략, 보스 대화 후 EndingScene 전환, 새 게임 초기화
+- 평원·해안·고원·빗길의 화자 이름과 초상화가 모두 다르고, 마왕 처치 후 대화만 평원 주민을 다시 쓰는지
+- MapScene 에서 마왕 성을 고르면 대화를 먼저 보여 주고, 다 본 뒤 TurnBattleScene 으로 넘어가는지
+- 실제 마왕 전투에서 wave 2·3 직전에 마왕 대화가 나오고, 대화가 끝나기 전에는 적이 나오지 않으며, 배경 그림이 전투 화면을 가리지 않는지
 
-기존 `TutorialPlayTests` 회귀 테스트 4개도 모두 통과했다. 검증 결과는 `Logs/StageDialogue/playmode-results.xml`, `tutorial-results.xml`에 보관한다.
+렌더링 미리보기는 `act-one-dialogue-preview.png`(해안 어부), `act-one-castle-dialogue-preview.png`(마왕 성 입장), `act-one-boss-dialogue-preview.png`(슬라임 마왕 등장)에 저장한다. 미리보기는 대화창 canvas 를 카메라 모드로 바꿔 찍으므로 가장 위 sorting layer 에 둔다. 실제 게임에서는 Overlay canvas 라서 전투 카드보다 위에 그려진다.
+
+2026-10-08 Unity 2022.3.34f1 batchmode 에서 `SharedDialoguePlayTests`, `StageDialoguePlayTests`, `TutorialPlayTests` PlayMode 12개와 EditMode 43개가 모두 통과했다.

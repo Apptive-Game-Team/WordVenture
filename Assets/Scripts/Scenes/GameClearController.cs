@@ -24,7 +24,6 @@ namespace Scenes
 
         private string sceneName;
         bool leaving;
-        const string DialogueResource = "Story/ActOneDialogues";
 
         private void Start()
         {
@@ -82,18 +81,9 @@ namespace Scenes
         {
             // 첫 클리어에서는 튜토리얼의 종료 대화를 먼저 마친다.
             yield return new WaitUntil(() => !InteractionLock.IsLocked);
-            int stageID = StageDataSingleton.Instance.stagePosition;
-            StageDialogueData data = Resources.Load<StageDialogueData>(DialogueResource);
-            StageDialogueChapter chapter = data != null ? data.FindChapter(stageID) : null;
-            if (chapter != null && chapter.lines != null && chapter.lines.Length > 0
-                && !SaveLoadController.HasSeenStageDialogue(stageID))
-            {
-                bool completed = false;
-                var view = new GameObject("StageDialogue", typeof(RectTransform)).AddComponent<StageDialogueView>();
-                view.Begin(data, chapter, () => completed = true);
-                yield return new WaitUntil(() => completed);
-                SaveLoadController.MarkStageDialogueSeen(stageID);
-            }
+            StageDialogueChapter chapter = StageDialogueView.FindUnseen(StageDataSingleton.Instance.stagePosition,
+                StageDialogueMoment.Clear, 0, out StageDialogueData data);
+            if (chapter != null) yield return StageDialogueView.Play(data, chapter);
             SceneManager.LoadScene(destination);
         }
 

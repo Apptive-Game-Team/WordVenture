@@ -1,6 +1,8 @@
+using System.Collections;
 using Combat.Stage;
 using Core;
 using DG.Tweening;
+using Story;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -192,6 +194,15 @@ namespace Map
 
             enteringStage = true;
             StageDataSingleton.Instance.stagePosition = stagePosition;
+            StageDialogueChapter chapter = StageDialogueView.FindUnseen(stagePosition,
+                StageDialogueMoment.Enter, 0, out StageDialogueData data);
+            if (chapter != null) StartCoroutine(EnterAfterDialogue(data, chapter));
+            else SceneManager.LoadScene("TurnBattleScene");
+        }
+
+        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter chapter)
+        {
+            yield return StageDialogueView.Play(data, chapter);
             SceneManager.LoadScene("TurnBattleScene");
         }
 
