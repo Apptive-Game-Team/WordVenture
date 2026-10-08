@@ -302,6 +302,13 @@ namespace Cards
         {
             if (selectCard == null) return;
 
+            // 칸은 조합창 안에 있어서 창이 닫혀 있으면 카드를 놓을 자리가 보이지 않는다.
+            // 카드를 집는 순간 창을 연다.
+            if (!CombineZone.Instance.gameObject.activeSelf)
+            {
+                CombineZone.Instance.gameObject.SetActive(true);
+            }
+
             // Shift를 누른 채 클릭하면 끌지 않고 카드 종류에 맞는 칸에 바로 올린다.
             // 드래그가 시작되지 않으므로 이어지는 MouseUp은 CardMouseUp에서 무시된다.
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
