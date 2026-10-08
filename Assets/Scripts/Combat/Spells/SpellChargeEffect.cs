@@ -8,8 +8,8 @@ namespace Combat.Spells
     // 씬에 따로 배치하지 않고 CombineZone이 처음 주문을 조합할 때 만든다.
     public class SpellChargeEffect : MonoBehaviour
     {
-        // 워드 스프라이트(512px, 100 PPU, 중앙 피벗)에서 지팡이 구슬 중심의 로컬 좌표.
-        static readonly Vector3 StaffOrbLocalPosition = new Vector3(1.79f, 1.41f, 0f);
+        // StaffOrbAnchor가 없을 때 쓰는 워드 대기 스프라이트의 지팡이 구슬 로컬 좌표.
+        static readonly Vector3 DefaultStaffOrbLocalPosition = new Vector3(1.86f, 1.43f, 0f);
 
         const int MoteCount = 12;
         const float MoteLifetime = 0.7f;
@@ -19,10 +19,14 @@ namespace Combat.Spells
         const float CoreGrowTime = 0.5f;
         const float ReleaseTime = 0.25f;
         const int SortingOrder = 5;
+        // 공격 프레임이 바뀌면 구슬 위치가 한 번에 옮겨 간다. 빛이 순간이동하지 않고
+        // 휘두르는 궤적을 따라 빠르게 쫓아가도록 이 속도로 좁힌다.
+        const float FollowSharpness = 30f;
 
         static Sprite glowSprite;
 
         SpriteRenderer core;
+        StaffOrbAnchor staffOrbAnchor;
         readonly SpriteRenderer[] motes = new SpriteRenderer[MoteCount];
         readonly float[] moteAngles = new float[MoteCount];
         readonly float[] moteAges = new float[MoteCount];
@@ -55,7 +59,7 @@ namespace Combat.Spells
                 moteAges[i] = MoteLifetime * i / MoteCount;
             }
 
-            FollowStaff();
+            transform.position = GetStaffOrbPosition();
             gameObject.SetActive(true);
         }
 
@@ -112,11 +116,26 @@ namespace Combat.Spells
 
         void FollowStaff()
         {
+            float follow = 1f - Mathf.Exp(-FollowSharpness * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, GetStaffOrbPosition(), follow);
+        }
+
+        Vector3 GetStaffOrbPosition()
+        {
             Player player = Player.PlayerInt();
-            if (player != null)
+            if (player == null)
             {
-                transform.position = player.transform.TransformPoint(StaffOrbLocalPosition);
+                return transform.position;
             }
+
+            if (staffOrbAnchor == null)
+            {
+                staffOrbAnchor = player.GetComponent<StaffOrbAnchor>();
+            }
+
+            return staffOrbAnchor != null
+                ? staffOrbAnchor.GetWorldPosition()
+                : player.transform.TransformPoint(DefaultStaffOrbLocalPosition);
         }
 
         void UpdateCharging()
