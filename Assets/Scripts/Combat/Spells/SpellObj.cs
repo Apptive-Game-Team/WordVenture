@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Cards;
 using Combat.Enemies;
 using Map;
@@ -15,6 +16,12 @@ namespace Combat.Spells
         MagicType magicType;
         SelectableObject target;
         MagicAffinityTable magicAffinityTable;
+        readonly HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
+        string targetTag;
+        bool hitPlayer;
+        bool initialized;
+        static int activeSpells;
+        public static bool HasActiveSpells => activeSpells > 0;
 
         public void InitSpell(
             MagicType spellType,
@@ -28,6 +35,9 @@ namespace Combat.Spells
             this.spellType = spellType;
             this.magicType = magicType;
             this.target = target;
+            targetTag = target.gameObject.tag;
+            initialized = true;
+            activeSpells++;
 
             if (this.spellType == MagicType.Explode)
             {
@@ -83,13 +93,24 @@ namespace Combat.Spells
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag(target.gameObject.tag))
+            if (initialized && collision.CompareTag(targetTag))
             {
-                moveVector = Vector3.zero;
-                animator.SetTrigger("Hit");
+                Enemy enemy = collision.GetComponentInParent<Enemy>();
                 if (collision.CompareTag("Enemy"))
                 {
-                    collision.GetComponent<Enemy>().TakeHit(CalculateDamage(damage, collision.gameObject.GetComponent<Enemy>().enemyType));
+                    if (enemy == null || !enemy.IsAlive || !hitEnemies.Add(enemy)) return;
+                }
+                else
+                {
+                    if (hitPlayer) return;
+                    hitPlayer = true;
+                }
+                moveVector = Vector3.zero;
+                if (animator != null) animator.SetTrigger("Hit");
+                if (collision.CompareTag("Enemy"))
+                {
+                    enemy.TakeSpellHit(magicType, spellType, GetBaseDamage(damage, spellType),
+                        magicAffinityTable.GetAffinity(magicType, enemy.enemyType));
                 } else
                 {
                     collision.GetComponent<Player>().TakeHit(CalculateDamage(damage, MagicType.Holy));
@@ -104,7 +125,18 @@ namespace Combat.Spells
             Destroy(gameObject);
         }
 
+        void OnDestroy()
+        {
+            if (initialized) activeSpells = Mathf.Max(0, activeSpells - 1);
+        }
+
         private int CalculateDamage(int damage, MagicType enemyMagicType)
+        {
+            return (int)(GetScaledDamage(damage, spellType)
+                * magicAffinityTable.GetAffinity(magicType, enemyMagicType));
+        }
+
+        static float GetScaledDamage(int damage, MagicType spellType)
         {
             float result = damage;
             if (spellType == MagicType.Drop)
@@ -115,10 +147,12 @@ namespace Combat.Spells
                 result *= 0.67f;
             }
 
-            result *= magicAffinityTable.GetAffinity(magicType, enemyMagicType);
-
-            return ((int)result);
+            return result;
         }
+
+        public static float GetBaseDamage(int damage, MagicType spellType) => GetScaledDamage(damage, spellType);
+
+        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(10 + 5 * (MapMove.StagePosition / 2), spellType);
 
     }
 
