@@ -19,8 +19,8 @@ namespace Combat.Enemies
 
         }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        // 테스트용: K 키로 지금 나와 있는 적을 모두 쓰러뜨린다. 출시 빌드에는 들어가지 않는다.
+#if UNITY_EDITOR
+        // 테스트용: 에디터에서 K 키로 지금 나와 있는 적을 모두 쓰러뜨린다. 빌드에는 들어가지 않는다.
         void Update()
         {
             // 대화나 튜토리얼이 입력을 잡고 있을 때는 무시한다.
