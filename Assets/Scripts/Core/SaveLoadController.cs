@@ -1,4 +1,5 @@
 using Map;
+using Story;
 using UnityEngine;
 
 namespace Core
@@ -8,22 +9,30 @@ namespace Core
     {
         public const string TutorialEndedKey = "TutorialEnded";
         public const string StageDialogueSeenKey = "ActOneDialogueSeen";
+        public const string ActTwoDialogueSeenKey = "ActTwoDialogueSeen";
 
-        // seenBit 는 StageDialogueChapter.SeenBit 이다.
+        // seenBit 는 StageDialogueChapter.SeenBit 이다. PlayerPrefs의 int 하나는 31비트까지 쓰므로
+        // 1부 비트(0~29)와 2부 비트(32~61)를 다른 키에 기록한다.
         public static bool HasSeenStageDialogue(int seenBit)
         {
-            return seenBit >= 0 && seenBit < 31
-                && (PlayerPrefs.GetInt(StageDialogueSeenKey, 0) & (1 << seenBit)) != 0;
+            if (!TryGetDialogueSeenSlot(seenBit, out string key, out int bit)) return false;
+            return (PlayerPrefs.GetInt(key, 0) & (1 << bit)) != 0;
         }
 
         public static void MarkStageDialogueSeen(int seenBit)
         {
-            if (seenBit < 0 || seenBit >= 31) return;
-            PlayerPrefs.SetInt(StageDialogueSeenKey,
-                PlayerPrefs.GetInt(StageDialogueSeenKey, 0) | (1 << seenBit));
+            if (!TryGetDialogueSeenSlot(seenBit, out string key, out int bit)) return;
+            PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key, 0) | (1 << bit));
             PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
             PlayerPrefs.Save();
         }
+        static bool TryGetDialogueSeenSlot(int seenBit, out string key, out int bit)
+        {
+            key = seenBit >= StageDialogueChapter.ActTwoBitOffset ? ActTwoDialogueSeenKey : StageDialogueSeenKey;
+            bit = seenBit >= StageDialogueChapter.ActTwoBitOffset ? seenBit - StageDialogueChapter.ActTwoBitOffset : seenBit;
+            return seenBit >= 0 && bit < 31;
+        }
+
         public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
 
         public static void MarkTutorialEnded()
@@ -98,6 +107,7 @@ namespace Core
             PlayerPrefs.SetInt("StagePosition", -1);
             PlayerPrefs.DeleteKey(TutorialEndedKey);
             PlayerPrefs.DeleteKey(StageDialogueSeenKey);
+            PlayerPrefs.DeleteKey(ActTwoDialogueSeenKey);
             PlayerPrefs.Save();
         }
     }

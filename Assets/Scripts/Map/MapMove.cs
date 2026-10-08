@@ -25,6 +25,13 @@ namespace Map
         [FormerlySerializedAs("Stage2")] [SerializeField] Sprite stage2;
         [FormerlySerializedAs("Stage3")] [SerializeField] Sprite stage3;
         [FormerlySerializedAs("Stage4")] [SerializeField] Sprite stage4;
+        // 1부를 끝내면(StagePosition 5 이상) 이 장의 배경과 지점으로 바꿔 보여 준다.
+        [SerializeField] MapChapter actTwoMap;
+        const int ActOneLastStageID = 4;
+        // 지금 맵에 보이는 장. 1부면 null이다.
+        MapChapter chapter;
+        // 지점 번호 position에 더하면 스테이지 번호가 된다. 1부는 0, 2부는 5다.
+        int firstStageID;
         int position = 0;
         public static int StagePosition;
 
@@ -45,7 +52,24 @@ namespace Map
             backgroundRenderer = background.GetComponent<SpriteRenderer>();
             stageLocations = new[] { village, battle1, battle2, battle3, boss };
             mapCamera = Camera.main;
+            if (actTwoMap != null && StagePosition >= actTwoMap.firstStageID) UseChapter(actTwoMap);
         }
+
+        // 지점 오브젝트는 스프라이트 없이 위치만 나타내므로, 장의 좌표로 옮겨서 그대로 쓴다.
+        void UseChapter(MapChapter mapChapter)
+        {
+            chapter = mapChapter;
+            firstStageID = mapChapter.firstStageID;
+            for (int i = 0; i < stageLocations.Length && i < mapChapter.stagePoints.Length; i++)
+            {
+                Vector3 point = stageLocations[i].transform.position;
+                point.x = mapChapter.stagePoints[i].x;
+                point.y = mapChapter.stagePoints[i].y;
+                stageLocations[i].transform.position = point;
+            }
+        }
+
+        int LastPlayableStageID => chapter != null ? chapter.lastPlayableStageID : ActOneLastStageID;
 
         private void Start()
         {
@@ -102,11 +126,14 @@ namespace Map
             bool up = Input.GetKeyDown(KeyCode.UpArrow);
             bool down = Input.GetKeyDown(KeyCode.DownArrow);
 
-            if (right || (up && (position == 0 || position == 2)))
+            // 1부 길은 위아래로 꺾이므로 지점마다 위아래 키의 방향이 다르다. 2부 길은 순서대로 이어 간다.
+            bool next = chapter != null ? right || up : right || (up && (position == 0 || position == 2));
+            bool previous = chapter != null ? left || down : left || (down && (position == 1 || position == 3));
+            if (next)
             {
                 MoveToStage(position + 1);
             }
-            else if (left || (down && (position == 1 || position == 3)))
+            else if (previous)
             {
                 MoveToStage(position - 1);
             }
@@ -159,9 +186,12 @@ namespace Map
             }
         }
 
+        // target은 지금 장 안의 지점 번호다. 전투 데이터가 아직 없는 지점은 보이기만 하고 들어갈 수 없다.
         bool IsStageUnlocked(int target)
         {
-            return target >= 0 && target < stageLocations.Length && target <= StagePosition;
+            int stageID = firstStageID + target;
+            return target >= 0 && target < stageLocations.Length && stageID <= StagePosition
+                && stageID <= LastPlayableStageID;
         }
 
         void MoveToStage(int target)
@@ -182,29 +212,35 @@ namespace Map
         }
         void ShowStage()
         {
-            stage.text = "Stage : " + StagePosition;
+            stage.text = StagePosition > LastPlayableStageID && StagePosition <= LastStageIDOnMap
+                ? "Stage : " + StagePosition + " (준비 중)"
+                : "Stage : " + StagePosition;
         }
 
-        public void SelectStage(int stagePosition)
+        int LastStageIDOnMap => firstStageID + stageLocations.Length - 1;
+
+        // locationIndex는 지금 장 안의 지점 번호다.
+        public void SelectStage(int locationIndex)
         {
-            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(stagePosition) ||
-                stagePosition != position ||
+            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(locationIndex) ||
+                locationIndex != position ||
                 (movement != null && movement.IsActive() && movement.IsPlaying()))
             {
                 return;
             }
 
             enteringStage = true;
-            StageDataSingleton.Instance.stagePosition = stagePosition;
-            StageDialogueChapter chapter = StageDialogueView.FindUnseen(stagePosition,
+            int stageID = firstStageID + locationIndex;
+            StageDataSingleton.Instance.stagePosition = stageID;
+            StageDialogueChapter dialogue = StageDialogueView.FindUnseen(stageID,
                 StageDialogueMoment.Enter, 0, out StageDialogueData data);
-            if (chapter != null) StartCoroutine(EnterAfterDialogue(data, chapter));
+            if (dialogue != null) StartCoroutine(EnterAfterDialogue(data, dialogue));
             else SceneManager.LoadScene("TurnBattleScene");
         }
 
-        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter chapter)
+        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter dialogue)
         {
-            yield return StageDialogueView.Play(data, chapter, false);
+            yield return StageDialogueView.Play(data, dialogue, false);
             SceneManager.LoadScene("TurnBattleScene");
         }
 
@@ -217,6 +253,12 @@ namespace Map
 
         void ShowBattle(int stagePosition)
         {
+            if (chapter != null)
+            {
+                backgroundRenderer.sprite = chapter.background;
+                return;
+            }
+
             switch (stagePosition)
             {
                 case 1:
@@ -241,15 +283,15 @@ namespace Map
 
         void WordPosition(int stagePosition)
         {
-            position = Mathf.Clamp(stagePosition, 0, stageLocations.Length - 1);
+            position = Mathf.Clamp(Mathf.Min(stagePosition, LastPlayableStageID) - firstStageID, 0, stageLocations.Length - 1);
             character.transform.position = stageLocations[position].transform.position;
         }
 #if UNITY_EDITOR
-        // 테스트용: 에디터에서 C 키로 다음 스테이지를 연다. 마왕 성(4)까지만 연다.
+        // 테스트용: 에디터에서 C 키로 다음 스테이지를 연다. 지금 장의 마지막 지점까지만 연다.
         void UnlockNextStageForTest()
         {
             if (InteractionLock.IsLocked || enteringStage || !Input.GetKeyDown(KeyCode.C)) return;
-            if (StagePosition < stageLocations.Length - 1) StagePosition++;
+            if (StagePosition < LastStageIDOnMap) StagePosition++;
         }
 #endif
     }
