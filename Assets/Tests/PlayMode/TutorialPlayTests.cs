@@ -148,6 +148,61 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
+        public IEnumerator 첫_클리어는_작별_인사_뒤에_지역_대화와_새_카드를_보여_준다()
+        {
+            bool hadSeen = PlayerPrefs.HasKey("ActOneDialogueSeen");
+            int savedSeen = PlayerPrefs.GetInt("ActOneDialogueSeen");
+            PlayerPrefs.SetInt("ActOneDialogueSeen", 0);
+            try
+            {
+                // 남은 적을 물리치는 단계에서 전투를 이기고 클리어 화면으로 넘어온 상황을 만든다.
+                SetField(Tutorial, "waitingForAcknowledge", false);
+                SetField(Tutorial, "currentFlag", Enum.ToObject(RuntimeType("Tutorial.TutorialFlag"), 11));
+                Call(Tutorial, "SetChatWindowVisible", false);
+                yield return null;
+                yield return null;
+                RuntimeType("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
+                yield return SceneManager.LoadSceneAsync("GameClearScene");
+                yield return null;
+
+                Type viewType = RuntimeType("Story.StageDialogueView");
+                Component clear = Object.FindObjectOfType(RuntimeType("Scenes.GameClearController")) as Component;
+                Assert.That(Flag, Is.EqualTo(12), "할아버지가 먼저 작별 인사를 한다.");
+                Assert.That(Object.FindObjectOfType(viewType), Is.Null);
+                // 작별 인사와 새 카드 안내 사이에 입력 잠금이 잠깐 풀려도 지역 대화가 끼어들지 않는다.
+                for (int i = 0; i < 30 && Tutorial != null && !(bool)Field(Tutorial, "finished"); i++)
+                {
+                    Acknowledge();
+                    yield return null;
+                    if (Tutorial != null && !(bool)Field(Tutorial, "finished"))
+                        Assert.That(Object.FindObjectOfType(viewType), Is.Null, "튜토리얼이 끝나기 전에는 지역 대화를 시작하지 않는다.");
+                }
+                Component view = null;
+                for (int i = 0; i < 10 && view == null; i++)
+                {
+                    yield return null;
+                    view = Object.FindObjectOfType(viewType) as Component;
+                }
+                Assert.That(view, Is.Not.Null, "작별 인사가 끝나면 평원 주민 대화를 보여 준다.");
+                Assert.That((bool)Field(clear, "flag"), Is.False, "새 카드는 대화가 모두 끝난 뒤에 보여 준다.");
+                for (int i = 0; i < 30 && view != null; i++)
+                {
+                    Call(view, "Advance");
+                    yield return null;
+                }
+                yield return null;
+                Assert.That((bool)Field(clear, "talking"), Is.False, "대화가 끝나면 키 입력으로 새 카드를 볼 수 있다.");
+                Assert.That((bool)Field(clear, "flag"), Is.False);
+                Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"));
+            }
+            finally
+            {
+                if (hadSeen) PlayerPrefs.SetInt("ActOneDialogueSeen", savedSeen); else PlayerPrefs.DeleteKey("ActOneDialogueSeen");
+                PlayerPrefs.Save();
+            }
+        }
+
+        [UnityTest]
         public IEnumerator 첫_대사_스킵을_취소하면_대사를_유지하고_확정하면_저장한다()
         {
             Component tutorial = Tutorial;

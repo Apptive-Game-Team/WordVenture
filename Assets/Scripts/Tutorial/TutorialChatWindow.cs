@@ -44,7 +44,7 @@ namespace Tutorial
 
         public void SetSpeakerImage(Sprite image)
         {
-            speakerImage.sprite = image;
+            SetPortraits(image, null, true);
         }
     }
 

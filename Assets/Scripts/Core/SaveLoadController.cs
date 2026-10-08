@@ -7,6 +7,23 @@ namespace Core
     public class SaveLoadController : MonoBehaviour
     {
         public const string TutorialEndedKey = "TutorialEnded";
+        public const string StageDialogueSeenKey = "ActOneDialogueSeen";
+
+        // seenBit 는 StageDialogueChapter.SeenBit 이다.
+        public static bool HasSeenStageDialogue(int seenBit)
+        {
+            return seenBit >= 0 && seenBit < 31
+                && (PlayerPrefs.GetInt(StageDialogueSeenKey, 0) & (1 << seenBit)) != 0;
+        }
+
+        public static void MarkStageDialogueSeen(int seenBit)
+        {
+            if (seenBit < 0 || seenBit >= 31) return;
+            PlayerPrefs.SetInt(StageDialogueSeenKey,
+                PlayerPrefs.GetInt(StageDialogueSeenKey, 0) | (1 << seenBit));
+            PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
+            PlayerPrefs.Save();
+        }
         public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
 
         public static void MarkTutorialEnded()
@@ -80,6 +97,7 @@ namespace Core
         {
             PlayerPrefs.SetInt("StagePosition", -1);
             PlayerPrefs.DeleteKey(TutorialEndedKey);
+            PlayerPrefs.DeleteKey(StageDialogueSeenKey);
             PlayerPrefs.Save();
         }
     }

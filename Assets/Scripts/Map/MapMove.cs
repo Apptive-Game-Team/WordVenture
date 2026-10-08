@@ -1,6 +1,8 @@
+using System.Collections;
 using Combat.Stage;
 using Core;
 using DG.Tweening;
+using Story;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -53,8 +55,10 @@ namespace Map
         void Update()
         {
             CharacterMove();
+#if UNITY_EDITOR
+            UnlockNextStageForTest();
+#endif
             RefreshStageVisuals();
-            //Clear();
         }
 
         /// <summary>
@@ -192,6 +196,15 @@ namespace Map
 
             enteringStage = true;
             StageDataSingleton.Instance.stagePosition = stagePosition;
+            StageDialogueChapter chapter = StageDialogueView.FindUnseen(stagePosition,
+                StageDialogueMoment.Enter, 0, out StageDialogueData data);
+            if (chapter != null) StartCoroutine(EnterAfterDialogue(data, chapter));
+            else SceneManager.LoadScene("TurnBattleScene");
+        }
+
+        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter chapter)
+        {
+            yield return StageDialogueView.Play(data, chapter, false);
             SceneManager.LoadScene("TurnBattleScene");
         }
 
@@ -231,12 +244,13 @@ namespace Map
             position = Mathf.Clamp(stagePosition, 0, stageLocations.Length - 1);
             character.transform.position = stageLocations[position].transform.position;
         }
-        void Clear()
+#if UNITY_EDITOR
+        // 테스트용: 에디터에서 C 키로 다음 스테이지를 연다. 마왕 성(4)까지만 연다.
+        void UnlockNextStageForTest()
         {
-            if (Input.GetKeyDown(KeyCode.C) && StagePosition <= 4)
-            {
-                StagePosition++;
-            }
+            if (InteractionLock.IsLocked || enteringStage || !Input.GetKeyDown(KeyCode.C)) return;
+            if (StagePosition < stageLocations.Length - 1) StagePosition++;
         }
+#endif
     }
 }
