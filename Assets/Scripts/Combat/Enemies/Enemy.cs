@@ -286,7 +286,8 @@ namespace Combat.Enemies
             Animator.Attack();
         }
 
-        protected void Death()
+        // 분열·폭발 슬라임은 쓰러질 때 일을 더 한다.
+        protected virtual void Death()
         {
             Animator.Death();
             StartCoroutine(DeathCounter());
@@ -295,6 +296,18 @@ namespace Combat.Enemies
         {
             yield return new WaitForSeconds(0.25f);
             gameObject.SetActive(false);
+        }
+
+        public int MissingHp => IsAlive ? MaxHp - Hp : 0;
+
+        // 치유 슬라임이 부른다. 최대 체력을 넘지 않는다.
+        public void Heal(int amount)
+        {
+            if (!IsAlive || amount <= 0) return;
+            Hp = Mathf.Min(MaxHp, Hp + amount);
+            reactionText = "회복";
+            reactionUntil = Time.time + 1.5f;
+            UpdateIndicator();
         }
 
         // 남은 체력만큼 피해를 줘서 평소와 같은 사망 처리로 쓰러뜨린다. 이미 쓰러진 적은 건드리지 않는다.
