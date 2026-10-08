@@ -8,7 +8,7 @@ MonoImporter:
   - Shoot: {instanceID: 0}
   - Heal: {instanceID: 0}
   - Drop: {instanceID: 0}
-  - Summon: {instanceID: 0}
+  - explode: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

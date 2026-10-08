@@ -6,15 +6,15 @@ using UnityEngine.Serialization;
 namespace Combat.Spells
 {
 
-    public class Summon : MonoBehaviour
+    public class Explode : MonoBehaviour
     {
         public GameObject player;
-        private float summonRadius = 2.0f;
-        [FormerlySerializedAs("SummonfirePrefab")] public GameObject summonfirePrefab;
-        [FormerlySerializedAs("SummonicePrefab")] public GameObject summonicePrefab;
-        [FormerlySerializedAs("SummonrockPrefab")] public GameObject summonrockPrefab;
-        [FormerlySerializedAs("SummonlightningPrefab")] public GameObject summonlightningPrefab;
-        [FormerlySerializedAs("SummonHolyPrefab")] public GameObject summonHolyPrefab;
+        private float explodeRadius = 2.0f;
+        [FormerlySerializedAs("SummonfirePrefab")] public GameObject explodeFirePrefab;
+        [FormerlySerializedAs("SummonicePrefab")] public GameObject explodeIcePrefab;
+        [FormerlySerializedAs("SummonrockPrefab")] public GameObject explodeRockPrefab;
+        [FormerlySerializedAs("SummonlightningPrefab")] public GameObject explodeLightningPrefab;
+        [FormerlySerializedAs("SummonHolyPrefab")] public GameObject explodeHolyPrefab;
 
         public void Run(MagicType magicType, SelectableObject target, MagicAffinityTable magicAffinityTable)
         {
@@ -24,28 +24,28 @@ namespace Combat.Spells
             switch (magicType)
             {
                 case MagicType.Fire:
-                    prefabToInstantiate = summonfirePrefab;
+                    prefabToInstantiate = explodeFirePrefab;
                     break;
                 case MagicType.Ice:
-                    prefabToInstantiate = summonicePrefab;
+                    prefabToInstantiate = explodeIcePrefab;
                     break;
                 case MagicType.Rock:
-                    prefabToInstantiate = summonrockPrefab;
+                    prefabToInstantiate = explodeRockPrefab;
                     break;
                 case MagicType.Lightning:
-                    prefabToInstantiate = summonlightningPrefab;
+                    prefabToInstantiate = explodeLightningPrefab;
                     break;
                 case MagicType.Holy:
-                    prefabToInstantiate = summonHolyPrefab;
+                    prefabToInstantiate = explodeHolyPrefab;
                     break;
             }
 
             if (prefabToInstantiate != null)
             {
-                //Vector3 instantiatePos = //GetRndPos(target.transform.position + new Vector3(0, -1 * target.transform.position.y, 0), summonRadius);
+                //Vector3 instantiatePos = //GetRndPos(target.transform.position + new Vector3(0, -1 * target.transform.position.y, 0), explodeRadius);
 
                 GameObject obj = Instantiate(prefabToInstantiate, target.transform.position + new Vector3(0, -1 * target.transform.position.y, 0), Quaternion.identity);
-                obj.GetComponent<SpellObj>().InitSpell(MagicType.Summon, magicType, target, magicAffinityTable);
+                obj.GetComponent<SpellObj>().InitSpell(MagicType.Explode, magicType, target, magicAffinityTable);
             }
         }
 

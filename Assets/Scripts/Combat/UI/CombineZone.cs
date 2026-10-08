@@ -62,7 +62,7 @@ namespace Combat.UI
         public Button activateButton;
         [FormerlySerializedAs("Shoot")] public GameObject shoot;
         [FormerlySerializedAs("Drop")] public GameObject drop;
-        [FormerlySerializedAs("Summon")] public GameObject summon;
+        [FormerlySerializedAs("Summon")] public GameObject explode;
 
         private void Awake()
         {
@@ -167,9 +167,9 @@ namespace Combat.UI
             {
                 drop.GetComponent<Drop>().Run(magicType, target, magicAffinityTable);
             }
-            else if (spellType == MagicType.Summon)
+            else if (spellType == MagicType.Explode)
             {
-                summon.GetComponent<Summon>().Run(magicType, target, magicAffinityTable);
+                explode.GetComponent<Explode>().Run(magicType, target, magicAffinityTable);
             }
             SetAllSelectable(false);
 

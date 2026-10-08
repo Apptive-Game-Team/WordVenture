@@ -29,7 +29,7 @@ namespace Combat.Spells
             this.magicType = magicType;
             this.target = target;
 
-            if (this.spellType == MagicType.Summon)
+            if (this.spellType == MagicType.Explode)
             {
                 StartCoroutine(DestoryCounter());
                 return;
@@ -110,7 +110,7 @@ namespace Combat.Spells
             if (spellType == MagicType.Drop)
             {
                 result *= 0.8f;
-            } else if(spellType == MagicType.Summon)
+            } else if(spellType == MagicType.Explode)
             {
                 result *= 0.67f;
             }

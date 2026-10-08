@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2276574769811036669}
   - component: {fileID: 1959435078272024901}
   m_Layer: 0
-  m_Name: ElectricSummon
+  m_Name: ElectricExplode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
