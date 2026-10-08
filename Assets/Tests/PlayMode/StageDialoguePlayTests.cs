@@ -208,7 +208,8 @@ namespace WordVenture.Tests
             {
                 // 앞 wave 를 바로 끝내서 다음 wave 직전의 대화를 확인한다.
                 waveField.SetValue(waves, wave - 1);
-                foreach (GameObject enemy in enemies) enemy.SetActive(false);
+                // 테스트용 K 키 기능으로 남은 적을 평소 사망 처리대로 쓰러뜨린다.
+                Call(Object.FindObjectOfType(Runtime("Combat.Enemies.EnemyTestManager")), "KillAllEnemies");
                 int spawned = enemies.Count;
                 // wave 가 끝나면 1초 기다린 뒤 다음 wave 로 넘어간다.
                 float deadline = Time.time + 5f;

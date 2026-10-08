@@ -205,6 +205,12 @@ namespace Combat.Enemies
             gameObject.SetActive(false);
         }
 
+        // 남은 체력만큼 피해를 줘서 평소와 같은 사망 처리로 쓰러뜨린다. 이미 쓰러진 적은 건드리지 않는다.
+        public void Kill()
+        {
+            if (Hp > 0 && gameObject.activeInHierarchy) TakeHit(Hp);
+        }
+
         public void TakeHit(int damage)
         {
             Hp -= damage;
