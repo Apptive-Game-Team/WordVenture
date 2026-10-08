@@ -9,8 +9,8 @@ Shoot·Drop·Explode × 불·얼음·바위·번개·신성 15개 prefab 이 외
 
 ## Approach
 
-1. `docs/design/spell-effects/common.py` 에 프레임 크기, 원소 팔레트, 외곽선·명암 도구, 미리보기를 둔다.
-2. 원소별 스크립트 5개가 Shoot·Drop·Hit·Explode 시트 4장씩, 총 20장을 그린다. 원소마다 subagent 1개가 맡고, 미리보기를 보고 고친다.
+1. Codex 의 내장 이미지 생성 도구로 원소마다 atlas 두 장(Shoot·Drop·Hit, 큰 Explode)을 만든다. 프롬프트 원문은 `docs/design/spell-effects/generation-prompts/` 에 둔다.
+2. `import_generated.py` 가 atlas 를 시트 20장으로 바꾼다. 분홍 배경 제거, 4×4 px 덩어리를 픽셀 하나로 축소, 원소별 24색 제한, 행별 기준점 정렬.
 3. `build_unity_assets.py` 가 시트의 `.meta`, `.anim`, `.controller` 를 만들고 prefab 15개의 첫 스프라이트, controller, 회전을 바꾼다.
 4. 참조가 0개가 된 `Assets/ThirdParty/ArtResource/Pixel Art` 를 지운다.
 
@@ -24,7 +24,12 @@ Shoot·Drop·Explode × 불·얼음·바위·번개·신성 15개 prefab 이 외
 ## Risks
 
 - `.meta` 와 `.anim` 을 손으로 만든 YAML 로 쓴다. Unity 에서 가져오기 오류가 없는지 확인해야 한다.
-- 원소별 담당이 달라 그림체가 어긋날 수 있다. 공용 팔레트와 외곽선 도구로 맞추고, 미리보기를 나란히 비교한다.
+- 이미지 생성 결과는 실행마다 달라서 원소마다 눈으로 확인하고, 이상하면 다시 생성한다. 동시에 생성하면 공용 이미지 폴더에서 다른 원소 그림을 가져올 수 있어, 프롬프트에 이번 실행의 이미지만 저장하라고 적었다.
+
+## History
+
+- 처음에는 Python 으로 도형을 그렸다. 실제 전투 화면 크기에서 이펙트가 캐릭터보다 몇 배 크고, 큰 매끈한 도형이라 벡터 클립아트처럼 보여서 버렸다.
+- 이미지 생성으로 바꾼 첫 Explode 는 폭 약 2.4 unit 으로 예전(5~8 unit)과 공격 범위(반지름 4 unit)보다 작아서, 512 칸 atlas 로 다시 생성해 폭 약 5 unit 으로 키웠다.
 
 ## Validation
 
@@ -35,7 +40,6 @@ Shoot·Drop·Explode × 불·얼음·바위·번개·신성 15개 prefab 이 외
 ## Result
 
 - `generate_all.py` 를 두 번 실행해 생성 파일 md5 가 같음을 확인했다.
-- 시트 20장의 모든 프레임이 가장자리 2px 여백 안에 있다. 예외: 하늘에서 내려오는 번개·신성 Explode 는 프레임 위쪽 끝에 닿는다.
 - 지운 47개 GUID 의 남은 참조 0개.
-- Unity 2022.3.34f1 batchmode 로 프로젝트 사본을 가져와 prefab 15개를 검사했다. 스프라이트, PPU(128/256), Point 필터, RGBA32, clip 프레임 수(4/6)와 반복 설정, 회전 0 이 모두 맞았다. Unity 가 생성한 `.meta`·`.anim`·`.controller` 를 고쳐 쓰지 않았다.
+- Unity 2022.3.34f1 batchmode 로 프로젝트 사본을 가져와 prefab 15개를 검사했다. 스프라이트, PPU(128/256), Point 필터, RGBA32, clip 프레임 수(4/6)가 모두 맞았다. Unity 가 생성한 `.meta`·`.anim`·`.controller` 를 고쳐 쓰지 않았다.
 - 실제 전투 플레이 확인은 하지 않았다.

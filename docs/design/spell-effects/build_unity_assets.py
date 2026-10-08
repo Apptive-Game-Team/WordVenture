@@ -1,4 +1,4 @@
-"""원소 스크립트가 그린 시트를 Unity 에셋으로 연결한다.
+"""import_generated.py 가 만든 시트를 Unity 에셋으로 연결한다.
 
 만드는 파일 (원소마다):
 - Assets/Art/Combat/Spells/<원소>/<원소><종류>.png.meta  스프라이트 슬라이스, PPU, Point 필터, 무압축
@@ -449,7 +449,7 @@ def build_element(element: str) -> dict[str, tuple[Path, Path]]:
         sheet_name = f"{element}{kind}"
         png = folder / f"{sheet_name}.png"
         if not png.exists():
-            raise FileNotFoundError(f"{png} 가 없다. {element.lower()}.py 를 먼저 실행한다.")
+            raise FileNotFoundError(f"{png} 가 없다. import_generated.py 를 먼저 실행한다.")
         write(png.with_name(png.name + ".meta"), texture_meta(png, sheet_name, spec["frame"], spec["count"]))
         clip = folder / f"{sheet_name}.anim"
         write(clip, animation_clip(png, sheet_name, spec))
