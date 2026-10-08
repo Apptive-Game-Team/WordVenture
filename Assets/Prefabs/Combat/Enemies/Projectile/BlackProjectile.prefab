@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8946871967767613893}
   - component: {fileID: 5963295311293161140}
   m_Layer: 0
-  m_Name: DarkProjectile
+  m_Name: BlackProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
