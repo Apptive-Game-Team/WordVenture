@@ -1,0 +1,19 @@
+Use your built-in image generation tool to create new sprite atlas image files in the current working directory, one image per file, and do not create or edit anything else. Generate them one at a time.
+
+`reference-slime-atlas.png` is the exact layout to follow. It is an existing enemy slime from the 2D pixel-art game WordVenture, drawn as 8 animation frames on a magenta background in a 4 x 2 grid of cells (each cell 384 wide x 512 tall). Frame order, left to right then top to bottom:
+1 idle A, 2 idle B (slightly squashed), 3 squash before a hop, 4 hop/attack stretch, 5 hurt (eyes > <, small particles), 6 defeated (melting, tears), 7 range attack charge (eyes closed), 8 range attack release (mouth wide open).
+
+Rules for every atlas:
+- Exactly 1536 x 1024 pixels with the same 4 x 2 grid of 384 x 512 cells. Draw one frame per cell, same order as the reference.
+- Solid flat magenta (#FF00FF) background everywhere. Do not use magenta inside the creature.
+- Match the reference style exactly: chunky pixel art, thick dark outline, simple two- or three-tone shading, small cute dot eyes, the same size of creature in each cell as the reference (about 60% of the cell width), the creature's bottom resting on the same baseline as the reference frames, horizontally centered in its cell.
+- The creature faces LEFT. Keep its silhouette, colors and size consistent across all 8 frames; only the pose and face change.
+- No text, no numbers, no grid lines, no shadows on the background.
+
+Files to create:
+1. `Mortar.png` - a mortar slime: purple-grey body with a short stone cannon barrel growing out of its back pointing up-left, a small stack of stone shells beside it. In frames 7-8 the barrel glows and fires a small round stone.
+2. `Charge.png` - a charging slime: red-brown armored body with a pointed horn helmet and stubby hooves, angry eyebrows. Frame 3 is a deep crouch ready to dash.
+3. `Shield.png` - a shield slime: dark steel-grey body carrying a large round iron shield in front of it (on the left side), sturdy and heavy looking.
+4. `Split.png` - a splitting slime: orange-red magma body with a visible glowing crack running down its middle, as if about to split into two.
+
+When done, reply with the file names.
