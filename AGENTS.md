@@ -4,14 +4,34 @@
 
 This file is the repository-level entrypoint for coding agents.
 
-Repository-specific instructions in `.agents/docs/` take precedence over broader
-workspace or user-level defaults.
+Read [`.agents/docs/project.md`](.agents/docs/project.md) before non-trivial
+work. Repository-specific instructions in `.agents/docs/` take precedence over
+broader workspace or user-level defaults.
 
 ## Documents
+
+For non-trivial work, follow:
+
+- [`.agents/docs/workflow.md`](.agents/docs/workflow.md)
+- [`.agents/docs/testing.md`](.agents/docs/testing.md)
+
+For tracked Git work, follow:
+
+- [`.agents/docs/issue.md`](.agents/docs/issue.md)
+- [`.agents/docs/branch.md`](.agents/docs/branch.md)
+- [`.agents/docs/commit.md`](.agents/docs/commit.md)
+- [`.agents/docs/pull-request.md`](.agents/docs/pull-request.md)
+
+Follow [`.agents/docs/line-endings.md`](.agents/docs/line-endings.md) when
+adding `.gitattributes`, normalizing line endings, or reviewing a diff where
+every line changed.
 
 For published releases, follow:
 
 - [`.agents/docs/release.md`](.agents/docs/release.md)
+
+Use project-local skills when installed and applicable. Skill instructions
+define their own triggers, formats, and output paths.
 
 ## Conventions
 
