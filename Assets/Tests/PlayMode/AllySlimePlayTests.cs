@@ -109,11 +109,11 @@ namespace WordVenture.Tests
             float frontX = first.transform.position.x;
             yield return null;
 
-            CallStatic("HitFrontLine", 5, 10f);
+            CallStatic("HitFrontLine", 5, 10f, 1);
             Assert.That(AllyHp(first), Is.EqualTo(3));
             Assert.That(AllyHp(second), Is.EqualTo(8));
 
-            CallStatic("HitFrontLine", 10, 10f);
+            CallStatic("HitFrontLine", 10, 10f, 1);
             Assert.That(Allies, Is.EqualTo(new[] { second }));
             Assert.That(CanSpawn, Is.True);
             yield return new WaitForSeconds(0.5f);
@@ -129,7 +129,7 @@ namespace WordVenture.Tests
             yield return null;
 
             // 워드(x=0) 앞의 칸은 x=4.2, 2.8이다. x=3.5의 적은 맨 앞 슬라임을 이미 지나쳤다.
-            CallStatic("HitFrontLine", 5, 3.5f);
+            CallStatic("HitFrontLine", 5, 3.5f, 1);
             Assert.That(AllyHp(first), Is.EqualTo(8));
             Assert.That(AllyHp(second), Is.EqualTo(3));
         }

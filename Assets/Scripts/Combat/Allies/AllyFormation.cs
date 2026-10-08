@@ -53,15 +53,43 @@ namespace Combat.Allies
 
         // 근접 공격은 공격한 적과 워드 사이에 선 슬라임 중 적에게 가장 가까운 슬라임이 대신 받는다.
         // 슬라임을 소환하기 전에 이미 맨 앞 칸보다 워드 쪽으로 온 적은 자기 뒤의 슬라임을 때리지 않는다.
-        public static void HitFrontLine(int damage, float attackerX)
+        // allyDamageMultiplier는 아군 슬라임이 막았을 때만 곱한다. 돌진 슬라임이 2를 쓴다.
+        public static void HitFrontLine(int damage, float attackerX, int allyDamageMultiplier = 1)
         {
             AllySlime blocker = current != null ? current.FindBlocker(attackerX) : null;
             if (blocker != null)
             {
-                blocker.TakeHit(damage);
+                blocker.TakeHit(damage * allyDamageMultiplier);
                 return;
             }
             Player.PlayerInt().TakeHit(damage);
+        }
+
+        // 곡사 슬라임이 노리는 자리. 맨 뒤(워드에 가장 가까운) 아군 슬라임, 아군이 없으면 워드다.
+        public static float RearTargetX(float playerX)
+        {
+            if (current == null) return playerX;
+            for (int i = current.allies.Count - 1; i >= 0; i--)
+                if (current.allies[i].IsAlive) return current.allies[i].transform.position.x;
+            return playerX;
+        }
+
+        // 곡사 탄이 x에 떨어진다. 그 자리에 선 아군 슬라임이 맞고, 없으면 워드가 그 근처에 있을 때 맞는다.
+        // 표시한 뒤 아군이 한 칸 앞으로 나왔다면 탄은 빈자리에 떨어진다.
+        public static void HitPoint(float x, int damage)
+        {
+            const float HitRadius = 0.7f;
+            if (current != null)
+            {
+                foreach (AllySlime ally in current.allies)
+                {
+                    if (!ally.IsAlive || Mathf.Abs(ally.transform.position.x - x) > HitRadius) continue;
+                    ally.TakeHit(damage);
+                    return;
+                }
+            }
+            Player player = Player.PlayerInt();
+            if (Mathf.Abs(player.transform.position.x - x) <= HitRadius) player.TakeHit(damage);
         }
 
         AllySlime FindBlocker(float attackerX)
