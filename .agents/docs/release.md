@@ -61,8 +61,9 @@ notes after builds finish:
 <!-- release-links:end -->
 ```
 
-It carries the per-platform download links, the web play URL, and the `xattr`
-instructions for the unsigned macOS build. Do not hand-write it, and do not
+It carries the per-platform download links (macOS, Windows, Linux, WebGL), the
+web play URL, the itch.io page link, and the `xattr` instructions for the
+unsigned macOS build. Do not hand-write it, and do not
 remove it.
 
 `gh release edit --notes` replaces the entire body. Using it on a release whose
@@ -77,6 +78,20 @@ gh release edit "$TAG" --notes-file /tmp/release-notes.md
 
 Read the release back with `gh release view` afterwards and confirm the block
 survived.
+
+## itch.io
+
+The `itch` job in `.github/workflows/release.yml` pushes each release zip to
+<https://theevilent.itch.io/wordventure> with butler, one channel per platform:
+`osx`, `windows`, `linux`, `webgl`. The version shown on itch.io is the tag
+without the `v`.
+
+- The repository needs a `BUTLER_API_KEY` secret, created at
+  <https://itch.io/user/settings/api-keys> by an account that can edit the
+  game. Without it the job fails and the table marks itch.io as failed.
+- itch.io does not tag the `webgl` channel as a browser game on its own. After
+  the first push, open the game's edit page once and check "This file will be
+  played in the browser" on the `webgl` upload.
 
 ## Version
 
