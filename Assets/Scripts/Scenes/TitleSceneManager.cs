@@ -31,7 +31,7 @@ namespace Scenes
 
             } else
             {
-                SceneManager.LoadScene("Map_scene");
+                SceneManager.LoadScene("MapScene");
             }
 
 

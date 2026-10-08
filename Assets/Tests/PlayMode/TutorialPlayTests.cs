@@ -41,7 +41,7 @@ namespace WordVenture.Tests
             RuntimeType("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
             if (Object.FindObjectOfType(RuntimeType("Combat.Stage.StageDataSingleton")) == null)
                 new GameObject("TestStageData").AddComponent(RuntimeType("Combat.Stage.StageDataSingleton"));
-            yield return SceneManager.LoadSceneAsync("Map_scene");
+            yield return SceneManager.LoadSceneAsync("MapScene");
             yield return null;
             Assert.That(Tutorial, Is.Not.Null);
         }
@@ -174,7 +174,7 @@ namespace WordVenture.Tests
             yield return null;
             Assert.That(Tutorial, Is.Null);
             Assert.That(Locked, Is.False);
-            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("Map_scene"));
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("MapScene"));
         }
 
         [UnityTest]
@@ -345,14 +345,14 @@ namespace WordVenture.Tests
             yield return null;
             yield return null;
             Assert.That(Tutorial, Is.Null);
-            yield return SceneManager.LoadSceneAsync("Map_scene");
+            yield return SceneManager.LoadSceneAsync("MapScene");
             yield return null;
             Assert.That(Tutorial, Is.Null);
             object save = Object.FindObjectOfType(RuntimeType("Core.SaveLoadController"));
             if (save == null) save = new GameObject("SaveTest").AddComponent(RuntimeType("Core.SaveLoadController"));
             Call(save, "InitPlayData");
             RuntimeType("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
-            yield return SceneManager.LoadSceneAsync("Map_scene");
+            yield return SceneManager.LoadSceneAsync("MapScene");
             yield return null;
             Assert.That(Tutorial, Is.Not.Null);
             Assert.That(Flag, Is.EqualTo(1));

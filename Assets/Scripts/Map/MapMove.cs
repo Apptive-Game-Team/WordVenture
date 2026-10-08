@@ -4,6 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace Map
@@ -25,6 +26,12 @@ namespace Map
         int position = 0;
         public static int StagePosition;
 
+        [SerializeField] float stageClickRadius = 0.6f;
+        GameObject[] stageLocations;
+        Camera mapCamera;
+        Tween movement;
+        bool enteringStage;
+
         SpriteRenderer backgroundRenderer;
 
         // 마지막으로 화면에 반영한 StagePosition. 아직 아무것도 그리지 않은 상태를
@@ -34,6 +41,8 @@ namespace Map
         private void Awake()
         {
             backgroundRenderer = background.GetComponent<SpriteRenderer>();
+            stageLocations = new[] { village, battle1, battle2, battle3, boss };
+            mapCamera = Camera.main;
         }
 
         private void Start()
@@ -67,75 +76,106 @@ namespace Map
 
         void CharacterMove()
         {
-            // 튜토리얼 대사를 넘기는 키가 스테이지 이동·입장으로도 먹히면 안 된다.
-            if (InteractionLock.IsLocked)
+            if (InteractionLock.IsLocked || enteringStage)
             {
                 return;
             }
 
-            if (position == 0)
+            if (Input.GetMouseButtonDown(0) &&
+                (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
             {
-                if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 1)
-                {
-                    character.transform.DOMove(battle1.transform.position, 1);
-                    position++;
-                }
-            }
-            else if (position == 1)
-            {
-                if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 2)
-                {
-                    character.transform.DOMove(battle2.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    character.transform.DOMove(village.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 2)
-            {
-                if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && StagePosition >= 3)
-                {
-                    character.transform.DOMove(battle3.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    character.transform.DOMove(battle1.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 3)
-            {
-                if (Input.GetKeyDown(KeyCode.RightArrow) && StagePosition >= 4)
-                {
-                    character.transform.DOMove(boss.transform.position, 1);
-                    position++;
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    character.transform.DOMove(battle2.transform.position, 1);
-                    position--;
-                }
-            }
-            else if (position == 4 || position == 5)
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    character.transform.DOMove(battle3.transform.position, 1);
-                    position--;
-                }
+                HandleStageClick();
+                return;
             }
 
-            // 스테이지 선택 시 씬 로드
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (movement != null && movement.IsActive() && movement.IsPlaying())
+            {
+                return;
+            }
+
+            bool right = Input.GetKeyDown(KeyCode.RightArrow);
+            bool left = Input.GetKeyDown(KeyCode.LeftArrow);
+            bool up = Input.GetKeyDown(KeyCode.UpArrow);
+            bool down = Input.GetKeyDown(KeyCode.DownArrow);
+
+            if (right || (up && (position == 0 || position == 2)))
+            {
+                MoveToStage(position + 1);
+            }
+            else if (left || (down && (position == 1 || position == 3)))
+            {
+                MoveToStage(position - 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
             {
                 SelectStage(position);
             }
         }
 
+        void HandleStageClick()
+        {
+            if (mapCamera == null)
+            {
+                return;
+            }
+
+            // 맵의 지점은 별도 스프라이트 없이 배경 위의 위치로 정의되어 있다.
+            Ray ray = mapCamera.ScreenPointToRay(Input.mousePosition);
+            Plane mapPlane = new Plane(Vector3.forward, village.transform.position);
+            if (!mapPlane.Raycast(ray, out float distance))
+            {
+                return;
+            }
+
+            Vector3 point = ray.GetPoint(distance);
+            int clickedStage = -1;
+            float closestDistance = stageClickRadius * stageClickRadius;
+            for (int i = 0; i < stageLocations.Length; i++)
+            {
+                float squaredDistance = ((Vector2)(point - stageLocations[i].transform.position)).sqrMagnitude;
+                if (squaredDistance <= closestDistance)
+                {
+                    clickedStage = i;
+                    closestDistance = squaredDistance;
+                }
+            }
+
+            if (!IsStageUnlocked(clickedStage))
+            {
+                return;
+            }
+
+            if (clickedStage == position)
+            {
+                SelectStage(clickedStage);
+            }
+            else
+            {
+                MoveToStage(clickedStage);
+            }
+        }
+
+        bool IsStageUnlocked(int target)
+        {
+            return target >= 0 && target < stageLocations.Length && target <= StagePosition;
+        }
+
+        void MoveToStage(int target)
+        {
+            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(target) || target == position)
+            {
+                return;
+            }
+
+            movement?.Kill();
+            position = target;
+            movement = character.transform.DOMove(stageLocations[target].transform.position, 1);
+        }
+
+        void OnDestroy()
+        {
+            movement?.Kill();
+        }
         void ShowStage()
         {
             stage.text = "Stage : " + StagePosition;
@@ -143,6 +183,14 @@ namespace Map
 
         public void SelectStage(int stagePosition)
         {
+            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(stagePosition) ||
+                stagePosition != position ||
+                (movement != null && movement.IsActive() && movement.IsPlaying()))
+            {
+                return;
+            }
+
+            enteringStage = true;
             StageDataSingleton.Instance.stagePosition = stagePosition;
             SceneManager.LoadScene("TurnBattleScene");
         }
@@ -180,31 +228,9 @@ namespace Map
 
         void WordPosition(int stagePosition)
         {
-            position = stagePosition;
-            switch (stagePosition)
-            {
-                case 0:
-                    break;
-                case 1:
-                    character.transform.position = battle1.transform.position;
-                    break;
-                case 2:
-                    character.transform.position = battle2.transform.position;
-                    break;
-                case 3:
-                    character.transform.position = battle3.transform.position;
-                    break;
-                case 4:
-                    character.transform.position = boss.transform.position;
-                    break;
-                case 5:
-                    character.transform.position = boss.transform.position;
-                    break;
-                default:
-                    break;
-            }
+            position = Mathf.Clamp(stagePosition, 0, stageLocations.Length - 1);
+            character.transform.position = stageLocations[position].transform.position;
         }
-
         void Clear()
         {
             if (Input.GetKeyDown(KeyCode.C) && StagePosition <= 4)
