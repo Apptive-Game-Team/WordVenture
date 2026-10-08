@@ -97,30 +97,27 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator RewardExitShowsPortraitDialogueThenReturnsToMap()
+        public IEnumerator ClearScreenShowsPortraitDialogueBeforeNewCard()
         {
             yield return ClearStage(1);
-            MonoBehaviour clear = Object.FindObjectOfType(Runtime("Scenes.GameClearController")) as MonoBehaviour;
-            clear.StartCoroutine((IEnumerator)Call(clear, "ShowDialogueThenLeave", "MapScene"));
             yield return null;
-            yield return null;
-            Assert.That(View, Is.Not.Null);
+            object clear = Object.FindObjectOfType(Runtime("Scenes.GameClearController"));
+            Assert.That(View, Is.Not.Null, "새 카드보다 지역 대화를 먼저 보여 준다.");
             Assert.That(Locked, Is.True);
             Assert.That(View.transform.Find("ChatWindow/DialogueWindow/WordPortrait").GetComponent<UnityEngine.UI.Image>().sprite, Is.Not.Null);
             Assert.That(View.transform.Find("ChatWindow/DialogueWindow/OtherPortrait").GetComponent<UnityEngine.UI.Image>().sprite, Is.Not.Null);
             Call(View, "Advance"); // 첫 입력은 대사를 펼치고 다음 대사로 넘어가지 않는다.
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"));
             CapturePreview("act-one-dialogue-preview.png");
+            Assert.That(Field(clear, "flag"), Is.False);
             yield return FinishDialogue();
-            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("MapScene"));
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"), "대화 뒤에 새 카드 화면이 남는다.");
+            Assert.That(Field(clear, "talking"), Is.False);
             Assert.That(PlayerPrefs.GetInt("ActOneDialogueSeen"), Is.EqualTo(2));
             yield return ClearStage(1);
-            clear = Object.FindObjectOfType(Runtime("Scenes.GameClearController")) as MonoBehaviour;
-            clear.StartCoroutine((IEnumerator)Call(clear, "ShowDialogueThenLeave", "MapScene"));
-            yield return null;
             yield return null;
             Assert.That(View, Is.Null, "이미 읽은 대사는 재도전에서 반복하지 않는다.");
-            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("MapScene"));
+            Assert.That(Field(Object.FindObjectOfType(Runtime("Scenes.GameClearController")), "talking"), Is.False);
         }
 
         [UnityTest]
@@ -156,6 +153,8 @@ namespace WordVenture.Tests
         }
 
         static object Get(object target, string name) => target.GetType().GetField(name).GetValue(target);
+        static object Field(object target, string name) => target.GetType()
+            .GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(target);
 
         [Test]
         public void EachRegionMeetsDifferentResidentAndFirstReturnsOnlyAtTheEnd()

@@ -17,7 +17,7 @@
 
 지역마다 다른 피난민을 만나고, 평원에서 처음 만난 주민만 마지막에 한 번 다시 만난다. 마지막 대화에서 어부와 양치기 소년도 남쪽 마을에 와 있다고 알려 준다. 호위나 구조 전투 규칙을 추가하지 않고 전후 대사로 표현한다.
 
-일반 지역은 기존 카드 보상 화면을 본 뒤 맵으로 나가기 전에 대화한다. 마왕 성은 맵에서 들어갈 때 대화한 뒤 전투 씬으로 넘어간다. 마왕 전투에서는 `BossBattleWaveData` 의 wave 2(`SlimeKing1`)와 wave 3(`SlimeKing2`)를 시작하기 직전에 대화하고, 대화가 끝나야 적이 나온다. 전투 중 대화는 배경 그림 없이 반투명 막만 깔아 전투 화면이 비쳐 보이게 한다. 보스는 클리어 대화 뒤 귀향 엔딩으로 넘어간다. 튜토리얼 종료 대화가 먼저 끝나야 진행하며, 클릭이나 아무 키로 타이핑 완료/다음 대사를 구분한다. 마지막 입력은 한 프레임 소비해서 다음 화면으로 넘어가지 않는다.
+클리어 화면에 들어오면 먼저 지역 대화를 보여 주고, 대화가 끝난 뒤 키 입력으로 새 카드를 보여 준 다음 맵으로 나간다. 첫 클리어(평원)에서는 할아버지의 작별 인사와 새 카드 안내 튜토리얼이 먼저 끝난 뒤 지역 대화를 시작한다. 튜토리얼 대사 사이에도 입력 잠금이 잠깐 풀리므로 잠금 대신 튜토리얼 종료 기록을 기다린다. 마왕 성은 맵에서 들어갈 때 대화한 뒤 전투 씬으로 넘어간다. 마왕 전투에서는 `BossBattleWaveData` 의 wave 2(`SlimeKing1`)와 wave 3(`SlimeKing2`)를 시작하기 직전에 대화하고, 대화가 끝나야 적이 나온다. 전투 중 대화는 배경 그림 없이 반투명 막만 깔아 전투 화면이 비쳐 보이게 한다. 보스는 클리어 대화 뒤 귀향 엔딩으로 넘어간다. 클릭이나 아무 키로 타이핑 완료/다음 대사를 구분한다. 마지막 입력은 한 프레임 소비해서 다음 화면으로 넘어가지 않는다.
 
 대화마다 `stageID`, `moment`(`Clear`·`Enter`·`Wave`), `wave` 로 재생 시점을 정하고, `speakerName`·`speakerPortrait` 로 상대를 정한다.
 
@@ -53,11 +53,11 @@ Use case: stylized-concept. Generate one NEW transparent dialogue portrait, matc
 
 `StageDialoguePlayTests` 는 다음을 확인한다.
 
-- 실제 GameClearScene 에서 대화 진입, 두 초상화 연결, 입력 잠금, 대화 완료 후 맵 전환, 읽음 저장 및 재도전 생략, 보스 대화 후 EndingScene 전환, 새 게임 초기화
+- 실제 GameClearScene 에서 새 카드보다 먼저 대화 진입, 두 초상화 연결, 입력 잠금, 대화 완료 후 새 카드 화면 유지, 읽음 저장 및 재도전 생략, 보스 대화 후 EndingScene 전환, 새 게임 초기화
 - 평원·해안·고원·빗길의 화자 이름과 초상화가 모두 다르고, 마왕 처치 후 대화만 평원 주민을 다시 쓰는지
 - MapScene 에서 마왕 성을 고르면 대화를 먼저 보여 주고, 다 본 뒤 TurnBattleScene 으로 넘어가는지
 - 실제 마왕 전투에서 wave 2·3 직전에 마왕 대화가 나오고, 대화가 끝나기 전에는 적이 나오지 않으며, 배경 그림이 전투 화면을 가리지 않는지
 
 렌더링 미리보기는 `act-one-dialogue-preview.png`(해안 어부), `act-one-castle-dialogue-preview.png`(마왕 성 입장), `act-one-boss-dialogue-preview.png`(슬라임 마왕 등장)에 저장한다. 미리보기는 대화창 canvas 를 카메라 모드로 바꿔 찍으므로 가장 위 sorting layer 에 둔다. 실제 게임에서는 Overlay canvas 라서 전투 카드보다 위에 그려진다.
 
-2026-10-08 Unity 2022.3.34f1 batchmode 에서 `SharedDialoguePlayTests`, `StageDialoguePlayTests`, `TutorialPlayTests` PlayMode 12개와 EditMode 43개가 모두 통과했다.
+2026-10-08 Unity 2022.3.34f1 batchmode 에서 `SharedDialoguePlayTests`, `StageDialoguePlayTests`, `TutorialPlayTests` PlayMode 13개와 EditMode 43개가 모두 통과했다.
