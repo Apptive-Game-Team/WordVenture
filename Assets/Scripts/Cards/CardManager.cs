@@ -301,6 +301,22 @@ namespace Cards
         public void CardMouseDown()
         {
             if (selectCard == null) return;
+
+            // 칸은 조합창 안에 있어서 창이 닫혀 있으면 카드를 놓을 자리가 보이지 않는다.
+            // 카드를 집는 순간 창을 연다.
+            if (!CombineZone.Instance.gameObject.activeSelf)
+            {
+                CombineZone.Instance.gameObject.SetActive(true);
+            }
+
+            // Shift를 누른 채 클릭하면 끌지 않고 카드 종류에 맞는 칸에 바로 올린다.
+            // 드래그가 시작되지 않으므로 이어지는 MouseUp은 CardMouseUp에서 무시된다.
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                QuickPlaceCard(selectCard);
+                return;
+            }
+
             dragStartPrs = new Prs(selectCard.transform.position, selectCard.transform.rotation, selectCard.transform.localScale);
             isMyCardDrag = true;
         }
@@ -314,34 +330,90 @@ namespace Cards
             }
 
             isMyCardDrag = false;
-            if (onPushArea1 && selectCard.CompareTag("Spell") && (CombineZone.Instance.spellCards.Count == 0 || CombineZone.Instance.spellCards.Contains(selectCard.gameObject)))
+            if (onPushArea1 && CanPlaceInSlot(selectCard, "Spell", CombineZone.Instance.spellCards))
             {
-                pushArea1.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new Prs(pushArea1.transform.position, Util.Qi, selectCard.originPrs.scale), false);
+                PlaceCard(selectCard, pushArea1);
             }
-            else if (onPushArea2 && selectCard.CompareTag("MagicType") && (CombineZone.Instance.magicTypeCards.Count == 0 || CombineZone.Instance.magicTypeCards.Contains(selectCard.gameObject)))
+            else if (onPushArea2 && CanPlaceInSlot(selectCard, "MagicType", CombineZone.Instance.magicTypeCards))
             {
-                pushArea2.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new Prs(pushArea2.transform.position, Util.Qi, selectCard.originPrs.scale), false);
+                PlaceCard(selectCard, pushArea2);
             }
             else if (onPushArea3 && selectCard.CompareTag("Target"))
             {
-                pushArea3.GetComponent<DropZone>().GetCard(selectCard.gameObject);
-                selectCard.MoveTransform(new Prs(pushArea3.transform.position, Util.Qi, selectCard.originPrs.scale), false);
+                PlaceCard(selectCard, pushArea3);
             }
             else
             {
-                if (selectCard.CompareTag("Spell"))
-                {
-                    CombineZone.Instance.spellCards.Remove(selectCard.gameObject);
-                }
-                if (selectCard.CompareTag("MagicType"))
-                {
-                    CombineZone.Instance.magicTypeCards.Remove(selectCard.gameObject);
-                }
-
-                selectCard.MoveTransform(selectCard.originPrs, false);
+                ReturnCardToHand(selectCard);
             }
+        }
+
+        // 손패의 카드는 맞는 칸으로 올리고, 이미 칸에 있는 카드는 손패로 돌린다.
+        // 칸을 다른 카드가 차지하고 있으면 그 카드를 손패로 돌리고 바꿔 넣는다.
+        void QuickPlaceCard(Card card)
+        {
+            List<GameObject> slotCards;
+            GameObject slot;
+            if (card.CompareTag("Spell"))
+            {
+                slotCards = CombineZone.Instance.spellCards;
+                slot = pushArea1;
+            }
+            else if (card.CompareTag("MagicType"))
+            {
+                slotCards = CombineZone.Instance.magicTypeCards;
+                slot = pushArea2;
+            }
+            else
+            {
+                return;
+            }
+
+            if (slotCards.Contains(card.gameObject))
+            {
+                ReturnCardToHand(card);
+                return;
+            }
+
+            for (int i = slotCards.Count - 1; i >= 0; i--)
+            {
+                Card occupant = slotCards[i] != null ? slotCards[i].GetComponent<Card>() : null;
+                if (occupant != null)
+                {
+                    ReturnCardToHand(occupant);
+                }
+                else
+                {
+                    slotCards.RemoveAt(i);
+                }
+            }
+
+            PlaceCard(card, slot);
+        }
+
+        static bool CanPlaceInSlot(Card card, string tag, List<GameObject> slotCards)
+        {
+            return card.CompareTag(tag) && (slotCards.Count == 0 || slotCards.Contains(card.gameObject));
+        }
+
+        void PlaceCard(Card card, GameObject slot)
+        {
+            slot.GetComponent<DropZone>().GetCard(card.gameObject);
+            card.MoveTransform(new Prs(slot.transform.position, Util.Qi, card.originPrs.scale), false);
+        }
+
+        void ReturnCardToHand(Card card)
+        {
+            if (card.CompareTag("Spell"))
+            {
+                CombineZone.Instance.spellCards.Remove(card.gameObject);
+            }
+            if (card.CompareTag("MagicType"))
+            {
+                CombineZone.Instance.magicTypeCards.Remove(card.gameObject);
+            }
+
+            card.MoveTransform(card.originPrs, false);
         }
 
         public void ReturnCardsToHand()
