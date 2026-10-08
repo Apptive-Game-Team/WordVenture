@@ -3,6 +3,7 @@ using Cards;
 using Combat.Enemies;
 using Core;
 using Combat.UI;
+using Combat.Spells;
 using UnityEngine;
 
 namespace Battle.Turns
@@ -117,7 +118,8 @@ namespace Battle.Turns
         {
             if (InteractionLock.IsLocked) return;
             CombineZone zone = FindObjectOfType<CombineZone>(true);
-            if (zone != null && zone.IsAwaitingTarget) return;
+            if (zone != null && (zone.IsAwaitingTarget || zone.IsCasting)) return;
+            if (SpellObj.HasActiveSpells) return;
             if (currentTurn == PlayerTurn)
             {
                 ChangeTurn(EnemyTurn);
@@ -135,6 +137,7 @@ namespace Battle.Turns
         IEnumerator EnemyTurnCounter()
         {
             yield return new WaitForSecondsRealtime(1f);
+            enemyManager.EndTurnStatuses();
             ChangeTurn(PlayerTurn);
         }
 

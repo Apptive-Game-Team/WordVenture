@@ -12,7 +12,7 @@ namespace Combat.Enemies
             base.Attack(distanceToPlayer);
             if (distanceToPlayer < attackRange)
             {
-                Player.PlayerInt().TakeHit(Damage);
+                Player.PlayerInt().TakeHit(AttackDamage);
             }
         }
     }

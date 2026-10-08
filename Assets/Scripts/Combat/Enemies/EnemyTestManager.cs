@@ -46,6 +46,13 @@ namespace Combat.Enemies
             InitList(enemies);
         }
 
+        public void EndTurnStatuses()
+        {
+            // 턴 시작 시의 목록을 사용해 도중에 나타난 다음 웨이브의 상태를 소비하지 않는다.
+            foreach (Enemy enemy in enemies)
+                if (enemy != null) enemy.EndTurnStatuses();
+        }
+
         //MSP
         public List<Enemy> GetEnemies()
         {

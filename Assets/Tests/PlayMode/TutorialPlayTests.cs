@@ -291,6 +291,16 @@ namespace WordVenture.Tests
             Assert.That(overlayRoot.Find("DragDemo").gameObject.activeInHierarchy, Is.True);
             Button endButton = Field(Tutorial, "turnEndButton") as Button;
             Assert.That(endButton, Is.Not.Null);
+            // 시전/발사체가 끝나기 전에는 새 상태 효과의 턴 경계가 바뀌지 않아야 한다.
+            float spellDeadline = Time.unscaledTime + 7f;
+            while ((bool)Zone.GetType().GetProperty("IsCasting").GetValue(Zone)
+                || (bool)RuntimeType("Combat.Spells.SpellObj").GetProperty("HasActiveSpells").GetValue(null))
+            {
+                endButton.onClick.Invoke();
+                Assert.That((bool)Field(Tutorial, "turnEnded"), Is.False);
+                Assert.That(Time.unscaledTime, Is.LessThan(spellDeadline), "주문 처리가 끝나면 턴을 넘길 수 있어야 한다");
+                yield return null;
+            }
             endButton.onClick.Invoke();
             yield return Reach(11);
         }

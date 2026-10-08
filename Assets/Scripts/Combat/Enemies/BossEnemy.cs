@@ -16,7 +16,7 @@ namespace Combat.Enemies
             base.Attack(distanceToPlayer);
             if (distanceToPlayer < attackRange)
             {
-                Player.PlayerInt().TakeHit(Damage);
+                Player.PlayerInt().TakeHit(AttackDamage);
             }
         }
         protected override void StopMove()
@@ -24,7 +24,7 @@ namespace Combat.Enemies
             base.StopMove();
             Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position, Quaternion.identity);
-            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage((int) (Damage * 0.7f));
+            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage((int) (AttackDamage * 0.7f));
         }
 
 

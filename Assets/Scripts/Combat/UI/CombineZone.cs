@@ -22,6 +22,7 @@ namespace Combat.UI
         public event Action<SelectableObject> TargetSelected;
         public bool IsAwaitingTarget { get; private set; }
         bool isCasting;
+        public bool IsCasting => isCasting;
 
         public Transform GetTutorialTarget()
         {
@@ -181,6 +182,8 @@ namespace Combat.UI
         {
             if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null
                 || !selectableObject.GetSelectable()) return;
+            Enemy selectedEnemy = selectableObject.GetComponent<Enemy>();
+            if (selectedEnemy != null && !selectedEnemy.IsAlive) return;
             target = selectableObject;
             IsAwaitingTarget = false;
             TargetSelected?.Invoke(selectableObject);

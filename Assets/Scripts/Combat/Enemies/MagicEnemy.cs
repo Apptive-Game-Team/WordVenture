@@ -15,7 +15,7 @@ namespace Combat.Enemies
         {
             Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position,Quaternion.identity);
-            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage(Damage);
+            projectile.GetComponent<EnemyProjectile>().InitProjectileDamage(AttackDamage);
         }
         //private void OnTriggerEnter2D(Collider2D other)
         //{

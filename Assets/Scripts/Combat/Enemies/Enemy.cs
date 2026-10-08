@@ -70,6 +70,15 @@ namespace Combat.Enemies
         protected int Hp = 1;
         protected int MaxHp = 1;
         protected int Damage;
+        public ElementalStatus Status { get; private set; } = new ElementalStatus();
+        public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
+        protected int AttackDamage => Status.GetAttackDamage(Damage);
+        TMP_Text statusText;
+        SpriteRenderer bodyRenderer;
+        Color originalBodyColor;
+        bool tookTurn;
+        string reactionText;
+        float reactionUntil;
 
         public float moveDistance = 5;
 
@@ -89,6 +98,9 @@ namespace Combat.Enemies
             attackRange = enemyData.attackRange;
             Damage = enemyData.damage;
             enemyType = enemyData.type;
+            Status = new ElementalStatus(enemyType);
+            reactionText = string.Empty;
+            tookTurn = false;
             UpdateIndicator();
         }
 
@@ -114,13 +126,64 @@ namespace Combat.Enemies
 
         public void UpdateIndicator()
         {
-            HpText.SetText(Hp.ToString());
+            if (HpText != null) HpText.SetText(Mathf.Max(0, Hp).ToString());
+            UpdateStatusIndicator();
+        }
+
+        void UpdateStatusIndicator()
+        {
+            if (statusText != null)
+                statusText.text = Time.time < reactionUntil ? reactionText : string.Empty;
+            if (bodyRenderer != null)
+            {
+                Color tint = Status.Frozen || Status.Chill > 0 ? new Color(0.5f, 0.85f, 1f)
+                    : Status.BurnTurns > 0 ? new Color(1f, 0.6f, 0.35f)
+                    : Status.ShockTurns > 0 ? new Color(1f, 1f, 0.5f)
+                    : Status.FractureTurns > 0 ? new Color(0.8f, 0.65f, 0.5f) : Color.white;
+                bodyRenderer.color = originalBodyColor * tint;
+            }
+        }
+
+        void Update()
+        {
+            if (!string.IsNullOrEmpty(reactionText) && Time.time >= reactionUntil)
+            {
+                reactionText = string.Empty;
+                UpdateStatusIndicator();
+            }
+        }
+
+        public void TakeSpellHit(MagicType element, MagicType spell, float baseDamage, float affinity)
+        {
+            if (!IsAlive) return;
+            ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
+            reactionText = hit.Reaction;
+            reactionUntil = Time.time + 1.5f;
+            TakeHit(hit.Damage + hit.ExtraDamage);
+            UpdateStatusIndicator();
+        }
+
+        public void EndTurnStatuses()
+        {
+            if (!tookTurn) return;
+            tookTurn = false;
+            if (!IsAlive) return;
+            int burn = Status.EndEnemyTurn();
+            if (burn > 0) TakeHit(burn);
+            UpdateStatusIndicator();
         }
 
 
 
         public void PlayTurnAction(float distanceToPlayer)
         {
+            if (!IsAlive) return;
+            tookTurn = true;
+            if (Status.BeginEnemyTurn())
+            {
+                UpdateStatusIndicator();
+                return;
+            }
             enemyActions[(int) MakeActionDecision(distanceToPlayer)].PlayAction(distanceToPlayer);
         }
 
@@ -131,24 +194,28 @@ namespace Combat.Enemies
         // turnTime을 넘겨, 1초 뒤 턴을 넘기는 TurnBattleSystem의 타이머를 침범했다.
         public IEnumerator MoveDistance(float distance)
         {
+            distance = Mathf.Max(0, distance) * Status.MovementMultiplier;
             Animator.MoveStart();
             float moveSpeed = moveDistance / turnTime;
             float movedDistance = 0;
-            while (movedDistance <= distance)
+            while (movedDistance < distance && IsAlive)
             {
                 yield return null;
 
-                float moveStep = moveSpeed * Time.deltaTime;
+                float moveStep = Mathf.Min(moveSpeed * Time.deltaTime, distance - movedDistance);
                 movedDistance += moveStep;
                 Move(-1, moveStep);
             }
-            StopMove();
+            if (IsAlive) StopMove();
         }
 
         private void Awake()
         {
             InitIndicators();
             InitEnemyActions();
+            bodyRenderer = GetComponent<SpriteRenderer>();
+            if (bodyRenderer != null) originalBodyColor = bodyRenderer.color;
+            gameObject.AddComponent<ElementalStatusVfx>().Initialize(this, bodyRenderer);
         }
 
         protected virtual void Start()
@@ -207,7 +274,9 @@ namespace Combat.Enemies
 
         public void TakeHit(int damage)
         {
+            if (!IsAlive) return;
             Hp -= damage;
+            UpdateIndicator();
             if (Hp <= 0)
             {
                 Death();
@@ -223,7 +292,22 @@ namespace Combat.Enemies
         private void InitIndicators()
         {
             HpText = gameObject.GetComponentInChildren<TMP_Text>();
+            if (HpText == null) return;
             HpText.SetText(MaxHp.ToString());
+            statusText = Instantiate(HpText, HpText.transform.parent);
+            statusText.name = "ElementalStatusText";
+            var presentation = Resources.Load<ElementalStatusPresentation>("Combat/ElementalStatusPresentation");
+            if (presentation != null && presentation.font != null) statusText.font = presentation.font;
+            statusText.raycastTarget = false;
+            statusText.richText = true;
+            statusText.enableAutoSizing = false;
+            statusText.fontSize = HpText.fontSize * 0.7f;
+            statusText.enableWordWrapping = false;
+            statusText.alignment = TextAlignmentOptions.Center;
+            statusText.rectTransform.anchoredPosition += new Vector2(0, HpText.rectTransform.rect.height * 0.8f);
+            statusText.rectTransform.sizeDelta = new Vector2(HpText.rectTransform.rect.width * 6f,
+                HpText.rectTransform.rect.height * 2f);
+            statusText.text = string.Empty;
         }
 
     }
