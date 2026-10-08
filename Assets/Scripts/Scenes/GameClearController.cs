@@ -18,6 +18,9 @@ namespace Scenes
 
         [FormerlySerializedAs("TEXT")] [SerializeField] GameObject text;
 
+        // "아무 키나 입력하세요" 안내. 연결하지 않은 씬에서는 쓰지 않는다.
+        [SerializeField] GameObject anyKeyPrompt;
+
         bool flag = false;
 
         private string sceneName;
@@ -35,6 +38,12 @@ namespace Scenes
 
         void Update()
         {
+            // 튜토리얼 대사가 떠 있는 동안에는 대사 쪽 안내와 겹치지 않게 숨긴다.
+            if (anyKeyPrompt != null)
+            {
+                anyKeyPrompt.SetActive(!InteractionLock.IsLocked);
+            }
+
             // 튜토리얼 대사를 넘기는 키가 클리어 화면 진행으로도 먹히면 안 된다.
             if (InteractionLock.IsLocked)
             {
