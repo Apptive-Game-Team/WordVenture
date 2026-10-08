@@ -8,6 +8,8 @@ namespace Story
     public struct StageDialogueLine
     {
         public bool wordSpeaking;
+        [Tooltip("켜면 이름과 초상화 없이 나레이션으로 보여 준다.")]
+        public bool narration;
         [TextArea(2, 4)] public string text;
     }
 

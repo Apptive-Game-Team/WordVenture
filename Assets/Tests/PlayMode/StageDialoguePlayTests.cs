@@ -127,8 +127,20 @@ namespace WordVenture.Tests
             yield return null;
             Assert.That(View, Is.Not.Null);
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"));
-            yield return FinishDialogue();
+            for (int i = 0; i < 40 && !(bool)Field(View, "finishing"); i++)
+            {
+                Call(View, "Advance");
+                yield return null;
+            }
+            // 엔딩으로 넘어가는 동안 클리어 화면이 비쳐 보이지 않도록 대화창이 끝까지 덮고 있다.
+            for (int i = 0; i < 10 && SceneManager.GetActiveScene().name == "GameClearScene"; i++)
+            {
+                Assert.That(View, Is.Not.Null, "씬이 바뀌기 전에 대화창이 사라지면 클리어 화면이 깜박인다.");
+                yield return null;
+            }
             Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("EndingScene"));
+            Assert.That(View, Is.Null);
+            Assert.That(Locked, Is.False);
             Assert.That(PlayerPrefs.GetInt("ActOneDialogueSeen"), Is.EqualTo(16));
         }
 

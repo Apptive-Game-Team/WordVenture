@@ -25,12 +25,14 @@ namespace Story
         }
 
         // 다른 대화나 튜토리얼이 입력을 잡고 있으면 끝나기를 기다린 뒤 재생하고, 다 보면 읽음으로 기록한다.
-        public static IEnumerator Play(StageDialogueData data, StageDialogueChapter chapter)
+        // 대화 뒤에 다른 씬으로 넘어갈 때는 closeWhenDone 을 끄면 씬이 바뀔 때까지 마지막 대사를 덮어 두어
+        // 그 사이에 지금 씬이 비쳐 보이지 않는다.
+        public static IEnumerator Play(StageDialogueData data, StageDialogueChapter chapter, bool closeWhenDone = true)
         {
             if (InteractionLock.IsLocked) yield return new WaitUntil(() => !InteractionLock.IsLocked);
             bool completed = false;
             var view = new GameObject("StageDialogue", typeof(RectTransform)).AddComponent<StageDialogueView>();
-            view.Begin(data, chapter, () => completed = true);
+            view.Begin(data, chapter, () => completed = true, closeWhenDone);
             yield return new WaitUntil(() => completed);
             SaveLoadController.MarkStageDialogueSeen(chapter.SeenBit);
         }
@@ -42,9 +44,13 @@ namespace Story
         int line;
         bool ownsLock;
         bool finishing;
+        bool closeWhenDone = true;
+        bool speakerAppeared;
 
-        public void Begin(StageDialogueData data, StageDialogueChapter dialogue, Action onCompleted)
+        public void Begin(StageDialogueData data, StageDialogueChapter dialogue, Action onCompleted,
+            bool closeOnFinish = true)
         {
+            closeWhenDone = closeOnFinish;
             chapter = dialogue;
             dialogueData = data;
             completed = onCompleted;
@@ -101,8 +107,12 @@ namespace Story
         void ShowLine()
         {
             StageDialogueLine current = chapter.lines[line];
-            chat.SetPortraits(dialogueData.wordPortrait, chapter.speakerPortrait, current.wordSpeaking);
-            chat.UpdateChatStream(current.wordSpeaking ? "워드" : chapter.speakerName, current.text);
+            // 상대 초상화는 상대가 처음 말할 때부터 보여 준다. 워드의 혼잣말로 시작하는 대화에서 미리 나오지 않게 한다.
+            if (!current.wordSpeaking && !current.narration) speakerAppeared = true;
+            chat.SetPortraits(dialogueData.wordPortrait, speakerAppeared ? chapter.speakerPortrait : null, current.wordSpeaking);
+            // 이름을 비우면 공통 대화창이 이름과 초상화를 숨기고 나레이션으로 보여 준다.
+            string speaker = current.narration ? "" : current.wordSpeaking ? "워드" : chapter.speakerName;
+            chat.UpdateChatStream(speaker, current.text);
         }
 
         void Update()
@@ -134,7 +144,7 @@ namespace Story
             ownsLock = false;
             InteractionLock.IsLocked = false;
             completed?.Invoke();
-            Destroy(gameObject);
+            if (closeWhenDone) Destroy(gameObject);
         }
 
         void OnDestroy()

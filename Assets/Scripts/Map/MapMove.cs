@@ -204,7 +204,7 @@ namespace Map
 
         IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter chapter)
         {
-            yield return StageDialogueView.Play(data, chapter);
+            yield return StageDialogueView.Play(data, chapter, false);
             SceneManager.LoadScene("TurnBattleScene");
         }
 

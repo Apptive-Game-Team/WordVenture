@@ -85,7 +85,8 @@ namespace Scenes
             // 첫 클리어에서는 할아버지의 작별 인사와 새 카드 안내가 모두 끝난 뒤에 대화한다.
             // 튜토리얼 대사 사이에도 입력 잠금이 잠깐 풀리므로 잠금 대신 튜토리얼 종료를 기다린다.
             while (TutorialController.Instance != null && !SaveLoadController.IsTutorialEnded) yield return null;
-            if (chapter != null) yield return StageDialogueView.Play(data, chapter);
+            // 마왕 처치 후에는 엔딩으로 넘어가므로 대화창을 닫지 않고 그대로 덮어 둔다.
+            if (chapter != null) yield return StageDialogueView.Play(data, chapter, stageID != 4);
             if (stageID == 4)
             {
                 leaving = true;
