@@ -9,7 +9,7 @@ namespace Cards
     public enum MagicType
     {
         Shoot,
-        Summon,
+        Explode,
         Drop,
         Holy,
         Fire,

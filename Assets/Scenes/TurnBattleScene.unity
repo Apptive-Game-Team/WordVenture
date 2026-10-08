@@ -853,7 +853,7 @@ GameObject:
   - component: {fileID: 794857273}
   - component: {fileID: 794857272}
   m_Layer: 0
-  m_Name: Summon
+  m_Name: Explode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -872,11 +872,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  SummonfirePrefab: {fileID: 9043495235772708234, guid: 135ea3a6f3fa44e04af8a823d8758975, type: 3}
-  SummonicePrefab: {fileID: 2024811858653220549, guid: 69e9de0c070df4321a4250d647465f1c, type: 3}
-  SummonrockPrefab: {fileID: 2412638009034430020, guid: 4d676791ebb404b419e075ed8377d27b, type: 3}
-  SummonlightningPrefab: {fileID: 5641058348314935100, guid: fee7fd1f8acdd4f0b815535813af548a, type: 3}
-  SummonHolyPrefab: {fileID: 400145966664602197, guid: e5b1542bc1b3a4f3ebba11024d7e3fd3, type: 3}
+  firePrefab: {fileID: 9043495235772708234, guid: 135ea3a6f3fa44e04af8a823d8758975, type: 3}
+  icePrefab: {fileID: 2024811858653220549, guid: 69e9de0c070df4321a4250d647465f1c, type: 3}
+  rockPrefab: {fileID: 2412638009034430020, guid: 4d676791ebb404b419e075ed8377d27b, type: 3}
+  lightningPrefab: {fileID: 5641058348314935100, guid: fee7fd1f8acdd4f0b815535813af548a, type: 3}
+  holyPrefab: {fileID: 400145966664602197, guid: e5b1542bc1b3a4f3ebba11024d7e3fd3, type: 3}
 --- !u!4 &794857273
 Transform:
   m_ObjectHideFlags: 0
@@ -1852,7 +1852,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 338851660}
     - target: {fileID: 457294745888891512, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
-      propertyPath: Summon
+      propertyPath: explode
       value: 
       objectReference: {fileID: 794857271}
     - target: {fileID: 457294745888891512, guid: aafeb11600a809840a4881989da0fb1f, type: 3}

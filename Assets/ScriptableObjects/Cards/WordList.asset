@@ -17,7 +17,7 @@ MonoBehaviour:
     percent: 10
     tag: Spell
     magicType: 0
-  - name: Summon
+  - name: Explode
     percent: 5
     tag: Spell
     magicType: 1

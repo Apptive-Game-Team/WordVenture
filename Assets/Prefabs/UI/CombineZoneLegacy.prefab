@@ -234,7 +234,7 @@ MonoBehaviour:
   activateButton: {fileID: 3403437234130403878}
   Shoot: {fileID: 0}
   Drop: {fileID: 0}
-  Summon: {fileID: 0}
+  explode: {fileID: 0}
 --- !u!1 &3597591649688361589
 GameObject:
   m_ObjectHideFlags: 0
