@@ -19,6 +19,7 @@ namespace Story
 
         private Coroutine streamingCoroutine;
         private string streamingText;
+        public DialogueWindowPresentation Presentation { get; private set; }
 
         public bool IsStreaming { get { return streamingCoroutine != null; } }
 
@@ -37,6 +38,10 @@ namespace Story
             }
 
             chatName.SetText(name);
+            Presentation.SetSpeaker(name);
+            chatText.SetText(string.Empty);
+            Presentation.PromptLabel.SetText("클릭 / 아무 키 · 대사 펼치기");
+            SetAnyKeyPromptVisible(true);
             streamingText = text + " ";
             streamingCoroutine = StartCoroutine(UpdateStreamingChat());
         }
@@ -86,26 +91,34 @@ namespace Story
 
         protected virtual void OnStreamComplete()
         {
+            Presentation.PromptLabel.SetText("클릭 / 아무 키 · 다음");
             SetAnyKeyPromptVisible(true);
         }
 
+        public void SetPortraits(Sprite left, Sprite right, bool leftSpeaking)
+        {
+            Presentation.SetPortraits(left, right, leftSpeaking);
+        }
+
         /// <summary>
-        /// 자식 TMP_Text를 이름으로 찾는다. 인덱스로 찾으면 대화창에 텍스트가
-        /// 하나만 추가돼도 참조가 어긋난다.
+        /// 기존 씬의 직렬화 연결은 유지하면서 공통 대화창을 구성한다.
         /// </summary>
         protected virtual void InitTexts()
         {
-            foreach (TMP_Text text in GetComponentsInChildren<TMP_Text>(true))
-            {
-                if (text.name == "ChatName")
-                {
-                    chatName = text;
-                }
-                else if (text.name == "ChatText")
-                {
-                    chatText = text;
-                }
-            }
+            // 기존 씬/프리팹의 컨트롤러 연결은 유지하고 표시 자식만 공통 창으로 교체한다.
+            foreach (Transform child in transform) child.gameObject.SetActive(false);
+            DialogueWindowPresentation.Stretch((RectTransform)transform);
+            DialogueWindowPresentation.ConfigureCanvas(GetComponentInParent<Canvas>());
+            Presentation = DialogueWindowPresentation.Create(transform);
+            chatName = Presentation.NameLabel;
+            chatText = Presentation.TextLabel;
+            anyKeyPrompt = Presentation.PromptLabel.gameObject;
+        }
+
+        void OnDisable()
+        {
+            if (streamingCoroutine != null) StopCoroutine(streamingCoroutine);
+            streamingCoroutine = null;
         }
 
     }
