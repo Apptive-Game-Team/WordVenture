@@ -82,11 +82,11 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 서리_마을을_끝내도_전투가_없는_벼락_협곡에는_들어갈_수_없다()
+        public IEnumerator 벼락_협곡을_끝내도_전투가_없는_잿빛_유적에는_들어갈_수_없다()
         {
-            yield return LoadMap(6);
-            Assert.That(IsUnlocked(0), Is.True);
-            Assert.That(IsUnlocked(1), Is.False);
+            yield return LoadMap(7);
+            Assert.That(IsUnlocked(1), Is.True);
+            Assert.That(IsUnlocked(2), Is.False);
             object stageLabel = Field(MapMove, "stage");
             Assert.That(stageLabel.GetType().GetProperty("text").GetValue(stageLabel), Does.Contain("준비 중"));
         }
