@@ -49,7 +49,9 @@ namespace Cards
         [FormerlySerializedAs("PushArea2")] [SerializeField] GameObject pushArea2;
         [FormerlySerializedAs("PushArea3")] [SerializeField] GameObject pushArea3;
 
-        List<Word> wordBuffer;
+        // 마법 카드와 타입 카드를 따로 섞어 둔다. 한 더미에서 뽑으면 한 턴에 같은 종류만
+        // 두 장 들어와 조합할 수 없는 턴이 생긴다.
+        readonly Dictionary<string, List<Word>> wordBuffers = new Dictionary<string, List<Word>>();
         public Card selectCard;
         bool isMyCardDrag;
         bool onCardArea;
@@ -81,22 +83,23 @@ namespace Cards
         }
 
 
-        public Word PopWord()
+        public Word PopWord(string tag)
         {
-            if (wordBuffer.Count == 0)
-                SetupWordBuffer();
+            if (!wordBuffers.TryGetValue(tag, out List<Word> wordBuffer) || wordBuffer.Count == 0)
+                wordBuffer = SetupWordBuffer(tag);
 
             Word word = wordBuffer[0];
             wordBuffer.RemoveAt(0);
             return word;
         }
 
-        void SetupWordBuffer()
+        List<Word> SetupWordBuffer(string tag)
         {
-            wordBuffer = new List<Word>();
+            List<Word> wordBuffer = new List<Word>();
             for (int i = 0; i < wordSo.words.Length; i++)
             {
                 Word word = wordSo.words[i];
+                if (word.tag != tag) continue;
                 for (int j = 0;j < word.percent;j++)
                     wordBuffer.Add(word);
             }
@@ -108,13 +111,15 @@ namespace Cards
                 wordBuffer[i] = wordBuffer[rand];
                 wordBuffer[rand] = temp;
             }
+
+            wordBuffers[tag] = wordBuffer;
+            return wordBuffer;
         }
 
         void Start()
         {
             //WordVenture.Map.MapMove.StagePosition = 0;
             WordOS_state();
-            SetupWordBuffer();
         }
 
         void Update()
@@ -149,11 +154,11 @@ namespace Cards
 
         }
 
-        public void AddCard()
+        public void AddCard(string tag)
         {
             var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
             var card = cardObject.GetComponent<Card>();
-            card.Setup(PopWord());
+            card.Setup(PopWord(tag));
             myCards.Add(card);
 
             SetOriginOrder();

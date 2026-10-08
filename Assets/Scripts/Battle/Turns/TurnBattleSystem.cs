@@ -35,8 +35,8 @@ namespace Battle.Turns
         {
             //Debug.Log("Player Turn Start!");
             //Draw Cards.
-            TurnBattleSystem.Instance.cardManager.AddCard();
-            TurnBattleSystem.Instance.cardManager.AddCard();
+            TurnBattleSystem.Instance.cardManager.AddCard("Spell");
+            TurnBattleSystem.Instance.cardManager.AddCard("MagicType");
         }
         public override void OnEnd() //When Player Hit End button...
         {
