@@ -6,7 +6,7 @@ namespace Combat.Enemies
     {
         [SerializeField] GameObject fireShoot;
 
-        void Start()
+        protected override void Start()
         {
             base.Start();
         }

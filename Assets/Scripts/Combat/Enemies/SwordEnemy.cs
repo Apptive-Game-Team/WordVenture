@@ -3,7 +3,7 @@ namespace Combat.Enemies
     public class SwordEnemy : Enemy
     {
 
-        void Start()
+        protected override void Start()
         {
             base.Start();
         }
