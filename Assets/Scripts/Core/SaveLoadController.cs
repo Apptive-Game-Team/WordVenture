@@ -7,6 +7,22 @@ namespace Core
     public class SaveLoadController : MonoBehaviour
     {
         public const string TutorialEndedKey = "TutorialEnded";
+        public const string StageDialogueSeenKey = "ActOneDialogueSeen";
+
+        public static bool HasSeenStageDialogue(int stageID)
+        {
+            return stageID >= 0 && stageID < 5
+                && (PlayerPrefs.GetInt(StageDialogueSeenKey, 0) & (1 << stageID)) != 0;
+        }
+
+        public static void MarkStageDialogueSeen(int stageID)
+        {
+            if (stageID < 0 || stageID >= 5) return;
+            PlayerPrefs.SetInt(StageDialogueSeenKey,
+                PlayerPrefs.GetInt(StageDialogueSeenKey, 0) | (1 << stageID));
+            PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
+            PlayerPrefs.Save();
+        }
         public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
 
         public static void MarkTutorialEnded()
@@ -80,6 +96,7 @@ namespace Core
         {
             PlayerPrefs.SetInt("StagePosition", -1);
             PlayerPrefs.DeleteKey(TutorialEndedKey);
+            PlayerPrefs.DeleteKey(StageDialogueSeenKey);
             PlayerPrefs.Save();
         }
     }

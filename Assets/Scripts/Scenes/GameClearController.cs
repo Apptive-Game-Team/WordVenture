@@ -1,4 +1,5 @@
 using Cards;
+using System.Collections;
 using Combat.Stage;
 using Core;
 using Map;
@@ -6,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using Story;
 
 namespace Scenes
 {
@@ -21,6 +23,8 @@ namespace Scenes
         bool flag = false;
 
         private string sceneName;
+        bool leaving;
+        const string DialogueResource = "Story/ActOneDialogues";
 
         private void Start()
         {
@@ -28,7 +32,10 @@ namespace Scenes
             if (sceneName == "GameClearScene")
             {
                 if (StageDataSingleton.Instance.stagePosition == 4)
-                    SceneManager.LoadScene("EndingScene");
+                {
+                    leaving = true;
+                    StartCoroutine(ShowDialogueThenLeave("EndingScene"));
+                }
                 text.SetActive(false);
             }
         }
@@ -36,7 +43,7 @@ namespace Scenes
         void Update()
         {
             // 튜토리얼 대사를 넘기는 키가 클리어 화면 진행으로도 먹히면 안 된다.
-            if (InteractionLock.IsLocked)
+            if (InteractionLock.IsLocked || leaving)
             {
                 return;
             }
@@ -53,7 +60,8 @@ namespace Scenes
                     }
                     else
                     {
-                        SceneManager.LoadScene("MapScene");
+                        leaving = true;
+                        StartCoroutine(ShowDialogueThenLeave("MapScene"));
                     }
 
                 }
@@ -68,6 +76,25 @@ namespace Scenes
             }
 
 
+        }
+
+        IEnumerator ShowDialogueThenLeave(string destination)
+        {
+            // 첫 클리어에서는 튜토리얼의 종료 대화를 먼저 마친다.
+            yield return new WaitUntil(() => !InteractionLock.IsLocked);
+            int stageID = StageDataSingleton.Instance.stagePosition;
+            StageDialogueData data = Resources.Load<StageDialogueData>(DialogueResource);
+            StageDialogueChapter chapter = data != null ? data.FindChapter(stageID) : null;
+            if (chapter != null && chapter.lines != null && chapter.lines.Length > 0
+                && !SaveLoadController.HasSeenStageDialogue(stageID))
+            {
+                bool completed = false;
+                var view = new GameObject("StageDialogue", typeof(RectTransform)).AddComponent<StageDialogueView>();
+                view.Begin(data, chapter, () => completed = true);
+                yield return new WaitUntil(() => completed);
+                SaveLoadController.MarkStageDialogueSeen(stageID);
+            }
+            SceneManager.LoadScene(destination);
         }
 
         void ShowGettedCard()
