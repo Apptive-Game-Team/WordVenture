@@ -26,7 +26,7 @@
 - 클리어 후 연결: `Assets/Scripts/Scenes/GameClearController.cs`
 - 읽음 저장/초기화: `Assets/Scripts/Core/SaveLoadController.cs`
 - 귀향 엔딩: `Assets/ScriptableObjects/EndingScript.asset`
-- 초상화: `Assets/Art/Story/Portraits/WordDialogue.png`, `VillagerDialogue.png`
+- 초상화: `Assets/Art/Story/Portraits/WordDialogue.png`, `VillagerDialogue.png`, 튜토리얼 할아버지 `GuideDialogue.png`
 
 생성 이미지는 기존 전투 워드의 붉은 단발, 노란 리본, 보라색 눈, 짙은 망토를 참조했다. 두 초상화를 내장 image_gen 도구로 개별 생성하고 투명 알파를 보존해 저장했다. Unity에서는 Sprite, Point 필터, 무압축으로 사용한다. 화자 초상화는 밝게, 듣는 사람은 어둡게 표시한다.
 

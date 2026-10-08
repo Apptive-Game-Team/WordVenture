@@ -82,4 +82,4 @@ MonoBehaviour:
     portraitID: 0
     tutorialFlag: 13
   speakerImage:
-  - {fileID: 21300000, guid: ada482f9dde5a3740818bac27712dfd4, type: 3}
+  - {fileID: 21300000, guid: b445ae1b88bf42fb91869de1e87b3fd0, type: 3}
