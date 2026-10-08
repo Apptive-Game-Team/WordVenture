@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bed155aa01b47504da9d2a3e0fe05538, type: 3}
-  m_Name: ThunderCanyonStage
+  m_Name: TwistedForestStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageID: 6
-  stageName: 벼락 협곡
-  background: {fileID: 21300000, guid: d82ef99697a64615b1270f279942a96f, type: 3}
+  stageID: 8
+  stageName: 뒤틀린 숲
+  background: {fileID: 21300000, guid: 03dcc5e3f768401f9d7b22c835e5c904, type: 3}
   waveData:
     enemyWaves:
-    - {fileID: 11400000, guid: 34ea254454f7436f940147354e8f7eba, type: 2}
+    - {fileID: 11400000, guid: 02af0f7a24254776869793f8b386a5df, type: 2}
   music: {fileID: 8300000, guid: 3ae6ac071f570bc4ca7bcfbc3beb5d1a, type: 3}

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bed155aa01b47504da9d2a3e0fe05538, type: 3}
-  m_Name: ThunderCanyonStage
+  m_Name: WorldTreeHeartStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageID: 6
-  stageName: 벼락 협곡
-  background: {fileID: 21300000, guid: d82ef99697a64615b1270f279942a96f, type: 3}
+  stageID: 9
+  stageName: 세계수의 심장
+  background: {fileID: 21300000, guid: 97b69cad2d4840909b1be5936d5315fc, type: 3}
   waveData:
     enemyWaves:
-    - {fileID: 11400000, guid: 34ea254454f7436f940147354e8f7eba, type: 2}
-  music: {fileID: 8300000, guid: 3ae6ac071f570bc4ca7bcfbc3beb5d1a, type: 3}
+    - {fileID: 11400000, guid: 9e86ed9af4db4d7786473f150ac4c1e9, type: 2}
+  music: {fileID: 8300000, guid: f4e2ef7296b4bcb4d90b242b913d1516, type: 3}

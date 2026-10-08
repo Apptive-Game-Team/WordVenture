@@ -237,7 +237,7 @@ MonoBehaviour:
     wave: 0
     title: "서리 마을 · 얼어붙은 길"
     speakerName: "서리 마을 주민"
-    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    speakerPortrait: {fileID: 21300000, guid: 5760ddef51b347e991221da66f0f3253, type: 3}
     background: {fileID: 0}
     lines:
     - wordSpeaking: 0
@@ -263,7 +263,7 @@ MonoBehaviour:
     wave: 0
     title: "서리 마을 · 돌아온 사람들"
     speakerName: "서리 마을 주민"
-    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    speakerPortrait: {fileID: 21300000, guid: 5760ddef51b347e991221da66f0f3253, type: 3}
     background: {fileID: 0}
     lines:
     - wordSpeaking: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
     wave: 0
     title: "벼락 협곡 · 끊긴 길"
     speakerName: "협곡 순찰대원"
-    speakerPortrait: {fileID: 21300000, guid: ba4ed1de425743da9ce627a37bf1cb8d, type: 3}
+    speakerPortrait: {fileID: 21300000, guid: 5394c1ddac5745d9857557188bd4be20, type: 3}
     background: {fileID: 0}
     lines:
     - wordSpeaking: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
     wave: 0
     title: "벼락 협곡 · 다시 열린 길"
     speakerName: "협곡 순찰대원"
-    speakerPortrait: {fileID: 21300000, guid: ba4ed1de425743da9ce627a37bf1cb8d, type: 3}
+    speakerPortrait: {fileID: 21300000, guid: 5394c1ddac5745d9857557188bd4be20, type: 3}
     background: {fileID: 0}
     lines:
     - wordSpeaking: 0
@@ -321,3 +321,168 @@ MonoBehaviour:
     - wordSpeaking: 1
       narration: 0
       text: "할아버지 기록에도 그 이름이 있었어요. 가 볼게요."
+  - stageID: 7
+    moment: 1
+    wave: 0
+    title: "잿빛 유적 · 재 속의 기록"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "잿빛 유적은 오래전 마법사들이 마력을 연구하던 곳이었다. 지금은 재가 눈처럼 쌓여 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "거기 마법사님! 들어가면 안 돼요. 안쪽 슬라임들은 쓰러뜨리면 둘로 갈라져요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "그럼 작은 쪽까지 다 쓰러뜨리면 되겠네요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "…그리고 저 안에 제 연구 기록이 있어요. 세계수에 관한 기록이에요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "제가 가져올게요."
+  - stageID: 7
+    moment: 2
+    wave: 2
+    title: "잿빛 유적 · 갈라지는 슬라임"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "조심해요! 갈라지는 슬라임이 둘이나 와요!"
+    - wordSpeaking: 1
+      narration: 0
+      text: "슬라임들아, 앞을 막아 줘. 작은 쪽은 내가 맡을게."
+  - stageID: 7
+    moment: 0
+    wave: 0
+    title: "잿빛 유적 · 할아버지의 글씨"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "찾았군요. 이 기록은… 맞아요. 세계수 아래로 마력이 모이고 있었어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지 글씨예요. 할아버지도 이걸 알고 계셨던 거예요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "숲을 지나면 세계수예요. 하지만 지금 숲은 사람이 지나갈 곳이 아니에요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "그래도 가야 해요. 할아버지가 끝내지 못한 일이니까요."
+  - stageID: 8
+    moment: 1
+    wave: 0
+    title: "뒤틀린 숲 · 숲을 빠져나온 아이"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "세계수로 가는 숲은 나무가 뒤틀리고 빛이 바래 있었다. 숲 쪽에서 사람들이 도망쳐 나오고 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "언니, 마법사예요? 숲속에 아직 우리 마을 사람들이 있어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "모두 데리고 나올게. 여기서 기다리고 있어."
+    - wordSpeaking: 0
+      narration: 0
+      text: "불을 단 슬라임은 가까이 오면 터져요! 터지기 전에 쓰러뜨려야 해요."
+  - stageID: 8
+    moment: 2
+    wave: 1
+    title: "뒤틀린 숲 · 뒤에서 돕는 슬라임"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "뒤에 있는 분홍색 슬라임이 다른 슬라임을 낫게 해 줘요!"
+    - wordSpeaking: 1
+      narration: 0
+      text: "그럼 뒤에 있는 쪽부터 노릴게."
+  - stageID: 8
+    moment: 0
+    wave: 0
+    title: "뒤틀린 숲 · 혼자 가는 길"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "모두 나왔어요! 고마워요, 언니."
+    - wordSpeaking: 1
+      narration: 0
+      text: "다들 마을로 돌아가. 이제부터는 나 혼자 갈게."
+    - wordSpeaking: 0
+      narration: 0
+      text: "혼자요? 세계수에는 무서운 게 있다던데…"
+    - wordSpeaking: 1
+      narration: 0
+      text: "그래서 가는 거야. 누군가는 가야 하니까."
+  - stageID: 9
+    moment: 1
+    wave: 0
+    title: "세계수의 심장 · 뭉쳐 버린 마력"
+    speakerName: ""
+    speakerPortrait: {fileID: 0}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "세계수의 뿌리 아래, 넘쳐흐른 마력이 하나의 형상으로 뭉쳐 있었다."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지 기록에 있던 마력의 폭주… 이게 모든 지역의 마법을 어지럽힌 원인이구나."
+    - wordSpeaking: 0
+      narration: 1
+      text: "형상 주위로 마력에 물든 슬라임들이 모여들었다."
+  - stageID: 9
+    moment: 2
+    wave: 2
+    title: "세계수의 심장 · 폭주한 마력의 형상"
+    speakerName: "폭주한 마력의 형상"
+    speakerPortrait: {fileID: 21300000, guid: a1febd8ccfc54e3185110405be77874c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "…돌려…줘…"
+    - wordSpeaking: 1
+      narration: 0
+      text: "무엇을요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "잃어버린 것을… 사라진 사람을… 모두 돌려줘…"
+    - wordSpeaking: 1
+      narration: 0
+      text: "…나도 그러고 싶었어. 할아버지가 돌아오기를 매일 바랐어."
+    - wordSpeaking: 1
+      narration: 0
+      text: "하지만 잃은 것을 되돌리려고 남은 사람들까지 다치게 할 수는 없어. 이제 쉬어."
+  - stageID: 9
+    moment: 0
+    wave: 0
+    title: "세계수의 심장 · 다시 초록빛으로"
+    speakerName: ""
+    speakerPortrait: {fileID: 0}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "형상이 흩어지자 세계수의 잎이 다시 초록빛을 띠었다."
+    - wordSpeaking: 1
+      narration: 0
+      text: "끝났어요, 할아버지. 이번에는 복수가 아니라, 지키려고 싸웠어요."

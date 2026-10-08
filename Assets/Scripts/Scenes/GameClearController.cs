@@ -24,6 +24,9 @@ namespace Scenes
         // "아무 키나 입력하세요" 안내. 연결하지 않은 씬에서는 쓰지 않는다.
         [SerializeField] GameObject anyKeyPrompt;
 
+        const int ActOneFinalStageID = 4;
+        const int ActTwoFinalStageID = 9;
+
         bool flag = false;
 
         private string sceneName;
@@ -100,9 +103,10 @@ namespace Scenes
             // 첫 클리어에서는 할아버지의 작별 인사와 새 카드 안내가 모두 끝난 뒤에 대화한다.
             // 튜토리얼 대사 사이에도 입력 잠금이 잠깐 풀리므로 잠금 대신 튜토리얼 종료를 기다린다.
             while (TutorialController.Instance != null && !SaveLoadController.IsTutorialEnded) yield return null;
-            // 마왕 처치 후에는 엔딩으로 넘어가므로 대화창을 닫지 않고 그대로 덮어 둔다.
-            if (chapter != null) yield return StageDialogueView.Play(data, chapter, stageID != 4);
-            if (stageID == 4)
+            // 장의 마지막 지역(1부 마왕, 2부 세계수)을 끝내면 엔딩으로 넘어가므로 대화창을 닫지 않고 그대로 덮어 둔다.
+            bool endsChapter = stageID == ActOneFinalStageID || stageID == ActTwoFinalStageID;
+            if (chapter != null) yield return StageDialogueView.Play(data, chapter, !endsChapter);
+            if (endsChapter)
             {
                 leaving = true;
                 SceneManager.LoadScene("EndingScene");

@@ -743,6 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chatWindowController: {fileID: 1326263106}
   scriptContainer: {fileID: 11400000, guid: eb7aef9ead3ada9438d9bf21fad300d4, type: 2}
+  actTwoEndingScript: {fileID: 11400000, guid: f3a862b5d645483f8a14478bbb0013e1, type: 2}
   backgorunds:
   - {fileID: 960534268}
   - {fileID: 1060534268}

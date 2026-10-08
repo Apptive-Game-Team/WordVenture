@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe8c7ac2a4e3b461db822f93e77d7529, type: 3}
+  m_Name: AshenRuinsBattleWaveData
+  m_EditorClassIdentifier: 
+  battleWaveDatas:
+  - enemySpawnDatasInWave:
+    - spawnPositionX: 6
+      enemyId: 24
+    - spawnPositionX: 8
+      enemyId: 23
+  - enemySpawnDatasInWave:
+    - spawnPositionX: 5
+      enemyId: 22
+    - spawnPositionX: 6
+      enemyId: 24
+    - spawnPositionX: 8
+      enemyId: 20
+  - enemySpawnDatasInWave:
+    - spawnPositionX: 5
+      enemyId: 24
+    - spawnPositionX: 7
+      enemyId: 24
+    - spawnPositionX: 6
+      enemyId: 21

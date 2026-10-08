@@ -197,3 +197,59 @@ MonoBehaviour:
     attackRange: 3
     damage: 5
     type: 6
+  - id: 23
+    name: S7_Ranged_Slime
+    prefab: {fileID: 5260748899496303554, guid: be15f7520e6bd4f83b8c8688c436578f, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 4
+  - id: 24
+    name: S7_Split_Slime
+    prefab: {fileID: 3875069317159495427, guid: 7d0c734b9cad48569c85144469a3b56d, type: 3}
+    maxHp: 40
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 4
+  - id: 25
+    name: S7_Split_Small
+    prefab: {fileID: 3875069317159495427, guid: a22338b4b4d74603a9ccb334942d5941, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 3
+    damage: 8
+    type: 4
+  - id: 26
+    name: S8_Explode_Slime
+    prefab: {fileID: 5185469052702614032, guid: 4a094ed80eac435bb15c9b01b51a4169, type: 3}
+    maxHp: 25
+    moveDistance: 5
+    attackRange: 3
+    damage: 15
+    type: 7
+  - id: 27
+    name: S8_Heal_Slime
+    prefab: {fileID: 5152970759226599136, guid: 1833aa0db5804c70ae02b5997f60fb4c, type: 3}
+    maxHp: 30
+    moveDistance: 0
+    attackRange: 99
+    damage: 10
+    type: 5
+  - id: 28
+    name: S8_Ranged_Slime
+    prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
+    maxHp: 35
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 8
+  - id: 29
+    name: S9_Surge_Boss
+    prefab: {fileID: 1380314620153829809, guid: 20fe90a8e19b448eb3e9ab70e5cff10e, type: 3}
+    maxHp: 160
+    moveDistance: 2
+    attackRange: 3
+    damage: 12
+    type: 8
