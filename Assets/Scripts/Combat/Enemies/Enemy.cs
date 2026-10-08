@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle.Turns;
 using Cards;
+using Core;
 using TMPro;
 using UnityEngine;
 
@@ -157,7 +158,7 @@ namespace Combat.Enemies
         {
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
-            reactionText = hit.Reaction;
+            reactionText = Localization.Translate(hit.Reaction);
             reactionUntil = Time.time + 1.5f;
             TakeHit(hit.Damage + hit.ExtraDamage);
             UpdateStatusIndicator();
