@@ -335,6 +335,8 @@ namespace Cards
         public void CardMouseDown()
         {
             if (selectCard == null) return;
+            // 주문이 준비되는 동안에는 조합창이 잠겨 있으므로 카드를 집지 않는다.
+            if (CombineZone.Instance.IsCasting) return;
 
             // 칸은 조합창 안에 있어서 창이 닫혀 있으면 카드를 놓을 자리가 보이지 않는다.
             // 카드를 집는 순간 창을 연다.

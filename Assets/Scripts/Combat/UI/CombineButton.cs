@@ -19,9 +19,23 @@ namespace Combat.UI
         //    }
         //}
 
+        void Update()
+        {
+            // 주문이 준비되는 동안 조합창 버튼이 잠겨 있다는 것을 버튼 색으로 보여준다.
+            if (activateButton != null)
+            {
+                activateButton.interactable = !IsSpellCasting();
+            }
+        }
+
+        static bool IsSpellCasting()
+        {
+            return CombineZone.Instance != null && CombineZone.Instance.IsCasting;
+        }
+
         public void OnButtonClick()
         {
-            if (InteractionLock.IsLocked) return;
+            if (InteractionLock.IsLocked || IsSpellCasting()) return;
             if (!combineZone.activeSelf)
             {
                 combineZone.SetActive(true);

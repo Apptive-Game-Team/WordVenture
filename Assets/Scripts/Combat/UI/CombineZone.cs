@@ -24,7 +24,9 @@ namespace Combat.UI
         public event Action<SelectableObject> TargetSelected;
         public bool IsAwaitingTarget { get; private set; }
         bool isCasting;
+        // 조합 버튼을 누른 뒤 주문이 발사될 때까지. 이 동안 조합창과 턴 종료는 잠긴다.
         public bool IsCasting => isCasting;
+        SpellChargeEffect chargeEffect;
 
         public Transform GetTutorialTarget()
         {
@@ -148,9 +150,18 @@ namespace Combat.UI
         {
             if (InteractionLock.IsLocked || isCasting || !CanCombine()) return;
             isCasting = true;
+
+            if (chargeEffect == null)
+            {
+                chargeEffect = SpellChargeEffect.Create();
+            }
+            chargeEffect.Begin(magicTypeCards[0].GetComponent<Card>().cardType);
+
             // 조합창을 닫아도 대상 선택 중인 주문은 유지한다. 카드 관리자는 전투 씬과 수명이 같다.
             CardManager.Inst.StartCoroutine(CastSpell());
             ClearDropZone();
+            // 주문이 준비되는 동안에는 조합창을 쓸 수 없으므로 닫아서 대상을 고를 자리를 비운다.
+            gameObject.SetActive(false);
             SpellCastStarted?.Invoke();
         }
         IEnumerator CastSpell()
@@ -178,6 +189,10 @@ namespace Combat.UI
             Player.PlayerInt().AttackAnima();
             yield return new WaitForSeconds(0.5f);
             magicEffectSource.Play();
+            if (chargeEffect != null)
+            {
+                chargeEffect.Release();
+            }
             if (spellType == MagicType.Shoot)
             {
 
@@ -204,6 +219,10 @@ namespace Combat.UI
             player.AttackAnima();
             yield return new WaitForSeconds(0.5f);
             magicEffectSource.Play();
+            if (chargeEffect != null)
+            {
+                chargeEffect.Release();
+            }
             AllyFormation.GetOrCreate(player.transform).Spawn(element, magicAffinityTable);
             isCasting = false;
         }

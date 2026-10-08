@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5774612924630024579}
   - component: {fileID: 1357666300451491632}
   - component: {fileID: 6187676208565139035}
+  - component: {fileID: 4815162342108421337}
   m_Layer: 0
   m_Name: Word
   m_TagString: Me
@@ -136,6 +137,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shield: 0
+--- !u!114 &4815162342108421337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7094094157170764326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b9ff1e66fa450d9a6166b693b631a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultPosition: {x: 1.86, y: 1.43}
+  spritePositions:
+  - sprite: {fileID: 21300000, guid: d77595dfaf8e948309ececc4e169fec6, type: 3}
+    position: {x: -1.85, y: 1.93}
+  - sprite: {fileID: 21300000, guid: a0854ef18aa2648f6a522b107d21a5eb, type: 3}
+    position: {x: -2.01, y: -1.04}
 --- !u!61 &1357666300451491632
 BoxCollider2D:
   m_ObjectHideFlags: 0

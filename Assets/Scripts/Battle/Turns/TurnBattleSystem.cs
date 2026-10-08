@@ -6,6 +6,7 @@ using Core;
 using Combat.UI;
 using Combat.Spells;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Battle.Turns
 {
@@ -82,6 +83,7 @@ namespace Battle.Turns
         [SerializeField] public CardManager cardManager;
         [SerializeField] public EnemyTestManager enemyManager;
         [SerializeField] public EnemyPoolController enemyPoolController;
+        [SerializeField] Button turnEndButton;
 
 
         private void Awake()
@@ -105,10 +107,22 @@ namespace Battle.Turns
             currentTurn.OnStart();
         }
 
-        //private void Update()
-        //{
-        //    print(currentTurn);
-        //}
+        private void Update()
+        {
+            // 주문이 준비되거나 날아가는 동안, 그리고 턴 종료 후 아군 슬라임이 공격하는 동안
+            // 턴을 넘길 수 없다는 것을 버튼 색으로 보여준다.
+            if (turnEndButton != null)
+            {
+                turnEndButton.interactable = !IsSpellInProgress() && !endingPlayerTurn;
+            }
+        }
+
+        static bool IsSpellInProgress()
+        {
+            CombineZone zone = CombineZone.Instance;
+            if (zone != null && (zone.IsAwaitingTarget || zone.IsCasting)) return true;
+            return SpellObj.HasActiveSpells;
+        }
 
         public void ChangeTurn(Turn turn)
         {
@@ -120,9 +134,7 @@ namespace Battle.Turns
         public void TurnEndButton()
         {
             if (InteractionLock.IsLocked) return;
-            CombineZone zone = FindObjectOfType<CombineZone>(true);
-            if (zone != null && (zone.IsAwaitingTarget || zone.IsCasting)) return;
-            if (SpellObj.HasActiveSpells) return;
+            if (IsSpellInProgress()) return;
             if (currentTurn == PlayerTurn && !endingPlayerTurn)
             {
                 StartCoroutine(EndPlayerTurn());
