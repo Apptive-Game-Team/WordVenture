@@ -1,0 +1,234 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e31484ae70c46f8b06274aebc4a3191, type: 3}
+  m_Name: ActOneDialogues
+  m_EditorClassIdentifier:
+  wordPortrait: {fileID: 21300000, guid: 4b11d118601649689dbff602bda3aab4, type: 3}
+  font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
+  chapters:
+  - stageID: 0
+    moment: 0
+    wave: 0
+    title: "평원 · 돌아갈 집"
+    speakerName: "평원 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    background: {fileID: 21300000, guid: 22934f4ac00e34dfd9cb33569822d181, type: 3}
+    lines:
+    - wordSpeaking: 1
+      narration: 0
+      text: "…할아버지."
+    - wordSpeaking: 0
+      narration: 1
+      text: "할아버지의 목소리가 사라진 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "저기… 마법사님? 이제 나와도 되나요? 슬라임들이 길을 막아서 꼼짝도 못 하고 있었어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "…네. 여기는 이제 괜찮아요. 혹시 슬라임 마왕이 있는 곳을 아세요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "해안 너머로 갔다는 말은 들었어요. 우리 마을도 습격을 받아서… 돌아갈 집이 없네요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "…저도요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "저희는 남쪽의 안전한 마을로 피하려고 해요. 길을 열어 줘서 고마워요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "저는 마왕을 찾아야 해요. 가시는 길, 조심하세요."
+  - stageID: 1
+    moment: 0
+    wave: 0
+    title: "해안 · 뒤집힌 배"
+    speakerName: "해안 어부"
+    speakerPortrait: {fileID: 21300000, guid: fbc30b11c9d84b558a2d329014f1e5e5, type: 3}
+    background: {fileID: 21300000, guid: 9d158541f1bf73847a2e9f86172af2ba, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "거기 누구요? …마법사로구먼. 슬라임들이 배를 다 뒤집어 놔서 바다로는 못 나가오."
+    - wordSpeaking: 1
+      narration: 0
+      text: "다친 사람은 없어요? 같이 계신 분들은요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "손주 녀석이 발을 삐었소. 나머지는 저 바위 뒤에 숨어 있고."
+    - wordSpeaking: 1
+      narration: 0
+      text: "제가 지나온 길에는 이제 슬라임이 없어요. 그 길로 가면 남쪽 마을까지 갈 수 있어요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "고맙소. 은인의 이름이라도 알려 주겠소?"
+    - wordSpeaking: 1
+      narration: 0
+      text: "워드예요. …조심히 가세요."
+  - stageID: 2
+    moment: 0
+    wave: 0
+    title: "고원 · 놓친 손"
+    speakerName: "고원 양치기 소년"
+    speakerPortrait: {fileID: 21300000, guid: 577c5c1a1db24fa79029fcd5792fdab5, type: 3}
+    background: {fileID: 21300000, guid: f5eee149beadcfb4bb4bbb74ad433be6, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "누나, 마법사 맞죠? 도와주세요. 양들을 데리고 내려가다가 동생을 놓쳤어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "어디서 헤어졌어? 천천히 말해 봐."
+    - wordSpeaking: 0
+      narration: 0
+      text: "저 바위 언덕 너머요. 슬라임이 몰려와서… 저만 도망쳤어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "방금 그쪽에서 오는 길이야. 울고 있던 아이를 빈 오두막에 숨겨 두고 왔어. 지금 가면 만날 수 있어."
+    - wordSpeaking: 0
+      narration: 0
+      text: "정말요? 고맙습니다! 누나도 다 끝나면 남쪽 마을에 들러요. 따뜻한 양젖 수프 해 드릴게요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "…응. 꼭 들를게."
+  - stageID: 3
+    moment: 0
+    wave: 0
+    title: "빗길 · 끝내야 하는 이유"
+    speakerName: "빗길 경비병"
+    speakerPortrait: {fileID: 21300000, guid: ba4ed1de425743da9ce627a37bf1cb8d, type: 3}
+    background: {fileID: 21300000, guid: 0c7860b01c549e643978c99b85b90efe, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "멈춰! …사람이었군. 이 앞은 마왕 성으로 가는 길이다. 피난민은 전부 내려보냈어."
+    - wordSpeaking: 1
+      narration: 0
+      text: "혼자 남아서 길을 지키고 있었어요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "누군가는 마지막 사람이 지나갈 때까지 있어야 하니까. 넌 왜 거꾸로 올라가지?"
+    - wordSpeaking: 1
+      narration: 0
+      text: "마왕 때문에 할아버지를 잃었어요. 처음엔 복수만 생각하며 여기까지 왔어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "그런데 오는 길에 만난 사람들이 또 집을 잃지 않았으면 좋겠어요. 여기서 끝낼게요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "…그럼 길은 내가 지키겠다. 살아서 돌아와라, 마법사."
+  - stageID: 4
+    moment: 1
+    wave: 0
+    title: "마왕 성 · 드디어"
+    speakerName: ""
+    speakerPortrait: {fileID: 0}
+    background: {fileID: 21300000, guid: 8eab9287a556d4cba85b2e2409af404b, type: 3}
+    lines:
+    - wordSpeaking: 1
+      narration: 0
+      text: "드디어… 여기까지 왔어."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지, 보고 계세요? 할아버지가 남긴 마법서로 여기까지 왔어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "평원에서, 해안에서, 고원에서 만난 사람들도 다들 무사히 내려갔어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "이번에는 도망치지 않아. 슬라임 마왕, 여기서 끝내자."
+  - stageID: 4
+    moment: 2
+    wave: 2
+    title: "마왕 성 · 슬라임 마왕"
+    speakerName: "슬라임 마왕"
+    speakerPortrait: {fileID: 21300000, guid: e93efa01be9c4993aa0ccbf9f0d4d686, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "샌즈의 냄새가 나는군. 그 늙은이가 살려 보낸 꼬마인가."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지 이름을 함부로 부르지 마."
+    - wordSpeaking: 0
+      narration: 0
+      text: "함부로? 그자는 내 동족을 수없이 베어 넘겼다. 우리는 빚을 받으러 갔을 뿐이다."
+    - wordSpeaking: 1
+      narration: 0
+      text: "그래서 아무 상관 없는 마을까지 덮쳤어? 평원도, 해안도, 고원도."
+    - wordSpeaking: 0
+      narration: 0
+      text: "슬라임에게 상관없는 인간 따위는 없다. 너도 결국 샌즈처럼 우리를 베러 온 것 아니냐."
+    - wordSpeaking: 1
+      narration: 0
+      text: "…처음엔 그랬어. 지금은 더는 아무도 집을 잃지 않게 하려고 왔어."
+    - wordSpeaking: 0
+      narration: 0
+      text: "말은 잘하는군. 그 카드 몇 장으로 무엇을 지킬 수 있는지 보여 봐라!"
+  - stageID: 4
+    moment: 2
+    wave: 3
+    title: "마왕 성 · 되살아난 마왕"
+    speakerName: "언데드 슬라임 마왕"
+    speakerPortrait: {fileID: 21300000, guid: 54acef7844f342a190191d40137d98b7, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "끝났다고… 생각했나…"
+    - wordSpeaking: 1
+      narration: 0
+      text: "분명히 쓰러뜨렸는데… 다시 일어났어?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "동족의 원한이… 나를 놓아주지 않는다. 죽어서도… 샌즈의 핏줄을 남겨 둘 수는 없다!"
+    - wordSpeaking: 1
+      narration: 0
+      text: "원한 때문에 죽어서도 싸우는 거구나. …나도 그렇게 될 뻔했어."
+    - wordSpeaking: 1
+      narration: 0
+      text: "하지만 난 여기서 멈출 거야. 네 원한도, 내 복수도 이번에 같이 끝내자."
+    - wordSpeaking: 0
+      narration: 0
+      text: "크하하… 그렇다면 함께 썩어 가자, 꼬마 마법사!"
+  - stageID: 4
+    moment: 0
+    wave: 0
+    title: "마왕을 쓰러뜨린 뒤 · 남쪽 마을"
+    speakerName: "평원 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: bba01f481368450997f4104c698ce553, type: 3}
+    background: {fileID: 21300000, guid: 22934f4ac00e34dfd9cb33569822d181, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "슬라임 마왕이 쓰러지자, 성을 뒤덮고 있던 검은 기운이 걷혔다."
+    - wordSpeaking: 0
+      narration: 1
+      text: "워드는 빗길과 고원과 해안을 지나 왔던 길을 되짚어 내려갔다. 며칠 뒤, 남쪽 마을의 불빛이 보였다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "마법사님! 평원에서 만났던 그 마법사님 맞죠? 저희는 남쪽 마을까지 무사히 왔어요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "무사하셨군요. 다행이에요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "해안의 어부 할아버지도, 고원의 양치기 아이도 여기 와 있어요. 다들 워드라는 마법사 이야기를 하더라고요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "마왕은 이제 없어요. 다들 집으로 돌아갈 수 있을 거예요."
+    - wordSpeaking: 0
+      narration: 0
+      text: "당신은 돌아갈 곳이 있어요? 없다면 언제든 여기로 와요. 이번에는 우리가 맞아 줄게요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지께 먼저 다녀올게요. …그다음엔, 꼭 들를게요."

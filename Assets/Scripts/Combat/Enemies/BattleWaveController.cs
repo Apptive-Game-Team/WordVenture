@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Combat.Stage;
 using Map;
+using Story;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -57,7 +58,13 @@ namespace Combat.Enemies
 
             wave += 1;
             if (wave < battleScript.GetBattleWaveDatas().Count)
+            {
+                // 마왕 슬라임 등장처럼 wave 앞에 정해 둔 대화가 있으면 먼저 보여 준다.
+                StageDialogueChapter chapter = StageDialogueView.FindUnseen(StageDataSingleton.Instance.stagePosition,
+                    StageDialogueMoment.Wave, wave, out StageDialogueData data);
+                if (chapter != null) yield return StageDialogueView.Play(data, chapter);
                 StartWave(wave);
+            }
             else
             {
                 MapMove.StagePosition++;
