@@ -1,4 +1,5 @@
 using System.Collections;
+using Core;
 using TMPro;
 using UnityEngine;
 
@@ -37,12 +38,12 @@ namespace Story
                 StopCoroutine(streamingCoroutine);
             }
 
-            chatName.SetText(name);
+            chatName.SetText(Localization.Translate(name));
             Presentation.SetSpeaker(name);
             chatText.SetText(string.Empty);
-            Presentation.PromptLabel.SetText("클릭 / 아무 키 · 대사 펼치기");
+            Presentation.PromptLabel.SetText(Localization.Translate("클릭 / 아무 키 · 대사 펼치기"));
             SetAnyKeyPromptVisible(true);
-            streamingText = text + " ";
+            streamingText = Localization.Translate(text) + " ";
             streamingCoroutine = StartCoroutine(UpdateStreamingChat());
         }
 
@@ -91,7 +92,7 @@ namespace Story
 
         protected virtual void OnStreamComplete()
         {
-            Presentation.PromptLabel.SetText("클릭 / 아무 키 · 다음");
+            Presentation.PromptLabel.SetText(Localization.Translate("클릭 / 아무 키 · 다음"));
             SetAnyKeyPromptVisible(true);
         }
 

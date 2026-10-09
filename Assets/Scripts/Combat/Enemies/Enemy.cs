@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle.Turns;
 using Cards;
+using Core;
 using TMPro;
 using UnityEngine;
 
@@ -163,12 +164,12 @@ namespace Combat.Enemies
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
             int damage = hit.Damage + hit.ExtraDamage;
-            reactionText = hit.Reaction;
+            reactionText = Localization.Translate(hit.Reaction);
             // 바로 앞에 방패 슬라임이 있으면 피해가 절반이 된다. 신성의 회복(음수 피해)은 줄이지 않는다.
             if (damage > 0 && ShieldEnemy.IsGuarding(this))
             {
                 damage /= 2;
-                if (string.IsNullOrEmpty(reactionText)) reactionText = "방패 보호";
+                if (string.IsNullOrEmpty(reactionText)) reactionText = Localization.Translate("방패 보호");
             }
             reactionUntil = Time.time + 1.5f;
             TakeHit(damage);

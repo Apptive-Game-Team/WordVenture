@@ -1,3 +1,4 @@
+using Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -94,7 +95,7 @@ namespace Tutorial
             if (guidance == null) return;
             guidance.SetTargets(source, destination);
             dragDemo.SetTargets(source, destination, demonstrateClick);
-            hint.text = message;
+            hint.text = Localization.Translate(message);
             guidance.gameObject.SetActive(!modal);
             dragDemo.gameObject.SetActive(!modal);
             hintPanel.gameObject.SetActive(!modal);
@@ -169,7 +170,7 @@ namespace Tutorial
             rect.offsetMax = new Vector2(-12, -6);
             TMP_Text label = rect.gameObject.AddComponent<TextMeshProUGUI>();
             label.font = font;
-            label.text = text;
+            label.text = Localization.Translate(text);
             label.color = new Color(1, 0.94f, 0.8f, 1);
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
