@@ -9,6 +9,10 @@ namespace Combat.Enemies
     {
         const float BlastRadius = 2.5f;
         const float WindupTrembleDistance = 0.05f;
+        // 폭발 그림의 가로 길이는 피해 범위의 지름과 같다.
+        const float BlastDiameter = BlastRadius * 2f;
+
+        [SerializeField] Sprite[] blastFrames;
 
         bool primed;
         bool exploding;
@@ -22,6 +26,7 @@ namespace Combat.Enemies
             {
                 exploding = true;
                 Animator.RangeAttack();
+                PlayBlast();
                 AllyFormation.HitAllAllies(AttackDamage);
                 Kill();
                 return;
@@ -44,10 +49,20 @@ namespace Combat.Enemies
             primed = false;
             Windup.Stop();
             base.Death();
-            if (blastEnemies) DamageNearbyEnemies();
+            if (blastEnemies)
+            {
+                PlayBlast();
+                DamageNearbyEnemies();
+            }
         }
 
         WindupMotion Windup => windup != null ? windup : windup = gameObject.AddComponent<WindupMotion>();
+
+        // 슬라임은 곧 꺼지므로 폭발 그림은 슬라임과 따로 재생한다.
+        void PlayBlast()
+        {
+            BlastVfx.Spawn(transform.position, blastFrames, BlastDiameter, GetComponent<SpriteRenderer>());
+        }
 
         void DamageNearbyEnemies()
         {

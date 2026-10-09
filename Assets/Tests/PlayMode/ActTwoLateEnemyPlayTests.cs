@@ -45,6 +45,45 @@ namespace WordVenture.Tests
             return Property(vfx, "LastBurst")?.ToString();
         }
 
+        static Component[] Blasts() => Object.FindObjectsOfType(Runtime("Combat.Enemies.BlastVfx"))
+            .Cast<Component>().ToArray();
+
+        [UnityTest]
+        public IEnumerator 폭발_슬라임이_스스로_터지면_자식이_아닌_폭발_효과가_끝까지_재생된다()
+        {
+            Component bomber = CreateEnemy("ExplodeSlime", 3f, 25, 15, "Lightning");
+            yield return null;
+            Call(bomber, "PlayTurnAction", 2f);
+            Assert.That(Blasts(), Is.Empty, "예고하는 동안에는 터지지 않는다");
+
+            Call(bomber, "PlayTurnAction", 2f);
+            Component[] blasts = Blasts();
+            Assert.That(blasts.Length, Is.EqualTo(1));
+            Assert.That(blasts[0].transform.parent, Is.Null, "슬라임이 꺼져도 남도록 자식이 아니다");
+            Assert.That(blasts[0].transform.position.x, Is.EqualTo(bomber.transform.position.x).Within(0.01f));
+
+            yield return new WaitForSeconds(0.4f);
+            Assert.That(bomber.gameObject.activeSelf, Is.False);
+            Assert.That(Blasts().Length, Is.EqualTo(1), "슬라임이 꺼진 뒤에도 재생 중이다");
+            yield return new WaitForSeconds(0.4f);
+            Assert.That(Blasts(), Is.Empty, "재생이 끝나면 스스로 지운다");
+        }
+
+        [UnityTest]
+        public IEnumerator 예고한_폭발_슬라임을_쓰러뜨리면_폭발_효과가_나오고_예고_전에는_나오지_않는다()
+        {
+            Component calm = CreateEnemy("ExplodeSlime", 3f, 25, 15, "Lightning");
+            Component primed = CreateEnemy("ExplodeSlime", 6f, 25, 15, "Lightning");
+            yield return null;
+
+            Call(calm, "Kill");
+            Assert.That(Blasts(), Is.Empty, "예고하지 않은 슬라임은 터지지 않는다");
+
+            Call(primed, "PlayTurnAction", 2f);
+            Call(primed, "Kill");
+            Assert.That(Blasts().Length, Is.EqualTo(1));
+        }
+
         [UnitySetUp]
         public IEnumerator SetUp()
         {
