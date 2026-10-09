@@ -74,6 +74,7 @@ namespace Combat.Enemies
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
         protected int AttackDamage => Status.GetAttackDamage(Damage);
         SpriteRenderer bodyRenderer;
+        ReactionBurstVfx reactionBurst;
         Color originalBodyColor;
         bool tookTurn;
 
@@ -144,8 +145,12 @@ namespace Combat.Enemies
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
             int damage = hit.Damage + hit.ExtraDamage;
+            bool guarded = damage > 0 && ShieldEnemy.IsGuarding(this);
             // 바로 앞에 방패 슬라임이 있으면 피해가 절반이 된다. 신성의 회복(음수 피해)은 줄이지 않는다.
-            if (damage > 0 && ShieldEnemy.IsGuarding(this)) damage /= 2;
+            if (guarded) damage /= 2;
+            // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
+            if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
+            else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
             TakeHit(damage);
             UpdateStatusIndicator();
         }
@@ -209,6 +214,8 @@ namespace Combat.Enemies
             bodyRenderer = GetComponent<SpriteRenderer>();
             if (bodyRenderer != null) originalBodyColor = bodyRenderer.color;
             gameObject.AddComponent<ElementalStatusVfx>().Initialize(this, bodyRenderer);
+            reactionBurst = gameObject.AddComponent<ReactionBurstVfx>();
+            reactionBurst.Initialize(bodyRenderer);
         }
 
         protected virtual void Start()
@@ -273,6 +280,7 @@ namespace Combat.Enemies
         {
             if (!IsAlive || amount <= 0) return;
             Hp = Mathf.Min(MaxHp, Hp + amount);
+            reactionBurst.Play(ReactionBurstVfx.Burst.Heal);
             UpdateIndicator();
         }
 

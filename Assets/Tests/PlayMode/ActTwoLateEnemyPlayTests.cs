@@ -39,6 +39,12 @@ namespace WordVenture.Tests
         static int AllyHp(Component ally) => (int)ally.GetType().GetField("hp", AnyInstance).GetValue(ally);
         static object Property(Component target, string name) => target.GetType().GetProperty(name).GetValue(target);
 
+        static string LastBurst(Component enemy)
+        {
+            Component vfx = enemy.GetComponent(Runtime("Combat.Enemies.ReactionBurstVfx"));
+            return Property(vfx, "LastBurst")?.ToString();
+        }
+
         [UnitySetUp]
         public IEnumerator SetUp()
         {
@@ -185,6 +191,8 @@ namespace WordVenture.Tests
             Call(healer, "PlayTurnAction", 10f);
             Assert.That(EnemyHp(wounded), Is.EqualTo(80));
             Assert.That(EnemyHp(scratched), Is.EqualTo(95));
+            Assert.That(LastBurst(wounded), Is.EqualTo("Heal"), "회복은 글자 대신 효과로 보인다");
+            Assert.That(LastBurst(scratched), Is.Null);
         }
 
         [UnityTest]

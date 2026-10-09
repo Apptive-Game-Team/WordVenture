@@ -39,6 +39,12 @@ namespace WordVenture.Tests
         static int AllyHp(Component ally) => (int)ally.GetType().GetField("hp", AnyInstance).GetValue(ally);
         static object Property(Component target, string name) => target.GetType().GetProperty(name).GetValue(target);
 
+        static string LastBurst(Component enemy)
+        {
+            Component vfx = enemy.GetComponent(Runtime("Combat.Enemies.ReactionBurstVfx"));
+            return Property(vfx, "LastBurst")?.ToString();
+        }
+
         [UnitySetUp]
         public IEnumerator SetUp()
         {
@@ -212,6 +218,25 @@ namespace WordVenture.Tests
             Call(exposed, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 20f, 1f);
             Assert.That(EnemyHp(guarded), Is.EqualTo(90));
             Assert.That(EnemyHp(exposed), Is.EqualTo(80));
+            Assert.That(LastBurst(guarded), Is.EqualTo("Guard"), "방패 보호는 글자 대신 효과로 보인다");
+            Assert.That(LastBurst(exposed), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator 원소_반응은_글자_대신_몸_위의_효과로_보인다()
+        {
+            Component enemy = CreateEnemy("MortarSlime", 3f, 100, 10, "Rock");
+            yield return null;
+            Call(enemy, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 10f, 1f);
+            Assert.That(LastBurst(enemy), Is.Null, "화상만 걸면 반응이 아니다");
+
+            Call(enemy, "TakeSpellHit", Magic("Lightning"), Magic("Shoot"), 10f, 1f);
+            Assert.That(LastBurst(enemy), Is.EqualTo("Overload"));
+            yield return null;
+            var burst = enemy.transform.Find("ReactionBurst").GetComponent<SpriteRenderer>();
+            Assert.That(burst.enabled, Is.True, "효과가 재생 중이다");
+            yield return new WaitForSeconds(0.6f);
+            Assert.That(burst.enabled, Is.False, "한 번 재생하고 사라진다");
         }
     }
 }

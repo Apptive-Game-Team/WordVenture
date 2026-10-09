@@ -13,6 +13,11 @@ namespace Combat
         public const float ShockBonus = 0.25f;
         public const float ShatterBonus = 0.5f;
         public const float WeakenMultiplier = 0.7f;
+        // HitResult.Reaction 값. ReactionBurstVfx가 이 값으로 재생할 효과를 고른다.
+        public const string OverloadReaction = "불꽃 방전";
+        public const string ShatterReaction = "쇄빙";
+        public const string ParalysisReaction = "신경 마비";
+        public const string LavaCrackReaction = "용암 균열";
         readonly MagicType defenseElement;
         public ElementalStatus() : this(MagicType.Undead) { }
         public ElementalStatus(MagicType defenseElement) { this.defenseElement = defenseElement; }
@@ -75,24 +80,24 @@ namespace Combat
             if (element == MagicType.Lightning && BurnTurns > 0)
             {
                 result.ExtraDamage = BurnDamage * BurnTurns;
-                result.Reaction = "불꽃 방전";
+                result.Reaction = OverloadReaction;
                 BurnDamage = BurnTurns = 0;
             }
             else if (element == MagicType.Rock && (Chill > 0 || Frozen))
             {
                 result.ExtraDamage = Mathf.FloorToInt(baseDamage * ShatterBonus);
-                result.Reaction = "쇄빙";
+                result.Reaction = ShatterReaction;
                 ClearChill();
             }
             else if (element == MagicType.Ice && hadShock)
             {
                 WeakenTurns = 2;
-                result.Reaction = "신경 마비";
+                result.Reaction = ParalysisReaction;
             }
             else if (element == MagicType.Fire && hadFracture)
             {
                 burnDuration = 3;
-                result.Reaction = "용암 균열";
+                result.Reaction = LavaCrackReaction;
             }
 
             switch (element)
