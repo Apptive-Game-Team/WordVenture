@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageID: 6
   stageName: 벼락 협곡
-  background: {fileID: 21300000, guid: 0c7860b01c549e643978c99b85b90efe, type: 3}
+  background: {fileID: 21300000, guid: d82ef99697a64615b1270f279942a96f, type: 3}
   waveData:
     enemyWaves:
     - {fileID: 11400000, guid: 34ea254454f7436f940147354e8f7eba, type: 2}

@@ -40,8 +40,8 @@ namespace WordVenture.Tests
         {
             SerializedObject map = ProjectAssets.Load(ActTwoMapPath);
             Assert.That(map.FindProperty("firstStageID").intValue, Is.EqualTo(5));
-            Assert.That(map.FindProperty("lastPlayableStageID").intValue, Is.EqualTo(6),
-                "전투 데이터가 있는 2부 지역은 서리 마을(5)과 벼락 협곡(6)이다");
+            Assert.That(map.FindProperty("lastPlayableStageID").intValue, Is.EqualTo(9),
+                "전투 데이터가 있는 2부 지역은 서리 마을(5)부터 세계수의 심장(9)까지다");
             Assert.That(map.FindProperty("background").objectReferenceValue, Is.Not.Null);
 
             SerializedProperty points = map.FindProperty("stagePoints");

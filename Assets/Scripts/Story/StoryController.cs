@@ -11,14 +11,21 @@ namespace Story
 
         public ChatWindowController chatWindowController;
         [SerializeField] ChatWindowScriptContainer scriptContainer;
+        // 엔딩 씬에서 2부(세계수의 심장)까지 끝냈을 때 scriptContainer 대신 보여 줄 대사. 다른 씬은 비워 둔다.
+        [SerializeField] ChatWindowScriptContainer actTwoEndingScript;
 
         [SerializeField] List<GameObject> backgorunds = new List<GameObject>();
 
         [SerializeField] AudioSource audioSource;
         [SerializeField] AudioClip badMood;
 
+        // 세계수의 심장(9)을 끝내면 StagePosition이 10이 된다.
+        const int ActTwoCompletedStagePosition = 10;
+
         void Start()
         {
+            if (actTwoEndingScript != null && MapMove.StagePosition >= ActTwoCompletedStagePosition)
+                scriptContainer = actTwoEndingScript;
             InitBackground();
             StartCoroutine(StoryTelling());
 
@@ -96,7 +103,8 @@ namespace Story
 
         private void LoadMapScene()
         {
-            if (MapMove.StagePosition == 5)
+            // 1부 엔딩(5)과 2부 에필로그(10) 뒤에는 타이틀로 돌아간다.
+            if (MapMove.StagePosition == 5 || MapMove.StagePosition >= ActTwoCompletedStagePosition)
                 SceneManager.LoadScene("TitleScene");
             else
                 SceneManager.LoadScene("MapScene");

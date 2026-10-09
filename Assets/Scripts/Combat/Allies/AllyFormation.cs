@@ -74,6 +74,22 @@ namespace Combat.Allies
             return playerX;
         }
 
+        // 폭발 슬라임이 터지면 아군 슬라임 전체가 피해를 받는다. 아군이 없으면 워드가 받는다.
+        public static void HitAllAllies(int damage)
+        {
+            bool hitAlly = false;
+            if (current != null)
+            {
+                foreach (AllySlime ally in current.allies.ToArray())
+                {
+                    if (!ally.IsAlive) continue;
+                    ally.TakeHit(damage);
+                    hitAlly = true;
+                }
+            }
+            if (!hitAlly) Player.PlayerInt().TakeHit(damage);
+        }
+
         // 곡사 탄이 x에 떨어진다. 그 자리에 선 아군 슬라임이 맞고, 없으면 워드가 그 근처에 있을 때 맞는다.
         // 표시한 뒤 아군이 한 칸 앞으로 나왔다면 탄은 빈자리에 떨어진다.
         public static void HitPoint(float x, int damage)

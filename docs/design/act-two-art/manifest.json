@@ -1,0 +1,328 @@
+{
+  "backgrounds": {
+    "FrostVillage": {
+      "path": "Assets/Art/Battle/Backgrounds/ActTwo/FrostVillage.png",
+      "guid": "b3e3c51d26844df7ace614b53bf48fbc"
+    },
+    "ThunderCanyon": {
+      "path": "Assets/Art/Battle/Backgrounds/ActTwo/ThunderCanyon.png",
+      "guid": "d82ef99697a64615b1270f279942a96f"
+    },
+    "AshenRuins": {
+      "path": "Assets/Art/Battle/Backgrounds/ActTwo/AshenRuins.png",
+      "guid": "1752d590c3284f99a5dd8af780317c0f"
+    },
+    "TwistedForest": {
+      "path": "Assets/Art/Battle/Backgrounds/ActTwo/TwistedForest.png",
+      "guid": "03dcc5e3f768401f9d7b22c835e5c904"
+    },
+    "WorldTreeHeart": {
+      "path": "Assets/Art/Battle/Backgrounds/ActTwo/WorldTreeHeart.png",
+      "guid": "97b69cad2d4840909b1be5936d5315fc"
+    }
+  },
+  "portraits": {
+    "FrostVillager": {
+      "path": "Assets/Art/Story/Portraits/FrostVillagerDialogue.png",
+      "guid": "5760ddef51b347e991221da66f0f3253"
+    },
+    "CanyonRanger": {
+      "path": "Assets/Art/Story/Portraits/CanyonRangerDialogue.png",
+      "guid": "5394c1ddac5745d9857557188bd4be20"
+    },
+    "RuinsScholar": {
+      "path": "Assets/Art/Story/Portraits/RuinsScholarDialogue.png",
+      "guid": "945557753e674c1aa53d55e878e5468c"
+    },
+    "ForestRefugee": {
+      "path": "Assets/Art/Story/Portraits/ForestRefugeeDialogue.png",
+      "guid": "e8d8ffa51b9645cd953ba2fca24c813f"
+    },
+    "MagicSurge": {
+      "path": "Assets/Art/Story/Portraits/MagicSurgeDialogue.png",
+      "guid": "a1febd8ccfc54e3185110405be77874c"
+    }
+  },
+  "enemies": {
+    "Mortar": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_01.png",
+          "guid": "6a402e58e7ac498baf4ab6f265bf981e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_02.png",
+          "guid": "3f6eacfb78774a7b99fabb30e61548d0"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_03.png",
+          "guid": "a4245d7e09ac46d4b468edf070fdb5ba"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_04.png",
+          "guid": "d7bca6e8e9c1482f845104c0efbedada"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_05.png",
+          "guid": "5a4d96b6a447467395293158efb9c9e9"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_06.png",
+          "guid": "a5da24c2c5c74e6eb424a8bf66e8b8d3"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_07.png",
+          "guid": "9ba6d69b37c2401ab4986b00a44f5880"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_08.png",
+          "guid": "0695dfc2b57b49ea8e28a8ec6cd66cb2"
+        }
+      ]
+    },
+    "Charge": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_01.png",
+          "guid": "24da1bf502874068a0d8a7e404daded8"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_02.png",
+          "guid": "8587f28d1c1a448dbf7fa77809b08c32"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_03.png",
+          "guid": "7ea5a95cdbcf41999c2e48867f1a8ca8"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_04.png",
+          "guid": "89f8687293374c349bd400f9dcde4a63"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_05.png",
+          "guid": "259b80dbcf1c49be8efa0976f7ae6d82"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_06.png",
+          "guid": "9e092ea2873d4edc91785ffd295ceb52"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_07.png",
+          "guid": "f3f3d30afc3c4c0b9165566d1d0cfe3f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_08.png",
+          "guid": "8123d53a1da247eba7f1f9fca38bac95"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_09.png",
+          "guid": "9631443c014647da86990db9cc16f402"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_10.png",
+          "guid": "3b1d3c58c14d466f968bb79fec8f9612"
+        }
+      ]
+    },
+    "Shield": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_01.png",
+          "guid": "78cc4dc063e846be8b6872ad8701ca94"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_02.png",
+          "guid": "4b7e8563f4f24c94b41465ca4497d48b"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_03.png",
+          "guid": "1e7114872c1a40688e82a99d2113e30c"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_04.png",
+          "guid": "9061a3c22c384bffbf7a54b6b3bcf157"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_05.png",
+          "guid": "ccfe4d9fb6df44d683749fc8ee4af6bd"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_06.png",
+          "guid": "a91a774459be413eaded2e9d204a19ac"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_07.png",
+          "guid": "b52dba2a8f6b4e30b5196409e88f47fe"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Shield/ShieldSlime_08.png",
+          "guid": "3933c22435ed4b52a671f756086d95f2"
+        }
+      ]
+    },
+    "Split": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_01.png",
+          "guid": "806ba3616bcc4df89d62a065e0126ab6"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_02.png",
+          "guid": "073bb6a50425415d9b3d9e22af3f5d7f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_03.png",
+          "guid": "daec72d2ac1640608c962dbed4a6733f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_04.png",
+          "guid": "57ad993078d74373a326e0a3dc0d4d95"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_05.png",
+          "guid": "8d95978e87c4422e8e512bb9722ef1ba"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_06.png",
+          "guid": "240b5f5be25f4c87b468cf09d871529b"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_07.png",
+          "guid": "384731d58ad94e4398c74abbfbefc24b"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Split/SplitSlime_08.png",
+          "guid": "0114a43664494bb7a00afa2aac9ede40"
+        }
+      ]
+    },
+    "Explode": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_01.png",
+          "guid": "7fa1d12dd8864e2cb5c4540d8b99a1bc"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_02.png",
+          "guid": "2dcfc8044ab8460ba64588fb7d0f2c17"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_03.png",
+          "guid": "fc1fd95e6ca04fa6b4bc4206b753b862"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_04.png",
+          "guid": "499b614d5bee484fb30eb9ff56eebf47"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_05.png",
+          "guid": "db0913ac42844522b670fc418771d2a7"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_06.png",
+          "guid": "9318801a36464370861ef2e2171359a7"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_07.png",
+          "guid": "85236c5ff5954dcea6c1df02e676048a"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_08.png",
+          "guid": "e810ebd416654b8d87795a608a7f5193"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_09.png",
+          "guid": "c98f8b37dc0b490dbf442c17b41dcad0"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_10.png",
+          "guid": "88b46af18e63476db6c030201e7a2d3a"
+        }
+      ]
+    },
+    "Heal": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_01.png",
+          "guid": "e827528b9f7a45d98cf519cce9930dce"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_02.png",
+          "guid": "8e4d041ab55c48b5ab39d26d892df459"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_03.png",
+          "guid": "3261c532d2114b0588dd0ddf227dae2f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_04.png",
+          "guid": "59b6b8d65f504260a9afd2437230c849"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_05.png",
+          "guid": "b45bc11de52a4a839664621974bebcc9"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_06.png",
+          "guid": "c125b3c287ef46cc92590703ccafbb5c"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_07.png",
+          "guid": "f0c2d24f56f248e3b0bf15f9e456feb2"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Heal/HealSlime_08.png",
+          "guid": "6a3c9833c9c146fda803898c670e9b3a"
+        }
+      ]
+    },
+    "Surge": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_01.png",
+          "guid": "dfffe5ee9cd740df9eae7be61557e716"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_02.png",
+          "guid": "6b8087fcd9764f1b9460b58da158ab2b"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_03.png",
+          "guid": "b957ced3275849d6bc095a26373e7e3d"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_04.png",
+          "guid": "94345e9beb6f4466ace60c8f43492fdd"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_05.png",
+          "guid": "1ba2e39f0d1042a9a7f36a63b90f287a"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_06.png",
+          "guid": "dfecc05f30a240f49224351b70f5ecc4"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_07.png",
+          "guid": "e52360be1f8e49b1ab96bb7ec8240484"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Surge/SurgeSlime_08.png",
+          "guid": "936f91f20cf9426f974f82fe7a0faf86"
+        }
+      ]
+    }
+  },
+  "folders": {
+    "Assets/Art/Battle/Backgrounds/ActTwo": "4f5fdc2e5e164bc190d9114c49b4a160",
+    "Assets/Art/Combat/Enemies": "bb4f9b98f55e42dcb43bc5d22defcea9",
+    "Assets/Art/Combat/Enemies/ActTwo": "9c1168b3af7f42539d756aebcb316754",
+    "Assets/Art/Combat/Enemies/ActTwo/Mortar": "404d20bf751e4092924b44106e97edf1",
+    "Assets/Art/Combat/Enemies/ActTwo/Charge": "ad1bf4b7eed548efb343012f7f0a38f6",
+    "Assets/Art/Combat/Enemies/ActTwo/Shield": "7cfdb69e58c8491e9fc6dbe7b7c4342d",
+    "Assets/Art/Combat/Enemies/ActTwo/Split": "af28fef5296b4c59beb716d1f645befd",
+    "Assets/Art/Combat/Enemies/ActTwo/Explode": "8bd5df653bf44c68a4eec5b50864325d",
+    "Assets/Art/Combat/Enemies/ActTwo/Heal": "5fe5d1a54b034bbc8d294e92f28f91cd",
+    "Assets/Art/Combat/Enemies/ActTwo/Surge": "ec2b654614474dc4b5543aec78426781"
+  }
+}

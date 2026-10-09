@@ -82,13 +82,23 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 벼락_협곡을_끝내도_전투가_없는_잿빛_유적에는_들어갈_수_없다()
+        public IEnumerator 이부를_모두_끝내면_다섯_지역에_모두_들어갈_수_있다()
         {
-            yield return LoadMap(7);
-            Assert.That(IsUnlocked(1), Is.True);
-            Assert.That(IsUnlocked(2), Is.False);
+            yield return LoadMap(10);
+            for (int i = 0; i < 5; i++) Assert.That(IsUnlocked(i), Is.True, "지점 " + i + " 이(가) 잠겨 있다");
             object stageLabel = Field(MapMove, "stage");
-            Assert.That(stageLabel.GetType().GetProperty("text").GetValue(stageLabel), Does.Contain("준비 중"));
+            Assert.That(stageLabel.GetType().GetProperty("text").GetValue(stageLabel), Does.Not.Contain("준비 중"));
+        }
+
+        [UnityTest]
+        public IEnumerator 이부를_끝내고_엔딩_씬에_들어가면_이부_에필로그를_보여_준다()
+        {
+            StagePosition.SetValue(null, 10);
+            yield return SceneManager.LoadSceneAsync("EndingScene");
+            yield return null;
+            Component story = (Component)Object.FindObjectOfType(Runtime("Story.StoryController"));
+            Object epilogue = AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/ActTwoEndingScript.asset");
+            Assert.That(Field(story, "scriptContainer"), Is.SameAs(epilogue));
         }
 
         [UnityTest]

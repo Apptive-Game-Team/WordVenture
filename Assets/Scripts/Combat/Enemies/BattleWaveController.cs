@@ -33,6 +33,16 @@ namespace Combat.Enemies
             StartCoroutine(WaveEndSensor());
         }
 
+        // 분열 슬라임과 최종 보스가 웨이브 도중에 부르는 적. 이 적까지 쓰러뜨려야 웨이브가 끝난다.
+        public static GameObject SpawnExtraEnemy(int enemyId, float positionX)
+        {
+            BattleWaveController controller = FindObjectOfType<BattleWaveController>();
+            if (controller == null || controller.ememyPool == null) return null;
+            GameObject enemy = controller.ememyPool.SpawnObject(positionX, controller.activatedEnemies.Count, enemyId);
+            controller.activatedEnemies.Add(enemy);
+            return enemy;
+        }
+
         IEnumerator WaveEndSensor()
         {
 

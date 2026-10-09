@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2895bca0f72e4267879fceeadd7a457, type: 3}
+  m_Name: ActTwoEndingScript
+  m_EditorClassIdentifier: 
+  script:
+  - name: 나레이터
+    text: "세계수의 마력이 가라앉자, 서리 마을의 길이 녹고 협곡의 번개가 그쳤다."
+    background: 1
+  - name: 나레이터
+    text: "숲으로 돌아간 사람들은 다시 등불을 켰고, 유적의 연구자는 할아버지의 기록을 이어 쓰기 시작했다."
+    background: 1
+  - name: 나레이터
+    text: "워드는 산골짜기 집의 비석 앞에 다시 섰다. 이번에는 들꽃과 함께, 지나온 마을들의 이야기를 내려놓았다."
+    background: 0
+  - name: 나레이터
+    text: "그 뒤로도 워드는 도움을 청하는 곳이면 어디든 찾아갔다."
+    background: 0
+  - name: 나레이터
+    text: "그녀가 지나간 자리에는 돌아갈 길이 남았다."
+    background: 1
+  - name: ""
+    text: "훗날 사람들은 그녀를 마법의 신, 워드라 불렀다."
+    background: 1
