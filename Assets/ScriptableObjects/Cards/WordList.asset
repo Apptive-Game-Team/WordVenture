@@ -45,3 +45,7 @@ MonoBehaviour:
     percent: 0
     tag: MagicType
     magicType: 3
+  - name: Spawn
+    percent: 0
+    tag: Spell
+    magicType: 9

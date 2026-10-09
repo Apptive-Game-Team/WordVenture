@@ -11,7 +11,7 @@ namespace Combat.Enemies
             base.Start();
         }
 
-        public override void Attack(float distanceToPlayer)
+        public override void Attack(float distanceToFrontLine)
         {
             Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position,Quaternion.identity);
