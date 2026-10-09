@@ -278,3 +278,46 @@ MonoBehaviour:
     - wordSpeaking: 1
       narration: 0
       text: "그럼 거기도 가 볼게요."
+  - stageID: 6
+    moment: 1
+    wave: 0
+    title: "벼락 협곡 · 끊긴 길"
+    speakerName: "협곡 순찰대원"
+    speakerPortrait: {fileID: 21300000, guid: ba4ed1de425743da9ce627a37bf1cb8d, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      text: "서리 마을에서 남쪽으로 내려가자, 맑은 하늘에서 번개가 쉬지 않고 떨어지고 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      text: "멈춰요! 협곡 길은 번개 때문에 막혔어요. 저 안쪽 슬라임들은 멀리서 바위를 던져요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "어디에 떨어질지 미리 보이나요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "땅에 표시가 생겨요. 그 자리에 서 있으면 안 돼요. 웅크린 놈은 곧 달려들고요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "알겠어요. 앞줄은 슬라임들이 막고, 표시가 생기면 던지는 놈부터 쓰러뜨릴게요."
+  - stageID: 6
+    moment: 0
+    wave: 0
+    title: "벼락 협곡 · 다시 열린 길"
+    speakerName: "협곡 순찰대원"
+    speakerPortrait: {fileID: 21300000, guid: ba4ed1de425743da9ce627a37bf1cb8d, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      text: "번개가 멎었어요. 길이 다시 열렸네요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "번개가 시작된 곳이 어디인지 알아요?"
+    - wordSpeaking: 0
+      narration: 0
+      text: "동쪽 잿빛 유적 쪽에서 마력이 흘러나온다는 소문이 있어요. 오래된 마법 연구소가 있던 곳이에요."
+    - wordSpeaking: 1
+      narration: 0
+      text: "할아버지 기록에도 그 이름이 있었어요. 가 볼게요."

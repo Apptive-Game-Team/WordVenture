@@ -80,6 +80,8 @@ namespace Combat.Enemies
         bool tookTurn;
         string reactionText;
         float reactionUntil;
+        // 다음 적 턴에 할 행동의 예고(돌진 준비, 포격 조준). 반응 글자가 없을 때 머리 위에 보인다.
+        string intentText = string.Empty;
 
         public float moveDistance = 5;
 
@@ -101,6 +103,7 @@ namespace Combat.Enemies
             enemyType = enemyData.type;
             Status = new ElementalStatus(enemyType);
             reactionText = string.Empty;
+            intentText = string.Empty;
             tookTurn = false;
             UpdateIndicator();
         }
@@ -134,7 +137,9 @@ namespace Combat.Enemies
         void UpdateStatusIndicator()
         {
             if (statusText != null)
-                statusText.text = Time.time < reactionUntil ? reactionText : string.Empty;
+                // 반응이 없는 공격(빈 글자)이 예고를 가리지 않도록, 반응 글자가 있을 때만 먼저 보여 준다.
+                statusText.text = Time.time < reactionUntil && !string.IsNullOrEmpty(reactionText)
+                    ? reactionText : intentText;
             if (bodyRenderer != null)
             {
                 Color tint = Status.Frozen || Status.Chill > 0 ? new Color(0.5f, 0.85f, 1f)
@@ -158,9 +163,16 @@ namespace Combat.Enemies
         {
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
+            int damage = hit.Damage + hit.ExtraDamage;
             reactionText = Localization.Translate(hit.Reaction);
+            // 바로 앞에 방패 슬라임이 있으면 피해가 절반이 된다. 신성의 회복(음수 피해)은 줄이지 않는다.
+            if (damage > 0 && ShieldEnemy.IsGuarding(this))
+            {
+                damage /= 2;
+                if (string.IsNullOrEmpty(reactionText)) reactionText = Localization.Translate("방패 보호");
+            }
             reactionUntil = Time.time + 1.5f;
-            TakeHit(hit.Damage + hit.ExtraDamage);
+            TakeHit(damage);
             UpdateStatusIndicator();
         }
 
@@ -186,7 +198,19 @@ namespace Combat.Enemies
                 UpdateStatusIndicator();
                 return;
             }
+            TakeTurnAction(distanceToFrontLine);
+        }
+
+        // 빙결로 턴을 건너뛰지 않았을 때 하는 행동. 예고를 하고 다음 턴에 공격하는 적이 바꾼다.
+        protected virtual void TakeTurnAction(float distanceToFrontLine)
+        {
             enemyActions[(int) MakeActionDecision(distanceToFrontLine)].PlayAction(distanceToFrontLine);
+        }
+
+        protected void SetIntent(string text)
+        {
+            intentText = text;
+            UpdateStatusIndicator();
         }
 
 
