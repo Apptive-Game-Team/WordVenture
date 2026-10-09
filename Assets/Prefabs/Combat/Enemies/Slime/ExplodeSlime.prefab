@@ -362,6 +362,13 @@ MonoBehaviour:
   id: 0
   moveDistance: 5
   attackRange: 3
+  blastFrames:
+  - {fileID: 1541873664, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
+  - {fileID: 1320705485, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
+  - {fileID: -2114864689, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
+  - {fileID: -1130426813, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
+  - {fileID: 1279190365, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
+  - {fileID: -1891921531, guid: 501695d16cf9b7fcd2a96aabdd92f1a8, type: 3}
 --- !u!58 &6748031459594951415
 CircleCollider2D:
   m_ObjectHideFlags: 0
