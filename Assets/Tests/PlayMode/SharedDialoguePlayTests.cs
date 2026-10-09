@@ -15,7 +15,7 @@ namespace WordVenture.Tests
 {
     public sealed class SharedDialoguePlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "Language" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -32,6 +32,8 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             existed = keys.Select(PlayerPrefs.HasKey).ToArray();
             oldPosition = (int)Runtime("Map.MapMove").GetField("StagePosition").GetValue(null);
+            // 안내 문구를 한국어 원문으로 비교하므로 시스템 언어와 관계없이 한국어로 고정한다.
+            SetLanguage("Korean");
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
             PlayerPrefs.DeleteKey("TutorialEnded");
@@ -52,8 +54,20 @@ namespace WordVenture.Tests
             for (int i = 0; i < keys.Length; i++)
                 if (existed[i]) PlayerPrefs.SetInt(keys[i], values[i]); else PlayerPrefs.DeleteKey(keys[i]);
             PlayerPrefs.Save();
+            ResetLanguage();
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, oldPosition);
         }
+
+        internal static void SetLanguage(string language)
+        {
+            Type localization = Runtime("Core.Localization");
+            object value = Enum.Parse(Runtime("Core.Language"), language);
+            localization.GetMethod("SetLanguage").Invoke(null, new[] { value });
+        }
+
+        // PlayerPrefs 를 되돌린 뒤 캐시한 언어를 비워 다음 조회가 저장값을 다시 읽게 한다.
+        internal static void ResetLanguage() => Runtime("Core.Localization")
+            .GetField("current", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
 
         [UnityTest]
         public IEnumerator StoryAndTutorialShareStyleAndKeepTheirOwnPortraitModes()
@@ -119,7 +133,7 @@ namespace WordVenture.Tests
             Assert.That(((Image)Property(Presentation, "RightPortrait")).gameObject.activeSelf, Is.False);
         }
 
-        static void Capture(string filename)
+        internal static void Capture(string filename)
         {
             Camera camera = Camera.main;
             Canvas[] canvases = Object.FindObjectsOfType<Canvas>()

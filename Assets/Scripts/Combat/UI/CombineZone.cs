@@ -73,6 +73,12 @@ namespace Combat.UI
         {
             Instance = this;
         }
+
+        // 전투 씬을 나간 뒤에도 static 참조가 파괴된 조합창을 가리키지 않게 한다.
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
         // activateButton의 현재 표시 상태. SetActive를 같은 값으로 다시 부르지 않기 위해
         // 따로 들고 있는다.
         bool activateButtonVisible;

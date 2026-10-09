@@ -14,6 +14,11 @@ namespace Scenes
         GameObject previousSelection;
         bool previousInteractable, previousBlocksRaycasts;
 
+        void Awake()
+        {
+            LanguageButton.Create(openButton);
+        }
+
         public void Show()
         {
             if (overlay.activeSelf) return;
