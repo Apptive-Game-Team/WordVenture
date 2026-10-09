@@ -39,8 +39,8 @@ namespace Cards
             areaHitFilter = new ContactFilter2D().NoFilter();
         }
 
-        // Spawn 카드는 2부 첫 지역(서리 마을, 스테이지 5)부터 손패에 섞인다.
-        const int SpawnUnlockStage = 5;
+        // Spawn 카드는 서리 마을(스테이지 5)을 클리어한 뒤 스테이지 6부터 손패에 섞인다.
+        const int SpawnUnlockStage = 6;
         const int SpawnCardPercent = 3;
 
         [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;
