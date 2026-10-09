@@ -10,11 +10,12 @@ namespace Combat.Enemies
         const float SummonOffset = 1.2f;
 
         [SerializeField] Sprite markerSprite;
+        [SerializeField] Sprite shellSprite;
         [SerializeField] int splitEnemyId;
         MortarStrike strike;
         bool summoned;
 
-        MortarStrike Strike => strike ??= new MortarStrike(markerSprite);
+        MortarStrike Strike => strike ??= new MortarStrike(markerSprite, shellSprite);
         public bool HasMarker => Strike.IsAimed;
         public bool HasSummoned => summoned;
 
@@ -33,13 +34,11 @@ namespace Combat.Enemies
             if (!Strike.IsAimed)
             {
                 Strike.Aim();
-                SetIntent("포격 조준");
                 return;
             }
 
             Animator.RangeAttack();
-            Strike.Fire(AttackDamage);
-            SetIntent(string.Empty);
+            Strike.Fire(transform.position, AttackDamage);
         }
 
         void OnDisable()

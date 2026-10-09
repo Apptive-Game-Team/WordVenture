@@ -82,6 +82,19 @@ namespace WordVenture.Tests
                 "MortarSlime의 markerSprite가 비어 있다");
         }
 
+        [TestCase("MortarSlime")]
+        [TestCase("SurgeBoss")]
+        public void 곡사_포격을_쓰는_prefab에_탄_스프라이트가_연결돼_있다(string prefabName)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(SlimePrefabFolder + prefabName + ".prefab");
+            Assert.That(prefab, Is.Not.Null);
+
+            SerializedObject shooter = ProjectAssets.FindComponentWithProperty(prefab, "shellSprite");
+            Assert.That(shooter, Is.Not.Null, prefabName + "에 shellSprite 필드가 없다");
+            Assert.That(shooter.FindProperty("shellSprite").objectReferenceValue, Is.Not.Null,
+                prefabName + "의 shellSprite가 비어 있다");
+        }
+
         [Test]
         public void 벼락_협곡_대사는_입장과_클리어가_하나씩_있다()
         {

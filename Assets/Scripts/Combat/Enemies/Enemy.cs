@@ -73,14 +73,10 @@ namespace Combat.Enemies
         public ElementalStatus Status { get; private set; } = new ElementalStatus();
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
         protected int AttackDamage => Status.GetAttackDamage(Damage);
-        TMP_Text statusText;
         SpriteRenderer bodyRenderer;
+        ReactionBurstVfx reactionBurst;
         Color originalBodyColor;
         bool tookTurn;
-        string reactionText;
-        float reactionUntil;
-        // 다음 적 턴에 할 행동의 예고(돌진 준비, 포격 조준). 반응 글자가 없을 때 머리 위에 보인다.
-        string intentText = string.Empty;
 
         public float moveDistance = 5;
 
@@ -101,8 +97,6 @@ namespace Combat.Enemies
             Damage = enemyData.damage;
             enemyType = enemyData.type;
             Status = new ElementalStatus(enemyType);
-            reactionText = string.Empty;
-            intentText = string.Empty;
             tookTurn = false;
             UpdateIndicator();
         }
@@ -133,12 +127,9 @@ namespace Combat.Enemies
             UpdateStatusIndicator();
         }
 
+        // 상태 이상은 몸 색과 ElementalStatusVfx로만 보여 준다. 머리 위에 글자를 띄우지 않는다.
         void UpdateStatusIndicator()
         {
-            if (statusText != null)
-                // 반응이 없는 공격(빈 글자)이 예고를 가리지 않도록, 반응 글자가 있을 때만 먼저 보여 준다.
-                statusText.text = Time.time < reactionUntil && !string.IsNullOrEmpty(reactionText)
-                    ? reactionText : intentText;
             if (bodyRenderer != null)
             {
                 Color tint = Status.Frozen || Status.Chill > 0 ? new Color(0.5f, 0.85f, 1f)
@@ -149,28 +140,17 @@ namespace Combat.Enemies
             }
         }
 
-        void Update()
-        {
-            if (!string.IsNullOrEmpty(reactionText) && Time.time >= reactionUntil)
-            {
-                reactionText = string.Empty;
-                UpdateStatusIndicator();
-            }
-        }
-
         public void TakeSpellHit(MagicType element, MagicType spell, float baseDamage, float affinity)
         {
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
             int damage = hit.Damage + hit.ExtraDamage;
-            reactionText = hit.Reaction;
+            bool guarded = damage > 0 && ShieldEnemy.IsGuarding(this);
             // 바로 앞에 방패 슬라임이 있으면 피해가 절반이 된다. 신성의 회복(음수 피해)은 줄이지 않는다.
-            if (damage > 0 && ShieldEnemy.IsGuarding(this))
-            {
-                damage /= 2;
-                if (string.IsNullOrEmpty(reactionText)) reactionText = "방패 보호";
-            }
-            reactionUntil = Time.time + 1.5f;
+            if (guarded) damage /= 2;
+            // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
+            if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
+            else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
             TakeHit(damage);
             UpdateStatusIndicator();
         }
@@ -206,13 +186,6 @@ namespace Combat.Enemies
             enemyActions[(int) MakeActionDecision(distanceToFrontLine)].PlayAction(distanceToFrontLine);
         }
 
-        protected void SetIntent(string text)
-        {
-            intentText = text;
-            UpdateStatusIndicator();
-        }
-
-
         // moveSpeed는 turnTime 안에 moveDistance를 지나도록 정해진다. 그런데 대기는
         // 0.01초를 요청하면서 실제 프레임은 그보다 길고, 이동량은 프레임 시간이 아닌
         // 0.01을 썼다. 그래서 60fps에서 적이 의도한 속도의 60% 정도로 움직이고 이동이
@@ -241,6 +214,8 @@ namespace Combat.Enemies
             bodyRenderer = GetComponent<SpriteRenderer>();
             if (bodyRenderer != null) originalBodyColor = bodyRenderer.color;
             gameObject.AddComponent<ElementalStatusVfx>().Initialize(this, bodyRenderer);
+            reactionBurst = gameObject.AddComponent<ReactionBurstVfx>();
+            reactionBurst.Initialize(bodyRenderer);
         }
 
         protected virtual void Start()
@@ -305,8 +280,7 @@ namespace Combat.Enemies
         {
             if (!IsAlive || amount <= 0) return;
             Hp = Mathf.Min(MaxHp, Hp + amount);
-            reactionText = "회복";
-            reactionUntil = Time.time + 1.5f;
+            reactionBurst.Play(ReactionBurstVfx.Burst.Heal);
             UpdateIndicator();
         }
 
@@ -338,20 +312,6 @@ namespace Combat.Enemies
             HpText = gameObject.GetComponentInChildren<TMP_Text>();
             if (HpText == null) return;
             HpText.SetText(MaxHp.ToString());
-            statusText = Instantiate(HpText, HpText.transform.parent);
-            statusText.name = "ElementalStatusText";
-            var presentation = Resources.Load<ElementalStatusPresentation>("Combat/ElementalStatusPresentation");
-            if (presentation != null && presentation.font != null) statusText.font = presentation.font;
-            statusText.raycastTarget = false;
-            statusText.richText = true;
-            statusText.enableAutoSizing = false;
-            statusText.fontSize = HpText.fontSize * 0.7f;
-            statusText.enableWordWrapping = false;
-            statusText.alignment = TextAlignmentOptions.Center;
-            statusText.rectTransform.anchoredPosition += new Vector2(0, HpText.rectTransform.rect.height * 0.8f);
-            statusText.rectTransform.sizeDelta = new Vector2(HpText.rectTransform.rect.width * 6f,
-                HpText.rectTransform.rect.height * 2f);
-            statusText.text = string.Empty;
         }
 
     }

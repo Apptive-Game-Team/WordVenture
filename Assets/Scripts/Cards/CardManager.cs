@@ -343,7 +343,8 @@ namespace Cards
 
         public void CardMouseDown()
         {
-            if (selectCard == null) return;
+            // 씬이 바뀌는 프레임에는 조합창이 먼저 파괴되고 카드 클릭이 뒤늦게 들어올 수 있다.
+            if (selectCard == null || CombineZone.Instance == null) return;
             // 주문이 준비되는 동안에는 조합창이 잠겨 있으므로 카드를 집지 않는다.
             if (CombineZone.Instance.IsCasting) return;
 
@@ -369,7 +370,7 @@ namespace Cards
         public void CardMouseUp()
         {
             // 창을 닫아 취소된 드래그의 MouseUp은 조합 영역에 다시 놓지 않는다.
-            if (!isMyCardDrag || selectCard == null)
+            if (!isMyCardDrag || selectCard == null || CombineZone.Instance == null)
             {
                 return;
             }

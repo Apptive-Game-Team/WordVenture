@@ -138,7 +138,8 @@ namespace WordVenture.Tests
         }
 
         [Test]
-        public void 둘째_부_적_prefab의_애니메이션이_manifest의_프레임_8장이다()
+        // 기본 8장 뒤에 돌진·폭발 슬라임의 예고 프레임 2장이 더 붙는다.
+        public void 둘째_부_적_prefab의_애니메이션이_manifest의_프레임과_같다()
         {
             foreach ((string prefabName, string art) in EnemyArt)
             {
@@ -150,8 +151,8 @@ namespace WordVenture.Tests
 
                 List<string> expected = ManifestGuids("enemies", art);
                 SerializedProperty sprites = animator.FindProperty("sprites");
-                Assert.That(sprites.arraySize, Is.EqualTo(8), prefabName + " 프레임 수");
-                for (int i = 0; i < 8; i++)
+                Assert.That(sprites.arraySize, Is.EqualTo(expected.Count), prefabName + " 프레임 수");
+                for (int i = 0; i < expected.Count; i++)
                 {
                     Assert.That(GuidOf(sprites.GetArrayElementAtIndex(i)), Is.EqualTo(expected[i]),
                         prefabName + " 프레임 " + (i + 1));

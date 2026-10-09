@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.Serialization;
 
 namespace Map
@@ -27,7 +28,12 @@ namespace Map
         [FormerlySerializedAs("Stage4")] [SerializeField] Sprite stage4;
         // 1부를 끝내면(StagePosition 5 이상) 이 장의 배경과 지점으로 바꿔 보여 준다.
         [SerializeField] MapChapter actTwoMap;
+        // 1부를 끝낸 뒤에만 보이는, 1부 맵과 2부 맵을 오가는 버튼. Tab 키로도 바꾼다.
+        [SerializeField] Button chapterSwitchButton;
+        [SerializeField] TextMeshProUGUI chapterSwitchLabel;
         const int ActOneLastStageID = 4;
+        // 2부 맵에서 1부 맵으로 돌아올 때 지점을 되돌려 놓을 씬 원래 위치.
+        Vector3[] actOneStageLocations;
         // 지금 맵에 보이는 장. 1부면 null이다.
         MapChapter chapter;
         // 지점 번호 position에 더하면 스테이지 번호가 된다. 1부는 0, 2부는 5다.
@@ -52,13 +58,25 @@ namespace Map
             backgroundRenderer = background.GetComponent<SpriteRenderer>();
             stageLocations = new[] { village, battle1, battle2, battle3, boss };
             mapCamera = Camera.main;
-            if (actTwoMap != null && StagePosition >= actTwoMap.firstStageID) UseChapter(actTwoMap);
+            actOneStageLocations = System.Array.ConvertAll(stageLocations, location => location.transform.position);
+            if (CanSwitchChapter && !SaveLoadController.ShowsActOneMap) UseChapter(actTwoMap);
         }
 
+        bool CanSwitchChapter => actTwoMap != null && StagePosition >= actTwoMap.firstStageID;
+
         // 지점 오브젝트는 스프라이트 없이 위치만 나타내므로, 장의 좌표로 옮겨서 그대로 쓴다.
+        // mapChapter가 null이면 1부 맵으로 돌아간다.
         void UseChapter(MapChapter mapChapter)
         {
             chapter = mapChapter;
+            if (mapChapter == null)
+            {
+                firstStageID = 0;
+                for (int i = 0; i < stageLocations.Length; i++)
+                    stageLocations[i].transform.position = actOneStageLocations[i];
+                return;
+            }
+
             firstStageID = mapChapter.firstStageID;
             for (int i = 0; i < stageLocations.Length && i < mapChapter.stagePoints.Length; i++)
             {
@@ -74,6 +92,34 @@ namespace Map
         private void Start()
         {
             InitShowBattles();
+            InitChapterSwitchButton();
+        }
+
+        void InitChapterSwitchButton()
+        {
+            if (chapterSwitchButton == null) return;
+            chapterSwitchButton.gameObject.SetActive(CanSwitchChapter);
+            chapterSwitchButton.onClick.AddListener(SwitchChapter);
+            ShowChapterSwitchLabel();
+        }
+
+        void ShowChapterSwitchLabel()
+        {
+            if (chapterSwitchLabel == null) return;
+            chapterSwitchLabel.text = chapter != null ? "1부 맵으로 (Tab)" : "2부 맵으로 (Tab)";
+        }
+
+        void SwitchChapter()
+        {
+            if (!CanSwitchChapter || InteractionLock.IsLocked || enteringStage) return;
+
+            movement?.Kill();
+            UseChapter(chapter != null ? null : actTwoMap);
+            SaveLoadController.ShowsActOneMap = chapter == null;
+            WordPosition(StagePosition);
+            // 배경과 스테이지 문구는 지금 장을 기준으로 그리므로 다음 프레임에 다시 그린다.
+            renderedStagePosition = -1;
+            ShowChapterSwitchLabel();
         }
 
         void Update()
@@ -125,6 +171,12 @@ namespace Map
             bool left = Input.GetKeyDown(KeyCode.LeftArrow);
             bool up = Input.GetKeyDown(KeyCode.UpArrow);
             bool down = Input.GetKeyDown(KeyCode.DownArrow);
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                SwitchChapter();
+                return;
+            }
 
             // 1부 길은 위아래로 꺾이므로 지점마다 위아래 키의 방향이 다르다. 2부 길은 순서대로 이어 간다.
             bool next = chapter != null ? right || up : right || (up && (position == 0 || position == 2));
@@ -259,7 +311,8 @@ namespace Map
                 return;
             }
 
-            switch (stagePosition)
+            // 2부를 진행 중에 1부 맵을 열면 1부를 끝낸 배경(stage4)을 보여 준다.
+            switch (Mathf.Min(stagePosition, ActOneLastStageID + 1))
             {
                 case 1:
                     backgroundRenderer.sprite = stage1;

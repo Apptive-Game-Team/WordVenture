@@ -9,7 +9,6 @@ namespace Combat.Spells
     public class Explode : MonoBehaviour
     {
         public GameObject player;
-        private float explodeRadius = 2.0f;
         [FormerlySerializedAs("SummonfirePrefab")] public GameObject explodeFirePrefab;
         [FormerlySerializedAs("SummonicePrefab")] public GameObject explodeIcePrefab;
         [FormerlySerializedAs("SummonrockPrefab")] public GameObject explodeRockPrefab;
@@ -42,20 +41,10 @@ namespace Combat.Spells
 
             if (prefabToInstantiate != null)
             {
-                //Vector3 instantiatePos = //GetRndPos(target.transform.position + new Vector3(0, -1 * target.transform.position.y, 0), explodeRadius);
-
                 GameObject obj = Instantiate(prefabToInstantiate, target.transform.position + new Vector3(0, -1 * target.transform.position.y, 0), Quaternion.identity);
                 obj.GetComponent<SpellObj>().InitSpell(MagicType.Explode, magicType, target, magicAffinityTable);
             }
         }
-
-        //private Vector3 GetRndPos(Vector3 center, float radius)
-        //{
-        //    Vector3 randomPos = Random.insideUnitSphere * radius;
-        //    randomPos.y = Mathf.Abs(randomPos.y); // y축 양수제한
-
-        //    return center + randomPos;
-        //}
     }
 
 }

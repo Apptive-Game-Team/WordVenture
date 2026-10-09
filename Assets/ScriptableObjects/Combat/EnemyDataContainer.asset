@@ -224,7 +224,7 @@ MonoBehaviour:
   - id: 26
     name: S8_Explode_Slime
     prefab: {fileID: 5185469052702614032, guid: 4a094ed80eac435bb15c9b01b51a4169, type: 3}
-    maxHp: 25
+    maxHp: 45
     moveDistance: 5
     attackRange: 3
     damage: 15
@@ -232,7 +232,7 @@ MonoBehaviour:
   - id: 27
     name: S8_Heal_Slime
     prefab: {fileID: 5152970759226599136, guid: 1833aa0db5804c70ae02b5997f60fb4c, type: 3}
-    maxHp: 30
+    maxHp: 50
     moveDistance: 0
     attackRange: 99
     damage: 10
@@ -240,16 +240,16 @@ MonoBehaviour:
   - id: 28
     name: S8_Ranged_Slime
     prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
-    maxHp: 35
+    maxHp: 50
     moveDistance: 5
     attackRange: 10
     damage: 10
-    type: 8
+    type: 6
   - id: 29
     name: S9_Surge_Boss
     prefab: {fileID: 1380314620153829809, guid: 20fe90a8e19b448eb3e9ab70e5cff10e, type: 3}
-    maxHp: 160
+    maxHp: 260
     moveDistance: 2
     attackRange: 3
-    damage: 12
-    type: 8
+    damage: 15
+    type: 3

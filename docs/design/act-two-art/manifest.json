@@ -113,6 +113,14 @@
         {
           "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_08.png",
           "guid": "8123d53a1da247eba7f1f9fca38bac95"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_09.png",
+          "guid": "9631443c014647da86990db9cc16f402"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Charge/ChargeSlime_10.png",
+          "guid": "3b1d3c58c14d466f968bb79fec8f9612"
         }
       ]
     },
@@ -221,6 +229,14 @@
         {
           "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_08.png",
           "guid": "e810ebd416654b8d87795a608a7f5193"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_09.png",
+          "guid": "c98f8b37dc0b490dbf442c17b41dcad0"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Explode/ExplodeSlime_10.png",
+          "guid": "88b46af18e63476db6c030201e7a2d3a"
         }
       ]
     },

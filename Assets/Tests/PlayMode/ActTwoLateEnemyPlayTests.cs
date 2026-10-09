@@ -39,6 +39,12 @@ namespace WordVenture.Tests
         static int AllyHp(Component ally) => (int)ally.GetType().GetField("hp", AnyInstance).GetValue(ally);
         static object Property(Component target, string name) => target.GetType().GetProperty(name).GetValue(target);
 
+        static string LastBurst(Component enemy)
+        {
+            Component vfx = enemy.GetComponent(Runtime("Combat.Enemies.ReactionBurstVfx"));
+            return Property(vfx, "LastBurst")?.ToString();
+        }
+
         [UnitySetUp]
         public IEnumerator SetUp()
         {
@@ -138,6 +144,9 @@ namespace WordVenture.Tests
             Call(bomber, "PlayTurnAction", FrontLineDistance(bomber));
             Assert.That(Property(bomber, "IsPrimed"), Is.True);
             Assert.That(AllyHp(front), Is.EqualTo(8), "예고한 턴에는 터지지 않는다");
+            yield return null;
+            string frame = bomber.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.EqualTo("ExplodeSlime_09").Or.EqualTo("ExplodeSlime_10"), "예고하는 동안 예고 프레임을 보여 준다");
 
             Call(bomber, "PlayTurnAction", FrontLineDistance(bomber));
             Assert.That(AllyHp(front), Is.EqualTo(0));
@@ -182,6 +191,8 @@ namespace WordVenture.Tests
             Call(healer, "PlayTurnAction", 10f);
             Assert.That(EnemyHp(wounded), Is.EqualTo(80));
             Assert.That(EnemyHp(scratched), Is.EqualTo(95));
+            Assert.That(LastBurst(wounded), Is.EqualTo("Heal"), "회복은 글자 대신 효과로 보인다");
+            Assert.That(LastBurst(scratched), Is.Null);
         }
 
         [UnityTest]
@@ -194,6 +205,7 @@ namespace WordVenture.Tests
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
             Assert.That(Property(boss, "HasMarker"), Is.True);
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            yield return new WaitForSeconds(0.8f);
             Assert.That(PlayerHp, Is.EqualTo(hp - 12), "아군이 없으면 포격은 워드에게 떨어진다");
 
             Call(boss, "TakeHit", 60);

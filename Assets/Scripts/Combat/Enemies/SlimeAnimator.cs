@@ -16,6 +16,10 @@ namespace Combat.Enemies
         static readonly WaitForSeconds LongFrameHold = new WaitForSeconds(0.25f);
         static readonly WaitForSeconds ShortFrameHold = new WaitForSeconds(0.15f);
 
+        // 돌진·폭발 슬라임만 대기 8장 뒤에 예고 프레임 2장을 더 가진다.
+        const int WindupFrame = 8;
+        bool windingUp;
+
         // 소환된 프레임에 바로 공격이나 피격 애니메이션을 부를 수 있으므로 참조는 Awake에서 잡는다.
         private void Awake()
         {
@@ -46,8 +50,23 @@ namespace Combat.Enemies
             StartCoroutine(Attacking());
         }
 
+        // 예고하는 동안에는 대기 대신 예고 프레임 2장을 번갈아 보여 준다. 피격 애니메이션이 끝나도 예고로 돌아온다.
+        public void Windup()
+        {
+            if (sprites.Count < WindupFrame + 2) return;
+            windingUp = true;
+            StopAllCoroutines();
+            StartCoroutine(Idling());
+        }
+
+        public void EndWindup()
+        {
+            windingUp = false;
+        }
+
         public void Death()
         {
+            windingUp = false;
             StopAllCoroutines();
             spriteRenderer.sprite = sprites[5];
         }
@@ -106,6 +125,14 @@ namespace Combat.Enemies
         {
             while (true)
             {
+                if (windingUp)
+                {
+                    spriteRenderer.sprite = sprites[WindupFrame];
+                    yield return ShortFrameHold;
+                    spriteRenderer.sprite = sprites[WindupFrame + 1];
+                    yield return ShortFrameHold;
+                    continue;
+                }
                 spriteRenderer.sprite = sprites[0];
                 yield return LongFrameHold;
                 spriteRenderer.sprite = sprites[1];

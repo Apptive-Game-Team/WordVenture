@@ -39,6 +39,12 @@ namespace WordVenture.Tests
         static int AllyHp(Component ally) => (int)ally.GetType().GetField("hp", AnyInstance).GetValue(ally);
         static object Property(Component target, string name) => target.GetType().GetProperty(name).GetValue(target);
 
+        static string LastBurst(Component enemy)
+        {
+            Component vfx = enemy.GetComponent(Runtime("Combat.Enemies.ReactionBurstVfx"));
+            return Property(vfx, "LastBurst")?.ToString();
+        }
+
         [UnitySetUp]
         public IEnumerator SetUp()
         {
@@ -121,9 +127,15 @@ namespace WordVenture.Tests
             Assert.That(AllyHp(rear), Is.EqualTo(8), "표시한 턴에는 맞히지 않는다");
 
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
+            Assert.That(GameObject.Find("MortarShell"), Is.Not.Null, "쏜 턴에는 탄이 날아간다");
+            Assert.That(AllyHp(rear), Is.EqualTo(8), "탄이 떨어지기 전에는 맞히지 않는다");
+            Assert.That(Property(mortar, "HasMarker"), Is.False);
+
+            yield return new WaitForSeconds(0.8f);
             Assert.That(AllyHp(rear), Is.EqualTo(0));
             Assert.That(AllyHp(front), Is.EqualTo(8), "앞줄 슬라임은 곡사 탄을 막지 못한다");
-            Assert.That(Property(mortar, "HasMarker"), Is.False);
+            Assert.That(GameObject.Find("MortarShell"), Is.Null, "떨어진 탄은 사라진다");
+            Assert.That(GameObject.Find("MortarMarker"), Is.Null, "떨어진 자리의 표시도 사라진다");
         }
 
         [UnityTest]
@@ -136,6 +148,7 @@ namespace WordVenture.Tests
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
             Assert.That((float)Property(mortar, "MarkerX"), Is.EqualTo(Player.transform.position.x).Within(0.01f));
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
+            yield return new WaitForSeconds(0.8f);
             Assert.That(PlayerHp, Is.EqualTo(hp - 10));
         }
 
@@ -173,15 +186,24 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 반응이_없는_공격을_받아도_돌진_예고가_보인다()
+        public IEnumerator 돌진_예고는_글자_없이_뒤로_물러나_웅크리는_프레임으로_보인다()
         {
             Component charger = CreateEnemy("ChargeSlime", 0f, 100, 10, "Rock");
             yield return null;
             Call(charger, "PlayTurnAction", 3f);
-            // 아군 슬라임의 바위 공격은 속성 반응 글자를 남기지 않는다.
+            // 피격 애니메이션이 끝난 뒤에도 대기 대신 예고 프레임으로 돌아와야 한다.
             Call(charger, "TakeSpellHit", Magic("Rock"), Magic("Spawn"), 4f, 1f);
-            object label = Runtime("Combat.Enemies.Enemy").GetField("statusText", AnyInstance).GetValue(charger);
-            Assert.That(label.GetType().GetProperty("text").GetValue(label), Is.EqualTo("돌진 준비"));
+            yield return new WaitForSeconds(0.6f);
+
+            string frame = charger.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.EqualTo("ChargeSlime_09").Or.EqualTo("ChargeSlime_10"));
+            Assert.That(charger.transform.position.x, Is.GreaterThan(0.3f), "아군 반대쪽으로 물러난다");
+            Assert.That(charger.GetComponentsInChildren<Transform>().Any(t => t.name == "ElementalStatusText"), Is.False);
+
+            Call(charger, "PlayTurnAction", 3f);
+            yield return new WaitForSeconds(0.6f);
+            frame = charger.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.Not.EqualTo("ChargeSlime_09").And.Not.EqualTo("ChargeSlime_10"), "돌진한 뒤에는 예고 프레임을 멈춘다");
         }
 
         [UnityTest]
@@ -196,6 +218,25 @@ namespace WordVenture.Tests
             Call(exposed, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 20f, 1f);
             Assert.That(EnemyHp(guarded), Is.EqualTo(90));
             Assert.That(EnemyHp(exposed), Is.EqualTo(80));
+            Assert.That(LastBurst(guarded), Is.EqualTo("Guard"), "방패 보호는 글자 대신 효과로 보인다");
+            Assert.That(LastBurst(exposed), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator 원소_반응은_글자_대신_몸_위의_효과로_보인다()
+        {
+            Component enemy = CreateEnemy("MortarSlime", 3f, 100, 10, "Rock");
+            yield return null;
+            Call(enemy, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 10f, 1f);
+            Assert.That(LastBurst(enemy), Is.Null, "화상만 걸면 반응이 아니다");
+
+            Call(enemy, "TakeSpellHit", Magic("Lightning"), Magic("Shoot"), 10f, 1f);
+            Assert.That(LastBurst(enemy), Is.EqualTo("Overload"));
+            yield return null;
+            var burst = enemy.transform.Find("ReactionBurst").GetComponent<SpriteRenderer>();
+            Assert.That(burst.enabled, Is.True, "효과가 재생 중이다");
+            yield return new WaitForSeconds(0.6f);
+            Assert.That(burst.enabled, Is.False, "한 번 재생하고 사라진다");
         }
     }
 }

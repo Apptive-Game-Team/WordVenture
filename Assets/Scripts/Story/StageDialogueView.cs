@@ -83,7 +83,7 @@ namespace Story
             // 대화 중 클릭이 뒤의 맵이나 전투로 전달되지 않게 막는다.
             shade.raycastTarget = true;
             Label("ChapterTitle", transform, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f),
-                chapter.title, data.font, 38, new Color(1f, 0.88f, 0.63f));
+                Localization.Translate(chapter.title), data.font, 38, new Color(1f, 0.88f, 0.63f));
 
             var window = new GameObject("ChatWindow", typeof(RectTransform));
             window.transform.SetParent(transform, false);
