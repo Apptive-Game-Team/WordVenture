@@ -60,7 +60,13 @@ namespace Scenes
             {
                 if (Input.anyKeyDown)
                 {
-                    if (!flag)
+                    // 새 카드를 주지 않는 스테이지(2부 등)에서는 "New Card" 안내 없이 바로 맵으로 간다.
+                    if (!flag && !HasCardReward())
+                    {
+                        leaving = true;
+                        SceneManager.LoadScene("MapScene");
+                    }
+                    else if (!flag)
                     {
                         text.SetActive(true);
                         ShowGettedCard();
@@ -103,6 +109,13 @@ namespace Scenes
                 yield break;
             }
             talking = false;
+        }
+
+        // 새 카드는 1부 스테이지 0~3을 처음 클리어했을 때만 준다. ShowGettedCard의 switch와 같은 조건이다.
+        bool HasCardReward()
+        {
+            int stageID = StageDataSingleton.Instance.stagePosition;
+            return MapMove.StagePosition - 1 == stageID && stageID >= 0 && stageID <= 3;
         }
 
         void ShowGettedCard()

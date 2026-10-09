@@ -37,17 +37,24 @@ namespace Story
         public Sprite background;
         public StageDialogueLine[] lines;
 
-        // 읽음 기록 비트: 클리어 0~4, 입장 5~9, wave 10~29. 기존 세이브의 클리어 비트를 유지한다.
+        // 읽음 기록 비트: 장마다 클리어 0~4, 입장 5~9, wave 10~29. 기존 세이브의 1부 비트를 유지한다.
+        // 2부(스테이지 5~9)는 같은 배치에 ActTwoBitOffset을 더한다. SaveLoadController가 이 비트를
+        // 2부 전용 저장 키에 기록한다.
+        public const int StagesPerAct = 5;
+        public const int ActTwoBitOffset = 32;
+
         public int SeenBit
         {
             get
             {
-                if (stageID < 0 || stageID >= 5) return -1;
+                if (stageID < 0 || stageID >= StagesPerAct * 2) return -1;
+                int stageInAct = stageID % StagesPerAct;
+                int actOffset = stageID < StagesPerAct ? 0 : ActTwoBitOffset;
                 switch (moment)
                 {
-                    case StageDialogueMoment.Clear: return stageID;
-                    case StageDialogueMoment.Enter: return 5 + stageID;
-                    default: return wave >= 0 && wave < 4 ? 10 + stageID * 4 + wave : -1;
+                    case StageDialogueMoment.Clear: return actOffset + stageInAct;
+                    case StageDialogueMoment.Enter: return actOffset + 5 + stageInAct;
+                    default: return wave >= 0 && wave < 4 ? actOffset + 10 + stageInAct * 4 + wave : -1;
                 }
             }
         }

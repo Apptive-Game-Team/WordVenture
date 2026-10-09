@@ -299,6 +299,15 @@ namespace Cards
                     wordSo.words[7].percent = 3;
                     break;
                 default:
+                    // 스테이지 5 이후는 스테이지 4와 같은 비율을 쓴다.
+                    wordSo.words[0].percent = 5;
+                    wordSo.words[1].percent = 5;
+                    wordSo.words[2].percent = 5;
+                    wordSo.words[3].percent = 3;
+                    wordSo.words[4].percent = 3;
+                    wordSo.words[5].percent = 3;
+                    wordSo.words[6].percent = 3;
+                    wordSo.words[7].percent = 3;
                     break;
             }
 
