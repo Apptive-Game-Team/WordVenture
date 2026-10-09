@@ -332,7 +332,7 @@ MonoBehaviour:
       text: "동쪽 잿빛 유적에서 마력이 새어 나온다는 소문이 있어요. 옛날에 마법 연구소가 있던 곳이에요."
     - wordSpeaking: 1
       narration: 0
-      text: "할아버지 기록에도 나온 곳이에요. 가 볼게요."
+      text: "얼음도 번개도 같은 마력 때문일지 몰라요. 가 볼게요."
   - stageID: 7
     moment: 1
     wave: 0
@@ -373,7 +373,7 @@ MonoBehaviour:
   - stageID: 7
     moment: 0
     wave: 0
-    title: "잿빛 유적 · 할아버지의 글씨"
+    title: "잿빛 유적 · 세계수로 모이는 마력"
     speakerName: "유적 연구자"
     speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
     background: {fileID: 21300000, guid: 1752d590c3284f99a5dd8af780317c0f, type: 3}
@@ -383,13 +383,13 @@ MonoBehaviour:
       text: "찾았군요! 이 기록이에요. 세계수 뿌리 아래로 마력이 계속 모이고 있었어요."
     - wordSpeaking: 1
       narration: 0
-      text: "여기 이 글씨… 할아버지 글씨예요. 할아버지도 이 일을 알고 계셨어요."
+      text: "서리 마을의 얼음도, 협곡의 번개도 세계수에서 넘친 마력이었군요."
     - wordSpeaking: 0
       narration: 0
       text: "세계수로 가려면 숲을 지나야 해요. 그런데 지금 숲은 사람이 다닐 수 있는 곳이 아니에요."
     - wordSpeaking: 1
       narration: 0
-      text: "그래도 갈게요. 할아버지가 끝내지 못한 일이니까요."
+      text: "그래도 갈게요. 숲에도 아직 빠져나오지 못한 사람들이 있을 거예요."
   - stageID: 8
     moment: 1
     wave: 0
@@ -457,7 +457,7 @@ MonoBehaviour:
       text: "세계수 뿌리 아래, 넘쳐흐른 마력이 하나로 뭉쳐 형체를 이루고 있었다."
     - wordSpeaking: 1
       narration: 0
-      text: "할아버지 기록에 있던 마력의 폭주… 이게 여러 지역의 마법을 어지럽힌 원인이었구나."
+      text: "유적에서 본 기록대로야… 이게 여러 지역의 마법을 어지럽힌 원인이었구나."
     - wordSpeaking: 1
       narration: 0
       text: "슬라임들이 사람을 덮치기 시작한 것도 이 마력 때문이었어."

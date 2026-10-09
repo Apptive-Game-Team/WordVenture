@@ -126,6 +126,12 @@
     {"ko": "정진욱  <size=30>디자이너 / 개발자</size>", "en": "정진욱  <size=30>Designer / Developer</size>"},
     {"ko": "황인섭  <size=30>개발자</size>", "en": "황인섭  <size=30>Developer</size>"},
     {"ko": "이 게임에는 AI로 생성된 아트가 사용되었습니다.", "en": "This game uses AI-generated art."},
-    {"ko": "닫기", "en": "Close"}
+    {"ko": "닫기", "en": "Close"},
+    {"ko": "얼음도 번개도 같은 마력 때문일지 몰라요. 가 볼게요.", "en": "The ice and the lightning might come from the same magic. I'll go and see."},
+    {"ko": "잿빛 유적 · 세계수로 모이는 마력", "en": "Ashen Ruins - Magic Gathering at the World Tree"},
+    {"ko": "서리 마을의 얼음도, 협곡의 번개도 세계수에서 넘친 마력이었군요.", "en": "So the ice in Frost Village and the lightning in the canyon both came from magic overflowing from the World Tree."},
+    {"ko": "그래도 갈게요. 숲에도 아직 빠져나오지 못한 사람들이 있을 거예요.", "en": "I'm still going. There must be people who haven't made it out of the forest yet."},
+    {"ko": "유적에서 본 기록대로야… 이게 여러 지역의 마법을 어지럽힌 원인이었구나.", "en": "Just like the record in the ruins said... So this is what threw the magic of every region into chaos."},
+    {"ko": "숲을 떠났던 사람들은 마을로 돌아가 다시 등불을 켰고, 유적의 연구자는 세계수 곁에 머물며 연구를 이어 갔다.", "en": "The people who had fled the forest returned to their villages and lit their lamps again, and the researcher from the ruins stayed by the World Tree to carry on the research."}
   ]
 }
