@@ -194,6 +194,7 @@ namespace WordVenture.Tests
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
             Assert.That(Property(boss, "HasMarker"), Is.True);
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            yield return new WaitForSeconds(0.8f);
             Assert.That(PlayerHp, Is.EqualTo(hp - 12), "아군이 없으면 포격은 워드에게 떨어진다");
 
             Call(boss, "TakeHit", 60);

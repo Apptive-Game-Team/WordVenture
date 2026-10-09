@@ -121,9 +121,15 @@ namespace WordVenture.Tests
             Assert.That(AllyHp(rear), Is.EqualTo(8), "표시한 턴에는 맞히지 않는다");
 
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
+            Assert.That(GameObject.Find("MortarShell"), Is.Not.Null, "쏜 턴에는 탄이 날아간다");
+            Assert.That(AllyHp(rear), Is.EqualTo(8), "탄이 떨어지기 전에는 맞히지 않는다");
+            Assert.That(Property(mortar, "HasMarker"), Is.False);
+
+            yield return new WaitForSeconds(0.8f);
             Assert.That(AllyHp(rear), Is.EqualTo(0));
             Assert.That(AllyHp(front), Is.EqualTo(8), "앞줄 슬라임은 곡사 탄을 막지 못한다");
-            Assert.That(Property(mortar, "HasMarker"), Is.False);
+            Assert.That(GameObject.Find("MortarShell"), Is.Null, "떨어진 탄은 사라진다");
+            Assert.That(GameObject.Find("MortarMarker"), Is.Null, "떨어진 자리의 표시도 사라진다");
         }
 
         [UnityTest]
@@ -136,6 +142,7 @@ namespace WordVenture.Tests
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
             Assert.That((float)Property(mortar, "MarkerX"), Is.EqualTo(Player.transform.position.x).Within(0.01f));
             Call(mortar, "PlayTurnAction", FrontLineDistance(mortar));
+            yield return new WaitForSeconds(0.8f);
             Assert.That(PlayerHp, Is.EqualTo(hp - 10));
         }
 

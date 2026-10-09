@@ -10,11 +10,12 @@ namespace Combat.Enemies
         const float SummonOffset = 1.2f;
 
         [SerializeField] Sprite markerSprite;
+        [SerializeField] Sprite shellSprite;
         [SerializeField] int splitEnemyId;
         MortarStrike strike;
         bool summoned;
 
-        MortarStrike Strike => strike ??= new MortarStrike(markerSprite);
+        MortarStrike Strike => strike ??= new MortarStrike(markerSprite, shellSprite);
         public bool HasMarker => Strike.IsAimed;
         public bool HasSummoned => summoned;
 
@@ -38,7 +39,7 @@ namespace Combat.Enemies
             }
 
             Animator.RangeAttack();
-            Strike.Fire(AttackDamage);
+            Strike.Fire(transform.position, AttackDamage);
             SetIntent(string.Empty);
         }
 
