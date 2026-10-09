@@ -106,7 +106,7 @@ namespace Map
         void ShowChapterSwitchLabel()
         {
             if (chapterSwitchLabel == null) return;
-            chapterSwitchLabel.text = chapter != null ? "1부 맵으로 (Tab)" : "2부 맵으로 (Tab)";
+            chapterSwitchLabel.text = Localization.Translate(chapter != null ? "1부 맵으로 (Tab)" : "2부 맵으로 (Tab)");
         }
 
         void SwitchChapter()
