@@ -10,6 +10,18 @@ namespace Core
         public const string TutorialEndedKey = "TutorialEnded";
         public const string StageDialogueSeenKey = "ActOneDialogueSeen";
         public const string ActTwoDialogueSeenKey = "ActTwoDialogueSeen";
+        public const string ShowsActOneMapKey = "ShowsActOneMap";
+
+        // 1부를 끝낸 뒤 맵에서 마지막으로 1부 맵을 보고 있었는지. 전투를 마치고 돌아왔을 때 같은 장을 연다.
+        public static bool ShowsActOneMap
+        {
+            get => PlayerPrefs.GetInt(ShowsActOneMapKey, 0) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(ShowsActOneMapKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
 
         // seenBit 는 StageDialogueChapter.SeenBit 이다. PlayerPrefs의 int 하나는 31비트까지 쓰므로
         // 1부 비트(0~29)와 2부 비트(32~61)를 다른 키에 기록한다.
@@ -108,6 +120,7 @@ namespace Core
             PlayerPrefs.DeleteKey(TutorialEndedKey);
             PlayerPrefs.DeleteKey(StageDialogueSeenKey);
             PlayerPrefs.DeleteKey(ActTwoDialogueSeenKey);
+            PlayerPrefs.DeleteKey(ShowsActOneMapKey);
             PlayerPrefs.Save();
         }
     }
