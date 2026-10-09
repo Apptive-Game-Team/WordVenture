@@ -73,6 +73,10 @@ namespace Story
             {
                 Image backdrop = DialogueWindowPresentation.Picture("Backdrop", transform, Vector2.zero, Vector2.one, Color.white);
                 backdrop.sprite = chapter.background;
+                // 2:1 전투 배경을 화면 비율로 늘리면 픽셀이 세로로 길어진다. 비율을 지킨 채 화면을 덮고 넘치는 좌우는 잘린다.
+                var fitter = backdrop.gameObject.AddComponent<AspectRatioFitter>();
+                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio = chapter.background.rect.width / chapter.background.rect.height;
             }
             Image shade = DialogueWindowPresentation.Picture("Shade", transform, Vector2.zero, Vector2.one,
                 new Color(0.04f, 0.03f, 0.09f, 0.35f));
