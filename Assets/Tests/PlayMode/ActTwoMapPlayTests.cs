@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class ActTwoMapPlayTests
     {
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        readonly string[] keys = { "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ShowsActOneMap" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -32,6 +32,7 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             oldPosition = (int)StagePosition.GetValue(null);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.DeleteKey("ShowsActOneMap");
             yield return null;
         }
 
@@ -99,6 +100,44 @@ namespace WordVenture.Tests
             Component story = (Component)Object.FindObjectOfType(Runtime("Story.StoryController"));
             Object epilogue = AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/ActTwoEndingScript.asset");
             Assert.That(Field(story, "scriptContainer"), Is.SameAs(epilogue));
+        }
+
+        static UnityEngine.UI.Button ChapterSwitchButton => (UnityEngine.UI.Button)Field(MapMove, "chapterSwitchButton");
+        static Vector2 CharacterPosition => ((GameObject)Field(MapMove, "character")).transform.position;
+
+        [UnityTest]
+        public IEnumerator 장_전환_버튼으로_1부_맵과_2부_맵을_오가고_마지막_장을_기억한다()
+        {
+            yield return LoadMap(7);
+            Assert.That(ChapterSwitchButton.gameObject.activeInHierarchy, Is.True, "1부를 끝냈는데 장 전환 버튼이 숨겨져 있다");
+            Vector2 actOneBoss = ((Vector3[])Field(MapMove, "actOneStageLocations"))[4];
+
+            ChapterSwitchButton.onClick.Invoke();
+            yield return null;
+            var background = (GameObject)Field(MapMove, "background");
+            Assert.That(Field(MapMove, "chapter"), Is.Null);
+            Assert.That(background.GetComponent<SpriteRenderer>().sprite, Is.SameAs(Field(MapMove, "stage4")));
+            Assert.That(Vector2.Distance(CharacterPosition, actOneBoss), Is.LessThan(0.01f), "캐릭터가 1부 마왕 지점에 서지 않았다");
+            for (int i = 0; i < 5; i++) Assert.That(IsUnlocked(i), Is.True, "1부 지점 " + i + " 이(가) 잠겨 있다");
+
+            // 전투를 다녀온 것처럼 맵 씬을 다시 열면 1부 맵이 그대로 열린다.
+            yield return LoadMap(7);
+            Assert.That(Field(MapMove, "chapter"), Is.Null, "다시 연 맵이 마지막으로 본 1부 맵을 잊었다");
+
+            ChapterSwitchButton.onClick.Invoke();
+            yield return null;
+            Object chapter = AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/Map/ActTwoMap.asset");
+            var points = (Vector2[])chapter.GetType().GetField("stagePoints").GetValue(chapter);
+            Assert.That(Field(MapMove, "chapter"), Is.SameAs(chapter));
+            Assert.That(Vector2.Distance(CharacterPosition, points[2]), Is.LessThan(0.01f), "캐릭터가 잿빛 유적(7)에 서지 않았다");
+            Assert.That(PlayerPrefs.GetInt("ShowsActOneMap"), Is.EqualTo(0));
+        }
+
+        [UnityTest]
+        public IEnumerator 일부_진행_중에는_장_전환_버튼을_숨긴다()
+        {
+            yield return LoadMap(3);
+            Assert.That(ChapterSwitchButton.gameObject.activeInHierarchy, Is.False);
         }
 
         [UnityTest]

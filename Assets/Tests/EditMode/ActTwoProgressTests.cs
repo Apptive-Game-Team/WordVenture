@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -33,6 +34,65 @@ namespace WordVenture.Tests
             Assert.That(guid, Is.Not.Empty, ActTwoMapPath + " 이(가) 없다");
             Assert.That(File.ReadAllText(MapScenePath), Does.Contain("actTwoMap: {fileID: 11400000, guid: " + guid),
                 "MapMove의 actTwoMap 참조가 끊겼다");
+        }
+
+        [Test]
+        public void 맵_씬이_장_전환_버튼과_문구를_MapMove에_연결한다()
+        {
+            string scene = File.ReadAllText(MapScenePath);
+            Assert.That(scene, Does.Contain("m_Name: ChapterSwitchButton"));
+            Assert.That(scene, Does.Match(@"chapterSwitchButton: \{fileID: [1-9]"), "MapMove의 chapterSwitchButton 참조가 비었다");
+            Assert.That(scene, Does.Match(@"chapterSwitchLabel: \{fileID: [1-9]"), "MapMove의 chapterSwitchLabel 참조가 비었다");
+        }
+
+        [Test]
+        public void 마지막으로_본_1부_맵_기록이_저장되고_새_게임에서_지워진다()
+        {
+            const string key = "ShowsActOneMap";
+            bool hadKey = PlayerPrefs.HasKey(key);
+            int saved = PlayerPrefs.GetInt(key);
+            var holder = new GameObject("SaveLoadControllerTest");
+            try
+            {
+                PropertyInfo showsActOneMap = SaveType.GetProperty("ShowsActOneMap");
+                PlayerPrefs.DeleteKey(key);
+                Assert.That((bool)showsActOneMap.GetValue(null), Is.False, "기록이 없으면 2부 맵을 연다");
+
+                showsActOneMap.SetValue(null, true);
+                Assert.That((bool)showsActOneMap.GetValue(null), Is.True);
+
+                // InitPlayData는 StagePosition과 대화 기록도 지우므로 바꾸기 전 값을 되돌린다.
+                using (new PlayerPrefsSnapshot("StagePosition", "TutorialEnded", ActOneSeenKey, ActTwoSeenKey))
+                    SaveType.GetMethod("InitPlayData").Invoke(holder.AddComponent(SaveType), null);
+                Assert.That(PlayerPrefs.HasKey(key), Is.False, "새 게임을 시작해도 1부 맵 기록이 남았다");
+            }
+            finally
+            {
+                Object.DestroyImmediate(holder);
+                if (hadKey) PlayerPrefs.SetInt(key, saved); else PlayerPrefs.DeleteKey(key);
+                PlayerPrefs.Save();
+            }
+        }
+
+        // 테스트가 건드린 PlayerPrefs int 값을 Dispose 때 원래대로 되돌린다.
+        sealed class PlayerPrefsSnapshot : IDisposable
+        {
+            readonly Dictionary<string, int?> values = new Dictionary<string, int?>();
+
+            public PlayerPrefsSnapshot(params string[] keys)
+            {
+                foreach (string key in keys) values[key] = PlayerPrefs.HasKey(key) ? PlayerPrefs.GetInt(key) : (int?)null;
+            }
+
+            public void Dispose()
+            {
+                foreach (KeyValuePair<string, int?> pair in values)
+                {
+                    if (pair.Value.HasValue) PlayerPrefs.SetInt(pair.Key, pair.Value.Value);
+                    else PlayerPrefs.DeleteKey(pair.Key);
+                }
+                PlayerPrefs.Save();
+            }
         }
 
         [Test]

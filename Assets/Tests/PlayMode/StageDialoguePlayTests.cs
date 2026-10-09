@@ -69,11 +69,12 @@ namespace WordVenture.Tests
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, oldLock);
         }
 
-        static void PlayStage(int stage)
+        static void PlayStage(int stage, bool isFirstClear = true)
         {
             var singleton = Object.FindObjectOfType(Runtime("Combat.Stage.StageDataSingleton"));
             if (singleton == null) singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, stage);
+            Runtime("Combat.Stage.StageDataSingleton").GetField("isFirstClear").SetValue(singleton, isFirstClear);
         }
 
         static IEnumerator ClearStage(int stage)
@@ -82,6 +83,19 @@ namespace WordVenture.Tests
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, stage + 1);
             yield return SceneManager.LoadSceneAsync("GameClearScene");
             yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 이미_깬_마왕을_다시_깨면_엔딩_없이_클리어_화면에_남는다()
+        {
+            // 2부 진행 중(StagePosition 5)에 1부 맵에서 마왕(4)을 다시 깬 상황이다. 대화는 이미 읽었다.
+            PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
+            PlayStage(4, false);
+            Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 5);
+            yield return SceneManager.LoadSceneAsync("GameClearScene");
+            for (int i = 0; i < 10; i++) yield return null;
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"), "다시 깬 마왕전이 엔딩으로 넘어갔다");
+            Assert.That(Field(Object.FindObjectOfType(Runtime("Scenes.GameClearController")), "talking"), Is.False);
         }
 
         static IEnumerator FinishDialogue()
