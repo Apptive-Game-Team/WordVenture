@@ -77,7 +77,10 @@ namespace Combat.Enemies
             }
             else
             {
-                MapMove.StagePosition++;
+                // 처음 깰 때만 stagePosition이 StagePosition과 같다. 이미 깬 스테이지를 다시 깨면 진행도를 올리지 않는다.
+                StageDataSingleton stageData = StageDataSingleton.Instance;
+                stageData.isFirstClear = stageData.stagePosition == MapMove.StagePosition;
+                if (stageData.isFirstClear) MapMove.StagePosition++;
                 SceneManager.LoadScene("GameClearScene");
             }
         }

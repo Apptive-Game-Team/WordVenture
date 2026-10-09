@@ -104,7 +104,8 @@ namespace Scenes
             // 튜토리얼 대사 사이에도 입력 잠금이 잠깐 풀리므로 잠금 대신 튜토리얼 종료를 기다린다.
             while (TutorialController.Instance != null && !SaveLoadController.IsTutorialEnded) yield return null;
             // 장의 마지막 지역(1부 마왕, 2부 세계수)을 끝내면 엔딩으로 넘어가므로 대화창을 닫지 않고 그대로 덮어 둔다.
-            bool endsChapter = stageID == ActOneFinalStageID || stageID == ActTwoFinalStageID;
+            // 다시 깬 마지막 지역은 엔딩 없이 맵으로 돌아간다.
+            bool endsChapter = IsFirstClear && (stageID == ActOneFinalStageID || stageID == ActTwoFinalStageID);
             if (chapter != null) yield return StageDialogueView.Play(data, chapter, !endsChapter);
             if (endsChapter)
             {
@@ -115,16 +116,18 @@ namespace Scenes
             talking = false;
         }
 
+        bool IsFirstClear => StageDataSingleton.Instance.isFirstClear;
+
         // 새 카드는 1부 스테이지 0~3을 처음 클리어했을 때만 준다. ShowGettedCard의 switch와 같은 조건이다.
         bool HasCardReward()
         {
             int stageID = StageDataSingleton.Instance.stagePosition;
-            return MapMove.StagePosition - 1 == stageID && stageID >= 0 && stageID <= 3;
+            return IsFirstClear && stageID >= 0 && stageID <= 3;
         }
 
         void ShowGettedCard()
         {
-            if (MapMove.StagePosition - 1 == StageDataSingleton.Instance.stagePosition)
+            if (IsFirstClear)
             {
                 switch (StageDataSingleton.Instance.stagePosition)
                 {
