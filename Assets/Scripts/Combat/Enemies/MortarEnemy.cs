@@ -19,13 +19,11 @@ namespace Combat.Enemies
             if (!Strike.IsAimed)
             {
                 Strike.Aim();
-                SetIntent("포격 조준");
                 return;
             }
 
             Animator.RangeAttack();
             Strike.Fire(transform.position, AttackDamage);
-            SetIntent(string.Empty);
         }
 
         void OnDisable()

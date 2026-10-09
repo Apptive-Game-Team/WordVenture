@@ -180,15 +180,24 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 반응이_없는_공격을_받아도_돌진_예고가_보인다()
+        public IEnumerator 돌진_예고는_글자_없이_뒤로_물러나_웅크리는_프레임으로_보인다()
         {
             Component charger = CreateEnemy("ChargeSlime", 0f, 100, 10, "Rock");
             yield return null;
             Call(charger, "PlayTurnAction", 3f);
-            // 아군 슬라임의 바위 공격은 속성 반응 글자를 남기지 않는다.
+            // 피격 애니메이션이 끝난 뒤에도 대기 대신 예고 프레임으로 돌아와야 한다.
             Call(charger, "TakeSpellHit", Magic("Rock"), Magic("Spawn"), 4f, 1f);
-            object label = Runtime("Combat.Enemies.Enemy").GetField("statusText", AnyInstance).GetValue(charger);
-            Assert.That(label.GetType().GetProperty("text").GetValue(label), Is.EqualTo("돌진 준비"));
+            yield return new WaitForSeconds(0.6f);
+
+            string frame = charger.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.EqualTo("ChargeSlime_09").Or.EqualTo("ChargeSlime_10"));
+            Assert.That(charger.transform.position.x, Is.GreaterThan(0.3f), "아군 반대쪽으로 물러난다");
+            Assert.That(charger.GetComponentsInChildren<Transform>().Any(t => t.name == "ElementalStatusText"), Is.False);
+
+            Call(charger, "PlayTurnAction", 3f);
+            yield return new WaitForSeconds(0.6f);
+            frame = charger.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.Not.EqualTo("ChargeSlime_09").And.Not.EqualTo("ChargeSlime_10"), "돌진한 뒤에는 예고 프레임을 멈춘다");
         }
 
         [UnityTest]

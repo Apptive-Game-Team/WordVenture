@@ -138,6 +138,9 @@ namespace WordVenture.Tests
             Call(bomber, "PlayTurnAction", FrontLineDistance(bomber));
             Assert.That(Property(bomber, "IsPrimed"), Is.True);
             Assert.That(AllyHp(front), Is.EqualTo(8), "예고한 턴에는 터지지 않는다");
+            yield return null;
+            string frame = bomber.GetComponent<SpriteRenderer>().sprite.name;
+            Assert.That(frame, Is.EqualTo("ExplodeSlime_09").Or.EqualTo("ExplodeSlime_10"), "예고하는 동안 예고 프레임을 보여 준다");
 
             Call(bomber, "PlayTurnAction", FrontLineDistance(bomber));
             Assert.That(AllyHp(front), Is.EqualTo(0));
