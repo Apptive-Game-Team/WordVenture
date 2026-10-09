@@ -50,7 +50,7 @@ namespace WordVenture.Tests
             Assert.That(spawn.FindPropertyRelative("tag").stringValue, Is.EqualTo("Spell"),
                 "Spawn은 주문 칸에 올라가야 한다");
             Assert.That(spawn.FindPropertyRelative("percent").intValue, Is.EqualTo(0),
-                "1부 손패에 Spawn이 섞이면 안 된다. 출현 확률은 CardManager가 스테이지 5부터 올린다");
+                "1부 손패에 Spawn이 섞이면 안 된다. 출현 확률은 CardManager가 스테이지 5 클리어 후 스테이지 6부터 올린다");
         }
 
         [Test]

@@ -1,4 +1,5 @@
 using Cards;
+using System;
 using System.Collections;
 using Combat.Stage;
 using Core;
@@ -25,6 +26,7 @@ namespace Scenes
         [SerializeField] GameObject anyKeyPrompt;
 
         const int ActOneFinalStageID = 4;
+        const int SpawnRewardStageID = 5;
         const int ActTwoFinalStageID = 9;
 
         bool flag = false;
@@ -63,7 +65,7 @@ namespace Scenes
             {
                 if (Input.anyKeyDown)
                 {
-                    // 새 카드를 주지 않는 스테이지(2부 등)에서는 "New Card" 안내 없이 바로 맵으로 간다.
+                    // 새 카드를 주지 않는 스테이지(2부 스테이지 5 제외)에서는 "New Card" 안내 없이 바로 맵으로 간다.
                     if (!flag && !HasCardReward())
                     {
                         leaving = true;
@@ -118,11 +120,11 @@ namespace Scenes
 
         bool IsFirstClear => StageDataSingleton.Instance.isFirstClear;
 
-        // 새 카드는 1부 스테이지 0~3을 처음 클리어했을 때만 준다. ShowGettedCard의 switch와 같은 조건이다.
+        // 새 카드는 1부 스테이지 0~3과 2부 스테이지 5를 처음 클리어했을 때 준다. ShowGettedCard의 switch와 같은 조건이다.
         bool HasCardReward()
         {
             int stageID = StageDataSingleton.Instance.stagePosition;
-            return IsFirstClear && stageID >= 0 && stageID <= 3;
+            return IsFirstClear && stageID >= 0 && (stageID <= 3 || stageID == SpawnRewardStageID);
         }
 
         void ShowGettedCard()
@@ -157,6 +159,12 @@ namespace Scenes
                         GameObject card8 = Instantiate(magicCard, new Vector3(2, 0, 0), Quaternion.identity);
                         card8.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[6].name);
                         card8.GetComponent<Order>().SetOrder(0);
+                        break;
+                    case SpawnRewardStageID:
+                        Word spawnWord = Array.Find(wordSo.words, word => word.magicType == MagicType.Spawn);
+                        GameObject spawnCard = Instantiate(spellCard, new Vector3(0, 0, 0), Quaternion.identity);
+                        spawnCard.GetComponentInChildren<TMP_Text>().SetText(spawnWord.name);
+                        spawnCard.GetComponent<Order>().SetOrder(0);
                         break;
                 }
             }
