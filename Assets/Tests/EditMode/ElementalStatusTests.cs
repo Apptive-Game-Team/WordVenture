@@ -170,6 +170,18 @@ namespace WordVenture.Tests
         }
 
         [Test]
+        public void 타격_결과는_실제로_쓴_상성을_담는다()
+        {
+            Assert.That(Field<float>(Hit(State(), "Holy", affinity: 1.5f), "Affinity"), Is.EqualTo(1.5f));
+            Assert.That(Field<float>(Hit(State(), "Holy", affinity: -1f), "Affinity"), Is.EqualTo(-1f));
+            object s = State(); Hit(s, "Rock");
+            Assert.That(Field<float>(Hit(s, "Holy", affinity: 0.7f), "Affinity"), Is.EqualTo(1f), "균열은 저항을 지운다");
+            object rock = State("Rock"); Hit(rock, "Rock");
+            Assert.That(Field<float>(Hit(rock, "Holy", affinity: 0.5f), "Affinity"), Is.EqualTo(0.75f).Within(0.0001f),
+                "바위 적은 균열로 저항이 절반만 해제된다");
+        }
+
+        [Test]
         public void 사용하지_않은_상태도_두_적_턴_후_만료한다()
         {
             object s = State(); Hit(s, "Ice"); Hit(s, "Lightning"); Hit(s, "Rock");

@@ -75,6 +75,8 @@ namespace Combat.Enemies
         protected int AttackDamage => Status.GetAttackDamage(Damage);
         SpriteRenderer bodyRenderer;
         ReactionBurstVfx reactionBurst;
+        HitFlashVfx hitFlash;
+        AffinityMarkVfx affinityMark;
         Color originalBodyColor;
         bool tookTurn;
 
@@ -151,8 +153,20 @@ namespace Combat.Enemies
             // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
             if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
             else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
+            HitStrength strength = HitImpact.Classify(hit.Affinity, !string.IsNullOrEmpty(hit.Reaction));
+            if (strength != HitStrength.None) PlayHitImpact(strength, hit.Affinity);
             TakeHit(damage);
             UpdateStatusIndicator();
+        }
+
+        // 주문과 아군 슬라임의 직접 타격에만 쓴다. 화상, Kill(), Heal()은 타격 효과를 내지 않는다.
+        void PlayHitImpact(HitStrength strength, float affinity)
+        {
+            hitFlash.Play(strength);
+            // 원소 반응도 상성 표시는 따로 보여 준다. 상성이 정확히 1이면 표시하지 않는다.
+            if (affinity > 1f) affinityMark.Play(AffinityMarkVfx.Mark.Weak);
+            else if (affinity < 1f) affinityMark.Play(AffinityMarkVfx.Mark.Resisted);
+            HitImpact.Play(strength);
         }
 
         public void EndTurnStatuses()
@@ -216,6 +230,10 @@ namespace Combat.Enemies
             gameObject.AddComponent<ElementalStatusVfx>().Initialize(this, bodyRenderer);
             reactionBurst = gameObject.AddComponent<ReactionBurstVfx>();
             reactionBurst.Initialize(bodyRenderer);
+            hitFlash = gameObject.AddComponent<HitFlashVfx>();
+            hitFlash.Initialize(bodyRenderer);
+            affinityMark = gameObject.AddComponent<AffinityMarkVfx>();
+            affinityMark.Initialize(bodyRenderer);
         }
 
         protected virtual void Start()
