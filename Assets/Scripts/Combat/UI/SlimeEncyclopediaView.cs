@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Cards;
 using Combat.Enemies;
+using Combat.Stage;
 using Core;
 using Story;
 using TMPro;
@@ -71,6 +72,34 @@ namespace Combat.UI
             rect.sizeDelta = new Vector2(400, 90);
             button.onClick.AddListener(open);
             return button;
+        }
+
+        // 도감 기록을 넣기 전에 진행한 세이브도 채우도록, 이미 깬 스테이지(stageID < stagePosition)의 적을 기록한다.
+        // 스테이지를 깼다면 모든 웨이브의 적과, 그 적이 웨이브 도중에 부른 적을 만났다. 이미 기록한 적은 다시 저장하지 않는다.
+        public static void RecordClearedStages(IEnumerable<StageData> stages, EnemyDataContainer enemies, int stagePosition)
+        {
+            if (stages == null || enemies == null) return;
+            var pending = new Stack<int>();
+            foreach (StageData stage in stages)
+            {
+                if (stage == null || stage.stageID >= stagePosition || stage.waveData?.enemyWaves == null
+                    || stage.waveData.enemyWaves.Length == 0 || stage.waveData.enemyWaves[0] == null) continue;
+                // StageManager 는 enemyWaves[0] 만 전투에 쓴다.
+                foreach (BattleWaveData wave in stage.waveData.enemyWaves[0].GetBattleWaveDatas())
+                    foreach (EnemySpawnData spawn in wave.enemySpawnDatasInWave)
+                        pending.Push(spawn.enemyId);
+            }
+
+            var recorded = new HashSet<int>();
+            while (pending.Count > 0)
+            {
+                int id = pending.Pop();
+                if (id < 0 || id >= enemies.GetGearNum() || !recorded.Add(id)) continue;
+                SaveLoadController.MarkSlimeSeen(id);
+                GameObject prefab = enemies.GetGearData(id).prefab;
+                Enemy enemy = prefab != null ? prefab.GetComponent<Enemy>() : null;
+                if (enemy != null) pending.Push(enemy.SummonedEnemyId);
+            }
         }
 
         public void Close() => Destroy(gameObject);

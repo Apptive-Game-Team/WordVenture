@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class ActTwoMapPlayTests
     {
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ShowsActOneMap" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ShowsActOneMap", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;

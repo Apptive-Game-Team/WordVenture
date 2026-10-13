@@ -95,15 +95,35 @@ namespace WordVenture.Tests
             Object.Destroy(saveObject.gameObject);
         }
 
+        static IEnumerator LoadMap(int stagePosition)
+        {
+            StagePosition.SetValue(null, stagePosition);
+            PlayerPrefs.SetInt("StagePosition", stagePosition);
+            yield return SceneManager.LoadSceneAsync("MapScene");
+            yield return null;
+            yield return null;
+        }
+
+        // 도감 기록 전의 세이브: 기록은 비어 있고 StagePosition 8 은 스테이지 0~7 을 깼다는 뜻이다.
+        [UnityTest]
+        public IEnumerator 기존_세이브로_맵을_열면_깬_스테이지의_적과_그_적이_부른_적이_기록된다()
+        {
+            yield return LoadMap(8);
+
+            int[] cleared = { 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
+            foreach (int id in cleared) Assert.That(HasSeen(id), Is.True, "깬 스테이지의 적 " + id + " 이(가) 기록되지 않았다");
+            Assert.That(HasSeen(25), Is.True, "잿빛 유적의 분열 슬라임이 나누어진 작은 분열 슬라임이 기록되지 않았다");
+            // 2 는 어느 스테이지에도 없고, 26~29 는 아직 깨지 않은 뒤틀린 숲(8)과 세계수의 심장(9)에만 나온다.
+            foreach (int id in new[] { 2, 26, 27, 28, 29 })
+                Assert.That(HasSeen(id), Is.False, "만나지 않은 적 " + id + " 이(가) 기록되었다");
+        }
+
         [UnityTest]
         public IEnumerator 맵에서_연_도감은_만난_슬라임만_이름을_보여_주고_닫으면_맵_입력이_돌아온다()
         {
             Save.GetMethod("MarkSlimeSeen").Invoke(null, new object[] { 6 });
-            StagePosition.SetValue(null, 1);
-            PlayerPrefs.SetInt("StagePosition", 1);
-            yield return SceneManager.LoadSceneAsync("MapScene");
-            yield return null;
-            yield return null;
+            // 아직 깬 스테이지가 없어 맵이 다른 적을 기록하지 않는다.
+            yield return LoadMap(0);
 
             var button = GameObject.Find("SlimeEncyclopediaButton").GetComponentInChildren<Button>();
             button.onClick.Invoke();
