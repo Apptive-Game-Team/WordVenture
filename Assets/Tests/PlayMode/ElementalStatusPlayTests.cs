@@ -88,7 +88,8 @@ namespace WordVenture.Tests
             float start = enemy.transform.position.x;
             Call(enemy, "PlayTurnAction", 100f);
             yield return new WaitForSeconds(1.1f);
-            Assert.That(enemy.transform.position.x, Is.EqualTo(start));
+            // 피격 넉백은 더한 만큼 빼서 되돌리므로 float 오차만 남는다.
+            Assert.That(enemy.transform.position.x, Is.EqualTo(start).Within(0.001f));
             Call(enemy, "EndTurnStatuses");
             Assert.That(Status.GetType().GetProperty("Frozen").GetValue(Status), Is.False);
             Call(enemy, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 10f, 1f);

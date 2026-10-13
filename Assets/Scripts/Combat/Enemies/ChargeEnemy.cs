@@ -19,6 +19,8 @@ namespace Combat.Enemies
         bool charging;
         WindupMotion windup;
 
+        public override string AttackDescription => "거리 6 안에 들어오면 한 턴 동안 웅크리고, 다음 턴에 맨 앞까지 돌진해 들이받는다. 아군 슬라임이 막으면 2배 피해를 준다.";
+
         public bool IsCharging => charging;
 
         protected override void TakeTurnAction(float distanceToFrontLine)

@@ -10,6 +10,8 @@ namespace Combat.Enemies
     {
         [SerializeField] public int id;
         [SerializeField] public string name;
+        // 도감에 보이는 한국어 이름. 비워 두면 도감에 싣지 않는다.
+        [SerializeField] public string displayName;
         [SerializeField] public GameObject prefab;
         [SerializeField] public int maxHp;
         [SerializeField] public float moveDistance;
@@ -34,6 +36,8 @@ namespace Combat.Enemies
 
             return enemyDatas[n];
         }
+
+        public IReadOnlyList<EnemyData> All => enemyDatas;
 
         public int GetGearNum()
         {

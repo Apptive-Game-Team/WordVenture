@@ -15,7 +15,7 @@ namespace WordVenture.Tests
 {
     public sealed class SharedDialoguePlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "Language" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "Language", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;

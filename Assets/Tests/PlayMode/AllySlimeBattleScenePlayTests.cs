@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class AllySlimeBattleScenePlayTests
     {
         const int Stage = 1;
-        readonly string[] keys = { "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;
