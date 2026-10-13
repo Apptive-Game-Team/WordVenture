@@ -42,6 +42,7 @@ namespace Combat.UI
         int openedFrame;
         bool ownsLock;
 
+        const string WoodButtonPath = "UI/WoodButtonSmall";
         static TMP_FontAsset Font => Resources.Load<DialogueWindowStyle>("Story/DialogueWindowStyle").font;
         static string T(string korean) => Localization.Translate(korean);
 
@@ -351,18 +352,15 @@ namespace Combat.UI
             obj.AddComponent<GraphicRaycaster>();
         }
 
+        // 밝은 나무색 버튼 모양(스프라이트, 상태별 스프라이트, 라벨)은 Resources 의 template prefab 에 둔다.
         static Button WoodButton(Transform parent, string text, int size)
         {
-            Image frame = DialogueWindowPresentation.Picture("Button", parent, Vector2.zero, Vector2.one, UiPalette.Border);
-            frame.raycastTarget = true;
-            Image inner = DialogueWindowPresentation.Picture("Background", frame.transform, Vector2.zero, Vector2.one, UiPalette.Panel);
-            Inset(inner.rectTransform, 6);
-            Label("Label", frame.transform, Vector2.zero, Vector2.one, text, size, UiPalette.Text).alignment = TextAlignmentOptions.Center;
-            var button = frame.gameObject.AddComponent<Button>();
-            button.targetGraphic = frame;
-            ColorBlock colors = button.colors;
-            colors.highlightedColor = new Color(1f, 0.92f, 0.7f);
-            button.colors = colors;
+            Button button = Instantiate(Resources.Load<Button>(WoodButtonPath), parent, false);
+            button.name = "Button";
+            Place((RectTransform)button.transform, Vector2.zero, Vector2.one);
+            TMP_Text label = button.GetComponentInChildren<TMP_Text>();
+            label.text = text;
+            label.fontSize = size;
             return button;
         }
 

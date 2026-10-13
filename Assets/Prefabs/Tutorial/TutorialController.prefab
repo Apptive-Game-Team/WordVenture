@@ -824,3 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   dragHand: {fileID: 21300000, guid: 7b7c40bd8c2342bc83172ecadf47de6b, type: 3}
+  buttonSprite: {fileID: 21300000, guid: 9c42e6cd809a48f29e5b583aa2f48f0c, type: 3}
+  buttonHoverSprite: {fileID: 21300000, guid: 7afbdf4040964b21aa8acee3f1c56cd6, type: 3}
+  buttonPressedSprite: {fileID: 21300000, guid: de7f23236cd64b818c1b5bebaae802d5, type: 3}
+  buttonDisabledSprite: {fileID: 21300000, guid: aa0a1cc20de44496aa249872488c0399, type: 3}
