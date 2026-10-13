@@ -11,6 +11,9 @@ namespace Core
         public const string StageDialogueSeenKey = "ActOneDialogueSeen";
         public const string ActTwoDialogueSeenKey = "ActTwoDialogueSeen";
         public const string ShowsActOneMapKey = "ShowsActOneMap";
+        // 도감에 기록한 적 id. int 하나에 31개씩 SeenSlimes0, SeenSlimes1 에 비트로 기록한다.
+        public const string SeenSlimesKey = "SeenSlimes";
+        const int SeenSlimeSlots = 2;
 
         // 1부를 끝낸 뒤 맵에서 마지막으로 1부 맵을 보고 있었는지. 전투를 마치고 돌아왔을 때 같은 장을 연다.
         public static bool ShowsActOneMap
@@ -43,6 +46,27 @@ namespace Core
             key = seenBit >= StageDialogueChapter.ActTwoBitOffset ? ActTwoDialogueSeenKey : StageDialogueSeenKey;
             bit = seenBit >= StageDialogueChapter.ActTwoBitOffset ? seenBit - StageDialogueChapter.ActTwoBitOffset : seenBit;
             return seenBit >= 0 && bit < 31;
+        }
+
+        public static bool HasSeenSlime(int enemyId)
+        {
+            if (!TryGetSlimeSeenSlot(enemyId, out string key, out int bit)) return false;
+            return (PlayerPrefs.GetInt(key, 0) & (1 << bit)) != 0;
+        }
+
+        // 적을 소환할 때마다 불리므로 처음 만난 적일 때만 저장한다.
+        public static void MarkSlimeSeen(int enemyId)
+        {
+            if (HasSeenSlime(enemyId) || !TryGetSlimeSeenSlot(enemyId, out string key, out int bit)) return;
+            PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key, 0) | (1 << bit));
+            PlayerPrefs.Save();
+        }
+
+        static bool TryGetSlimeSeenSlot(int enemyId, out string key, out int bit)
+        {
+            key = SeenSlimesKey + enemyId / 31;
+            bit = enemyId % 31;
+            return enemyId >= 0 && enemyId < SeenSlimeSlots * 31;
         }
 
         public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
@@ -121,6 +145,7 @@ namespace Core
             PlayerPrefs.DeleteKey(StageDialogueSeenKey);
             PlayerPrefs.DeleteKey(ActTwoDialogueSeenKey);
             PlayerPrefs.DeleteKey(ShowsActOneMapKey);
+            for (int slot = 0; slot < SeenSlimeSlots; slot++) PlayerPrefs.DeleteKey(SeenSlimesKey + slot);
             PlayerPrefs.Save();
         }
     }

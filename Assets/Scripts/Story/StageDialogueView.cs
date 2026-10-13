@@ -122,7 +122,8 @@ namespace Story
         void Update()
         {
             if (chat == null || finishing) return;
-            if (Input.anyKeyDown) Advance();
+            // 대화창이 IsLocked 를 잡고 있으므로 설정 메뉴가 열렸는지는 IsPaused 로 따로 본다.
+            if (!InteractionLock.IsPaused && Input.anyKeyDown) Advance();
         }
 
         public void Advance()

@@ -19,7 +19,7 @@ namespace WordVenture.Tests
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         const string SlimeFolder = "Assets/Prefabs/Combat/Enemies/Slime/";
         const string AffinityTablePath = "Assets/ScriptableObjects/Combat/Magic Affinity Table.asset";
-        readonly string[] keys = { "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
         readonly List<GameObject> spawned = new List<GameObject>();
         int[] values;
         bool[] existed;
