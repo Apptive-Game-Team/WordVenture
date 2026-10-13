@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -13,6 +14,7 @@ namespace Combat.Enemies
             EnemyData enemyData = enemyDataContainer.GetGearData(id);
             GameObject enemy = Instantiate(enemyData.prefab, new Vector3(positionX, -3, positionZ), Quaternion.identity);
             enemy.GetComponent<Enemy>().InitEnemyData(enemyData);
+            SaveLoadController.MarkSlimeSeen(id);
             return enemy;
         }
     }

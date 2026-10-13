@@ -9,6 +9,8 @@ namespace Combat.Enemies
 
         [SerializeField] int childEnemyId;
 
+        public override string AttackDescription => "근접 공격한다. 쓰러지면 작은 분열 슬라임 두 마리로 나뉜다.";
+
         protected override void Death()
         {
             base.Death();

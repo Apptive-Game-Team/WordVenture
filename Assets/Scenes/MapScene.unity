@@ -1223,6 +1223,8 @@ MonoBehaviour:
   actTwoMap: {fileID: 11400000, guid: 51d03030d1834c2a8c4264a657cb71c1, type: 2}
   chapterSwitchButton: {fileID: 1010000000000000065}
   chapterSwitchLabel: {fileID: 1010000000000000084}
+  enemyDataContainer: {fileID: 11400000, guid: fc3876ebab0954dc087e0a96dfa4088f, type: 2}
+  magicAffinityTable: {fileID: 11400000, guid: 4c680509e10e045f194bd24bb28698da, type: 2}
 --- !u!4 &1544275870
 Transform:
   m_ObjectHideFlags: 0

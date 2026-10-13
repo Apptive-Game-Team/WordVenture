@@ -14,6 +14,8 @@ namespace Combat.Enemies
         bool exploding;
         WindupMotion windup;
 
+        public override string AttackDescription => "맨 앞까지 다가와 한 턴 동안 심지를 태우고, 다음 턴에 터져 아군 슬라임 전체(없으면 워드)에게 피해를 준다. 터지기 전에 쓰러뜨리면 주변의 적이 피해를 받는다.";
+
         public bool IsPrimed => primed;
 
         protected override void TakeTurnAction(float distanceToFrontLine)

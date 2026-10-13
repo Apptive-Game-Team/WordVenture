@@ -16,6 +16,8 @@ namespace Combat.Enemies
         bool summoned;
 
         MortarStrike Strike => strike ??= new MortarStrike(markerSprite, shellSprite);
+        public override string AttackDescription => "곡사 슬라임처럼 표시를 놓고 다음 턴에 포탄을 쏜다. 체력이 처음 절반 아래로 떨어지면 분열 슬라임 두 마리를 부른다.";
+
         public bool HasMarker => Strike.IsAimed;
         public bool HasSummoned => summoned;
 

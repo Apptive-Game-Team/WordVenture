@@ -1,5 +1,8 @@
 using System.Collections;
+using Combat;
+using Combat.Enemies;
 using Combat.Stage;
+using Combat.UI;
 using Core;
 using DG.Tweening;
 using Story;
@@ -31,6 +34,9 @@ namespace Map
         // 1부를 끝낸 뒤에만 보이는, 1부 맵과 2부 맵을 오가는 버튼. Tab 키로도 바꾼다.
         [SerializeField] Button chapterSwitchButton;
         [SerializeField] TextMeshProUGUI chapterSwitchLabel;
+        // 슬라임 도감이 읽는 적 수치와 마법 상성. 전투 씬과 같은 에셋이다.
+        [SerializeField] EnemyDataContainer enemyDataContainer;
+        [SerializeField] MagicAffinityTable magicAffinityTable;
         const int ActOneLastStageID = 4;
         // 2부 맵에서 1부 맵으로 돌아올 때 지점을 되돌려 놓을 씬 원래 위치.
         Vector3[] actOneStageLocations;
@@ -93,6 +99,13 @@ namespace Map
         {
             InitShowBattles();
             InitChapterSwitchButton();
+            SlimeEncyclopediaView.CreateOpenButton(OpenEncyclopedia);
+        }
+
+        void OpenEncyclopedia()
+        {
+            if (enteringStage) return;
+            SlimeEncyclopediaView.Open(enemyDataContainer, magicAffinityTable);
         }
 
         void InitChapterSwitchButton()
@@ -175,6 +188,12 @@ namespace Map
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 SwitchChapter();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                OpenEncyclopedia();
                 return;
             }
 

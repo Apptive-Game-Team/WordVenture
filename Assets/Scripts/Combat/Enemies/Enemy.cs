@@ -87,6 +87,9 @@ namespace Combat.Enemies
 
         [SerializeField] private List<EnemyAction> enemyActions = new List<EnemyAction>();
 
+        // 도감에 보이는 공격 방식. 문장을 바꾸면 English.json 도 고친다.
+        public virtual string AttackDescription => "";
+
         public void InitEnemyData(EnemyData enemyData)
         {
             id = enemyData.id;

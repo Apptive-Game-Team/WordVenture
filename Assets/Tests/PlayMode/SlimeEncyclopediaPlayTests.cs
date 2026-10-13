@@ -1,0 +1,144 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
+
+namespace WordVenture.Tests
+{
+    // 전투에서 만난 슬라임을 기록하고, 맵에서 연 도감이 그 기록대로 이름을 보여 주는지 확인한다.
+    public sealed class SlimeEncyclopediaPlayTests
+    {
+        const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        readonly string[] keys =
+        {
+            "TutorialEnded", "StagePosition", "ShowsActOneMap", "ActOneDialogueSeen", "ActTwoDialogueSeen",
+            "SeenSlimes0", "SeenSlimes1", "Language"
+        };
+        int[] values;
+        bool[] existed;
+        int oldPosition;
+
+        static Type Runtime(string name) => AppDomain.CurrentDomain.GetAssemblies()
+            .Select(a => a.GetType(name)).First(t => t != null);
+        static FieldInfo StagePosition => Runtime("Map.MapMove").GetField("StagePosition");
+        static Type Save => Runtime("Core.SaveLoadController");
+        static Type View => Runtime("Combat.UI.SlimeEncyclopediaView");
+        static bool HasSeen(int id) => (bool)Save.GetMethod("HasSeenSlime").Invoke(null, new object[] { id });
+        static bool IsLocked => (bool)Runtime("Core.InteractionLock").GetProperty("IsLocked").GetValue(null);
+        static Component CurrentView => (Component)View.GetProperty("Current").GetValue(null);
+        static Object EnemyData => AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/Combat/EnemyDataContainer.asset");
+        static string Text(Transform obj)
+        {
+            Component label = obj.GetComponent(Runtime("TMPro.TMP_Text"));
+            return (string)label.GetType().GetProperty("text").GetValue(label);
+        }
+
+        [UnitySetUp]
+        public IEnumerator SetUp()
+        {
+            existed = keys.Select(PlayerPrefs.HasKey).ToArray();
+            values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
+            oldPosition = (int)StagePosition.GetValue(null);
+            PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.DeleteKey("SeenSlimes0");
+            PlayerPrefs.DeleteKey("SeenSlimes1");
+            SharedDialoguePlayTests.SetLanguage("Korean");
+            yield return null;
+        }
+
+        [UnityTearDown]
+        public IEnumerator TearDown()
+        {
+            yield return SceneManager.LoadSceneAsync("TitleScene");
+            yield return null;
+            // 테스트 에디터 종료 시 SaveLoadController가 복원한 저장값을 덮어쓰지 않게 한다.
+            Component save = Object.FindObjectOfType(Save) as Component;
+            if (save != null) Object.Destroy(save.gameObject);
+            yield return null;
+            for (int i = 0; i < keys.Length; i++)
+                if (existed[i]) PlayerPrefs.SetInt(keys[i], values[i]); else PlayerPrefs.DeleteKey(keys[i]);
+            PlayerPrefs.Save();
+            SharedDialoguePlayTests.ResetLanguage();
+            StagePosition.SetValue(null, oldPosition);
+        }
+
+        [UnityTest]
+        public IEnumerator 소환한_적은_도감에_기록되고_새_게임을_시작하면_지워진다()
+        {
+            var pool = new GameObject("Pool").AddComponent(Runtime("Combat.Enemies.EnemyPoolController"));
+            pool.GetType().GetField("enemyDataContainer", AnyInstance).SetValue(pool, EnemyData);
+            var spawn = pool.GetType().GetMethod("SpawnObject");
+            var first = (GameObject)spawn.Invoke(pool, new object[] { 3f, 0f, 3 });
+            // 31번부터는 두 번째 key 에 기록한다. 쓰지 않는 id 지만 기록 범위를 확인한다.
+            Save.GetMethod("MarkSlimeSeen").Invoke(null, new object[] { 40 });
+            yield return null;
+
+            Assert.That(HasSeen(3), Is.True, "소환한 물방울 슬라임이 기록되지 않았다");
+            Assert.That(HasSeen(4), Is.False);
+            Assert.That(HasSeen(40), Is.True);
+            Assert.That(PlayerPrefs.GetInt("SeenSlimes1"), Is.EqualTo(1 << 9));
+
+            Object.Destroy(first);
+            var saveObject = new GameObject("Save").AddComponent(Save);
+            Save.GetMethod("InitPlayData").Invoke(saveObject, null);
+            Assert.That(HasSeen(3), Is.False, "새 게임에 이전 도감 기록이 남았다");
+            Assert.That(HasSeen(40), Is.False);
+            Object.Destroy(pool.gameObject);
+            Object.Destroy(saveObject.gameObject);
+        }
+
+        [UnityTest]
+        public IEnumerator 맵에서_연_도감은_만난_슬라임만_이름을_보여_주고_닫으면_맵_입력이_돌아온다()
+        {
+            Save.GetMethod("MarkSlimeSeen").Invoke(null, new object[] { 6 });
+            StagePosition.SetValue(null, 1);
+            PlayerPrefs.SetInt("StagePosition", 1);
+            yield return SceneManager.LoadSceneAsync("MapScene");
+            yield return null;
+            yield return null;
+
+            var button = GameObject.Find("SlimeEncyclopediaButton").GetComponentInChildren<Button>();
+            button.onClick.Invoke();
+            yield return null;
+            Component view = CurrentView;
+            Assert.That(view, Is.Not.Null, "버튼을 눌렀는데 도감이 열리지 않았다");
+            Assert.That(IsLocked, Is.True, "도감이 열려 있는 동안 맵 입력을 막지 않았다");
+
+            Transform content = view.transform.Find("Window/Background/List/Content");
+            Assert.That(content.childCount, Is.EqualTo(29), "이름이 빈 S0_Boss_Slime 만 빼고 실어야 한다");
+            Assert.That(Text(content.Find("Slime6/Name")), Is.EqualTo("흙더미 슬라임"));
+            Assert.That(Text(content.Find("Slime0/Name")), Is.EqualTo("???"));
+            Assert.That(Text(view.transform.Find("Window/Background/Count")), Is.EqualTo("발견 1 / 29"));
+
+            Transform detail = view.transform.Find("Window/Background/Detail");
+            Assert.That(Text(detail.Find("Name")), Is.EqualTo("흙더미 슬라임"), "처음에 만난 슬라임을 골라 두지 않았다");
+            Assert.That(Text(detail.Find("Stats")), Is.EqualTo("체력 20\n공격력 10"));
+            Assert.That(Text(detail.Find("Movement")), Is.EqualTo("이동 거리 5\n사거리 10"));
+            string description = Text(detail.Find("Description"));
+            Assert.That(description, Does.Contain("마법 탄을 쏜다"));
+            // 바위 슬라임은 얼음 마법에 약하고 불 마법에 강하며 신성 마법에 회복된다.
+            Assert.That(description, Does.Contain("얼음</color> 1.5배"));
+            Assert.That(description, Does.Contain("불</color> 0.7배"));
+            Assert.That(description, Does.Contain("맞으면 회복: <color=#FFF4C8>신성"));
+            Assert.That(description, Does.Contain("균열이 저항을 절반만 무시한다."));
+
+            View.GetMethod("Select").Invoke(view, new object[] { 0 });
+            Assert.That(Text(detail.Find("Name")), Is.EqualTo("???"));
+            Assert.That(Text(detail.Find("Stats")), Is.Empty, "만나지 않은 슬라임의 수치가 보인다");
+
+            View.GetMethod("Close").Invoke(view, null);
+            yield return null;
+            Assert.That(CurrentView == null, Is.True);
+            Assert.That(IsLocked, Is.False, "도감을 닫았는데 맵 입력 잠금이 남았다");
+        }
+    }
+}
+#endif
