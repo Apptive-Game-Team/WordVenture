@@ -14,7 +14,7 @@ namespace WordVenture.Tests
 {
     public sealed class StageDialoguePlayTests
     {
-        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;

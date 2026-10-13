@@ -3,6 +3,8 @@ namespace Combat.Enemies
     // 움직이지 않고 매 적 턴에 가장 많이 다친 다른 적을 공격력만큼 회복한다. 공격하지 않는다.
     public class HealEnemy : Enemy
     {
+        public override string AttackDescription => "움직이지 않고 공격하지 않는다. 매 턴 가장 많이 다친 다른 적을 공격력만큼 회복한다.";
+
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
             Enemy target = FindMostWounded();

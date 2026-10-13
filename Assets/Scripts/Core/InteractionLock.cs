@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Core
 {
     /// <summary>
@@ -9,6 +11,31 @@ namespace Core
     /// </summary>
     public static class InteractionLock
     {
-        public static bool IsLocked { get; set; }
+        static bool locked;
+
+        static bool paused;
+        static int resumedFrame = -1;
+
+        /// <summary>
+        /// 설정 메뉴가 열려 있는 동안 켜진다. 튜토리얼과 대화창이 <see cref="IsLocked"/>를 풀어도
+        /// 메뉴가 닫히기 전까지는 입력이 막혀 있도록 따로 둔다.
+        ///
+        /// 메뉴를 닫은 Esc 키나 클릭도 <c>Input.anyKeyDown</c>에 잡히므로, 닫은 프레임까지는 켜진 것으로 본다.
+        /// </summary>
+        public static bool IsPaused
+        {
+            get => paused || Time.frameCount == resumedFrame;
+            set
+            {
+                if (paused && !value) resumedFrame = Time.frameCount;
+                paused = value;
+            }
+        }
+
+        public static bool IsLocked
+        {
+            get => locked || IsPaused;
+            set => locked = value;
+        }
     }
 }

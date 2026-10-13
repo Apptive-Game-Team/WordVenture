@@ -11,6 +11,8 @@ namespace Combat.Enemies
         MortarStrike strike;
 
         MortarStrike Strike => strike ??= new MortarStrike(markerSprite, shellSprite);
+        public override string AttackDescription => "움직이지 않는다. 한 턴은 맨 뒤의 아군 슬라임이나 워드 자리에 표시를 놓고, 다음 턴에 그 자리로 포탄을 쏜다.";
+
         public bool HasMarker => Strike.IsAimed;
         public float MarkerX => Strike.TargetX;
 

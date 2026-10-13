@@ -10,6 +10,9 @@ namespace Combat.Enemies
         [SerializeField] List<Sprite> sprites = new List<Sprite>();
         SpriteRenderer spriteRenderer;
 
+        // 여러 prefab 의 SpriteRenderer 에는 임시 그림이 들어 있고 실제 모습은 첫 대기 프레임이다. 도감이 이 그림을 쓴다.
+        public Sprite FirstFrame => sprites.Count > 0 ? sprites[0] : null;
+
         // Idling과 Moving은 끝없이 돌기 때문에 대기 객체를 그때그때 만들면 살아 있는
         // 적 수만큼 GC 쓰레기가 계속 쌓인다. WaitForSeconds는 남은 시간을 들고 있지
         // 않아 인스턴스를 공유해도 안전하다.

@@ -8,6 +8,8 @@ namespace Combat.Enemies
         const float GuardDistance = 2.5f;
         static readonly List<ShieldEnemy> ActiveShields = new List<ShieldEnemy>();
 
+        public override string AttackDescription => "근접 공격한다. 바로 뒤 거리 2.5 안에 선 적이 받는 주문 피해를 절반으로 줄인다.";
+
         void OnEnable() => ActiveShields.Add(this);
         void OnDisable() => ActiveShields.Remove(this);
 

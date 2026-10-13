@@ -1,0 +1,7 @@
+interface:
+  display_name: "Add Slime"
+  short_description: "Add or change a slime enemy together with its slime encyclopedia entry"
+  default_prompt: "Use $add-slime to add a new slime and update the slime encyclopedia in the same change."
+
+policy:
+  allow_implicit_invocation: true
