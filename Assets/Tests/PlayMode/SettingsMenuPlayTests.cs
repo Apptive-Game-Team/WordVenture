@@ -61,7 +61,7 @@ namespace WordVenture.Tests
         [UnityTest]
         public IEnumerator 메뉴를_열면_시간과_입력이_멈추고_닫으면_되돌린다()
         {
-            Assert.That(Menu, Is.Not.Null, "첫 씬을 열면 설정 메뉴가 만들어진다.");
+            Assert.That(Menu, Is.Not.Null, "씬에 배치한 설정 메뉴가 있다.");
             Assert.That(MenuButton("openButton").gameObject.activeInHierarchy, Is.True, "왼쪽 위 메뉴 버튼이 보인다.");
 
             Open();
@@ -84,6 +84,8 @@ namespace WordVenture.Tests
         {
             yield return SceneManager.LoadSceneAsync("MapScene");
             yield return null;
+            Assert.That(((RectTransform)MenuButton("openButton").transform).anchoredPosition.y, Is.EqualTo(-170),
+                "맵에서는 메뉴 버튼을 로고 아래로 내린다.");
             Open();
             Assert.That(MenuButton("titleButton").gameObject.activeSelf, Is.True);
             SharedDialoguePlayTests.Capture("settings-menu-map.png");
@@ -98,7 +100,7 @@ namespace WordVenture.Tests
             Assert.That(IsOpen, Is.False);
             Assert.That(Time.timeScale, Is.EqualTo(1));
             Assert.That(Object.FindObjectsOfType(Runtime("Scenes.SettingsMenu")).Length, Is.EqualTo(1),
-                "씬이 바뀌어도 메뉴는 하나만 남는다.");
+                "이전 씬의 메뉴는 씬과 함께 사라지고 새 씬의 메뉴 하나만 남는다.");
         }
 
         [UnityTest]

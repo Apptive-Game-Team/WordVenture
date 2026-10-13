@@ -13,20 +13,17 @@ namespace Scenes
     /// 어느 씬에서나 Esc 키나 왼쪽 위 메뉴 버튼으로 여는 설정 메뉴.
     /// 화면 모드, 언어, 크레딧, 타이틀로 돌아가기를 한곳에 모은다.
     ///
-    /// 씬마다 배치하지 않고 첫 씬을 연 뒤 Resources 의 prefab 을 한 번 만들어 씬이 바뀌어도 남긴다.
+    /// 빌드 설정의 씬마다 prefab 을 배치한다. runtime 에 생성하면 메뉴 버튼이 생기지 않을 때가 있어서,
+    /// 씬 파일만 보고 메뉴가 있는지 알 수 있게 했다. 맵의 메뉴 버튼 위치는 MapScene 에서 override 한다.
     /// 다른 스크립트가 같은 프레임에 Esc 키를 아무 키 입력으로 읽기 전에 메뉴가 먼저 열리도록 가장 먼저 실행한다.
     /// </summary>
     [DefaultExecutionOrder(-1000)]
     public class SettingsMenu : MonoBehaviour
     {
-        public const string PrefabPath = "UI/SettingsMenu";
         const string TitleSceneName = "TitleScene";
         const string MapSceneName = "MapScene";
         const int WindowWidth = 1280;
         const int WindowHeight = 720;
-        // 맵 배경 그림의 왼쪽 위에는 로고와 Stage 글자가 있어서 메뉴 버튼을 그 아래 바다 위로 내린다.
-        static readonly Vector2 ButtonPosition = new Vector2(24, -24);
-        static readonly Vector2 MapButtonPosition = new Vector2(24, -170);
 
         [SerializeField] GameObject menu;
         [SerializeField] Button openButton;
@@ -44,22 +41,9 @@ namespace Scenes
         public static SettingsMenu Instance { get; private set; }
         public bool IsOpen => menu.activeSelf;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        static void Create()
-        {
-            var prefab = Resources.Load<SettingsMenu>(PrefabPath);
-            if (prefab != null && Instance == null) Instantiate(prefab);
-        }
-
         void Awake()
         {
-            if (Instance != null)
-            {
-                Destroy(gameObject);
-                return;
-            }
             Instance = this;
-            DontDestroyOnLoad(gameObject);
             menu.SetActive(false);
             credits.gameObject.SetActive(false);
             openButton.onClick.AddListener(Open);
@@ -68,17 +52,15 @@ namespace Scenes
             languageButton.onClick.AddListener(ToggleLanguage);
             creditsButton.onClick.AddListener(credits.Show);
             titleButton.onClick.AddListener(GoToTitle);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            PlaceOpenButton();
-            EnsureEventSystem();
         }
 
+        // 씬을 바꾸면 다음 씬의 메뉴가 Awake 에서 Instance 를 먼저 가져갈 수 있다.
+        // 그래도 열린 채로 사라지는 메뉴는 멈춘 시간과 입력을 되돌려 놓는다.
         void OnDestroy()
         {
-            if (Instance != this) return;
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            if (IsOpen) Close();
-            Instance = null;
+            // 씬을 내릴 때는 자식인 menu 가 먼저 지워져 있을 수 있다.
+            if (menu != null && IsOpen) Close();
+            if (Instance == this) Instance = null;
         }
 
         void Update()
@@ -188,27 +170,6 @@ namespace Scenes
             if (SaveLoadController.Instance != null) SaveLoadController.Instance.SavePlayData();
             Close();
             SceneManager.LoadScene(TitleSceneName);
-        }
-
-        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (mode == LoadSceneMode.Additive) return;
-            Close();
-            PlaceOpenButton();
-            EnsureEventSystem();
-        }
-
-        void PlaceOpenButton()
-        {
-            ((RectTransform)openButton.transform).anchoredPosition =
-                SceneManager.GetActiveScene().name == MapSceneName ? MapButtonPosition : ButtonPosition;
-        }
-
-        // 메뉴 버튼은 씬의 EventSystem 으로 클릭을 받는다. EventSystem 이 없는 씬(GameOverScene)에는 그 씬에 하나 만든다.
-        static void EnsureEventSystem()
-        {
-            if (FindObjectOfType<EventSystem>() != null) return;
-            new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
         }
     }
 }

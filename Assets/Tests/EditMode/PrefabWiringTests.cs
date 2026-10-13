@@ -1,6 +1,10 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace WordVenture.Tests
@@ -14,7 +18,7 @@ namespace WordVenture.Tests
         const string MagicCardPrefab = "Assets/Prefabs/Cards/MagicCard.prefab";
         const string TypeCardPrefab = "Assets/Prefabs/Cards/TypeCard.prefab";
         const string TutorialPrefab = "Assets/Prefabs/Tutorial/TutorialController.prefab";
-        const string SettingsMenuPrefab = "Assets/Resources/UI/SettingsMenu.prefab";
+        const string SettingsMenuPrefab = "Assets/Prefabs/UI/SettingsMenu.prefab";
 
         [TestCase(MagicCardPrefab)]
         [TestCase(TypeCardPrefab)]
@@ -97,6 +101,35 @@ namespace WordVenture.Tests
             Canvas tutorial = AssetDatabase.LoadAssetAtPath<GameObject>(TutorialPrefab).GetComponent<Canvas>();
             Assert.That(menu.sortingOrder, Is.GreaterThan(tutorial.sortingOrder), "튜토리얼 blocker 가 메뉴를 가린다");
             Assert.That(menu.sortingOrder, Is.GreaterThan(SceneCanvasOrder.Highest()), "씬 캔버스가 메뉴를 가린다");
+        }
+
+        static IEnumerable<string> BuildScenes() => EditorBuildSettings.scenes.Select(scene => scene.path);
+
+        // 설정 메뉴는 runtime 에 만들지 않고 씬마다 배치한다. 씬을 열면 편집 중이던 씬이 바뀌므로 씬 파일을 텍스트로 읽는다.
+        [TestCaseSource(nameof(BuildScenes))]
+        public void 빌드_설정의_씬마다_설정_메뉴와_EventSystem이_있다(string scenePath)
+        {
+            string scene = File.ReadAllText(scenePath);
+            string prefabGuid = AssetDatabase.AssetPathToGUID(SettingsMenuPrefab);
+            Assert.That(scene, Does.Contain("m_SourcePrefab: {fileID: 100100000, guid: " + prefabGuid + ", type: 3}"),
+                scenePath + " 에 " + SettingsMenuPrefab + " 이(가) 없어 메뉴 버튼이 보이지 않는다");
+            Assert.That(scene, Does.Contain("guid: " + ScriptGuid<EventSystem>() + ","),
+                scenePath + " 에 EventSystem 이 없어 메뉴 버튼을 눌러도 열리지 않는다");
+        }
+
+        static string ScriptGuid<T>() where T : MonoBehaviour
+        {
+            var holder = new GameObject();
+            try
+            {
+                MonoScript script = MonoScript.FromMonoBehaviour(holder.AddComponent<T>());
+                AssetDatabase.TryGetGUIDAndLocalFileIdentifier(script, out string guid, out long _);
+                return guid;
+            }
+            finally
+            {
+                Object.DestroyImmediate(holder);
+            }
         }
 
         static SerializedObject TutorialControllerComponent()

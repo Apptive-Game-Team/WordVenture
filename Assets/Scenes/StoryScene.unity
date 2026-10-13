@@ -1212,6 +1212,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069431105}
   m_CullTransparentMesh: 1
+--- !u!1001 &1107000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8987864604603049440, guid: ddd2241ef82a90c43aa16237913f6f54, type: 3}
+      propertyPath: m_Name
+      value: SettingsMenu
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ddd2241ef82a90c43aa16237913f6f54, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1224,6 +1241,7 @@ SceneRoots:
   - {fileID: 1308042641}
   - {fileID: 993407756}
   - {fileID: 501385146}
+  - {fileID: 1107000001}
 --- !u!1 &1010000000000000011
 GameObject:
   m_ObjectHideFlags: 0
