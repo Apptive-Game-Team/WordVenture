@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class FrostVillageBattlePlayTests
     {
         const int Stage = 5;
-        readonly string[] keys = { "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;

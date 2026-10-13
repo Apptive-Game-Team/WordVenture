@@ -22,11 +22,11 @@ namespace Combat
         public ElementalStatus() : this(MagicType.Undead) { }
         public ElementalStatus(MagicType defenseElement) { this.defenseElement = defenseElement; }
         public int RequiredChill => defenseElement == MagicType.Ice ? FreezeThreshold * 2 : FreezeThreshold;
-        public string ResistanceDescription => defenseElement == MagicType.Fire ? "불 속성 · 화상 피해 50%"
-            : defenseElement == MagicType.Ice ? "얼음 속성 · 빙결에 냉기 6점 필요"
-            : defenseElement == MagicType.Lightning ? "번개 속성 · 감전 증폭 50%"
-            : defenseElement == MagicType.Rock ? "바위 속성 · 균열 효과 50%"
-            : defenseElement == MagicType.Holy ? "신성 속성" : "언데드 속성";
+        // 도감에 보이는 속성별 상태 이상 저항. 수치를 바꾸면 이 문장과 English.json 도 고친다.
+        public string ResistanceDescription => defenseElement == MagicType.Fire ? "화상 피해를 절반만 받는다."
+            : defenseElement == MagicType.Ice ? "냉기가 6 쌓여야 빙결된다."
+            : defenseElement == MagicType.Lightning ? "감전 추가 피해를 절반만 받는다."
+            : defenseElement == MagicType.Rock ? "균열이 저항을 절반만 무시한다." : "";
         public int BurnDamage { get; private set; }
         public int BurnTurns { get; private set; }
         public int Chill { get; private set; }

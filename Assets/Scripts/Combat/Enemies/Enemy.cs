@@ -89,6 +89,11 @@ namespace Combat.Enemies
 
         [SerializeField] private List<EnemyAction> enemyActions = new List<EnemyAction>();
 
+        // 도감에 보이는 공격 방식. 문장을 바꾸면 English.json 도 고친다.
+        public virtual string AttackDescription => "";
+        // 웨이브 도중에 부르는 적의 id. 없으면 -1. 깬 스테이지로 도감을 채울 때 부른 적까지 기록한다.
+        public virtual int SummonedEnemyId => -1;
+
         public void InitEnemyData(EnemyData enemyData)
         {
             id = enemyData.id;

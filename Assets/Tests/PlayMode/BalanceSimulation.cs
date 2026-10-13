@@ -33,7 +33,7 @@ namespace WordVenture.Tests
         static readonly int[] Stages = ReadStages();
         static readonly int RunsPerCase = ReadRuns();
 
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;
