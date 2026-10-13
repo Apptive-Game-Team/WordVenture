@@ -35,6 +35,14 @@ namespace WordVenture.Tests
         static bool IsLocked => (bool)Runtime("Core.InteractionLock").GetProperty("IsLocked").GetValue(null);
         static Component CurrentView => (Component)View.GetProperty("Current").GetValue(null);
         static Object EnemyData => AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/Combat/EnemyDataContainer.asset");
+        // 도감에 실리는 적 수. displayName 이 빈 적(S0_Boss_Slime)은 빠진다.
+        static int ListedCount()
+        {
+            var all = (IEnumerable)EnemyData.GetType().GetProperty("All").GetValue(EnemyData);
+            return all.Cast<object>().Count(data =>
+                !string.IsNullOrEmpty((string)data.GetType().GetField("displayName").GetValue(data)));
+        }
+
         static string Text(Transform obj)
         {
             Component label = obj.GetComponent(Runtime("TMPro.TMP_Text"));
@@ -133,10 +141,12 @@ namespace WordVenture.Tests
             Assert.That(IsLocked, Is.True, "도감이 열려 있는 동안 맵 입력을 막지 않았다");
 
             Transform content = view.transform.Find("Window/Background/List/Content");
-            Assert.That(content.childCount, Is.EqualTo(29), "이름이 빈 S0_Boss_Slime 만 빼고 실어야 한다");
+            int listed = ListedCount();
+            Assert.That(listed, Is.GreaterThan(0));
+            Assert.That(content.childCount, Is.EqualTo(listed), "이름이 빈 적만 빼고 실어야 한다");
             Assert.That(Text(content.Find("Slime6/Name")), Is.EqualTo("흙더미 슬라임"));
             Assert.That(Text(content.Find("Slime0/Name")), Is.EqualTo("???"));
-            Assert.That(Text(view.transform.Find("Window/Background/Count")), Is.EqualTo("발견 1 / 29"));
+            Assert.That(Text(view.transform.Find("Window/Background/Count")), Is.EqualTo("발견 1 / " + listed));
 
             Transform detail = view.transform.Find("Window/Background/Detail");
             Assert.That(Text(detail.Find("Name")), Is.EqualTo("흙더미 슬라임"), "처음에 만난 슬라임을 골라 두지 않았다");
