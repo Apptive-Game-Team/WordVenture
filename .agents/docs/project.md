@@ -33,6 +33,20 @@ Agents must verify commands against repository configuration before running them
 - Persistent data: game data and dialogue in ScriptableObjects
   (`Assets/ScriptableObjects/`); player progress in PlayerPrefs.
 
+## Scene Conventions
+
+- Place UI that every scene shows, such as the settings menu
+  (`Assets/Prefabs/UI/SettingsMenu.prefab`), as a prefab instance in each scene
+  file. Do not create it at runtime with `RuntimeInitializeOnLoadMethod`,
+  `Resources.Load`, or `Instantiate`, and do not carry it across scenes with
+  `DontDestroyOnLoad`. A runtime-created menu button sometimes failed to
+  appear, and a scene file did not show whether the menu was there.
+- Set a per-scene difference, such as the menu button position in MapScene, as
+  a prefab override in that scene instead of a branch on the scene name in code.
+- When adding a scene to build settings, place `SettingsMenu.prefab` and an
+  `EventSystem` in it. `PrefabWiringTests` fails for a build scene that lacks
+  either.
+
 ## Commands
 
 | Purpose | Command |

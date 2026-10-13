@@ -10,7 +10,7 @@ namespace WordVenture.Tests
     public sealed class LocalizationTests
     {
         const string FontPath = "Assets/Art/Fonts/NeoDunggeunmoPro-Regular SDF.asset";
-        const string SettingsMenuPrefab = "Assets/Resources/UI/SettingsMenu.prefab";
+        const string SettingsMenuPrefab = "Assets/Prefabs/UI/SettingsMenu.prefab";
         const string SettingsMenuScript = "Assets/Scripts/Scenes/SettingsMenu.cs";
         static readonly Regex Hangul = new Regex("[가-힣]");
         static readonly Regex RichTextTag = new Regex("<[^>]+>");

@@ -1,6 +1,10 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace WordVenture.Tests
@@ -14,7 +18,7 @@ namespace WordVenture.Tests
         const string MagicCardPrefab = "Assets/Prefabs/Cards/MagicCard.prefab";
         const string TypeCardPrefab = "Assets/Prefabs/Cards/TypeCard.prefab";
         const string TutorialPrefab = "Assets/Prefabs/Tutorial/TutorialController.prefab";
-        const string SettingsMenuPrefab = "Assets/Resources/UI/SettingsMenu.prefab";
+        const string SettingsMenuPrefab = "Assets/Prefabs/UI/SettingsMenu.prefab";
 
         [TestCase(MagicCardPrefab)]
         [TestCase(TypeCardPrefab)]
@@ -81,6 +85,8 @@ namespace WordVenture.Tests
         [TestCase("heading")]
         [TestCase("languageNotice")]
         [TestCase("credits")]
+        [TestCase("accountButton")]
+        [TestCase("account")]
         public void 설정_메뉴가_항목을_들고_있다(string field)
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(SettingsMenuPrefab);
@@ -97,6 +103,48 @@ namespace WordVenture.Tests
             Canvas tutorial = AssetDatabase.LoadAssetAtPath<GameObject>(TutorialPrefab).GetComponent<Canvas>();
             Assert.That(menu.sortingOrder, Is.GreaterThan(tutorial.sortingOrder), "튜토리얼 blocker 가 메뉴를 가린다");
             Assert.That(menu.sortingOrder, Is.GreaterThan(SceneCanvasOrder.Highest()), "씬 캔버스가 메뉴를 가린다");
+        }
+
+        static IEnumerable<string> BuildScenes() => EditorBuildSettings.scenes.Select(scene => scene.path);
+
+        // 설정 메뉴는 runtime 에 만들지 않고 씬마다 배치한다. 씬을 열면 편집 중이던 씬이 바뀌므로 씬 파일을 텍스트로 읽는다.
+        [TestCaseSource(nameof(BuildScenes))]
+        public void 빌드_설정의_씬마다_설정_메뉴와_EventSystem이_있다(string scenePath)
+        {
+            string scene = File.ReadAllText(scenePath);
+            string prefabGuid = AssetDatabase.AssetPathToGUID(SettingsMenuPrefab);
+            Assert.That(scene, Does.Contain("m_SourcePrefab: {fileID: 100100000, guid: " + prefabGuid + ", type: 3}"),
+                scenePath + " 에 " + SettingsMenuPrefab + " 이(가) 없어 메뉴 버튼이 보이지 않는다");
+            Assert.That(scene, Does.Contain("guid: " + ScriptGuid<EventSystem>() + ","),
+                scenePath + " 에 EventSystem 이 없어 메뉴 버튼을 눌러도 열리지 않는다");
+        }
+
+        // 계정 창의 진행도 이름은 타이틀 배경과 같은 stage 목록에서 고른다. prefab 은 씬을 참조하지 못해서 목록을 따로 들고 있다.
+        [Test]
+        public void 계정_창의_stage_목록이_타이틀_배경과_같다()
+        {
+            Assert.That(StageList(SettingsMenuPrefab), Is.Not.Empty, SettingsMenuPrefab + " 에 stages 목록이 없다");
+            Assert.That(StageList(SettingsMenuPrefab), Is.EqualTo(StageList("Assets/Scenes/TitleScene.unity")),
+                "계정 창과 타이틀 배경이 다른 stage 목록을 쓴다");
+        }
+
+        static string[] StageList(string path) => File.ReadAllText(path).Split('\n')
+            .SkipWhile(line => line != "  stages:").Skip(1)
+            .TakeWhile(line => line.StartsWith("  - ")).ToArray();
+
+        static string ScriptGuid<T>() where T : MonoBehaviour
+        {
+            var holder = new GameObject();
+            try
+            {
+                MonoScript script = MonoScript.FromMonoBehaviour(holder.AddComponent<T>());
+                AssetDatabase.TryGetGUIDAndLocalFileIdentifier(script, out string guid, out long _);
+                return guid;
+            }
+            finally
+            {
+                Object.DestroyImmediate(holder);
+            }
         }
 
         static SerializedObject TutorialControllerComponent()

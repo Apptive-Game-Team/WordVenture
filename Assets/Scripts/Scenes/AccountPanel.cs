@@ -8,7 +8,8 @@ using UnityEngine.UI;
 namespace Scenes
 {
     /// <summary>
-    /// 타이틀의 계정 창. 크레딧 창처럼 메뉴를 막고 열리며, 로그인 여부에 따라 로그인 화면이나 회원 화면을 보여 준다.
+    /// 설정 메뉴에서 여는 계정 창. 크레딧 창처럼 메뉴를 막고 열리며, 로그인 여부에 따라 로그인 화면이나 회원 화면을 보여 준다.
+    /// Esc 키는 설정 메뉴가 받아서 이 창을 닫는다.
     /// 로그인은 선택 사항이라 이 창을 열지 않아도 게임은 그대로 돌아간다.
     /// </summary>
     public class AccountPanel : MonoBehaviour
@@ -25,24 +26,19 @@ namespace Scenes
         [SerializeField] TMP_Text status;
 
         static bool restoreTried;
-        static AccountPanel current;
-        int hiddenFrame = -1;
-
-        // 설정 메뉴는 Esc 키로 열리므로, 계정 창이 열려 있거나 이번 프레임에 Esc 키로 닫혔으면 메뉴를 열지 않는다.
-        public static bool HoldsEscape => current != null && (current.overlay.activeSelf || current.hiddenFrame == Time.frameCount);
         GameObject previousSelection;
         bool previousInteractable, previousBlocksRaycasts;
 
+        public bool IsOpen => overlay.activeSelf;
+
         void Awake()
         {
-            current = this;
             AccountSession.Changed += ShowHomeIfOpen;
             AccountRequests.BusyChanged += ShowBusy;
         }
 
         void OnDestroy()
         {
-            if (current == this) current = null;
             AccountSession.Changed -= ShowHomeIfOpen;
             AccountRequests.BusyChanged -= ShowBusy;
         }
@@ -50,7 +46,7 @@ namespace Scenes
         void Start()
         {
             ShowBusy();
-            // 저장된 refresh token 이 있으면 게임을 켠 뒤 처음 타이틀을 열 때 한 번만 조용히 로그인을 복원한다.
+            // 저장된 refresh token 이 있으면 게임을 켠 뒤 처음 연 씬에서 한 번만 조용히 로그인을 복원한다.
             if (restoreTried || AccountSession.IsLoggedIn) return;
             restoreTried = true;
             AccountRequests.Enqueue(AccountService.RestoreSession(_ => { }));
@@ -72,7 +68,6 @@ namespace Scenes
         {
             if (!overlay.activeSelf) return;
             overlay.SetActive(false);
-            hiddenFrame = Time.frameCount;
             menu.interactable = previousInteractable;
             menu.blocksRaycasts = previousBlocksRaycasts;
             if (EventSystem.current != null)
@@ -112,11 +107,6 @@ namespace Scenes
         void ShowBusy()
         {
             content.interactable = !AccountRequests.IsBusy;
-        }
-
-        void Update()
-        {
-            if (overlay.activeSelf && Input.GetKeyDown(KeyCode.Escape)) Hide();
         }
 
         void LateUpdate()

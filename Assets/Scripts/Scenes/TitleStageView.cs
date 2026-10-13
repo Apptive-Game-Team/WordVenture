@@ -32,7 +32,7 @@ namespace Scenes
 
         public void Show(int stagePosition)
         {
-            StageData stage = Find(stagePosition);
+            StageData stage = Find(stages, stagePosition);
             showsStage = stage != null && stage.background != null;
             bool raining = showsStage && stage.stageID == RainyStageId && rainyBackgroundPrefab != null;
             if (raining && rain == null)
@@ -50,10 +50,11 @@ namespace Scenes
             Frame();
         }
 
-        // 계정 창에서 이 기기와 서버의 진행도를 비교할 때도 같은 이름을 쓴다.
-        public string Describe(int stagePosition)
+        // 계정 창에서 이 기기와 서버의 진행도를 비교할 때도 같은 이름을 쓴다. 계정 창은 설정 메뉴 prefab 에 있어서
+        // 타이틀의 이 컴포넌트를 참조하지 못하므로, 같은 stage 목록을 넘겨 받는다.
+        public static string Describe(StageData[] stages, int stagePosition)
         {
-            StageData stage = Find(stagePosition);
+            StageData stage = Find(stages, stagePosition);
             if (stage == null) return Localization.Translate("진행도 없음");
             if (stagePosition > stage.stageID) return Localization.Translate("모든 지역 완료");
             return string.IsNullOrEmpty(stage.stageName)
@@ -62,7 +63,7 @@ namespace Scenes
         }
 
         // stagePosition 이하에서 가장 뒤의 스테이지. 진행도가 없으면 null 이다.
-        StageData Find(int stagePosition)
+        static StageData Find(StageData[] stages, int stagePosition)
         {
             if (stagePosition < 0) return null;
             StageData found = null;
