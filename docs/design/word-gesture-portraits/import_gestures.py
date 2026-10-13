@@ -25,6 +25,11 @@ GESTURES = {
     "WordShowBook.png": ("WordShowBookDialogue.png", "e965a5282d084d5a89b6a9ce8305b556"),
     "WordRaiseCard.png": ("WordRaiseCardDialogue.png", "51d9ed3a93f642c0b64594803e842281"),
     "WordPalmOut.png": ("WordPalmOutDialogue.png", "53a3f8021a534d91b60f96e1f7dd3bef"),
+    "WordNodFirm.png": ("WordNodFirmDialogue.png", "2c4d9a7194e0416fb11a1af27b085640"),
+    "WordShakeHeadFirm.png": ("WordShakeHeadFirmDialogue.png", "e68a5ff30f78431291a1155709494872"),
+    "WordPointWorried.png": ("WordPointWorriedDialogue.png", "ee1daf037c4e49b58018a3de2fd2b433"),
+    "WordShowCover.png": ("WordShowCoverDialogue.png", "2893518f1c344927b7e4547cc52875f5"),
+    "WordTouchThroat.png": ("WordTouchThroatDialogue.png", "ca6e1f029377475990077d7e067cf7c9"),
 }
 
 
