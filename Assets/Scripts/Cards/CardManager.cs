@@ -201,7 +201,7 @@ namespace Cards
         public void CardAlignment()
         {
             List<Prs> originCardPrSs = new List<Prs>();
-            originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
+            originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, Vector3.one * 0.4f);
 
             var targetCards = myCards;
 
@@ -230,7 +230,8 @@ namespace Cards
             for (int i = 0;i< objCount;i++)
             {
                 var targetPos = Vector3.Lerp(left.position, right.position, objLerps[i]);
-                targetPos.y += 0.5f;
+                // 손패 기준점(CardLeft, CardRight)은 화면 아래 끝보다 조금 아래에 있다. 카드 높이 1.85의 절반보다 더 올려야 카드 아래 테두리가 화면에 들어온다.
+                targetPos.y += 1.2f;
                 var targetRot = Quaternion.identity;
 
                 // float curve = Mathf.Sqrt(Mathf.Pow(height, 2) - Mathf.Pow(objLerps[i] - 0.5f, 2));

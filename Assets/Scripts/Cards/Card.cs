@@ -1,3 +1,4 @@
+using System;
 using Core;
 using DG.Tweening;
 using TMPro;
@@ -21,11 +22,21 @@ namespace Cards
         Spawn
     }
 
+    [Serializable]
+    public struct WordSprite
+    {
+        public string name;
+        public Sprite sprite;
+    }
+
     public class Card : MonoBehaviour
     {
+        // 이름 TMP는 계층에서 첫 TMP_Text여야 한다. GetComponentInChildren<TMP_Text>()로 카드 이름을 찾는 코드가 있다.
         [SerializeField] TMP_Text nameTMP;
+        [SerializeField] TMP_Text kindTMP;
         [FormerlySerializedAs("MagicCard")] [SerializeField] Sprite magicCard;
         [FormerlySerializedAs("TypeCard")] [SerializeField] Sprite typeCard;
+        [SerializeField] WordSprite[] wordSprites;
 
         public MagicType cardType;
 
@@ -35,13 +46,25 @@ namespace Cards
         public void Setup(Word word)
         {
             this.word = word;
-            if (word.tag == "Spell")
-                this.GetComponent<SpriteRenderer>().sprite = magicCard;
-            else
-                this.GetComponent<SpriteRenderer>().sprite = typeCard;
+            bool isSpell = word.tag == "Spell";
+            Sprite sprite = FindWordSprite(word.name);
+            if (sprite == null) sprite = isSpell ? magicCard : typeCard;
+            this.GetComponent<SpriteRenderer>().sprite = sprite;
             nameTMP.text = this.word.name;
+            if (kindTMP != null)
+                kindTMP.text = Localization.Translate(isSpell ? "마법" : "속성");
             cardType = this.word.magicType;
             gameObject.tag = this.word.tag;
+        }
+
+        Sprite FindWordSprite(string wordName)
+        {
+            if (wordSprites == null) return null;
+            foreach (WordSprite wordSprite in wordSprites)
+            {
+                if (wordSprite.name == wordName && wordSprite.sprite != null) return wordSprite.sprite;
+            }
+            return null;
         }
 
         public void MoveTransform(Prs prs, bool useDotween, float dotweenTime = 0)

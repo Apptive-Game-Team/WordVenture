@@ -10,6 +10,12 @@ namespace Tutorial
     {
         [SerializeField] TMP_FontAsset font;
         [SerializeField] Sprite dragHand;
+        // 버튼은 다른 화면과 같은 밝은 나무색 작은 버튼 스프라이트로 그린다.
+        [SerializeField] Sprite buttonSprite;
+        [SerializeField] Sprite buttonHoverSprite;
+        [SerializeField] Sprite buttonPressedSprite;
+        [SerializeField] Sprite buttonDisabledSprite;
+        static readonly Color ButtonTextColor = new Color(0.365f, 0.271f, 0.059f);
         RectTransform root;
         RectTransform skipButton;
         RectTransform confirmation;
@@ -21,6 +27,7 @@ namespace Tutorial
         TutorialGuidance guidance;
         TutorialDragDemo dragDemo;
         TMP_Text skipText, questionText, cancelText, confirmText;
+        Image[] buttonImages;
         bool modal;
 
         public void Initialize(TutorialController controller)
@@ -39,19 +46,21 @@ namespace Tutorial
             Stretch(demoRect);
             dragDemo = demoRect.gameObject.AddComponent<TutorialDragDemo>();
             dragDemo.Initialize(guidance, dragHand, font);
-            hintPanel = Background("ActionHint", root, new Color(0.04f, 0.08f, 0.14f, 0.94f), false);
+            hintPanel = Background("ActionHint", root, new Color(UiPalette.Panel.r, UiPalette.Panel.g, UiPalette.Panel.b, 0.94f), false);
+            AddBorder(hintPanel, 3);
             hintPanel.anchorMin = hintPanel.anchorMax = new Vector2(0.5f, 1);
             hintPanel.pivot = new Vector2(0.5f, 1);
             hint = Label("HintText", hintPanel, "");
             hint.enableWordWrapping = true;
 
             skipButton = Button("SkipTutorial", root, "튜토리얼 건너뛰기", controller.RequestSkip, out skipText);
-            skipButton.anchorMin = skipButton.anchorMax = Vector2.one;
-            skipButton.pivot = Vector2.one;
+            // 설정 메뉴 버튼(왼쪽 위) 바로 오른쪽에 둔다. 오른쪽 위에는 전투의 턴 종료 버튼과 맵 버튼이 있다.
+            skipButton.anchorMin = skipButton.anchorMax = skipButton.pivot = new Vector2(0, 1);
 
             confirmation = Background("SkipConfirmation", root, new Color(0, 0, 0, 0.75f), true);
             Stretch(confirmation);
-            panel = Background("ConfirmationPanel", confirmation, new Color(0.06f, 0.1f, 0.17f, 1), true);
+            panel = Background("ConfirmationPanel", confirmation, UiPalette.Panel, true);
+            AddBorder(panel, 3);
             questionText = Label("Question", panel, "튜토리얼을 건너뛸까요?");
             questionText.rectTransform.anchorMin = new Vector2(0, 0.4f);
             questionText.rectTransform.anchorMax = Vector2.one;
@@ -59,7 +68,7 @@ namespace Tutorial
             confirmButton = Button("ConfirmSkip", panel, "건너뛰기", controller.ConfirmSkip, out confirmText);
             cancelButton.anchorMin = cancelButton.anchorMax = new Vector2(0.27f, 0.23f);
             confirmButton.anchorMin = confirmButton.anchorMax = new Vector2(0.73f, 0.23f);
-            confirmButton.GetComponent<Image>().color = new Color(0.38f, 0.23f, 0.08f, 1);
+            buttonImages = new[] { skipButton.GetComponent<Image>(), cancelButton.GetComponent<Image>(), confirmButton.GetComponent<Image>() };
             confirmation.gameObject.SetActive(false);
             ClearGuidance();
             Layout();
@@ -77,8 +86,12 @@ namespace Tutorial
             float canvasScale = GetComponent<Canvas>().scaleFactor;
             float scale = Mathf.Clamp(Mathf.Min(Screen.width / 1280f, Screen.height / 720f), 0.4f, 2f)
                 / Mathf.Max(canvasScale, 0.001f);
-            skipButton.sizeDelta = new Vector2(250, 48) * scale;
-            skipButton.anchoredPosition = new Vector2(-20, -20) * scale;
+            // 설정 메뉴 버튼은 화면 높이 1080 기준 캔버스에서 (24, -24), 88x88 이다. 같은 높이로 16 만큼 띄워 옆에 둔다.
+            float menuUnit = Screen.height / 1080f / Mathf.Max(canvasScale, 0.001f);
+            skipButton.sizeDelta = new Vector2(250 * scale, 88 * menuUnit);
+            skipButton.anchoredPosition = new Vector2(24 + 88 + 16, -24) * menuUnit;
+            // 1920x1080 기준 캔버스에서 스프라이트 1 픽셀을 4 단위로 보이게 한다.
+            foreach (Image image in buttonImages) image.pixelsPerUnitMultiplier = 0.25f / Mathf.Max(menuUnit, 0.001f);
             hintPanel.sizeDelta = new Vector2(Mathf.Min(620 * scale, Screen.width / canvasScale - 32 * scale), 64 * scale);
             hintPanel.anchoredPosition = new Vector2(0, -84 * scale);
             panel.sizeDelta = new Vector2(520, 230) * scale;
@@ -162,6 +175,13 @@ namespace Tutorial
             return rect;
         }
 
+        static void AddBorder(RectTransform rect, float width)
+        {
+            Outline outline = rect.gameObject.AddComponent<Outline>();
+            outline.effectColor = UiPalette.Border;
+            outline.effectDistance = new Vector2(width, -width);
+        }
+
         TMP_Text Label(string name, RectTransform parent, string text)
         {
             RectTransform rect = Rect(name, parent);
@@ -171,20 +191,41 @@ namespace Tutorial
             TMP_Text label = rect.gameObject.AddComponent<TextMeshProUGUI>();
             label.font = font;
             label.text = Localization.Translate(text);
-            label.color = new Color(1, 0.94f, 0.8f, 1);
+            label.color = UiPalette.Text;
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             return label;
         }
 
+        // 버튼 스프라이트는 아래 테두리가 두꺼워서, 라벨을 버튼 면 가운데로 조금 올린다.
+        void ApplyWoodStyle(Button button, TMP_Text label)
+        {
+            if (buttonSprite == null) return;
+            label.color = ButtonTextColor;
+            label.rectTransform.offsetMin = new Vector2(12, 12);
+            label.rectTransform.offsetMax = new Vector2(-12, 0);
+            var image = (Image)button.targetGraphic;
+            image.color = Color.white;
+            image.sprite = buttonSprite;
+            image.type = Image.Type.Sliced;
+            button.transition = Selectable.Transition.SpriteSwap;
+            button.spriteState = new SpriteState
+            {
+                highlightedSprite = buttonHoverSprite,
+                pressedSprite = buttonPressedSprite,
+                disabledSprite = buttonDisabledSprite,
+            };
+        }
+
         RectTransform Button(string name, Transform parent, string text, UnityEngine.Events.UnityAction onClick, out TMP_Text label)
         {
-            RectTransform rect = Background(name, parent, new Color(0.12f, 0.2f, 0.28f, 1), true);
+            RectTransform rect = Background(name, parent, UiPalette.Cell, true);
             Button button = rect.gameObject.AddComponent<Button>();
             button.targetGraphic = rect.GetComponent<Image>();
             button.navigation = new Navigation { mode = Navigation.Mode.None };
             button.onClick.AddListener(onClick);
             label = Label("Label", rect, text);
+            ApplyWoodStyle(button, label);
             return rect;
         }
     }

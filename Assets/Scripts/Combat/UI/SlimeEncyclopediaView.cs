@@ -22,12 +22,6 @@ namespace Combat.UI
         // MagicAffinityTable 의 행 순서. 플레이어가 쓰는 원소 마법이다.
         static readonly MagicType[] SpellElements =
             { MagicType.Fire, MagicType.Ice, MagicType.Rock, MagicType.Lightning, MagicType.Holy };
-        // 맵의 1부·2부 전환 버튼과 같은 색이다.
-        static readonly Color Border = new Color(0.72f, 0.53f, 0.25f);
-        static readonly Color Wood = new Color(0.16f, 0.105f, 0.065f);
-        static readonly Color Cream = new Color(0.98f, 0.91f, 0.70f);
-        static readonly Color CellColor = new Color(0.26f, 0.18f, 0.11f);
-        static readonly Color SelectedCellColor = new Color(0.5f, 0.36f, 0.17f);
         static readonly Color Silhouette = new Color(0f, 0f, 0f, 0.85f);
 
         public static SlimeEncyclopediaView Current { get; private set; }
@@ -48,6 +42,7 @@ namespace Combat.UI
         int openedFrame;
         bool ownsLock;
 
+        const string WoodButtonPath = "UI/WoodButtonSmall";
         static TMP_FontAsset Font => Resources.Load<DialogueWindowStyle>("Story/DialogueWindowStyle").font;
         static string T(string korean) => Localization.Translate(korean);
 
@@ -125,14 +120,14 @@ namespace Combat.UI
             // 도감 뒤의 맵 지점과 버튼이 클릭되지 않게 막는다.
             shade.raycastTarget = true;
             Image frame = DialogueWindowPresentation.Picture("Window", transform, new Vector2(0.05f, 0.06f),
-                new Vector2(0.95f, 0.94f), Border);
-            Image window = DialogueWindowPresentation.Picture("Background", frame.transform, Vector2.zero, Vector2.one, Wood);
+                new Vector2(0.95f, 0.94f), UiPalette.Border);
+            Image window = DialogueWindowPresentation.Picture("Background", frame.transform, Vector2.zero, Vector2.one, UiPalette.Panel);
             Inset(window.rectTransform, 6);
 
-            Label("Title", window.transform, new Vector2(0.025f, 0.87f), new Vector2(0.4f, 0.98f), T("슬라임 도감"), 52, Cream)
+            Label("Title", window.transform, new Vector2(0.025f, 0.87f), new Vector2(0.4f, 0.98f), T("슬라임 도감"), 52, UiPalette.Text)
                 .alignment = TextAlignmentOptions.MidlineLeft;
             TMP_Text count = Label("Count", window.transform, new Vector2(0.4f, 0.87f), new Vector2(0.75f, 0.98f),
-                T("발견") + " " + seen + " / " + entries.Count, 36, Cream);
+                T("발견") + " " + seen + " / " + entries.Count, 36, UiPalette.Text);
             count.alignment = TextAlignmentOptions.MidlineRight;
             Button close = WoodButton(window.transform, T("닫기 (Esc)"), 34);
             Place((RectTransform)close.transform, new Vector2(0.78f, 0.885f), new Vector2(0.975f, 0.975f));
@@ -179,13 +174,13 @@ namespace Combat.UI
             var obj = new GameObject("Slime" + data.id, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
             obj.transform.SetParent(parent, false);
             var background = obj.GetComponent<Image>();
-            background.color = CellColor;
+            background.color = UiPalette.Cell;
             Image picture = DialogueWindowPresentation.Picture("Picture", obj.transform, new Vector2(0.06f, 0.3f),
                 new Vector2(0.94f, 0.96f), seen ? BodyColor(data) : Silhouette);
             picture.sprite = Portrait(data);
             picture.preserveAspect = true;
             TMP_Text label = Label("Name", obj.transform, new Vector2(0.04f, 0.02f), new Vector2(0.96f, 0.3f),
-                seen ? T(data.displayName) : Unknown, 22, Cream);
+                seen ? T(data.displayName) : Unknown, 22, UiPalette.Text);
             label.alignment = TextAlignmentOptions.Center;
             label.enableAutoSizing = true;
             label.fontSizeMin = 12;
@@ -203,7 +198,7 @@ namespace Combat.UI
             portrait = DialogueWindowPresentation.Picture("Portrait", detail, new Vector2(0.03f, 0.64f),
                 new Vector2(0.36f, 0.97f), Color.white);
             portrait.preserveAspect = true;
-            nameLabel = Label("Name", detail, new Vector2(0.4f, 0.86f), new Vector2(0.97f, 0.97f), "", 44, Cream);
+            nameLabel = Label("Name", detail, new Vector2(0.4f, 0.86f), new Vector2(0.97f, 0.97f), "", 44, UiPalette.Text);
             nameLabel.enableAutoSizing = true;
             nameLabel.fontSizeMin = 24;
             nameLabel.fontSizeMax = 44;
@@ -220,9 +215,9 @@ namespace Combat.UI
         public void Select(int index)
         {
             if (index < 0 || index >= entries.Count) return;
-            if (selected >= 0) cells[selected].color = CellColor;
+            if (selected >= 0) cells[selected].color = UiPalette.Cell;
             selected = index;
-            cells[index].color = SelectedCellColor;
+            cells[index].color = UiPalette.SelectedCell;
 
             EnemyData data = entries[index];
             bool seen = SaveLoadController.HasSeenSlime(data.id);
@@ -357,18 +352,15 @@ namespace Combat.UI
             obj.AddComponent<GraphicRaycaster>();
         }
 
+        // 밝은 나무색 버튼 모양(스프라이트, 상태별 스프라이트, 라벨)은 Resources 의 template prefab 에 둔다.
         static Button WoodButton(Transform parent, string text, int size)
         {
-            Image frame = DialogueWindowPresentation.Picture("Button", parent, Vector2.zero, Vector2.one, Border);
-            frame.raycastTarget = true;
-            Image inner = DialogueWindowPresentation.Picture("Background", frame.transform, Vector2.zero, Vector2.one, Wood);
-            Inset(inner.rectTransform, 6);
-            Label("Label", frame.transform, Vector2.zero, Vector2.one, text, size, Cream).alignment = TextAlignmentOptions.Center;
-            var button = frame.gameObject.AddComponent<Button>();
-            button.targetGraphic = frame;
-            ColorBlock colors = button.colors;
-            colors.highlightedColor = new Color(1f, 0.92f, 0.7f);
-            button.colors = colors;
+            Button button = Instantiate(Resources.Load<Button>(WoodButtonPath), parent, false);
+            button.name = "Button";
+            Place((RectTransform)button.transform, Vector2.zero, Vector2.one);
+            TMP_Text label = button.GetComponentInChildren<TMP_Text>();
+            label.text = text;
+            label.fontSize = size;
             return button;
         }
 

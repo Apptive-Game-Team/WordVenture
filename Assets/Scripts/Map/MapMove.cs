@@ -287,9 +287,10 @@ namespace Map
         }
         void ShowStage()
         {
+            string text = Localization.Translate("스테이지") + " " + StagePosition;
             stage.text = StagePosition > LastPlayableStageID && StagePosition <= LastStageIDOnMap
-                ? "Stage : " + StagePosition + " (준비 중)"
-                : "Stage : " + StagePosition;
+                ? text + " (" + Localization.Translate("준비 중") + ")"
+                : text;
         }
 
         int LastStageIDOnMap => firstStageID + stageLocations.Length - 1;

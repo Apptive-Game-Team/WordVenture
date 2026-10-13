@@ -4,7 +4,6 @@ using System.Collections;
 using Combat.Stage;
 using Core;
 using Map;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -134,41 +133,34 @@ namespace Scenes
                 switch (StageDataSingleton.Instance.stagePosition)
                 {
                     case 0: // 2
-                        GameObject card1 = Instantiate(spellCard, new Vector3(0, 0, 0), Quaternion.identity);
-                        card1.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[2].name);
-                        card1.GetComponent<Order>().SetOrder(0);
+                        ShowCard(spellCard, wordSo.words[2], new Vector3(0, 0, 0));
                         break;
                     case 1: // rock 5
-                        GameObject card4 = Instantiate(magicCard, new Vector3(0, 0, 0), Quaternion.identity);
-                        card4.GetComponent<Order>().SetOrder(0);
-                        card4.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[5].name);
+                        ShowCard(magicCard, wordSo.words[5], new Vector3(0, 0, 0));
                         break;
                     case 2: // 4 7
-                        GameObject card5 = Instantiate(magicCard, new Vector3(-2, 0, 0), Quaternion.identity);
-                        card5.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[4].name);
-                        card5.GetComponent<Order>().SetOrder(0);
-                        GameObject card6 = Instantiate(magicCard, new Vector3(2, 0, 0), Quaternion.identity);
-                        card6.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[7].name);
-                        card6.GetComponent<Order>().SetOrder(0);
+                        ShowCard(magicCard, wordSo.words[4], new Vector3(-2, 0, 0));
+                        ShowCard(magicCard, wordSo.words[7], new Vector3(2, 0, 0));
                         break;
 
                     case 3: // 1 6
-                        GameObject card7 = Instantiate(magicCard, new Vector3(-2, 0, 0), Quaternion.identity);
-                        card7.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[1].name);
-                        card7.GetComponent<Order>().SetOrder(0);
-                        GameObject card8 = Instantiate(magicCard, new Vector3(2, 0, 0), Quaternion.identity);
-                        card8.GetComponentInChildren<TMP_Text>().SetText(wordSo.words[6].name);
-                        card8.GetComponent<Order>().SetOrder(0);
+                        ShowCard(magicCard, wordSo.words[1], new Vector3(-2, 0, 0));
+                        ShowCard(magicCard, wordSo.words[6], new Vector3(2, 0, 0));
                         break;
                     case SpawnRewardStageID:
                         Word spawnWord = Array.Find(wordSo.words, word => word.magicType == MagicType.Spawn);
-                        GameObject spawnCard = Instantiate(spellCard, new Vector3(0, 0, 0), Quaternion.identity);
-                        spawnCard.GetComponentInChildren<TMP_Text>().SetText(spawnWord.name);
-                        spawnCard.GetComponent<Order>().SetOrder(0);
+                        ShowCard(spellCard, spawnWord, new Vector3(0, 0, 0));
                         break;
                 }
             }
 
+        }
+
+        static void ShowCard(GameObject prefab, Word word, Vector3 position)
+        {
+            GameObject card = Instantiate(prefab, position, Quaternion.identity);
+            card.GetComponent<Card>().Setup(word);
+            card.GetComponent<Order>().SetOrder(0);
         }
     }
 

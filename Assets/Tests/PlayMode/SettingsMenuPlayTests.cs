@@ -86,8 +86,8 @@ namespace WordVenture.Tests
         {
             yield return SceneManager.LoadSceneAsync("MapScene");
             yield return null;
-            Assert.That(((RectTransform)MenuButton("openButton").transform).anchoredPosition.y, Is.EqualTo(-170),
-                "맵에서는 메뉴 버튼을 로고 아래로 내린다.");
+            Assert.That(((RectTransform)MenuButton("openButton").transform).anchoredPosition.y, Is.EqualTo(-24),
+                "로고를 지운 맵에서도 메뉴 버튼을 왼쪽 위에 둔다.");
             Open();
             Assert.That(MenuButton("titleButton").gameObject.activeSelf, Is.True);
             SharedDialoguePlayTests.Capture("settings-menu-map.png");
