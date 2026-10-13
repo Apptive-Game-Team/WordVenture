@@ -88,6 +88,8 @@ namespace Scenes
             if (credits.IsOpen) credits.Hide();
             // 맵의 슬라임 도감은 Esc 키로 닫으므로, 도감이 열려 있으면 메뉴를 열지 않는다.
             else if (!IsOpen && SlimeEncyclopediaView.Current != null) return;
+            // 타이틀의 계정 창도 Esc 키로 닫는다.
+            else if (!IsOpen && AccountPanel.HoldsEscape) return;
             else if (IsOpen) Close();
             else Open();
         }

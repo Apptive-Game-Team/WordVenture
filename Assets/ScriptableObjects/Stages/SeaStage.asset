@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SeaStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageID: 1
-  stageName: 
+  stageName: 해안
   background: {fileID: 21300000, guid: 9d158541f1bf73847a2e9f86172af2ba, type: 3}
   waveData:
     enemyWaves:
