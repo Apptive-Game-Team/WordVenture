@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using Map;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -94,11 +95,11 @@ namespace Story
         }
 
         /// <summary>
-        /// 아무 키 입력에는 마우스 버튼도 포함한다.
+        /// 아무 키 입력에는 마우스 버튼도 포함한다. 설정 메뉴를 여닫는 입력은 넘기지 않는다.
         /// </summary>
         protected static bool IsAdvanceKeyDown()
         {
-            return Input.anyKeyDown;
+            return !InteractionLock.IsPaused && Input.anyKeyDown;
         }
 
         private void LoadMapScene()
