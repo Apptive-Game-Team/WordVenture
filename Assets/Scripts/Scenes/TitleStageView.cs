@@ -1,26 +1,27 @@
 using Combat.Stage;
 using Core;
-using TMPro;
 using UnityEngine;
 
 namespace Scenes
 {
     /// <summary>
-    /// 저장된 진행도가 있으면 이어 할 지역 이름을 보여 주고 타이틀 배경을 그 지역의 전투 배경으로 바꾼다.
+    /// 저장된 진행도가 있으면 타이틀 배경을 이어 할 지역의 전투 배경으로 바꾼다.
     /// StagePosition 은 다음에 깰 스테이지 번호다. 마지막 스테이지보다 크면(2부를 끝낸 10) 모두 깬 것이다.
     /// </summary>
     public class TitleStageView : MonoBehaviour
     {
         [SerializeField] SpriteRenderer background;
-        [SerializeField] GameObject plaque;
-        [SerializeField] TMP_Text label;
         [SerializeField] StageData[] stages;
+        // 빗길은 전투 씬처럼 비가 내리는 애니메이션 배경을 띄운다(StageManager.SetBackground 와 같은 stage 번호).
+        [SerializeField] GameObject rainyBackgroundPrefab;
+        const int RainyStageId = 3;
 
         Sprite titleSprite;
         Vector3 titleScale;
         Camera view;
         float framedAspect;
         bool showsStage;
+        SpriteRenderer rain;
 
         void Awake()
         {
@@ -33,9 +34,11 @@ namespace Scenes
         {
             StageData stage = Find(stagePosition);
             showsStage = stage != null && stage.background != null;
-            plaque.SetActive(stage != null);
-            if (stage != null)
-                label.text = string.Format(Localization.Translate("이어하기: {0}"), Describe(stagePosition));
+            bool raining = showsStage && stage.stageID == RainyStageId && rainyBackgroundPrefab != null;
+            if (raining && rain == null)
+                rain = Instantiate(rainyBackgroundPrefab, background.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
+            if (rain != null) rain.gameObject.SetActive(raining);
+            background.enabled = !raining;
 
             if (!showsStage)
             {
@@ -74,15 +77,21 @@ namespace Scenes
             if (showsStage && !Mathf.Approximately(view.aspect, framedAspect)) Frame();
         }
 
-        // 전투 배경마다 크기가 달라서 카메라 화면을 빈틈없이 덮는 배율을 다시 구한다.
+        // 전투 배경(2:1)은 타이틀 배경(16:9)과 비율이 달라서, 카메라 화면을 빈틈없이 덮는 배율을 다시 구한다.
         void Frame()
         {
             if (view == null) return;
             framedAspect = view.aspect;
+            Cover(background);
+            if (rain != null && rain.gameObject.activeSelf) Cover(rain);
+        }
+
+        void Cover(SpriteRenderer target)
+        {
             float height = view.orthographicSize * 2;
-            Vector2 size = background.sprite.bounds.size;
+            Vector2 size = target.sprite.bounds.size;
             float scale = Mathf.Max(height * view.aspect / size.x, height / size.y);
-            background.transform.localScale = new Vector3(scale, scale, 1);
+            target.transform.localScale = new Vector3(scale, scale, 1);
         }
     }
 }

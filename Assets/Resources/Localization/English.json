@@ -216,7 +216,6 @@
     {"ko": "보내기", "en": "Send"},
     {"ko": "피드백", "en": "Feedback"},
     {"ko": "의견이나 찾은 버그를 자유롭게 적어 주세요.", "en": "Write any feedback or bugs you found."},
-    {"ko": "이어하기: {0}", "en": "Continue: {0}"},
     {"ko": "진행도 없음", "en": "No progress"},
     {"ko": "모든 지역 완료", "en": "All regions cleared"},
     {"ko": "{0} 님", "en": "{0}"},
