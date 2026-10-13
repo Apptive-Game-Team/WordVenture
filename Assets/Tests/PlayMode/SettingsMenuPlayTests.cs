@@ -68,8 +68,10 @@ namespace WordVenture.Tests
             Assert.That(Time.timeScale, Is.EqualTo(0));
             Assert.That(Locked, Is.True);
             Assert.That(MenuButton("titleButton").gameObject.activeSelf, Is.False, "타이틀에서는 타이틀로 항목을 숨긴다.");
-            Assert.That(MenuButton("resumeButton").navigation.selectOnUp, Is.EqualTo(MenuButton("creditsButton")),
+            Assert.That(MenuButton("resumeButton").navigation.selectOnUp, Is.EqualTo(MenuButton("accountButton")),
                 "방향키로 메뉴 아래의 타이틀 버튼을 고르지 않는다.");
+            // 메뉴 패널 크기는 버튼 수에 맞춰 다음 layout 갱신 때 정해지므로 한 프레임 기다린 뒤 찍는다.
+            yield return null;
             SharedDialoguePlayTests.Capture("settings-menu-title.png");
 
             Close();
@@ -169,6 +171,35 @@ namespace WordVenture.Tests
             credits.GetType().GetMethod("Hide").Invoke(credits, null);
             Assert.That(credits.gameObject.activeSelf, Is.False);
             Assert.That(IsOpen, Is.True, "크레딧을 닫으면 메뉴로 돌아간다.");
+        }
+
+        [UnityTest]
+        public IEnumerator 계정_창은_어느_씬에서나_열고_불러오기는_타이틀에서만_보인다()
+        {
+            yield return 계정_창을_열어_불러오기_버튼을_확인한다("TitleScene", true);
+            yield return 계정_창을_열어_불러오기_버튼을_확인한다("MapScene", false);
+        }
+
+        IEnumerator 계정_창을_열어_불러오기_버튼을_확인한다(string scene, bool showsDownload)
+        {
+            yield return SceneManager.LoadSceneAsync(scene);
+            yield return null;
+            Open();
+            MenuButton("accountButton").onClick.Invoke();
+            yield return null;
+            var account = (Component)Field("account");
+            Assert.That(account.GetType().GetProperty("IsOpen").GetValue(account), Is.True, scene + " 에서 계정 창이 열린다.");
+            SharedDialoguePlayTests.Capture("settings-menu-account-" + scene + ".png");
+
+            // 로그인하지 않아도 회원 화면을 열어 불러오기 버튼이 보이는지 확인한다. refresh 를 끄면 서버에 요청하지 않는다.
+            Component member = account.GetComponentsInChildren(Runtime("Scenes.MemberView"), true)[0];
+            member.GetType().GetMethod("Open").Invoke(member, new object[] { false });
+            var download = (GameObject)member.GetType()
+                .GetField("download", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(member);
+            Assert.That(download.activeSelf, Is.EqualTo(showsDownload), scene + " 에서 불러오기 버튼이 보이는지");
+
+            Close();
+            Assert.That(account.GetType().GetProperty("IsOpen").GetValue(account), Is.False, "메뉴를 닫으면 계정 창도 닫힌다.");
         }
     }
 }

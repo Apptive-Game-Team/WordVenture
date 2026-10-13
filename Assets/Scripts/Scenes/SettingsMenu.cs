@@ -11,7 +11,7 @@ namespace Scenes
 {
     /// <summary>
     /// 어느 씬에서나 Esc 키나 왼쪽 위 메뉴 버튼으로 여는 설정 메뉴.
-    /// 화면 모드, 언어, 크레딧, 타이틀로 돌아가기를 한곳에 모은다.
+    /// 화면 모드, 언어, 크레딧, 계정, 타이틀로 돌아가기를 한곳에 모은다.
     ///
     /// 빌드 설정의 씬마다 prefab 을 배치한다. runtime 에 생성하면 메뉴 버튼이 생기지 않을 때가 있어서,
     /// 씬 파일만 보고 메뉴가 있는지 알 수 있게 했다. 맵의 메뉴 버튼 위치는 MapScene 에서 override 한다.
@@ -20,7 +20,7 @@ namespace Scenes
     [DefaultExecutionOrder(-1000)]
     public class SettingsMenu : MonoBehaviour
     {
-        const string TitleSceneName = "TitleScene";
+        public const string TitleSceneName = "TitleScene";
         const string MapSceneName = "MapScene";
         const int WindowWidth = 1280;
         const int WindowHeight = 720;
@@ -31,10 +31,12 @@ namespace Scenes
         [SerializeField] Button screenModeButton;
         [SerializeField] Button languageButton;
         [SerializeField] Button creditsButton;
+        [SerializeField] Button accountButton;
         [SerializeField] Button titleButton;
         [SerializeField] TMP_Text heading;
         [SerializeField] TMP_Text languageNotice;
         [SerializeField] Credits credits;
+        [SerializeField] AccountPanel account;
 
         float pausedTimeScale = 1;
 
@@ -51,6 +53,7 @@ namespace Scenes
             screenModeButton.onClick.AddListener(ToggleScreenMode);
             languageButton.onClick.AddListener(ToggleLanguage);
             creditsButton.onClick.AddListener(credits.Show);
+            accountButton.onClick.AddListener(account.Show);
             titleButton.onClick.AddListener(GoToTitle);
         }
 
@@ -68,10 +71,9 @@ namespace Scenes
             if (Input.GetKeyDown(KeyCode.F11)) ToggleScreenMode();
             if (!Input.GetKeyDown(KeyCode.Escape)) return;
             if (credits.IsOpen) credits.Hide();
+            else if (account.IsOpen) account.Hide();
             // 맵의 슬라임 도감은 Esc 키로 닫으므로, 도감이 열려 있으면 메뉴를 열지 않는다.
             else if (!IsOpen && SlimeEncyclopediaView.Current != null) return;
-            // 타이틀의 계정 창도 Esc 키로 닫는다.
-            else if (!IsOpen && AccountPanel.HoldsEscape) return;
             else if (IsOpen) Close();
             else Open();
         }
@@ -94,6 +96,7 @@ namespace Scenes
         {
             if (!IsOpen) return;
             credits.Hide();
+            account.Hide();
             menu.SetActive(false);
             Time.timeScale = pausedTimeScale;
             InteractionLock.IsPaused = false;
@@ -103,7 +106,7 @@ namespace Scenes
         // Automatic navigation 은 메뉴 아래에 있는 씬 버튼까지 찾아가므로, 보이는 메뉴 버튼끼리만 위아래로 잇는다.
         void LinkNavigation()
         {
-            Button[] buttons = new[] { resumeButton, screenModeButton, languageButton, creditsButton, titleButton }
+            Button[] buttons = new[] { resumeButton, screenModeButton, languageButton, creditsButton, accountButton, titleButton }
                 .Where(button => button.gameObject.activeSelf).ToArray();
             for (int i = 0; i < buttons.Length; i++)
                 buttons[i].navigation = new Navigation
@@ -122,6 +125,7 @@ namespace Scenes
             // 언어 버튼에는 지금 언어가 아니라 바꿀 언어를 그 언어로 적는다.
             Label(languageButton).text = Localization.Current == Language.Korean ? "English" : "한국어";
             Label(creditsButton).text = Localization.Translate("크레딧");
+            Label(accountButton).text = Localization.Translate("계정");
             Label(titleButton).text = Localization.Translate("타이틀로");
             languageNotice.text = Localization.Translate("다음 화면부터 적용됩니다");
         }

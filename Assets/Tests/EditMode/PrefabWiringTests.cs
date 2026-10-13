@@ -85,6 +85,8 @@ namespace WordVenture.Tests
         [TestCase("heading")]
         [TestCase("languageNotice")]
         [TestCase("credits")]
+        [TestCase("accountButton")]
+        [TestCase("account")]
         public void 설정_메뉴가_항목을_들고_있다(string field)
         {
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(SettingsMenuPrefab);
@@ -116,6 +118,19 @@ namespace WordVenture.Tests
             Assert.That(scene, Does.Contain("guid: " + ScriptGuid<EventSystem>() + ","),
                 scenePath + " 에 EventSystem 이 없어 메뉴 버튼을 눌러도 열리지 않는다");
         }
+
+        // 계정 창의 진행도 이름은 타이틀 배경과 같은 stage 목록에서 고른다. prefab 은 씬을 참조하지 못해서 목록을 따로 들고 있다.
+        [Test]
+        public void 계정_창의_stage_목록이_타이틀_배경과_같다()
+        {
+            Assert.That(StageList(SettingsMenuPrefab), Is.Not.Empty, SettingsMenuPrefab + " 에 stages 목록이 없다");
+            Assert.That(StageList(SettingsMenuPrefab), Is.EqualTo(StageList("Assets/Scenes/TitleScene.unity")),
+                "계정 창과 타이틀 배경이 다른 stage 목록을 쓴다");
+        }
+
+        static string[] StageList(string path) => File.ReadAllText(path).Split('\n')
+            .SkipWhile(line => line != "  stages:").Skip(1)
+            .TakeWhile(line => line.StartsWith("  - ")).ToArray();
 
         static string ScriptGuid<T>() where T : MonoBehaviour
         {
