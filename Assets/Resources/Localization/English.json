@@ -126,6 +126,12 @@
     {"ko": "정진욱  <size=30>디자이너 / 개발자</size>", "en": "정진욱  <size=30>Designer / Developer</size>"},
     {"ko": "황인섭  <size=30>개발자</size>", "en": "황인섭  <size=30>Developer</size>"},
     {"ko": "이 게임에는 AI로 생성된 아트가 사용되었습니다.", "en": "This game uses AI-generated art."},
-    {"ko": "닫기", "en": "Close"}
+    {"ko": "닫기", "en": "Close"},
+    {"ko": "설정", "en": "Settings"},
+    {"ko": "계속하기", "en": "Resume"},
+    {"ko": "창 모드 (F11)", "en": "Windowed (F11)"},
+    {"ko": "전체 화면 (F11)", "en": "Fullscreen (F11)"},
+    {"ko": "타이틀로", "en": "Back to Title"},
+    {"ko": "다음 화면부터 적용됩니다", "en": "Applies from the next screen"}
   ]
 }
