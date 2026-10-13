@@ -14,6 +14,7 @@ namespace WordVenture.Tests
         const string MagicCardPrefab = "Assets/Prefabs/Cards/MagicCard.prefab";
         const string TypeCardPrefab = "Assets/Prefabs/Cards/TypeCard.prefab";
         const string TutorialPrefab = "Assets/Prefabs/Tutorial/TutorialController.prefab";
+        const string SettingsMenuPrefab = "Assets/Resources/UI/SettingsMenu.prefab";
 
         [TestCase(MagicCardPrefab)]
         [TestCase(TypeCardPrefab)]
@@ -68,6 +69,34 @@ namespace WordVenture.Tests
             int highestInScenes = SceneCanvasOrder.Highest();
             Assert.That(canvas.sortingOrder, Is.GreaterThan(highestInScenes),
                 "씬 캔버스(최대 " + highestInScenes + ")가 blocker 위에 깔린다");
+        }
+
+        [TestCase("menu")]
+        [TestCase("openButton")]
+        [TestCase("resumeButton")]
+        [TestCase("screenModeButton")]
+        [TestCase("languageButton")]
+        [TestCase("creditsButton")]
+        [TestCase("titleButton")]
+        [TestCase("heading")]
+        [TestCase("languageNotice")]
+        [TestCase("credits")]
+        public void 설정_메뉴가_항목을_들고_있다(string field)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(SettingsMenuPrefab);
+            Assert.That(prefab, Is.Not.Null, SettingsMenuPrefab + " 을(를) 로드하지 못했다");
+            SerializedObject menu = ProjectAssets.FindComponentWithProperty(prefab, field);
+            Assert.That(menu, Is.Not.Null, field + " 필드를 가진 컴포넌트가 없다");
+            Assert.That(menu.FindProperty(field).objectReferenceValue, Is.Not.Null, field + " 참조가 끊겼다");
+        }
+
+        [Test]
+        public void 설정_메뉴_캔버스가_튜토리얼과_씬_캔버스보다_위에_있다()
+        {
+            Canvas menu = AssetDatabase.LoadAssetAtPath<GameObject>(SettingsMenuPrefab).GetComponent<Canvas>();
+            Canvas tutorial = AssetDatabase.LoadAssetAtPath<GameObject>(TutorialPrefab).GetComponent<Canvas>();
+            Assert.That(menu.sortingOrder, Is.GreaterThan(tutorial.sortingOrder), "튜토리얼 blocker 가 메뉴를 가린다");
+            Assert.That(menu.sortingOrder, Is.GreaterThan(SceneCanvasOrder.Highest()), "씬 캔버스가 메뉴를 가린다");
         }
 
         static SerializedObject TutorialControllerComponent()

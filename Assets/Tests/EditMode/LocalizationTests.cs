@@ -10,6 +10,8 @@ namespace WordVenture.Tests
     public sealed class LocalizationTests
     {
         const string FontPath = "Assets/Art/Fonts/NeoDunggeunmoPro-Regular SDF.asset";
+        const string SettingsMenuPrefab = "Assets/Resources/UI/SettingsMenu.prefab";
+        const string SettingsMenuScript = "Assets/Scripts/Scenes/SettingsMenu.cs";
         static readonly Regex Hangul = new Regex("[가-힣]");
         static readonly Regex RichTextTag = new Regex("<[^>]+>");
 
@@ -52,17 +54,31 @@ namespace WordVenture.Tests
         }
 
         [Test]
-        public void 빌드_씬의_한국어_고정_문구에_영어_번역이_있다()
+        public void 빌드_씬과_설정_메뉴의_한국어_고정_문구에_영어_번역이_있다()
         {
             IReadOnlyDictionary<string, string> table = EnglishTable();
             var missing = new List<string>();
-            foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
-                foreach (Match text in Regex.Matches(System.IO.File.ReadAllText(scene.path), "m_text: \"(.*)\""))
+            var paths = new List<string> { SettingsMenuPrefab };
+            foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes) paths.Add(scene.path);
+            foreach (string path in paths)
+                foreach (Match text in Regex.Matches(System.IO.File.ReadAllText(path), "m_text: \"(.*)\""))
                 {
                     string korean = Regex.Unescape(text.Groups[1].Value);
                     if (Hangul.IsMatch(korean) && !table.ContainsKey(korean.Trim()))
-                        missing.Add(scene.path + ": " + korean);
+                        missing.Add(path + ": " + korean);
                 }
+            Assert.That(missing, Is.Empty, "Resources/Localization/English.json 에 번역을 추가해야 한다");
+        }
+
+        [Test]
+        public void 설정_메뉴_코드의_한국어_문구에_영어_번역이_있다()
+        {
+            IReadOnlyDictionary<string, string> table = EnglishTable();
+            var missing = new List<string>();
+            // 언어 버튼에 적는 "한국어" 는 번역하지 않고 그대로 보여 준다.
+            foreach (Match text in Regex.Matches(System.IO.File.ReadAllText(SettingsMenuScript), "\"([^\"\\n]*[가-힣][^\"\\n]*)\""))
+                if (text.Groups[1].Value != "한국어" && !table.ContainsKey(text.Groups[1].Value))
+                    missing.Add(text.Groups[1].Value);
             Assert.That(missing, Is.Empty, "Resources/Localization/English.json 에 번역을 추가해야 한다");
         }
 

@@ -240,6 +240,8 @@ namespace Combat.UI
             FitCells();
             // 도감을 연 E 키 입력으로 바로 닫히지 않게 한다.
             if (Time.frameCount == openedFrame) return;
+            // 설정 메뉴가 위에 열려 있으면 Esc 키와 방향키는 메뉴가 받는다.
+            if (InteractionLock.IsPaused) return;
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E)) Close();
             else if (Input.GetKeyDown(KeyCode.RightArrow)) Step(1);
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) Step(-1);
