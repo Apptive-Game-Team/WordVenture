@@ -1,0 +1,26 @@
+Use your built-in image generation tool to create SEVEN new image files in the current working directory, one image per file. Do not create, edit, or delete anything else, and do not touch any other directory. Generate them one at a time. Attach `reference-word.png` to every generation; also attach `reference-fisherman.png` as a second style reference.
+
+`reference-word.png` is the existing dialogue portrait of Word, the heroine of this game. Every new image is the SAME girl, drawn by the same artist in the same style, so that the new images can replace the reference mid-conversation without the character looking different. Keep exactly:
+- Short bob of coral-red hair with straight bangs, a yellow ribbon headband with a bow on top-right of the head.
+- Large magenta-pink anime eyes with a single highlight, small nose and mouth, pale skin.
+- Black hooded cloak, red bow/tie at the collar, dark blue dress underneath.
+- When the staff is visible: a grey crescent-topped staff holding a dark blue orb.
+- Style: cute anime face, flat cel shading with only 2 tones per material, dark outline, chunky pixel-art clusters about 8-10 px wide, no fine texture, no individual hair strands, soft slightly muted colors.
+- Framing exactly like the reference: waist-up, three-quarter view, body turned slightly to the RIGHT (the viewer's right), same size on the canvas, head and shoulders fully visible, small empty margin around the head. Hands and props must stay inside the canvas.
+
+Rules for every image:
+- Square canvas, 1024 x 1024.
+- Solid flat magenta background (#FF00FF) everywhere outside the character. Do not use magenta or pink-purple inside the character except her eyes as in the reference.
+- No text, no speech bubbles, no motion lines, no frame, no scenery, no other characters.
+- Word never speaks: her mouth stays closed in every image.
+
+Files:
+1. `WordNod.png` - nodding: head dipped forward and slightly down, eyes gently closed, a small calm closed-mouth smile. Staff held loosely in one hand as in the reference.
+2. `WordShakeHead.png` - shaking her head no: head turned a little to one side, eyes closed, eyebrows drawn together in a sad but firm look. One hand lightly touching her own throat.
+3. `WordPoint.png` - pointing: one arm extended forward to the viewer's RIGHT with the index finger pointing that way, eyes looking where she points, serious face. The other hand holds the staff.
+4. `WordTilt.png` - puzzled: head tilted to one side, eyes open and curious, one finger touching her chin. Staff leaning on her shoulder.
+5. `WordShowBook.png` - showing a book: holding an old open brown leather spellbook with both hands, the open pages turned toward the viewer's RIGHT as if showing it to someone, earnest face. No staff.
+6. `WordRaiseCard.png` - raising a card: one hand raised to shoulder height holding up a single plain rectangular cream-colored card with a simple pink border (no text on it), determined face. The other hand holds the staff.
+7. `WordPalmOut.png` - "wait here": one arm extended forward toward the viewer's RIGHT with the open palm facing outward like a gentle stop sign, calm reassuring face. The other hand holds the staff.
+
+When done, reply with the seven file names.
