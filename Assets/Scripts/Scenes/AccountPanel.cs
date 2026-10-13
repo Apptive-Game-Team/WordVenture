@@ -25,17 +25,24 @@ namespace Scenes
         [SerializeField] TMP_Text status;
 
         static bool restoreTried;
+        static AccountPanel current;
+        int hiddenFrame = -1;
+
+        // 설정 메뉴는 Esc 키로 열리므로, 계정 창이 열려 있거나 이번 프레임에 Esc 키로 닫혔으면 메뉴를 열지 않는다.
+        public static bool HoldsEscape => current != null && (current.overlay.activeSelf || current.hiddenFrame == Time.frameCount);
         GameObject previousSelection;
         bool previousInteractable, previousBlocksRaycasts;
 
         void Awake()
         {
+            current = this;
             AccountSession.Changed += ShowHomeIfOpen;
             AccountRequests.BusyChanged += ShowBusy;
         }
 
         void OnDestroy()
         {
+            if (current == this) current = null;
             AccountSession.Changed -= ShowHomeIfOpen;
             AccountRequests.BusyChanged -= ShowBusy;
         }
@@ -65,6 +72,7 @@ namespace Scenes
         {
             if (!overlay.activeSelf) return;
             overlay.SetActive(false);
+            hiddenFrame = Time.frameCount;
             menu.interactable = previousInteractable;
             menu.blocksRaycasts = previousBlocksRaycasts;
             if (EventSystem.current != null)
