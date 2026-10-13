@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HighlandStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageID: 2
-  stageName: 
+  stageName: 고원
   background: {fileID: 21300000, guid: f5eee149beadcfb4bb4bbb74ad433be6, type: 3}
   waveData:
     enemyWaves:
