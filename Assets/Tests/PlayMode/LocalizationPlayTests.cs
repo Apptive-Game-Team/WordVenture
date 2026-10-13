@@ -14,7 +14,7 @@ namespace WordVenture.Tests
 {
     public sealed class LocalizationPlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;

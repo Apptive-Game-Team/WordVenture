@@ -1,4 +1,5 @@
 using System.Linq;
+using Combat.UI;
 using Core;
 using TMPro;
 using UnityEngine;
@@ -85,6 +86,8 @@ namespace Scenes
             if (Input.GetKeyDown(KeyCode.F11)) ToggleScreenMode();
             if (!Input.GetKeyDown(KeyCode.Escape)) return;
             if (credits.IsOpen) credits.Hide();
+            // 맵의 슬라임 도감은 Esc 키로 닫으므로, 도감이 열려 있으면 메뉴를 열지 않는다.
+            else if (!IsOpen && SlimeEncyclopediaView.Current != null) return;
             else if (IsOpen) Close();
             else Open();
         }

@@ -22,11 +22,11 @@ namespace Combat
         public ElementalStatus() : this(MagicType.Undead) { }
         public ElementalStatus(MagicType defenseElement) { this.defenseElement = defenseElement; }
         public int RequiredChill => defenseElement == MagicType.Ice ? FreezeThreshold * 2 : FreezeThreshold;
-        public string ResistanceDescription => defenseElement == MagicType.Fire ? "불 속성 · 화상 피해 50%"
-            : defenseElement == MagicType.Ice ? "얼음 속성 · 빙결에 냉기 6점 필요"
-            : defenseElement == MagicType.Lightning ? "번개 속성 · 감전 증폭 50%"
-            : defenseElement == MagicType.Rock ? "바위 속성 · 균열 효과 50%"
-            : defenseElement == MagicType.Holy ? "신성 속성" : "언데드 속성";
+        // 도감에 보이는 속성별 상태 이상 저항. 수치를 바꾸면 이 문장과 English.json 도 고친다.
+        public string ResistanceDescription => defenseElement == MagicType.Fire ? "화상 피해를 절반만 받는다."
+            : defenseElement == MagicType.Ice ? "냉기가 6 쌓여야 빙결된다."
+            : defenseElement == MagicType.Lightning ? "감전 추가 피해를 절반만 받는다."
+            : defenseElement == MagicType.Rock ? "균열이 저항을 절반만 무시한다." : "";
         public int BurnDamage { get; private set; }
         public int BurnTurns { get; private set; }
         public int Chill { get; private set; }
@@ -49,6 +49,8 @@ namespace Combat
             public string Reaction;
             public bool RemovesBurn;
             public bool RemovesChill;
+            // 균열 보정까지 반영해 실제로 쓴 상성. 타격감 세기(HitImpact)를 고르는 데 쓴다.
+            public float Affinity;
         }
 
         public HitResult Preview(MagicType element, MagicType spell, float baseDamage, float affinity, bool boss)
@@ -61,7 +63,7 @@ namespace Combat
             baseDamage = Mathf.Max(0, baseDamage);
             // 신성의 음수 상성은 기존 회복 동작이다. 회복은 공격 준비 상태를 소비하지 않는다.
             if (affinity <= 0f)
-                return new HitResult { Damage = (int)(baseDamage * affinity), Reaction = string.Empty };
+                return new HitResult { Damage = (int)(baseDamage * affinity), Reaction = string.Empty, Affinity = affinity };
             bool hadFracture = FractureTurns > 0;
             bool hadShock = ShockTurns > 0;
             float hitAffinity = affinity;
@@ -72,7 +74,8 @@ namespace Combat
             {
                 // 균열은 약점 보너스를 유지하고 저항(1 미만)만 무시한다.
                 Damage = Mathf.FloorToInt(baseDamage * hitAffinity * (hadShock ? 1f + shockBonus : 1f)),
-                Reaction = string.Empty
+                Reaction = string.Empty,
+                Affinity = hitAffinity
             };
             ShockTurns = FractureTurns = 0;
             int burnDuration = spell == MagicType.Drop ? 1 : 2;
