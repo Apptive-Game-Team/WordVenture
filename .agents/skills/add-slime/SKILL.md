@@ -5,7 +5,8 @@ description: >
   WordVenture. Use when the user asks to add a slime, add an enemy, add a boss,
   add an enemy to a wave or stage, change an enemy's stats, element, or attack
   behavior, or says 슬라임 추가, 적 추가, 보스 추가, 새 몬스터, 웨이브에 적 추가.
-  Covers the enemy class, prefab, EnemyDataContainer entry, wave data, and the
+  Covers the enemy class, slime art in the shared style, prefab,
+  EnemyDataContainer entry, wave data, and the
   slime encyclopedia (도감) name, attack description, and English translation,
   which must be updated in the same change.
 ---
@@ -46,11 +47,13 @@ not as follow-up work.
      return that enemy id. `RecordClearedStages` follows this id so that old
      saves record the summoned slime too.
    - `BossEnemy` subclasses get the boss freeze sentence automatically.
-2. **Prefab.** Put the prefab under `Assets/Prefabs/Combat/Enemies/Slime/` with
+2. **Art.** Follow the art section below. Do not put a generated image straight
+   into the game.
+3. **Prefab.** Put the prefab under `Assets/Prefabs/Combat/Enemies/Slime/` with
    the `Enemy` subclass, `SlimeAnimator`, and `SelectableObject`. The first
    entry of `SlimeAnimator.sprites` is the encyclopedia picture, so it must be
    the idle frame, not a placeholder. Commit the `.meta` file with it.
-3. **Data entry.** Append an entry to `EnemyDataContainer.asset`.
+4. **Data entry.** Append an entry to `EnemyDataContainer.asset`.
    - `id` must equal the entry's index in the list, because
      `EnemyDataContainer.GetGearData(id)` indexes the list.
    - `name` is the internal name (`S10_Ranged_Slime`). `displayName` is the
@@ -63,20 +66,91 @@ not as follow-up work.
      `사거리 화면 전체`.
    - Unity writes Korean strings in this asset as double-quoted `\uXXXX`
      escapes with uppercase hex. Match that when editing the YAML by hand.
-4. **Waves.** Add the id to the `enemySpawnDatasInWave` list of the stage's
+5. **Waves.** Add the id to the `enemySpawnDatasInWave` list of the stage's
    `*BattleWaveData.asset`. `StageManager` only plays `enemyWaves[0]` of a
    `StageData`, and `RecordClearedStages` reads the same wave container.
-5. **Translation.** Add an entry to `English.json` for the new `displayName`
+6. **Translation.** Add an entry to `English.json` for the new `displayName`
    and for a new `AttackDescription` sentence. The font atlas
    (`NeoDunggeunmoPro-Regular SDF`) holds only ASCII and Hangul, so do not use
    `·`, `×`, `—`, or other symbols in the Korean or English text.
-6. **Element changes.** If the change adds a `MagicType` or edits the affinity
+7. **Element changes.** If the change adds a `MagicType` or edits the affinity
    table, check that `SlimeEncyclopediaView.ElementName` has a name and color
    for the type and that `ElementalStatus.ResistanceDescription` describes its
    status resistance.
-7. **Id range.** Discovery is stored as bits, 31 ids per key, in
+8. **Id range.** Discovery is stored as bits, 31 ids per key, in
    `SaveLoadController.SeenSlimeSlots` keys. Two keys hold ids 0 to 61. Raise
    `SeenSlimeSlots` before adding id 62.
+
+## Art
+
+The existing slimes share one body: the same outline, eye position, 4-pixel
+blocks, and per-frame motion. Act Two slimes generated as whole images had a
+different body shape, eye position, and rim width, and were redrawn. Every new
+slime keeps the shared body and gets its look from color and one decoration.
+`docs/design/act-two-art/README.md` records how this was decided.
+
+**Style rules**
+
+- Body: the 8 frames of the purple ranged slime
+  (`Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/`).
+  Change only its 4 colors: body, rim and eyes, lower band, and highlight.
+  Keep the highlight white so the shine matches the other slimes.
+- Look: one decoration on top of or in front of the body (a horn, a fuse, a
+  sprout, a cannon, a shield, a crack, crystals in Act Two). Draw it as text
+  art where one character is one cell, stamped at 2x2 cells so its pixels are
+  as thick as the body's. Keep it off the eyes.
+- Size: draw on a 128x128 grid and scale 4x to a 512x512 transparent frame.
+  A boss scales 6x and so looks 1.5 times larger; the bottom line stays where
+  the base slime's is.
+- Direction: the slime faces right, like every existing frame.
+- Frame order, as `SlimeAnimator` plays it: idle 2, move and melee 2, hit,
+  death, ranged attack 2. A slime that warns before acting (`Windup()`) has 2
+  more frames, 9th and 10th.
+- Colors: choose a body and rim pair that no existing slime uses, so the slime
+  is recognizable in the encyclopedia list at cell size.
+
+**Steps**
+
+1. Add an entry to `SLIMES` in `docs/design/act-two-art/build_slimes.py`: the
+   color map (`BODY`, `RIM`, `BAND` replacements), the decoration grid with its
+   palette, its anchor (`top` or `front`), and `scale` for a boss or `windup`
+   for a warning slime. A new decoration needs a new text-art grid next to
+   `HORN`, `FUSE`, and the others.
+2. Add the slime under `enemies` in `docs/design/act-two-art/manifest.json`
+   with 8 (or 10) frame paths,
+   `Assets/Art/Combat/Enemies/ActTwo/<Name>/<Name>Slime_01.png` onward, each
+   with a new 32-character hex GUID. Create the `<Name>/` folder, add it with a
+   new GUID under `folders` in the same manifest, and give it a `.meta` copied
+   from `Assets/Art/Combat/Enemies/ActTwo/Mortar.meta` with that GUID.
+3. Copy an existing frame's `.meta` (for example
+   `Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_01.png.meta`) to the new
+   `_01.png.meta` and replace its GUID with the manifest GUID. The script copies
+   this file's import settings to the other frames, so do not change them.
+4. From the repository root, render a comparison sheet first. Its top row is
+   the base slime, so check that the eyes, bottom line, and outline match:
+
+   ```bash
+   python3 docs/design/act-two-art/build_slimes.py preview.png
+   ```
+
+5. Write the frames, then set the prefab's `SlimeAnimator.sprites` to them in
+   the manifest order:
+
+   ```bash
+   python3 docs/design/act-two-art/build_slimes.py
+   ```
+
+6. Add the prefab and its manifest name to `EnemyArt` in
+   `Assets/Tests/EditMode/ActTwoCompleteDataTests.cs`, which checks that the
+   prefab's frames match the manifest.
+7. Put the comparison sheet in the plan's `.plan/assets/<plan-name>/` folder and
+   in the pull request, so the reviewer can compare the new slime with the base.
+
+Image generation is still the way to make battle backgrounds and dialogue
+portraits; the prompts and the reference images used are in
+`docs/design/act-two-art/prompts/` and the README. For a slime, use a generated
+image at most as a sketch for the decoration, then draw the decoration as text
+art in `build_slimes.py`.
 
 ## Validation
 
