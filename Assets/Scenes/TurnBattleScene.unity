@@ -156,11 +156,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162701488369841977, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 256
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 162701488369841977, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 236
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 162701488369841977, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -196,7 +196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162701488369841977, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 162701488369841977, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -215,7 +215,7 @@ PrefabInstance:
       value: CombineButton
       objectReference: {fileID: 0}
     - target: {fileID: 7445685578488802338, guid: 731b7f54e1898c845a1b92912c5dcae8, type: 3}
-      propertyPath: CombineZone
+      propertyPath: combineZone
       value: 
       objectReference: {fileID: 1425239962}
     m_RemovedComponents: []
@@ -1192,7 +1192,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1202,10 +1202,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: 21300000, guid: 1d799439257a460d801ef0c95d65de1b, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 4c03aee812334eaeabc2b6bdb20fb2ce, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: b93b85f1c01d4a7f92eb5c134c1f7391, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -1985,11 +1985,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 1086165618}
     m_Modifications:
     - target: {fileID: 457294745888891512, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
-      propertyPath: Drop
+      propertyPath: drop
       value: 
       objectReference: {fileID: 595456797}
     - target: {fileID: 457294745888891512, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
-      propertyPath: Shoot
+      propertyPath: shoot
       value: 
       objectReference: {fileID: 338851660}
     - target: {fileID: 457294745888891512, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
@@ -2030,11 +2030,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 444
+      value: 376
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 320
+      value: 328
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2066,11 +2066,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -445.4
+      value: -488
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 29.9
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 6942285620787239883, guid: aafeb11600a809840a4881989da0fb1f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
