@@ -8,9 +8,31 @@ namespace Story
     public struct StageDialogueLine
     {
         public bool wordSpeaking;
-        [Tooltip("켜면 이름과 초상화 없이 나레이션으로 보여 준다.")]
+        [Tooltip("켜면 이름 없이 나레이션으로 보여 준다. 초상화는 둘 다 어둡게 남는다.")]
         public bool narration;
+        [Tooltip("나레이션이 워드의 몸짓을 설명하면 워드 초상화를 그 몸짓 그림으로 바꾸고 밝게 보여 준다.")]
+        public WordGesture gesture;
         [TextArea(2, 4)] public string text;
+    }
+
+    // 워드는 세계수 결말 전까지 말하지 않는다. 하려던 말은 나레이션의 몸짓으로 보여 준다.
+    public enum WordGesture
+    {
+        None,
+        Nod,
+        ShakeHead,
+        Point,
+        Tilt,
+        ShowBook,
+        RaiseCard,
+        PalmOut,
+    }
+
+    [Serializable]
+    public struct WordGesturePortrait
+    {
+        public WordGesture gesture;
+        public Sprite portrait;
     }
 
     public enum StageDialogueMoment
@@ -64,8 +86,19 @@ namespace Story
     public sealed class StageDialogueData : ScriptableObject
     {
         public Sprite wordPortrait;
+        public WordGesturePortrait[] gesturePortraits;
         public TMP_FontAsset font;
         public StageDialogueChapter[] chapters;
+
+        // 몸짓 그림이 없으면 평소 초상화를 쓴다.
+        public Sprite WordPortraitFor(WordGesture gesture)
+        {
+            if (gesture == WordGesture.None || gesturePortraits == null) return wordPortrait;
+            foreach (var entry in gesturePortraits)
+                if (entry.gesture == gesture && entry.portrait != null)
+                    return entry.portrait;
+            return wordPortrait;
+        }
 
         public StageDialogueChapter FindChapter(int stageID,
             StageDialogueMoment moment = StageDialogueMoment.Clear, int wave = 0)
