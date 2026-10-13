@@ -39,7 +39,8 @@ namespace Tutorial
             Stretch(demoRect);
             dragDemo = demoRect.gameObject.AddComponent<TutorialDragDemo>();
             dragDemo.Initialize(guidance, dragHand, font);
-            hintPanel = Background("ActionHint", root, new Color(0.04f, 0.08f, 0.14f, 0.94f), false);
+            hintPanel = Background("ActionHint", root, new Color(UiPalette.Panel.r, UiPalette.Panel.g, UiPalette.Panel.b, 0.94f), false);
+            AddBorder(hintPanel, 3);
             hintPanel.anchorMin = hintPanel.anchorMax = new Vector2(0.5f, 1);
             hintPanel.pivot = new Vector2(0.5f, 1);
             hint = Label("HintText", hintPanel, "");
@@ -51,7 +52,8 @@ namespace Tutorial
 
             confirmation = Background("SkipConfirmation", root, new Color(0, 0, 0, 0.75f), true);
             Stretch(confirmation);
-            panel = Background("ConfirmationPanel", confirmation, new Color(0.06f, 0.1f, 0.17f, 1), true);
+            panel = Background("ConfirmationPanel", confirmation, UiPalette.Panel, true);
+            AddBorder(panel, 3);
             questionText = Label("Question", panel, "튜토리얼을 건너뛸까요?");
             questionText.rectTransform.anchorMin = new Vector2(0, 0.4f);
             questionText.rectTransform.anchorMax = Vector2.one;
@@ -59,7 +61,7 @@ namespace Tutorial
             confirmButton = Button("ConfirmSkip", panel, "건너뛰기", controller.ConfirmSkip, out confirmText);
             cancelButton.anchorMin = cancelButton.anchorMax = new Vector2(0.27f, 0.23f);
             confirmButton.anchorMin = confirmButton.anchorMax = new Vector2(0.73f, 0.23f);
-            confirmButton.GetComponent<Image>().color = new Color(0.38f, 0.23f, 0.08f, 1);
+            confirmButton.GetComponent<Image>().color = UiPalette.SelectedCell;
             confirmation.gameObject.SetActive(false);
             ClearGuidance();
             Layout();
@@ -162,6 +164,13 @@ namespace Tutorial
             return rect;
         }
 
+        static void AddBorder(RectTransform rect, float width)
+        {
+            Outline outline = rect.gameObject.AddComponent<Outline>();
+            outline.effectColor = UiPalette.Border;
+            outline.effectDistance = new Vector2(width, -width);
+        }
+
         TMP_Text Label(string name, RectTransform parent, string text)
         {
             RectTransform rect = Rect(name, parent);
@@ -171,7 +180,7 @@ namespace Tutorial
             TMP_Text label = rect.gameObject.AddComponent<TextMeshProUGUI>();
             label.font = font;
             label.text = Localization.Translate(text);
-            label.color = new Color(1, 0.94f, 0.8f, 1);
+            label.color = UiPalette.Text;
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             return label;
@@ -179,7 +188,8 @@ namespace Tutorial
 
         RectTransform Button(string name, Transform parent, string text, UnityEngine.Events.UnityAction onClick, out TMP_Text label)
         {
-            RectTransform rect = Background(name, parent, new Color(0.12f, 0.2f, 0.28f, 1), true);
+            RectTransform rect = Background(name, parent, UiPalette.Cell, true);
+            AddBorder(rect, 2);
             Button button = rect.gameObject.AddComponent<Button>();
             button.targetGraphic = rect.GetComponent<Image>();
             button.navigation = new Navigation { mode = Navigation.Mode.None };
