@@ -16,16 +16,31 @@ namespace Story
     }
 
     // 워드는 세계수 결말 전까지 말하지 않는다. 하려던 말은 나레이션의 몸짓으로 보여 준다.
+    // 같은 몸짓이라도 상황에 따라 표정이 다른 그림을 쓴다. 값은 에셋에 숫자로 저장되므로 새 몸짓은 끝에 붙인다.
     public enum WordGesture
     {
         None,
+        // 부드럽게 미소 지으며 끄덕인다.
         Nod,
+        // 슬프게 고개를 젓는다.
         ShakeHead,
+        // 진지하게 가리킨다.
         Point,
         Tilt,
+        // 펼친 마법서를 보여 준다.
         ShowBook,
         RaiseCard,
         PalmOut,
+        // 굳게 결심하고 끄덕인다.
+        NodFirm,
+        // 적에게 단호하게 고개를 젓는다.
+        ShakeHeadFirm,
+        // 걱정스러운 얼굴로 가리킨다.
+        PointWorried,
+        // 덮인 마법서의 표지를 보여 준다.
+        ShowCover,
+        // 목을 짚어 말할 수 없다고 알린다.
+        TouchThroat,
     }
 
     [Serializable]

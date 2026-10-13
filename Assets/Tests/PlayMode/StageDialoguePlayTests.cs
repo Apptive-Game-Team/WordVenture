@@ -273,8 +273,8 @@ namespace WordVenture.Tests
         static readonly Dictionary<string, string> GesturePreviews = new Dictionary<string, string>
             {
                 { "무너진 산골짜기의 집을 떠올리며", "word-gesture-narration-preview.png" },
-                { "바위 쪽을 가리키고", "word-gesture-point-preview.png" },
-                { "마법서 표지를 내밀었다", "word-gesture-book-preview.png" },
+                { "바위 쪽을 가리키고", "word-gesture-point-worried-preview.png" },
+                { "마법서 표지를 내밀었다", "word-gesture-cover-preview.png" },
             };
 
         [UnityTest]

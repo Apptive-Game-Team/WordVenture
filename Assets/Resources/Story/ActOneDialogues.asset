@@ -28,6 +28,16 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 51d9ed3a93f642c0b64594803e842281, type: 3}
   - gesture: 7
     portrait: {fileID: 21300000, guid: 53a3f8021a534d91b60f96e1f7dd3bef, type: 3}
+  - gesture: 8
+    portrait: {fileID: 21300000, guid: 2c4d9a7194e0416fb11a1af27b085640, type: 3}
+  - gesture: 9
+    portrait: {fileID: 21300000, guid: e68a5ff30f78431291a1155709494872, type: 3}
+  - gesture: 10
+    portrait: {fileID: 21300000, guid: ee1daf037c4e49b58018a3de2fd2b433, type: 3}
+  - gesture: 11
+    portrait: {fileID: 21300000, guid: 2893518f1c344927b7e4547cc52875f5, type: 3}
+  - gesture: 12
+    portrait: {fileID: 21300000, guid: ca6e1f029377475990077d7e067cf7c9, type: 3}
   font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   chapters:
   - stageID: 0
@@ -60,7 +70,7 @@ MonoBehaviour:
       text: "정말 다 물리쳐 주셨네요. 고마워요. …그런데 왜 아무 말씀도 안 하세요?"
     - wordSpeaking: 0
       narration: 1
-      gesture: 2
+      gesture: 12
       text: "워드는 목을 짚고 천천히 고개를 저었다."
     - wordSpeaking: 0
       narration: 0
@@ -104,7 +114,7 @@ MonoBehaviour:
       text: "거기 누구요? …마법사로구먼. 슬라임들이 배를 다 뒤집어 놔서 바다로는 못 나가오."
     - wordSpeaking: 0
       narration: 1
-      gesture: 3
+      gesture: 10
       text: "워드는 바위 쪽을 가리키고, 걱정스러운 얼굴로 어부를 바라보았다."
     - wordSpeaking: 0
       narration: 0
@@ -124,7 +134,7 @@ MonoBehaviour:
       text: "은인의 이름이라도 알려 주겠소?"
     - wordSpeaking: 0
       narration: 1
-      gesture: 5
+      gesture: 11
       text: "워드는 잠시 망설이다가 마법서 표지를 내밀었다. 표지 귀퉁이에 할아버지의 글씨로 '워드에게'라고 적혀 있었다."
     - wordSpeaking: 0
       narration: 0
@@ -184,7 +194,7 @@ MonoBehaviour:
       text: "멈춰! …사람이었군. 이 앞은 마왕 성으로 가는 길이다. 피난민은 전부 내려보냈어."
     - wordSpeaking: 0
       narration: 1
-      gesture: 3
+      gesture: 10
       text: "워드는 빗속에 혼자 선 경비병을 보고, 텅 빈 초소를 가리켰다."
     - wordSpeaking: 0
       narration: 0
@@ -192,7 +202,7 @@ MonoBehaviour:
       text: "혼자 남아서 뭘 하냐고? 누군가는 마지막 사람이 지나갈 때까지 있어야 하니까. 넌 왜 거꾸로 올라가지?"
     - wordSpeaking: 0
       narration: 1
-      gesture: 5
+      gesture: 11
       text: "워드는 대답 대신 할아버지의 마법서를 꺼내 들었다. 표지에 묻은 그을음이 빗물에 번졌다."
     - wordSpeaking: 0
       narration: 1
@@ -204,7 +214,7 @@ MonoBehaviour:
       text: "처음엔 복수하러 나섰겠지. 그런데 지금은 지나온 마을 사람들을 생각하는 얼굴이군."
     - wordSpeaking: 0
       narration: 1
-      gesture: 1
+      gesture: 8
       text: "워드는 고개를 끄덕였다."
     - wordSpeaking: 0
       narration: 0
@@ -260,7 +270,7 @@ MonoBehaviour:
       text: "노려보기만 하는군. 그자는 내 동족을 수없이 베어 넘겼다. 우리는 빚을 받으러 갔을 뿐이다."
     - wordSpeaking: 0
       narration: 1
-      gesture: 2
+      gesture: 9
       text: "워드는 고개를 저었다. 그리고 지나온 길, 평원과 해안과 고원이 있는 쪽을 차례로 가리켰다."
     - wordSpeaking: 0
       narration: 0
@@ -440,7 +450,7 @@ MonoBehaviour:
       text: "그러고 보니 남쪽 협곡에도 번개가 그치지 않는대요. 이상해진 곳이 여기만이 아닌가 봐요."
     - wordSpeaking: 0
       narration: 1
-      gesture: 1
+      gesture: 8
       text: "워드는 카드를 품에 넣고, 남쪽을 바라보며 고개를 끄덕였다."
   - stageID: 6
     moment: 1
