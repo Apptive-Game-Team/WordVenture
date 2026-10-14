@@ -17,6 +17,7 @@ namespace WordVenture.Tests
         static Type Upgrades => Find("Core.PlayerUpgrades");
         static Type Reward => Find("Core.StageReward");
         static object Kind(string name) => Enum.Parse(Find("Core.UpgradeKind"), name);
+        static object Grade(string name) => Enum.Parse(Find("Core.StageGrade"), name);
 
         static object Call(Type type, string method, params object[] args) =>
             type.GetMethods(BindingFlags.Public | BindingFlags.Static)
@@ -98,23 +99,54 @@ namespace WordVenture.Tests
             Assert.AreEqual(-1, (int)Call(Upgrades, "NextCost", kind));
         }
 
-        // 10개 스테이지를 처음, 빨리 깨서 받는 재화로 모든 능력치를 다 올릴 수 없어야 고르는 의미가 있다.
+        // 10개 스테이지를 처음, S 등급으로 깨서 받는 재화로도 모든 능력치를 다 올릴 수 없어야 고르는 의미가 있다.
         [Test]
         public void FullRunCannotBuyEveryUpgrade()
         {
-            int income = Enumerable.Range(0, 10).Sum(stage => Read<int>(Call(Reward, "Calculate", stage, true, 1), "Total"));
+            int income = Enumerable.Range(0, 10).Sum(stage => Read<int>(Call(Reward, "Calculate", stage, true, Grade("S")), "Total"));
             int allCosts = 0;
             Call(Upgrades, "AddShards", 100000);
-            foreach (object kind in Enum.GetValues(Find("Core.UpgradeKind")))
+            FieldInfo stagePosition = Find("Map.MapMove").GetField("StagePosition");
+            object oldStage = stagePosition.GetValue(null);
+            stagePosition.SetValue(null, 9);
+            try
             {
-                int cost;
-                while ((cost = (int)Call(Upgrades, "NextCost", kind)) >= 0)
+                foreach (object kind in Enum.GetValues(Find("Core.UpgradeKind")))
                 {
-                    allCosts += cost;
-                    Call(Upgrades, "TryUpgrade", kind);
+                    int cost;
+                    while ((cost = (int)Call(Upgrades, "NextCost", kind)) >= 0)
+                    {
+                        allCosts += cost;
+                        Assert.IsTrue((bool)Call(Upgrades, "TryUpgrade", kind));
+                    }
                 }
             }
+            finally
+            {
+                stagePosition.SetValue(null, oldStage);
+            }
             Assert.Less(income, allCosts);
+        }
+
+        [Test]
+        public void AllyUpgradeIsLockedUntilSpawnUnlocks()
+        {
+            FieldInfo stagePosition = Find("Map.MapMove").GetField("StagePosition");
+            object oldStage = stagePosition.GetValue(null);
+            Call(Upgrades, "AddShards", 100);
+            try
+            {
+                stagePosition.SetValue(null, 5);
+                Assert.IsFalse((bool)Call(Upgrades, "IsUnlocked", Kind("Ally")));
+                Assert.IsFalse((bool)Call(Upgrades, "TryUpgrade", Kind("Ally")));
+                Assert.IsTrue((bool)Call(Upgrades, "IsUnlocked", Kind("Attack")));
+                stagePosition.SetValue(null, 6);
+                Assert.IsTrue((bool)Call(Upgrades, "TryUpgrade", Kind("Ally")));
+            }
+            finally
+            {
+                stagePosition.SetValue(null, oldStage);
+            }
         }
 
         [Test]
@@ -138,26 +170,54 @@ namespace WordVenture.Tests
             Assert.AreEqual(0, (int)Call(Upgrades, "GetLevel", Kind("MaxHp")));
         }
 
+        static object Score(int stage, int turns, int cards, int damage, int combos) =>
+            Call(Reward, "Score", stage, turns, cards, damage, combos, 100);
+
         [Test]
-        public void FirstClearWithinTargetTurnsGetsBonus()
+        public void PerfectBattleScoresFullMarksAndGradeS()
         {
-            int target = (int)Call(Reward, "FastClearTurns", 4);
-            object fast = Call(Reward, "Calculate", 4, true, target);
-            object slow = Call(Reward, "Calculate", 4, true, target + 1);
-            Assert.IsTrue(Read<bool>(fast, "IsFastClear"));
-            Assert.IsFalse(Read<bool>(slow, "IsFastClear"));
-            Assert.AreEqual(Read<int>(slow, "Total") + 2, Read<int>(fast, "Total"));
+            int target = (int)Call(Reward, "TargetTurns", 4);
+            object score = Score(4, target, (int)Call(Reward, "TargetCards", 4), 0, 4);
+            Assert.AreEqual(1000, Read<int>(score, "Total"));
+            Assert.AreEqual(Grade("S"), Read<object>(score, "Grade"));
         }
 
         [Test]
-        public void ReplayGivesTwentyPercentWithoutBonus()
+        public void SlowWastefulBattleLosesPoints()
         {
-            object first = Call(Reward, "Calculate", 8, true, 1);
-            object replay = Call(Reward, "Calculate", 8, false, 1);
+            int target = (int)Call(Reward, "TargetTurns", 4);
+            object score = Score(4, target + 4, (int)Call(Reward, "TargetCards", 4) + 5, 50, 1);
+            Assert.AreEqual(200, Field<int>(score, "TurnPoints"));
+            Assert.AreEqual(150, Field<int>(score, "CardPoints"));
+            Assert.AreEqual(150, Field<int>(score, "DamagePoints"));
+            Assert.AreEqual(50, Field<int>(score, "ComboPoints"));
+            Assert.AreEqual(Grade("B"), Read<object>(score, "Grade"));
+        }
+
+        [Test]
+        public void PointsNeverGoNegative()
+        {
+            object score = Score(0, 999, 999, 999, 0);
+            Assert.AreEqual(0, Read<int>(score, "Total"));
+            Assert.AreEqual(Grade("C"), Read<object>(score, "Grade"));
+        }
+
+        [Test]
+        public void FirstClearGetsGradeBonus()
+        {
+            Assert.AreEqual(7, Read<int>(Call(Reward, "Calculate", 4, true, Grade("C")), "Total"));
+            Assert.AreEqual(10, Read<int>(Call(Reward, "Calculate", 4, true, Grade("S")), "Total"));
+        }
+
+        [Test]
+        public void ReplayGivesTwentyPercentWithoutGradeBonus()
+        {
+            object first = Call(Reward, "Calculate", 8, true, Grade("C"));
+            object replay = Call(Reward, "Calculate", 8, false, Grade("S"));
             Assert.AreEqual(11, Field<int>(first, "BaseShards"));
             Assert.AreEqual(2, Read<int>(replay, "Total"));
-            Assert.IsFalse(Read<bool>(replay, "IsFastClear"));
-            Assert.AreEqual(1, Read<int>(Call(Reward, "Calculate", 0, false, 1), "Total"));
+            Assert.AreEqual(0, Field<int>(replay, "GradeBonus"));
+            Assert.AreEqual(1, Read<int>(Call(Reward, "Calculate", 0, false, Grade("S")), "Total"));
         }
     }
 }
