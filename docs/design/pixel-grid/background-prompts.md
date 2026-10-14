@@ -66,7 +66,7 @@ limited palette of about 40 colours.
 No text, UI or logos unless the reference has them. Output a landscape image with the same aspect ratio as the reference.
 ```
 
-### KakaoRuins
+### DemonCastleHall (BossStage, 예전 이름 KakaoTalk_20240701_202830558)
 
 ```text
 Attached: the current in-game image (composition, landmarks, colours and mood reference).

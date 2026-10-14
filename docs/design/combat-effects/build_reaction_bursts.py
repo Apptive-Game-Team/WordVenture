@@ -235,7 +235,7 @@ def build_atlas():
 def preview(path):
     """기준 슬라임 첫 프레임 위에 효과를 겹쳐 본다."""
     slime = Image.open(ROOT / "Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/"
-                       "KakaoTalk_20240702_171522097_01.png").convert("RGBA")
+                       "Ranged_Purple_01.png").convert("RGBA")
     body = slime.crop(slime.getbbox())
     cell_w, cell_h = WIDTH * SCALE, HEIGHT * SCALE
     body = body.resize((BODY_HALF_WIDTH * 2 * SCALE, round(body.height * BODY_HALF_WIDTH * 2 * SCALE / body.width)),

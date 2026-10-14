@@ -5,7 +5,7 @@
 ## 만드는 방법
 
 1. Codex의 내장 이미지 생성 도구로 만든다. 프롬프트 원문은 `prompts/`에 있고, 기존 그림을 화풍 참고 이미지로 첨부했다.
-   - 배경: 고원·빗길 전투 배경(`Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `Rainy/KakaoTalk_20240701_192204698_02.png`)
+   - 배경: 고원·빗길 전투 배경(`Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `Rainy/RainyBackground_01.png`)
    - 초상화: 워드·평원 주민 초상화(`Assets/Art/Story/Portraits/WordDialogue.png`, `VillagerDialogue.png`)
    - 적: 보라 원거리 슬라임 프레임 8장을 생성 규격(1536×1024, 4×2칸, 마젠타 배경)에 맞게 배치한 그림
 2. `import_generated.py`가 생성 그림을 게임 에셋으로 바꾸고 `.meta`를 만든다. 저장소 루트에서 실행한다.
