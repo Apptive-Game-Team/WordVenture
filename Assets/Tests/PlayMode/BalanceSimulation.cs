@@ -33,7 +33,8 @@ namespace WordVenture.Tests
         static readonly int[] Stages = ReadStages();
         static readonly int RunsPerCase = ReadRuns();
 
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1",
+            "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -51,6 +52,15 @@ namespace WordVenture.Tests
         {
             string value = Environment.GetEnvironmentVariable("BALANCE_RUNS");
             return int.TryParse(value, out int runs) && runs > 0 ? runs : 3;
+        }
+
+        // BALANCE_UPGRADES(공격력,최대 HP,손패 상한,아군 슬라임 단계)로 업그레이드 단계를 고정한다. 없으면 공격력만
+        // 스테이지 / 2 단계로 둔다. 주문 피해가 예전 자동 상승(10 + 5 × (스테이지 / 2))과 같아서 기록을 비교할 수 있다.
+        static int[] UpgradeLevels(int stage)
+        {
+            string value = Environment.GetEnvironmentVariable("BALANCE_UPGRADES");
+            if (string.IsNullOrEmpty(value)) return new[] { stage / 2, 0, 0, 0 };
+            return value.Split(',').Select(int.Parse).ToArray();
         }
 
         static Type Runtime(string name) => AppDomain.CurrentDomain.GetAssemblies()
@@ -139,6 +149,7 @@ namespace WordVenture.Tests
             public int finalHp;
             public int spawnsCast;
             public int spellsCast;
+            public string upgrades;
         }
 
         IEnumerator PlayBattle(BattleResult result)
@@ -148,6 +159,10 @@ namespace WordVenture.Tests
             // 지역 대화는 자동 전투에서 넘기므로 이미 본 것으로 둔다.
             PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
             PlayerPrefs.SetInt("ActTwoDialogueSeen", int.MaxValue);
+            int[] upgrades = UpgradeLevels(result.stage);
+            string[] upgradeKeys = { "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly" };
+            for (int i = 0; i < upgradeKeys.Length; i++) PlayerPrefs.SetInt(upgradeKeys[i], i < upgrades.Length ? upgrades[i] : 0);
+            result.upgrades = string.Join(",", upgrades);
             var singleton = Object.FindObjectOfType(Runtime("Combat.Stage.StageDataSingleton"));
             if (singleton == null) singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, result.stage);
