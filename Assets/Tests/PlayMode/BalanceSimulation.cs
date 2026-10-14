@@ -356,10 +356,14 @@ namespace WordVenture.Tests
             object manager = StaticGet("Cards.CardManager", "Inst");
             var hand = ((IEnumerable)Get(manager, "HandCards")).Cast<Component>()
                 .Where(card => card != null && card.gameObject.activeInHierarchy).ToList();
-            if (hand.Count < handLimit) return false;
+            // 한도는 주문 카드와 속성 카드에 반씩 걸린다. 어느 쪽이든 가득 찼으면 새 카드가 타므로 버린다.
+            int perKind = handLimit / 2;
+            bool spellsFull = hand.Count(card => card.CompareTag("Spell")) >= perKind;
+            bool elementsFull = hand.Count(card => card.CompareTag("MagicType")) >= perKind;
+            if (!spellsFull && !elementsFull) return false;
             Component victim = hand.FirstOrDefault(card => CardType(card) == "Spawn")
                 ?? hand.FirstOrDefault(card => CardType(card) == "Holy" && PlayerHp > HealBelowHp)
-                ?? hand.FirstOrDefault();
+                ?? hand.FirstOrDefault(card => card.CompareTag(spellsFull ? "Spell" : "MagicType"));
             return victim != null && (bool)Call(manager, "TryDiscard", victim);
         }
 
