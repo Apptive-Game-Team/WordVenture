@@ -20,13 +20,6 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 |---|---|---|---|
 | `Assets/Art/UI/NewCardTitle.png` | 267x45 | 투명 배경 | 기존 6.5px 블록을 늘림. 2026-10-14에 재생성했지만 Codex가 약 14.6px 칸으로 그려 260칸으로 줄이면 1.95배라 가장자리가 깨졌다. 지금 PNG가 더 깨끗해서 유지함 |
 
-## 줄이면서 디테일이 뭉개진 것
-
-| 에셋 | 대상 | 옵션 | 현재 상태 |
-|---|---|---|---|
-| `Assets/Art/Title/WordHeadIdle1.png`, `WordHeadIdle2.png` | 35x35 | `--keep-lines 2`, 투명 | 64x64를 줄여 얼굴이 뭉개짐. 두 프레임은 애니메이션 |
-| `Assets/Art/Cards/MagicCard.png`, `MagicCard1.png`, `TypeCard.png`, `TypeCard1.png` | 52x52 | 투명 | "Magic", "Type" 글자 일부가 깨짐 |
-
 ## 처리 완료
 
 - 워드 전투 스프라이트 7프레임(`Assets/Art/Combat/Word/`): `--keep-lines 2`로 다시 변환해 외곽선이 닫힘
@@ -37,3 +30,5 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 전투 배경(`Assets/Art/Battle/Backgrounds/PlainBackground.png`, 1024x512)과 스테이지 배경 4종(512x256): 재생성해 `--target`으로 변환. 폐허 배경(`KakaoTalk_20240701_202830558.png`)은 `--despeckle` 추가
 - 게임오버 3프레임: 1프레임을 재생성하고, 2·3프레임은 1프레임을 편집 대상으로 넘겨 생성. 캐릭터가 프레임마다 흔들리지 않도록 2·3프레임은 1프레임 위에 글자 영역(위 60줄)과 눈물 픽셀만 옮기고 1프레임 팔레트로 맞춤
 - 맵 배경 5장: DefaultBG만 재생성(기존 대비 랜드마크 위치 차이 1~2아트픽셀). Stage1~4BG는 DefaultBG에서 깬 랜드마크(버섯 집, 야자 섬, 바위 폐허, 나무 바위 순서로 누적)를 회색으로 바꿔 만듦. 회색은 DefaultBG 팔레트에 있는 회색 중 밝기가 가장 가까운 것을 써서 64색 이하 유지
+- 타이틀 머리(`WordHeadIdle1.png`, `WordHeadIdle2.png`): Codex가 약 85칸으로 그려 35칸으로 줄이면 입이 사라진다. 1프레임은 `--colors 12 --keep-lines 2`로 변환하고 입을 손으로 다시 그림. 2프레임은 같은 생성 원본을 턱 기준으로 5도 기울여 변환하고 1프레임 팔레트로 맞춤(기존 애니메이션도 고개를 기울이는 차이만 있음)
+- 카드 4장(`MagicCard*.png`, `TypeCard*.png`): Codex 결과는 글자가 더 깨져서 쓰지 않음. 기존 테두리는 두고 "Magic", "Type" 글자만 높이 6픽셀(내림 2픽셀) 픽셀 폰트로 다시 그림
