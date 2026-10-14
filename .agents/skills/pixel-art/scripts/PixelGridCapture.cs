@@ -9,7 +9,8 @@ using UnityEngine.UI;
 
 public static class PixelGridCapture
 {
-    const string OutputDirectory = @"C:\temp\wv-pixel-base\captures";
+    // next to the project folder this runs in: <project>/captures
+    static string OutputDirectory => Path.Combine(Directory.GetParent(Application.dataPath).FullName, "captures");
 
     public static void Run()
     {

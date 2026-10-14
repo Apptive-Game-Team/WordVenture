@@ -20,6 +20,7 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 
 - 주문 이펙트 시트 20장(`Assets/Art/Combat/Spells/`): 프리팹 스케일 5 또는 10에서 1텍셀 = 4.22px. 5% 차이라 그대로 둔다.
 - `SplitSlimeSmall`: 프리팹 스케일 0.3으로 `SplitSlime`(0.5)의 프레임을 다시 써서 2.4px로 보인다.
+- `AllySlime`: 프리팹 스케일 0.4로 `Ranged_Light`(0.5)의 프레임을 다시 써서 3.2px로 보인다.
 - `AffinityMark`, `ReactionBurst`, `ElementalStatusOverlay`: 적의 몸 폭에 맞춰 런타임에 크기가 정해진다. 일반 슬라임에서 약 4px, 보스에서는 더 크다.
 - `Assets/Art/Icon.png`: 앱 아이콘이라 게임 화면에 그려지지 않는다.
 
@@ -31,4 +32,4 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 게임오버 2·3프레임, 비 오는 배경 5프레임: `gameover_frames.py`, `rain_frames.py`로 바뀌는 부분만 옮김.
 - 슬라임 22종, 워드 전투 7프레임, 적 투사체 8색: `resample_set.py`로 69/90/97/126칸, 28칸으로 줄임.
   2부 슬라임은 `docs/design/act-two-art/build_slimes.py`가 128칸에서 그려 같은 방법으로 줄인다.
-- 로고, 타이틀 머리, NEW CARD·GAME OVER 글자, 박격포 표적: 줄이거나 예전 결과를 쓰고 투명 여백을 잘라냄.
+- 로고, 타이틀 머리, NEW CARD·GAME OVER 글자, 박격포 표적: 줄이거나 예전 결과를 씀. 타이틀 머리와 글자 두 장은 투명 여백도 잘라냄(로고는 UI Image 라 자르지 않음).

@@ -44,7 +44,8 @@ Logical sizes of current assets (measured on develop, #116), for matching new on
 | Cards in hand (`Card.prefab` root and runtime scale 0.4) | 34x50 | 10.8 |
 
 Known exceptions, kept on purpose: spell effect sheets (4.22 px per texel, 5% off);
-`SplitSlimeSmall` (prefab scale 0.3 reuses the 0.5 frames, 2.4 px); `ElementalStatusOverlay`,
+`SplitSlimeSmall` (prefab scale 0.3 reuses the 0.5 frames, 2.4 px); `AllySlime` (scale 0.4
+reuses the `Ranged_Light` frames, 3.2 px); `ElementalStatusOverlay`,
 `AffinityMark` and `ReactionBurst` are sized by the enemy's body at runtime, about 4 px on a
 normal slime and larger on bosses; `Assets/Art/Icon.png` is the app icon, not drawn in game.
 
@@ -145,7 +146,8 @@ python3 .agents/skills/pixel-art/scripts/trim_set.py FRAME_*.png
 ```
 
 Set `--ppu` to 27 x the scale the sprite is drawn at. Trim only sprites that a
-SpriteRenderer draws and no code measures: not UI Image sprites, not slime frames (the
+SpriteRenderer draws and no code measures: not UI Image sprites (the title logo is one;
+trimming stretches the content over the same rect), not slime frames (the
 encyclopedia shows them in a UI Image), not cards (the tutorial highlight uses their
 bounds), not explosion frames (`BlastVfx` scales by their bounds), not sprite sheets.
 

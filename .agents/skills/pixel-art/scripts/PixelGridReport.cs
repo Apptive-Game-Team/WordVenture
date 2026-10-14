@@ -13,7 +13,8 @@ using UnityEngine.UI;
 
 public static class PixelGridReport
 {
-    const string OutputPath = @"C:\temp\wv-pixel-base\pixel-report.json";
+    // next to the project folder this runs in: <project>/pixel-report.json
+    static string OutputPath => Path.Combine(Directory.GetParent(Application.dataPath).FullName, "pixel-report.json");
     const float ScreenPixelsPerWorldUnit = 108f; // orthographic size 5 at 1080p
 
     static readonly StringBuilder Json = new StringBuilder();
