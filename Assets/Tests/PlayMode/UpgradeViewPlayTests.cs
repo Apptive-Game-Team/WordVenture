@@ -44,6 +44,7 @@ namespace WordVenture.Tests
             for (int i = 0; i < keys.Length; i++)
                 if (existed[i]) PlayerPrefs.SetInt(keys[i], values[i]); else PlayerPrefs.DeleteKey(keys[i]);
             PlayerPrefs.Save();
+            Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, PlayerPrefs.GetInt("StagePosition"));
             SharedDialoguePlayTests.ResetLanguage();
         }
 
@@ -80,6 +81,36 @@ namespace WordVenture.Tests
             yield return null;
             Assert.That(CurrentView == null, Is.True);
             Assert.That(IsLocked, Is.False, "창을 닫았는데 맵 입력 잠금이 남았다");
+        }
+
+        [UnityTest]
+        public IEnumerator Spawn_해금_전에는_아군_업그레이드를_누를_수_없고_해금_후에는_누를_수_있다()
+        {
+            PlayerPrefs.SetInt("UpgradeShards", 100);
+            foreach (string kind in Kinds) PlayerPrefs.DeleteKey("UpgradeLevel" + kind);
+            yield return SceneManager.LoadSceneAsync("MapScene");
+            yield return null;
+            yield return null;
+
+            Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 5);
+            GameObject.Find("UpgradeButton").GetComponentInChildren<Button>().onClick.Invoke();
+            yield return null;
+            Component view = CurrentView;
+            Button ally = view.transform.Find("Window/Background/List/Ally/Button").GetComponent<Button>();
+            Assert.That(ally.interactable, Is.False, "Spawn 해금 전인데 아군 업그레이드를 누를 수 있다");
+
+            Runtime("Map.UpgradeView").GetMethod("Close").Invoke(view, null);
+            yield return null;
+
+            Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 6);
+            GameObject.Find("UpgradeButton").GetComponentInChildren<Button>().onClick.Invoke();
+            yield return null;
+            view = CurrentView;
+            ally = view.transform.Find("Window/Background/List/Ally/Button").GetComponent<Button>();
+            Assert.That(ally.interactable, Is.True, "Spawn 해금 후인데 아군 업그레이드를 누를 수 없다");
+
+            Runtime("Map.UpgradeView").GetMethod("Close").Invoke(view, null);
+            yield return null;
         }
     }
 }

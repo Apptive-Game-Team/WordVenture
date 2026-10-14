@@ -40,7 +40,7 @@ namespace Cards
         }
 
         // Spawn 카드는 서리 마을(스테이지 5)을 클리어한 뒤 스테이지 6부터 손패에 섞인다.
-        const int SpawnUnlockStage = 6;
+        const int SpawnUnlockStage = PlayerUpgrades.SpawnUnlockStage;
         const int SpawnCardPercent = 3;
 
         [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;

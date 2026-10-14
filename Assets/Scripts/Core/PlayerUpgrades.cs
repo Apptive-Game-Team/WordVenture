@@ -1,4 +1,5 @@
 using System;
+using Map;
 using UnityEngine;
 
 namespace Core
@@ -33,7 +34,7 @@ namespace Core
         public static readonly UpgradeKind[] Kinds = (UpgradeKind[])Enum.GetValues(typeof(UpgradeKind));
 
         // 다음 단계로 올리는 비용. 배열 길이가 최대 단계다. 모두 올리는 데 111이 들고,
-        // 10개 스테이지를 처음 깨서 받는 재화는 70~90이라 모든 능력치를 다 올릴 수는 없다.
+        // 10개 스테이지를 처음 깨서 받는 재화는 등급에 따라 70~100이라 모든 능력치를 다 올릴 수는 없다.
         static int[] Costs(UpgradeKind kind)
         {
             switch (kind)
@@ -45,6 +46,12 @@ namespace Core
                 default: throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
             }
         }
+
+        // 5 스테이지를 처음 깨고 Spawn 카드를 받은 뒤부터 Spawn 이 나온다. 그 전에는 아군 슬라임 업그레이드도 잠근다.
+        public const int SpawnUnlockStage = 6;
+
+        public static bool IsUnlocked(UpgradeKind kind) =>
+            kind != UpgradeKind.Ally || MapMove.StagePosition >= SpawnUnlockStage;
 
         public static int Shards => Mathf.Max(0, PlayerPrefs.GetInt(ShardsKey, 0));
 
@@ -63,7 +70,7 @@ namespace Core
         public static bool CanUpgrade(UpgradeKind kind)
         {
             int cost = NextCost(kind);
-            return cost >= 0 && Shards >= cost;
+            return IsUnlocked(kind) && cost >= 0 && Shards >= cost;
         }
 
         public static bool TryUpgrade(UpgradeKind kind)

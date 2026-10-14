@@ -96,7 +96,7 @@ namespace Map
             }
 
             TMP_Text hint = Label("Hint", window.transform, new Vector2(0.03f, 0.03f), new Vector2(0.97f, 0.15f),
-                T("스테이지를 깨면 마력 조각을 얻습니다. 빨리 깰수록 더 받습니다."), 30, Color.white);
+                T("스테이지를 깨면 마력 조각을 얻습니다. 결과 등급이 높을수록 더 받습니다."), 30, Color.white);
             hint.alignment = TextAlignmentOptions.MidlineLeft;
             hint.enableAutoSizing = true;
             hint.fontSizeMin = 18;
@@ -167,12 +167,14 @@ namespace Map
             foreach (Row row in rows)
             {
                 UpgradeKind kind = row.kind;
+                bool locked = !PlayerUpgrades.IsUnlocked(kind);
                 int level = PlayerUpgrades.GetLevel(kind);
-                row.values.text = Describe(kind, level);
-                for (int i = 0; i < row.pips.Length; i++) row.pips[i].color = i < level ? PipFilled : PipEmpty;
+                row.values.text = locked ? T("Spawn 주문을 얻으면 열립니다") : Describe(kind, level);
+                for (int i = 0; i < row.pips.Length; i++) row.pips[i].color = !locked && i < level ? PipFilled : PipEmpty;
                 int cost = PlayerUpgrades.NextCost(kind);
-                row.buttonLabel.text = cost < 0 ? T("최대") : string.Format(T("{0} 조각"), cost);
-                row.button.interactable = PlayerUpgrades.CanUpgrade(kind);
+                if (locked) row.buttonLabel.text = T("잠김");
+                else row.buttonLabel.text = cost < 0 ? T("최대") : string.Format(T("{0} 조각"), cost);
+                row.button.interactable = !locked && PlayerUpgrades.CanUpgrade(kind);
             }
         }
 
