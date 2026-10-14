@@ -1,0 +1,7 @@
+interface:
+  display_name: "ARTEL Test Case"
+  short_description: "Write WordVenture test cases into ARTEL with the artel command line"
+  default_prompt: "Use $artel-test-case to add ARTEL test cases for this feature."
+
+policy:
+  allow_implicit_invocation: true
