@@ -18,9 +18,7 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 
 | 에셋 | 대상 | 옵션 | 현재 상태 |
 |---|---|---|---|
-| `Assets/Art/Story/MountainHome.png`, `MountainHomeAttack.png`, `MountainHomeRuins.png`, `MountainHomeMemorial.png`, `WorldTreeEpilogue.png`, `Assets/Art/Title/MountainValley.png` | 480x270 | `--despeckle` | AI 원본 격자가 약 6.5px라 블록이 1~2텍셀로 고르지 않음. 같은 집이 나오는 4장은 구도와 집 모양을 서로 맞출 것 |
-| `Assets/Art/Title/WordVentureLogo.png` | 275x91 | 투명 배경 | 원본 가짜 픽셀이 12~19px로 제각각 |
-| `Assets/Art/UI/NewCardTitle.png` | 267x45 | 투명 배경 | 기존 6.5px 블록을 늘림 |
+| `Assets/Art/UI/NewCardTitle.png` | 267x45 | 투명 배경 | 기존 6.5px 블록을 늘림. 2026-10-14에 재생성했지만 Codex가 약 14.6px 칸으로 그려 260칸으로 줄이면 1.95배라 가장자리가 깨졌다. 지금 PNG가 더 깨끗해서 유지함 |
 | `Assets/Art/Battle/Backgrounds/PlainBackground.png` | 1024x512 | | 256x128 원본을 4배로 붙여 둠, 실제 블록 16px |
 | `Assets/Art/Tutorial/PlainBackground.png`, `Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `.../Ocean/SeaBackground.png`, `.../WorldMap/KakaoTalk_20240701_202830558.png` (스테이지 배경 4종) | 512x256 | | 256x128 원본을 2배로 붙여 둠, 실제 블록 8px |
 | `Assets/ThirdParty/ArtResource/JinWook/GameOverBackground/*.png` (3장, 애니메이션 프레임) | 512x256 | | 실제 블록 8px. 세 장의 차이를 유지할 것 |
@@ -38,3 +36,5 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 워드 전투 스프라이트 7프레임(`Assets/Art/Combat/Word/`): `--keep-lines 2`로 다시 변환해 외곽선이 닫힘
 - 워드 대화 초상화(`Assets/Art/Story/Portraits/WordDialogue.png`): Codex image_gen으로 재생성해 `--target 170x170 --keep-lines 2`로 변환. 나머지 초상화 7장의 머리 크기와 프레이밍 기준
 - 대화 초상화 7장(Fisherman, Guard, Guide, Shepherd, Villager, SlimeKing, UndeadSlimeKing): 새 WordDialogue.png를 프레이밍 기준으로 함께 첨부해 재생성하고 `--target 170x170 --keep-lines 2`로 변환
+- 스토리·타이틀 배경 6장(`MountainHome*.png` 4장, `WorldTreeEpilogue.png`, `MountainValley.png`): 재생성해 `--target 480x270 --despeckle`로 변환. 습격·폐허·추모 3장은 새 MountainHome을 편집 대상으로 넘겨 집과 산 위치를 맞춤. `MountainHomeAttack.png`는 기본 팔레트가 불덩이 중심의 크림색을 연두색으로 합쳐서, 생성 원본을 480x270으로 BOX 축소한 이미지에서 64색 팔레트를 뽑아 원본에 먼저 적용한 뒤 변환
+- 타이틀 로고(`WordVentureLogo.png`): 재생성 원본을 내용 영역으로 자른 뒤 기존 로고의 내용 영역(215x58, 위치 31,18)에 맞춰 변환
