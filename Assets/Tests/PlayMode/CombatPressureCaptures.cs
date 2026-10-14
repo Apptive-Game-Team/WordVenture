@@ -85,22 +85,26 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 클리어_재화()
+        public IEnumerator 클리어_결과()
         {
             PlayerPrefs.SetInt("UpgradeShards", 9);
             Type stageType = Runtime("Combat.Stage.StageDataSingleton");
             var singleton = Object.FindObjectOfType(stageType) ?? new GameObject("StageData").AddComponent(stageType);
-            stageType.GetField("stagePosition").SetValue(singleton, 4);
+            stageType.GetField("stagePosition").SetValue(singleton, 6);
             stageType.GetField("isFirstClear").SetValue(singleton, true);
-            stageType.GetField("lastClearTurns").SetValue(singleton, 13);
+            object score = Activator.CreateInstance(Runtime("Core.StageScore"), 13, 14, 35, 3, 300, 180, 195, 150);
+            stageType.GetField("lastScore").SetValue(singleton, score);
             object reward = Activator.CreateInstance(Runtime("Core.StageRewardResult"), 7, 2, true);
             stageType.GetField("lastReward").SetValue(singleton, reward);
+            stageType.GetField("hasResult").SetValue(singleton, true);
             yield return SceneManager.LoadSceneAsync("GameClearScene");
             yield return new WaitForSeconds(0.5f);
-            if (Object.FindObjectOfType(Runtime("Scenes.StageRewardView")) == null)
-                Call(Runtime("Scenes.StageRewardView"), "Show", singleton);
+            Type viewType = Runtime("Scenes.StageResultView");
+            var view = Object.FindObjectOfType(viewType);
+            if (view == null) view = (Object)Call(viewType, "Show", singleton);
+            viewType.GetMethod("Skip").Invoke(view, null);
             yield return new WaitForSeconds(0.3f);
-            SharedDialoguePlayTests.Capture("clear-reward.png");
+            SharedDialoguePlayTests.Capture("clear-result.png");
         }
 
         IEnumerator EnterBattle(int stage)
