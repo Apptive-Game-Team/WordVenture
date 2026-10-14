@@ -9,6 +9,7 @@ namespace Cards
     // 카드는 손패 목록에 들어가지 않고, 시작하는 순간 콜라이더와 태그를 지워 잡거나 조합창에 놓을 수 없다.
     public sealed class CardBurnVfx : MonoBehaviour
     {
+        const float ReferenceScreenHeight = 1080f;
         const float FlySeconds = 0.3f;
         const float BurnSeconds = 0.6f;
         // 그림 한 칸은 화면 4픽셀이다.
@@ -61,7 +62,8 @@ namespace Cards
             card.enabled = false;
 
             Camera camera = Camera.main;
-            float worldPerScreenPixel = camera != null ? camera.orthographicSize * 2f / Screen.height : 0.01f;
+            // 실제 창 높이가 아니라 1080 기준 화면으로 계산한다. 창 크기와 상관없이 그림 한 칸이 가상 화면(480x270)의 한 칸이 된다.
+            float worldPerScreenPixel = camera != null ? camera.orthographicSize * 2f / ReferenceScreenHeight : 0.01f;
             pixelUnit = worldPerScreenPixel * ScreenPixelsPerArtPixel;
 
             // 손패 위로 올려 그린다. 상대 순서는 유지해 글자가 그림 위에 남는다.

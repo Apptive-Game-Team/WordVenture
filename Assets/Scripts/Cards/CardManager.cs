@@ -223,7 +223,8 @@ namespace Cards
         #region Discard
 
         // 손패 오른쪽 옆. 가장자리 카드(손패 끝에서 약 0.7)와 겹치지 않고 화면 오른쪽 끝(월드 x 8.9) 안에 든다.
-        const float DiscardSpotOffsetX = 3.2f;
+        // 손패 오른쪽은 적이 다가오는 자리라 워드와 손패 사이에 둔다.
+        const float DiscardSpotOffsetX = -0.35f;
         // 한 턴에 버릴 수 있는 카드 수는 1장이다. 버린 턴 번호를 기억해 다음 턴이 되면 풀린다.
         int lastDiscardTurn = -1;
         DiscardSpot discardSpot;
@@ -273,7 +274,7 @@ namespace Cards
         {
             if (cardLeft == null || cardRight == null || cardPrefab == null) return;
             var cardRenderer = cardPrefab.GetComponent<SpriteRenderer>();
-            Vector3 position = new Vector3(cardRight.position.x + DiscardSpotOffsetX, cardRight.position.y + 1.2f, 0f);
+            Vector3 position = new Vector3(cardLeft.position.x + DiscardSpotOffsetX, cardLeft.position.y + 1.2f, 0f);
             discardSpot = DiscardSpot.Create(position, cardRenderer != null ? cardRenderer.sortingLayerID : 0);
         }
 

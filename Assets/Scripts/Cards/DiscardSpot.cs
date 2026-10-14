@@ -9,6 +9,7 @@ namespace Cards
     // 씬을 고치지 않고 코드로 만든다. 놓였는지는 콜라이더가 아니라 화면 영역으로 판단한다.
     public sealed class DiscardSpot : MonoBehaviour
     {
+        const float ReferenceScreenHeight = 1080f;
         // 그림 한 칸은 화면 4픽셀이다.
         const float ScreenPixelsPerArtPixel = 4f;
         const int ArtWidth = 44;
@@ -37,7 +38,8 @@ namespace Cards
         void Build(Vector3 position, int sortingLayerId)
         {
             Camera camera = Camera.main;
-            float worldPerScreenPixel = camera != null ? camera.orthographicSize * 2f / Screen.height : 0.01f;
+            // 실제 창 높이가 아니라 1080 기준 화면으로 계산한다. 창 크기와 상관없이 그림 한 칸이 가상 화면(480x270)의 한 칸이 된다.
+            float worldPerScreenPixel = camera != null ? camera.orthographicSize * 2f / ReferenceScreenHeight : 0.01f;
             float pixelUnit = worldPerScreenPixel * ScreenPixelsPerArtPixel;
 
             transform.position = position;
