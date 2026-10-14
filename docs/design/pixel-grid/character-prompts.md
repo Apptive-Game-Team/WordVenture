@@ -239,12 +239,15 @@ Each cell is an exact 35x29 pixel grid, so the whole sheet is 140x58 pixels: eve
 
 ## Word
 
+첫 결과는 눈이 가늘고 날카롭게 나오고 입이 빠져 다시 그렸다. 후보 세 개 중 고른 프롬프트다(develop 원래 프레임 시트와 승인된 대화 초상화를 첨부). 둘째 줄 칸 위쪽에 그려진 칸 선 조각은 지웠다.
+
 ```text
-Attached: (1) a sprite sheet of 7 animation frames of one game character, laid out left to right, top to bottom in a 4 x 2 grid (empty cells are unused), each cell one frame; (2) and (3) style references: an approved dialogue portrait and an approved background of the same game.
-Redraw sheet (1) as true pixel art in the unified art style of references (2) and (3): a clean 1-pixel outline in a darker shade of each area's colour (not pure black), flat shading with 2 to 3 tones per colour and light from the top left, simple bold readable shapes, small clean eyes, the same palette treatment and density as the references.
-Word, a chibi red-haired mage girl with a yellow ribbon, black cloak, red scarf, blue dress, holding a long staff with a blue orb. Frames in order: idle, idle, idle, attack swing, attack follow-through, hit, death (sitting and crying).
-Keep the same grid layout and frame order. In every frame keep the character at the same position inside its cell (same baseline, same left and right extent), the same pose and action, the same colours and decorations, so the frames still animate together and the character is recognisable. Keep each frame's expression (for example a squeezed >_< face when hit). 
-Each cell is an exact 68x69 pixel grid, so the whole sheet is 272x138 pixels: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no dithering noise, no blur, flat colour clusters, at most about 16 colours. Transparent background. No text, no grid lines.
+Attached: (1) a sprite sheet of 7 animation frames of Word, the player character, laid out left to right, top to bottom in a 4 x 2 grid (the last cell is unused), each cell one frame; the other attachments are style references of the same game.
+Redraw sheet (1) as true pixel art: a chibi red-haired mage girl with a yellow ribbon, black cloak, red scarf, blue dress, holding a long staff with a blue orb. Frames in order: idle, idle, idle, attack swing, attack follow-through, hit, death (sitting and crying).
+She must look cute and gentle like reference (1): big ROUND magenta eyes with a small white highlight, a small calm mouth, a soft round face, soft rounded orange-red bob hair. Never draw narrow, slanted, sharp or angry eyes, and do not leave out the mouth.
+Keep the same grid layout and frame order. In every frame keep her at the same position inside its cell (same baseline, same left and right extent), the same pose, action and expression as reference (1), the same colours. Keep areas clean and flat: no scattered single pixels.
+Each cell is an exact 68x69 pixel grid, so the whole sheet is 272x138 pixels: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no dithering noise, no blur, at most about 20 colours, flat 2 to 3 tone shading lit from the top left. Transparent background. No text, no grid lines.
+Outline: a clean 1-pixel dark outline.
 ```
 
 ## Projectiles
