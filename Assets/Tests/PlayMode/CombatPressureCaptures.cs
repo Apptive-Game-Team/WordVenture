@@ -53,6 +53,25 @@ namespace WordVenture.Tests
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, oldPosition);
         }
 
+        // 넘친 카드가 위쪽부터 타 들어가는 과정을 여러 시점으로 찍는다.
+        [UnityTest]
+        public IEnumerator 카드_소각_과정()
+        {
+            yield return EnterBattle(6);
+            Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
+            object cards = battle.GetType().GetField("cardManager").GetValue(battle);
+            for (int i = 0; i < 2; i++) Call(cards, "AddCard", i % 2 == 0 ? "Spell" : "MagicType");
+            yield return new WaitForSeconds(0.6f);
+            Call(cards, "AddCard", "Spell");
+            float start = Time.time;
+            float[] moments = { 0.35f, 0.6f, 0.85f, 1.1f, 1.35f };
+            for (int i = 0; i < moments.Length; i++)
+            {
+                while (Time.time - start < moments[i]) yield return null;
+                SharedDialoguePlayTests.Capture("card-burn-" + i + ".png");
+            }
+        }
+
         [UnityTest]
         public IEnumerator 업그레이드_창()
         {

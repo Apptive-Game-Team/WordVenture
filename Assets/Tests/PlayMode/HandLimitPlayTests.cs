@@ -103,7 +103,8 @@ namespace WordVenture.Tests
             Assert.That(burning.CompareTag("Untagged"), Is.True);
             Assert.That(burning.GetComponentsInChildren<Collider2D>().All(c => !c.enabled), Is.True);
 
-            yield return new WaitForSeconds(1.6f);
+            // 날아가기 0.3초, 타기 1.1초, 두 번째 카드는 0.15초 늦게 시작한다.
+            yield return new WaitForSeconds(2.2f);
             Assert.That(AllCards.Length, Is.EqualTo(HandCount), "불탄 카드가 파괴되지 않았다");
             Assert.That(HandCount, Is.EqualTo(HandLimit));
         }
