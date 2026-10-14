@@ -14,20 +14,6 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 
 재생성해서 교체하면 이 목록에서 지운다.
 
-## 대화 초상화: 128칸 격자로 그려진 원본을 170칸으로 늘려 선 두께가 고르지 않음
-
-대상 170x170, 옵션 `--keep-lines 2`, 투명 배경. 화면에서는 680x680px로 보인다.
-
-| 에셋 | 비고 |
-|---|---|
-| `Assets/Art/Story/Portraits/FishermanDialogue.png` | |
-| `Assets/Art/Story/Portraits/GuardDialogue.png` | |
-| `Assets/Art/Story/Portraits/GuideDialogue.png` | |
-| `Assets/Art/Story/Portraits/ShepherdDialogue.png` | |
-| `Assets/Art/Story/Portraits/VillagerDialogue.png` | |
-| `Assets/Art/Story/Portraits/SlimeKingDialogue.png` | |
-| `Assets/Art/Story/Portraits/UndeadSlimeKingDialogue.png` | |
-
 ## 원본에 4px 디테일이 없어 블록이 크게 남는 것
 
 | 에셋 | 대상 | 옵션 | 현재 상태 |
@@ -51,3 +37,4 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 
 - 워드 전투 스프라이트 7프레임(`Assets/Art/Combat/Word/`): `--keep-lines 2`로 다시 변환해 외곽선이 닫힘
 - 워드 대화 초상화(`Assets/Art/Story/Portraits/WordDialogue.png`): Codex image_gen으로 재생성해 `--target 170x170 --keep-lines 2`로 변환. 나머지 초상화 7장의 머리 크기와 프레이밍 기준
+- 대화 초상화 7장(Fisherman, Guard, Guide, Shepherd, Villager, SlimeKing, UndeadSlimeKing): 새 WordDialogue.png를 프레이밍 기준으로 함께 첨부해 재생성하고 `--target 170x170 --keep-lines 2`로 변환
