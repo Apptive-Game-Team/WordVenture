@@ -24,7 +24,7 @@
 
 월드맵 두 장(WorldMapDefault, ActTwoMap)은 아래 프롬프트로 다시 그렸지만 외곽선이 자글자글해서 쓰지 않고, 원래 지도를 줄여 만들었다.
 
-참고 이미지로 develop 의 현재 그림 한 장을 첨부했다(월드맵은 씬 스케일 (1.19, 1)로 늘어난 화면 그대로). 크기: 전투·대화 배경 552x276(PPU 53.90625, 전투 배경 오브젝트 스케일 2), 게임오버·게임클리어 480x240(PPU 46.875), 월드맵 495x276(PPU 27, 오브젝트 스케일 1). 비 오는 배경은 비 없는 바탕만 그리고 빗줄기는 `rain_frames.py` 로 옮겼다. 게임오버 2·3프레임은 `gameover_frames.py`, 1부 월드맵 진행 4장은 `map_stages.py` 로 만들었다.
+참고 이미지로 develop 의 현재 그림 한 장을 첨부했다(월드맵은 씬 스케일 (1.19, 1)로 늘어난 화면 그대로). 크기: 전투·대화 배경 552x276(PPU 53.90625, 전투 배경 오브젝트 스케일 2), 게임오버·게임클리어 480x240(PPU 46.875), 월드맵 495x276(PPU 27, 오브젝트 스케일 1). 비 오는 배경은 비 없는 바탕만 그리고 빗줄기는 `rain_frames.py` 로 옮겼다. 게임오버 1·2프레임은 `gameover_frames.py`, 1부 월드맵 진행 4장은 `map_stages.py` 로 만들었다.
 
 ### Plain
 
@@ -168,16 +168,12 @@ No text, UI or logos unless the reference has them. Output a landscape image wit
 
 ### GameOver
 
+워드 얼굴을 대화 초상화에 맞춰 다시 그렸다. 첨부: 그때의 게임오버 그림, 승인된 WordDialogue.png 의 얼굴 부분 8배 확대본. 결과는 3프레임(눈물이 뺨 아래까지 흐른 그림)으로 쓴다. 검은 배경에 16~20 사이 색이 섞여 있어서, 가장자리와 이어진 어두운 픽셀을 예전 배경색 (28, 28, 28) 한 색으로 칠했다. 그다음 `gameover_frames.py` 가 눈물 줄기를 위쪽 1/3, 2/3만 남겨 1·2프레임을 만든다.
+
 ```text
-Attached: the current in-game image (composition, landmarks, colours and mood reference).
-Redraw the attached reference image as true pixel art for the game WordVenture.
-Game over screen: on a flat near-black background, the chibi red-haired mage girl Word with a yellow ribbon and black cloak sits crying on a small yellow-green patch of ground, her staff with a blue orb lying across her lap. Keep her at exactly the same position and size as in the reference: her body centre is just right of the image centre, she is NOT at the right edge. Leave the rest of the background flat near-black.
-Keep the same composition, layout, horizon heights, landmark positions and colours as the reference.
-Draw it on an exact 480x240 pixel grid: every art pixel is one equal square cell,
-then enlarge with nearest-neighbour by an integer factor. Hard edges, no
-anti-aliasing, no gradients, no dithering noise, no blur, flat colour clusters,
-limited palette of about 24 colours. 
-No text, UI or logos unless the reference has them. Output a landscape image with the same aspect ratio as the reference.
+Attached: (1) the current game over screen, (2) a close-up of the heroine Word's face from her approved dialogue portrait.
+Redraw (1) as true pixel art. On a flat near-black background the chibi heroine Word sits crying on a small yellow-green patch of ground, her staff with a blue orb lying across her lap, at exactly the same position and size as in (1) (her body centre just right of the image centre). Draw her face in the style of reference (2), simplified to chibi size: the same eye shape and colour, the same red-orange bob hair with bangs and the same yellow ribbon, eyes shut or teary with blue tears running down both cheeks, a small sad mouth. Her black cloak and blue dress as in (1).
+Draw it on an exact 480x240 pixel grid: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. A clean 1-pixel dark outline, flat 2 to 3 tone shading, no scattered single pixels, no anti-aliasing, no gradients, no blur. Leave the rest of the background flat near-black. No text.
 ```
 
 ### GameClear

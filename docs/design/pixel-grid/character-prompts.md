@@ -239,15 +239,16 @@ Each cell is an exact 35x29 pixel grid, so the whole sheet is 140x58 pixels: eve
 
 ## Word
 
-첫 결과는 눈이 가늘고 날카롭게 나오고 입이 빠져 다시 그렸다. 후보 세 개 중 대화 초상화(스토리) 얼굴에 맞춘 것을 골랐다. 첨부: develop 원래 프레임 시트, 승인된 WordDialogue.png 의 얼굴 부분 8배 확대본. 둘째 줄 칸 위쪽에 그려진 칸 선 조각은 지웠다.
+대화 초상화(스토리) 얼굴에 맞춘 시트에서 망토와 머리카락에 얼룩덜룩한 픽셀, 두께가 고르지 않은 외곽선, 칸 가장자리에 잘린 지팡이 구슬이 남아 한 번 더 그렸다. 첨부: 그 시트(대기 2프레임을 3번째 칸에도 넣었다), 승인된 WordDialogue.png 의 얼굴 부분 8배 확대본. 후보 두 개 중 깨끗한 쪽을 골라 `char_sheet.py post` 와 같은 방법으로 줄인 뒤, RGB 거리 28 안의 비슷한 색을 합치고(55색에서 21색), 칸 가장자리에 붙은 12픽셀 이하 조각을 지웠다.
 
 ```text
-Attached: (1) a sprite sheet of 7 animation frames of Word, the player character, laid out left to right, top to bottom in a 4 x 2 grid (the last cell is unused), each cell one frame; the other attachments are style references of the same game.
-Redraw sheet (1) as true pixel art: a chibi red-haired mage girl with a yellow ribbon, black cloak, red scarf, blue dress, holding a long staff with a blue orb. Frames in order: idle, idle, idle, attack swing, attack follow-through, hit, death (sitting and crying).
-She must look cute and gentle like reference (1): big ROUND magenta eyes with a small white highlight, a small calm mouth, a soft round face, soft rounded orange-red bob hair. Never draw narrow, slanted, sharp or angry eyes, and do not leave out the mouth.
-Keep the same grid layout and frame order. In every frame keep her at the same position inside its cell (same baseline, same left and right extent), the same pose, action and expression as reference (1), the same colours. Keep areas clean and flat: no scattered single pixels.
-Each cell is an exact 68x69 pixel grid, so the whole sheet is 272x138 pixels: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no dithering noise, no blur, at most about 20 colours, flat 2 to 3 tone shading lit from the top left. Transparent background. No text, no grid lines.
-Attachment (2) is a close-up of her face from her approved dialogue portrait: draw her face, eyes, mouth and hair in the battle sprites the same way, simplified to this small size. Outline: a clean 1-pixel dark outline.
+Attached: (1) a sprite sheet of 7 animation frames of Word, the player character, in a 4 x 2 grid (the last cell is unused), each cell one frame; (2) a close-up of her face from her approved dialogue portrait.
+Sheet (1) is approved in design but its pixels are messy. Redraw it as clean, hand-placed pixel art with the same design: a chibi red-haired mage girl with a yellow ribbon, black cloak, red scarf, blue dress, holding a long staff with a blue orb. Frames in order: idle, idle (breathing), idle, attack swing, attack follow-through, hit, death (sitting and crying). Face as in (2), simplified: the same eye shape and colour, small mouth, red-orange bob hair with bangs.
+Cleanliness rules, the main point of this redraw:
+- Every area is one flat colour plus at most one shadow tone and one highlight tone, in large clean shapes. The black cloak, the hair and the dress have no texture, no noise, no specks, no checkerboard dithering.
+- One continuous 1-pixel outline around the whole figure, never 2 pixels thick, never broken, with no loose pixels outside it. Legs, shoes and the hem are clean simple shapes.
+- The three idle frames are the same drawing at exactly the same position; only a 1-pixel breathing bob is allowed. Nothing may touch or cross a cell edge: keep at least 2 empty pixels between the figure (staff and orb included) and every cell edge.
+Keep the grid layout, frame order, pose and position of each frame as in (1). Each cell is an exact 68x69 pixel grid, so the whole sheet is 272x138 pixels: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no blur, at most about 16 colours, light from the top left. Transparent background. No text, no grid lines.
 ```
 
 ## Projectiles
@@ -262,13 +263,7 @@ Keep areas clean and flat: no scattered single pixels, no specks or noise inside
 
 ## WordHead
 
-```text
-Attached: (1) a sprite sheet of 2 animation frames of one game character, laid out left to right, top to bottom in a 4 x 1 grid (empty cells are unused), each cell one frame; (2) and (3) style references: an approved dialogue portrait and an approved background of the same game.
-Redraw sheet (1) as true pixel art in the unified art style of references (2) and (3): a clean 1-pixel outline in a darker shade of each area's colour (not pure black), flat shading with 2 to 3 tones per colour and light from the top left, simple bold readable shapes, small clean eyes, the same palette treatment and density as the references.
-A chibi head icon of Word: red-orange hair, big yellow ribbon on top, large magenta eyes, pink blushing cheeks, a small happy cat-like smile. The head fills the whole cell exactly like the reference: ribbon at the top edge, hair reaching the bottom edge, face in the lower middle. Frame 2 is the same head tilted slightly to the right.
-Keep the same grid layout and frame order. In every frame keep the character at the same position inside its cell (same baseline, same left and right extent), the same pose and action, the same colours and decorations, so the frames still animate together and the character is recognisable. Keep each frame's expression (for example a squeezed >_< face when hit). 
-Keep areas clean and flat: no scattered single pixels, no specks or noise inside the body; texture is shown with a few clear marks only. Each cell is an exact 31x30 pixel grid, so the whole sheet is 124x30 pixels: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no dithering noise, no blur, flat colour clusters, at most about 16 colours. Transparent background. No text, no grid lines.
-```
+Codex 로 31x30 칸에 그리면 얼굴이 그 크기보다 촘촘하게 나와서, 줄이면 눈과 입이 뭉개졌다. 그래서 타이틀 머리는 위 Word 전투 그림의 대기 1·2프레임에서 머리 부분(리본, 머리카락, 얼굴)을 잘라 만들었다. 지팡이의 회색과 파란색 픽셀을 지우고, 목은 턱 아래 한 줄을 외곽선 색으로 막았다. 크기는 35x30, 피벗은 (0.5, 0.45)다.
 
 ## 제목 글자, 튜토리얼 손, 상태 이상 오버레이
 

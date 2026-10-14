@@ -29,7 +29,8 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 스토리·타이틀·엔딩 배경 6장, 전투·대화 배경 10장, 게임오버·게임클리어 배경: Codex로 다시 그림.
 - 월드맵 2장: Codex 로 다시 그린 그림은 외곽선이 자글자글해서, 원래 지도를 화면 비율로 늘린 뒤 `pixelate.py --target 495x276 --keep-lines 2` 로 줄였다.
 - 1부 월드맵 진행 4장: `docs/design/pixel-grid/map_stages.py`로 새 WorldMapDefault에서 만듦.
-- 게임오버 2·3프레임, 비 오는 배경 5프레임: `gameover_frames.py`, `rain_frames.py`로 바뀌는 부분만 옮김.
+- 게임오버 1·2프레임: `gameover_frames.py`가 3프레임의 눈물 줄기를 짧게 잘라 만듦. 비 오는 배경 5프레임: `rain_frames.py`로 빗줄기만 옮김.
+- 타이틀 머리: 워드 전투 대기 프레임의 머리 부분을 잘라 35x30으로 만듦.
 - 슬라임 24종, 워드 전투 7프레임, 적 투사체 7색, 타이틀 머리, NEW CARD·GAME OVER 글자, 튜토리얼 손, 상태 이상 오버레이: 줄이면 선이 자글자글해서 공통 캐릭터 스타일로 Codex 로 다시 그림(`char_sheet.py`, `docs/design/pixel-grid/character-prompts.md`).
 - 로고, 타이틀 머리, NEW CARD·GAME OVER 글자, 박격포 표적: 줄이거나 예전 결과를 씀. 타이틀 머리와 글자 두 장은 투명 여백도 잘라냄(로고는 UI Image 라 자르지 않음).
 - 투명 여백: 슬라임 22종 프레임, 주문 이펙트 시트 20장(`trim_sheet.py`), 워드·투사체·타이틀 머리·글자 두 장을 잘라냄. 대화 초상화, 로고, 튜토리얼 손, 조합 버튼, `Resources/Combat` 아틀라스는 UI 배치나 코드가 크기를 읽어서 자르지 않음.
