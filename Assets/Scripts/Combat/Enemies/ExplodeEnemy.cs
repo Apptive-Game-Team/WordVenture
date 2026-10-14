@@ -34,7 +34,7 @@ namespace Combat.Enemies
                 return;
             }
 
-            if (distanceToFrontLine <= attackRange)
+            if (IsInAttackRange(distanceToFrontLine))
             {
                 primed = true;
                 Windup.Play(0f, WindupTrembleDistance);
