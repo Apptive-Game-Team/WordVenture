@@ -37,10 +37,6 @@ When adding, generating, or replacing an image under `Assets/`, follow
 [`.agents/skills/pixel-art/SKILL.md`](.agents/skills/pixel-art/SKILL.md): every
 image is real pixel art at 1 art pixel = 4 screen px (480x270 virtual screen).
 
-When adding, generating, or replacing an image under `Assets/`, follow
-[`.agents/skills/pixel-art/SKILL.md`](.agents/skills/pixel-art/SKILL.md): every
-image is real pixel art at 1 art pixel = 4 screen px (480x270 virtual screen).
-
 ## Conventions
 
 - Write commit subjects and bodies, pull requests, and release notes in Korean.
