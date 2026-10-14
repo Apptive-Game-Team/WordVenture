@@ -116,10 +116,16 @@ namespace Combat.Enemies
 
 
 
+        // 이동은 기준선에서 정확히 attackRange 떨어진 자리에서 멈추지만, 위치를 프레임마다 더하므로
+        // 거리가 3.0000002처럼 사거리를 아주 조금 넘을 수 있다. 공격 여부와 근접 피해를 모두 이 판정으로 정한다.
+        const float AttackRangeTolerance = 0.01f;
+
+        public bool IsInAttackRange(float distanceToFrontLine) => distanceToFrontLine <= attackRange + AttackRangeTolerance;
+
         private ActionType MakeActionDecision(float distanceToFrontLine)
         {
 
-            if (distanceToFrontLine > attackRange)
+            if (!IsInAttackRange(distanceToFrontLine))
             {
                 return ActionType.MOVE;
             } else

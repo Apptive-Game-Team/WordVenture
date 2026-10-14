@@ -83,29 +83,22 @@ not as follow-up work.
 
 ## Art
 
-The existing slimes share one body: the same outline, eye position, 4-pixel
-blocks, and per-frame motion. Act Two slimes generated as whole images had a
-different body shape, eye position, and rim width, and were redrawn. Every new
-slime keeps the shared body and gets its look from color and one decoration.
-`docs/design/act-two-art/README.md` records how this was decided.
+Every slime is drawn in the shared character style of the
+[`pixel-art`](../pixel-art/SKILL.md) skill ("Workflow: character animation"): a
+1-pixel outline in a darker shade of the body (the rim), flat 2 to 3 tone
+shading, small clean eyes, and no scattered single pixels. The existing slimes
+share one body (outline, eye position, per-frame motion); a new slime keeps that
+body and gets its look from colour and one decoration (a horn, a fuse, a sprout,
+a cannon, a shield, a crack, crystals in Act Two).
 
 **Style rules**
 
-- Body: the 8 frames of the purple ranged slime
-  (`Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/`).
-  Change only its 4 colors: body, rim and eyes, lower band, and highlight.
-  Keep the highlight white so the shine matches the other slimes.
-- Look: one decoration on top of or in front of the body (a horn, a fuse, a
-  sprout, a cannon, a shield, a crack, crystals in Act Two). Draw it as text
-  art where one character is one cell, stamped at 2x2 cells so its pixels are
-  as thick as the body's. Keep it off the eyes.
-- Size: draw on a 128x128 grid. `build_slimes.py` shrinks the frames together
-  to the 4-screen-px grid of the [`pixel-art`](../pixel-art/SKILL.md) skill:
-  512 x prefab scale x 1.08 / 4 cells, so 69x69 at the usual prefab scale 0.5
-  (PPU 13.5) and 90x90 for Shield at 0.65 (PPU 17.55, `FRAME_SIZES`). The PPU
-  in the frame `.meta` is 27 x prefab scale. Do not enlarge a boss on the grid
-  with a scale factor; draw it larger or give its prefab a larger scale and
-  frame size.
+- Body: use the frames of a similar existing slime (for example
+  `Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/`) as the
+  reference sheet, and describe only the new colours and decoration.
+- Size: frames are 69x69 art px before trimming at the usual prefab scale 0.5
+  (PPU 13.5, one art px = 4 screen px); a boss at 0.7 uses 97x97 (PPU 18.9). The
+  PPU in each frame `.meta` is 27 x prefab scale.
 - Direction: the slime faces right, like every existing frame.
 - Frame order, as `SlimeAnimator` plays it: idle 2, move and melee 2, hit,
   death, ranged attack 2. A slime that warns before acting (`Windup()`) has 2
@@ -115,45 +108,27 @@ slime keeps the shared body and gets its look from color and one decoration.
 
 **Steps**
 
-1. Add an entry to `SLIMES` in `docs/design/act-two-art/build_slimes.py`: the
-   color map (`BODY`, `RIM`, `BAND` replacements), the decoration grid with its
-   palette, its anchor (`top` or `front`), and `windup` for a warning slime. A new decoration needs a new text-art grid next to
-   `HORN`, `FUSE`, and the others.
-2. Add the slime under `enemies` in `docs/design/act-two-art/manifest.json`
+1. Add the slime under `enemies` in `docs/design/act-two-art/manifest.json`
    with 8 (or 10) frame paths,
    `Assets/Art/Combat/Enemies/ActTwo/<Name>/<Name>Slime_01.png` onward, each
    with a new 32-character hex GUID. Create the `<Name>/` folder, add it with a
    new GUID under `folders` in the same manifest, and give it a `.meta` copied
    from `Assets/Art/Combat/Enemies/ActTwo/Mortar.meta` with that GUID.
-3. Copy an existing frame's `.meta` (for example
-   `Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_01.png.meta`) to the new
-   `_01.png.meta` and replace its GUID with the manifest GUID. The script copies
-   this file's import settings to the other frames, so do not change them.
-4. From the repository root, render a comparison sheet first. Its top row is
-   the base slime, so check that the eyes, bottom line, and outline match:
-
-   ```bash
-   python3 docs/design/act-two-art/build_slimes.py preview.png
-   ```
-
-5. Write the frames, then set the prefab's `SlimeAnimator.sprites` to them in
-   the manifest order:
-
-   ```bash
-   python3 docs/design/act-two-art/build_slimes.py
-   ```
-
-6. Add the prefab and its manifest name to `EnemyArt` in
+2. Copy an existing frame's `.meta` (for example
+   `Assets/Art/Combat/Enemies/ActTwo/Mortar/MortarSlime_01.png.meta`) for each
+   frame and replace its GUID with the manifest GUID.
+3. Draw the frames with `.agents/skills/pixel-art/scripts/char_sheet.py` and
+   Codex as described in the pixel-art skill, then run `trim_set.py` on them.
+4. Set the prefab's `SlimeAnimator.sprites` to the frames in manifest order.
+5. Add the prefab and its manifest name to `EnemyArt` in
    `Assets/Tests/EditMode/ActTwoCompleteDataTests.cs`, which checks that the
    prefab's frames match the manifest.
-7. Put the comparison sheet in the plan's `.plan/assets/<plan-name>/` folder and
+6. Put the comparison sheet in the plan's `.plan/assets/<plan-name>/` folder and
    in the pull request, so the reviewer can compare the new slime with the base.
 
-Image generation is still the way to make battle backgrounds and dialogue
+Image generation is also the way to make battle backgrounds and dialogue
 portraits; the prompts and the reference images used are in
-`docs/design/act-two-art/prompts/` and the README. For a slime, use a generated
-image at most as a sketch for the decoration, then draw the decoration as text
-art in `build_slimes.py`.
+`docs/design/act-two-art/prompts/`, `docs/design/pixel-grid/` and the README.
 
 ## Validation
 

@@ -136,6 +136,42 @@ mkdir -p /mnt/c/temp/wv-pixel/Assets/Editor/PixelGrid && cp .agents/skills/pixel
 The report is `C:\temp\wv-pixel\pixel-report.json`, the captures `C:\temp\wv-pixel\captures\`.
 Target art size of a texture = texture size x texpx / 4.
 
+## Workflow: character animation (slimes, Word, projectiles)
+
+Characters are drawn in one shared style (#116): a 1-pixel outline in a darker shade of
+each colour (a slime's rim is its outline), flat 2 to 3 tone shading lit from the top left,
+small clean eyes that stay identical across frames unless the expression changes, no
+scattered single pixels. Do not shrink character art drawn on a finer grid: the lines
+break into jagged steps. Redraw it at the target grid with Codex as one sheet:
+
+1. Frame size: 512 x prefab scale x 1.08 / 4 art px for a 512 frame (69 at scale 0.5),
+   or the size of an existing trimmed frame of the same character.
+2. `char_sheet.py ref ref.png W H <frames>` (4 columns, one frame per cell).
+3. Run Codex with the sheet attached, plus `Assets/Art/Story/Portraits/WordDialogue.png`
+   and `Assets/Art/Tutorial/PlainBackground.png` enlarged 4x and 2x as style references:
+
+   ```text
+   Attached: (1) a sprite sheet of [N] animation frames of one game character, laid out left
+   to right, top to bottom in a 4 x [rows] grid, each cell one frame; (2) and (3) style
+   references: an approved dialogue portrait and an approved background of the same game.
+   Redraw sheet (1) as true pixel art in the unified art style of references (2) and (3): a
+   clean 1-pixel outline in a darker shade of each area's colour (not pure black), flat shading
+   with 2 to 3 tones per colour and light from the top left, simple bold readable shapes, small
+   clean eyes. [Character, colours, decoration, frame order.]
+   Keep the same grid layout and frame order. In every frame keep the character at the same
+   position inside its cell (same baseline, same left and right extent), the same pose and
+   action, the same colours and decorations. Keep each frame's expression. Keep areas clean
+   and flat: no scattered single pixels. The eyes are the same two small blocks in every frame
+   unless the expression changes. Each cell is an exact [W]x[H] pixel grid, so the whole sheet
+   is [4W]x[rows*H] pixels: every art pixel is one equal square cell, then enlarge with
+   nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no
+   dithering noise, no blur, at most about 16 colours. Transparent background. No text, no
+   grid lines.
+   ```
+4. `char_sheet.py post raw.png W H <frame paths>`, then compare with the reference at 2x
+   screen size (eyes in every frame, baseline, decoration); regenerate the sheet if a frame breaks.
+5. Set PPU 27 x prefab scale in each `.meta`, then run `trim_set.py` on the frames.
+
 ## Workflow: animation sets and margins
 
 ```bash

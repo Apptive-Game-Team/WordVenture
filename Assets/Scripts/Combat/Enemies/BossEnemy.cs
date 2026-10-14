@@ -17,7 +17,7 @@ namespace Combat.Enemies
         public override void Attack(float distanceToFrontLine)
         {
             base.Attack(distanceToFrontLine);
-            if (distanceToFrontLine < attackRange)
+            if (IsInAttackRange(distanceToFrontLine))
             {
                 AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
             }
