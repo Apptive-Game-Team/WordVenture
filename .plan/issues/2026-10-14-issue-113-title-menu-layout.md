@@ -2,7 +2,7 @@
 
 - Date: 2026-10-14
 - GitHub Issue: #113
-- Status: In Progress
+- Status: Complete
 
 ## Goal
 
@@ -26,8 +26,11 @@
 ## Approach (Checklist)
 - [x] `TitleScene.unity` 에 `MenuButtons` 추가, 버튼 3개 이동
 - [x] 저장 유무에 따른 버튼 위치를 검사하는 PlayMode test 추가
-- [ ] PlayMode test 실행, 두 상태 화면 캡처
+- [x] PlayMode test 실행, 두 상태 화면 캡처
 
 ## Validation
 
 - PlayMode: `TitleMenuPlayTests`
+- EditMode 전체: 217개 중 216개 통과, 1개 skip(`ElementalStatusTests` 미리보기 렌더링)
+- PlayMode 전체: 64개 중 63개 통과, 1개 skip(`BalanceSimulation`)
+- 화면 캡처: `.plan/assets/2026-10-14-issue-113-title-menu-layout/`
