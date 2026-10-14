@@ -375,7 +375,7 @@
     {"ko": "걸린 턴 {0}", "en": "Turns taken: {0}"},
     {"ko": "다시 깬 스테이지: 기본의 {0}%", "en": "Replayed stage: {0}% of base"},
     {"ko": "보유 마력 조각 {0}", "en": "Mana Shards: {0}"},
-    {"ko": "마력 조각 (U)", "en": "Mana Shards (U)"},
+    {"ko": "업그레이드 (U)", "en": "Upgrades (U)"},
     {"ko": "업그레이드", "en": "Upgrades"},
     {"ko": "최대 HP", "en": "Max HP"},
     {"ko": "손패 상한", "en": "Hand Limit"},

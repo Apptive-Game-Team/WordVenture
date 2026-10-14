@@ -50,7 +50,7 @@ namespace Map
         {
             var obj = new GameObject("UpgradeButton", typeof(RectTransform));
             SetUpCanvas(obj, 10);
-            Button button = WoodButton(obj.transform, T("마력 조각 (U)"), 40);
+            Button button = WoodButton(obj.transform, T("업그레이드 (U)"), 40);
             var rect = (RectTransform)button.transform;
             rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.one;
             rect.anchoredPosition = new Vector2(-460, -40);
