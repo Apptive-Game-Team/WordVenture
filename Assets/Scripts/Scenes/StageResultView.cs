@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Combat.Stage;
 using Core;
+using Story;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
