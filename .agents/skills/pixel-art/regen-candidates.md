@@ -27,7 +27,8 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 ## 처리 완료(#116)
 
 - 대화 초상화 25장: Codex로 170x170에 다시 그림(`docs/design/pixel-grid/portrait-prompts.md`).
-- 스토리·타이틀·엔딩 배경 6장, 전투·대화 배경 10장, 게임오버·게임클리어 배경, 월드맵 2장: Codex로 다시 그림.
+- 스토리·타이틀·엔딩 배경 6장, 전투·대화 배경 10장, 게임오버·게임클리어 배경: Codex로 다시 그림.
+- 월드맵 2장: Codex 로 다시 그린 그림은 외곽선이 자글자글해서, 원래 지도를 화면 비율로 늘린 뒤 `pixelate.py --target 495x276 --keep-lines 2` 로 줄였다.
 - 1부 월드맵 진행 4장: `docs/design/pixel-grid/map_stages.py`로 새 WorldMapDefault에서 만듦.
 - 게임오버 2·3프레임, 비 오는 배경 5프레임: `gameover_frames.py`, `rain_frames.py`로 바뀌는 부분만 옮김.
 - 슬라임 22종, 워드 전투 7프레임, 적 투사체 8색: `resample_set.py`로 69/90/97/126칸, 28칸으로 줄임.
