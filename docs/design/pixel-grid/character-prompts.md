@@ -239,7 +239,7 @@ Each cell is an exact 35x29 pixel grid, so the whole sheet is 140x58 pixels: eve
 
 ## Word
 
-대화 초상화(스토리) 얼굴에 맞춘 시트에서 망토와 머리카락에 얼룩덜룩한 픽셀, 두께가 고르지 않은 외곽선, 칸 가장자리에 잘린 지팡이 구슬이 남아 한 번 더 그렸다. 첨부: 그 시트(대기 2프레임을 3번째 칸에도 넣었다), 승인된 WordDialogue.png 의 얼굴 부분 8배 확대본. 후보 두 개 중 깨끗한 쪽을 골라 `char_sheet.py post` 와 같은 방법으로 줄인 뒤, RGB 거리 28 안의 비슷한 색을 합치고(55색에서 21색), 칸 가장자리에 붙은 12픽셀 이하 조각을 지웠다.
+대화 초상화(스토리) 얼굴에 맞춘 시트에서 망토와 머리카락에 얼룩덜룩한 픽셀, 두께가 고르지 않은 외곽선, 칸 가장자리에 잘린 지팡이 구슬이 남아 한 번 더 그렸다. 첨부: 그 시트(대기 2프레임을 3번째 칸에도 넣었다), 승인된 WordDialogue.png 의 얼굴 부분 8배 확대본. 후보 두 개 중 깨끗한 쪽을 골라 `char_sheet.py post` 와 같은 방법으로 줄인 뒤, RGB 거리 28 안의 비슷한 색을 합치고(55색에서 21색), 칸 가장자리에 붙은 12픽셀 이하 조각을 지웠다. 입은 점 하나로 나와서 직접 그렸다: 대기 3프레임과 타이틀 머리는 외곽선 색 3픽셀 가로선, 공격 2·피격은 4x3 크기의 벌린 입(외곽선 안에 붉은색 2픽셀).
 
 ```text
 Attached: (1) a sprite sheet of 7 animation frames of Word, the player character, in a 4 x 2 grid (the last cell is unused), each cell one frame; (2) a close-up of her face from her approved dialogue portrait.
