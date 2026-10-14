@@ -104,6 +104,13 @@ namespace Map
             InitChapterSwitchButton();
             SlimeEncyclopediaView.RecordClearedStages(stageDataList, enemyDataContainer, StagePosition);
             SlimeEncyclopediaView.CreateOpenButton(OpenEncyclopedia);
+            UpgradeView.CreateOpenButton(OpenUpgrades);
+        }
+
+        void OpenUpgrades()
+        {
+            if (enteringStage) return;
+            UpgradeView.Open();
         }
 
         void OpenEncyclopedia()
@@ -198,6 +205,12 @@ namespace Map
             if (Input.GetKeyDown(KeyCode.E))
             {
                 OpenEncyclopedia();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                OpenUpgrades();
                 return;
             }
 
