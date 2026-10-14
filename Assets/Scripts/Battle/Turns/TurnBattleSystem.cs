@@ -36,6 +36,7 @@ namespace Battle.Turns
         public override void OnStart() // When Enemy Turn End...
         {
             //Debug.Log("Player Turn Start!");
+            TurnBattleSystem.Instance.BeginPlayerTurn();
             //Draw Cards.
             TurnBattleSystem.Instance.cardManager.AddCard("Spell");
             TurnBattleSystem.Instance.cardManager.AddCard("MagicType");
@@ -79,6 +80,9 @@ namespace Battle.Turns
         bool endingPlayerTurn;
         public bool IsEndingPlayerTurn => endingPlayerTurn;
         public event System.Action PlayerTurnEnded;
+        // 전투의 몇 번째 플레이어 턴인지. 첫 턴이 1이다. 적 공격력 상승과 빠른 클리어 보상이 이 값을 쓴다.
+        public int TurnNumber { get; private set; }
+        public event System.Action<int> PlayerTurnStarted;
 
         [SerializeField] public CardManager cardManager;
         [SerializeField] public EnemyTestManager enemyManager;
@@ -122,6 +126,12 @@ namespace Battle.Turns
             CombineZone zone = CombineZone.Instance;
             if (zone != null && (zone.IsAwaitingTarget || zone.IsCasting)) return true;
             return SpellObj.HasActiveSpells;
+        }
+
+        public void BeginPlayerTurn()
+        {
+            TurnNumber++;
+            PlayerTurnStarted?.Invoke(TurnNumber);
         }
 
         public void ChangeTurn(Turn turn)
