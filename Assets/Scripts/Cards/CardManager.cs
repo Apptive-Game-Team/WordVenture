@@ -177,10 +177,39 @@ namespace Cards
             var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
             var card = cardObject.GetComponent<Card>();
             card.Setup(word);
+
+            // 손패가 가득 차면 뽑은 카드는 손패에 들어가지 않고 불타 사라진다.
+            // 조합칸에서 돌아오는 카드는 이 길을 거치지 않으므로 한도를 넘어도 태우지 않는다.
+            if (myCards.Count >= PlayerUpgrades.HandLimit)
+            {
+                BurnCard(card);
+                return;
+            }
+
             myCards.Add(card);
 
             SetOriginOrder();
             CardAlignment();
+        }
+
+        // 같은 턴에 두 장이 넘치면 나란히 서서 어긋나게 탄다.
+        int activeBurns;
+
+        void BurnCard(Card card)
+        {
+            float x = (cardLeft.position.x + cardRight.position.x) * 0.5f + (activeBurns % 2 == 0 ? -1f : 1f) * 1.2f;
+            float y = cardLeft.position.y + 4f;
+            Vector3 burnPosition = new Vector3(x, y, card.transform.position.z);
+            float delay = activeBurns * 0.15f;
+            activeBurns++;
+            CardBurnVfx.Play(card, burnPosition, delay);
+            StartCoroutine(ReleaseBurnSlot());
+        }
+
+        System.Collections.IEnumerator ReleaseBurnSlot()
+        {
+            yield return new WaitForSeconds(1.2f);
+            activeBurns = Mathf.Max(0, activeBurns - 1);
         }
 
         public void PopCard(Card card)
