@@ -20,7 +20,6 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 
 | 에셋 | 비고 |
 |---|---|
-| `Assets/Art/Story/Portraits/WordDialogue.png` | 우선순위 1. 외곽선이 희미하다는 피드백. 임시로 `--keep-lines 2` 적용됨 |
 | `Assets/Art/Story/Portraits/FishermanDialogue.png` | |
 | `Assets/Art/Story/Portraits/GuardDialogue.png` | |
 | `Assets/Art/Story/Portraits/GuideDialogue.png` | |
@@ -51,3 +50,4 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 ## 처리 완료
 
 - 워드 전투 스프라이트 7프레임(`Assets/Art/Combat/Word/`): `--keep-lines 2`로 다시 변환해 외곽선이 닫힘
+- 워드 대화 초상화(`Assets/Art/Story/Portraits/WordDialogue.png`): Codex image_gen으로 재생성해 `--target 170x170 --keep-lines 2`로 변환. 나머지 초상화 7장의 머리 크기와 프레이밍 기준

@@ -40,3 +40,9 @@ Use case: style-transfer / illustration-story. Edit target image 1: peaceful mou
 ### MountainValley
 
 Use case: illustration-story. Asset: WordVenture title screen background, 16:9 landscape. Input images STYLE references only. Match the simple coarse pixel art of game battle background: blue layered mountain silhouettes, flat teal forest, bright green grasses, ochre paths, limited flat color clusters, large square pixels. Scene: inviting remote mountain valley and winding ochre trail leading toward distant blue mountains, framing trees at far left and right, low bushes. Keep central 60 percent open and uncluttered for existing title and vertical menu overlay; airy blue sky upper half. No cottage in center, no characters, no text or letters, no logo/UI, no high detail dithering, no gradients or painterly texture. Approximately 320x180 logical pixel grid enlarged crisp, side-on scenic 2D RPG backdrop. Use same palette and visual density as reference 1.
+
+### WordDialogue
+
+Assets/Art/Story/Portraits/WordDialogue.png: 워드 대화 초상화. 참고 이미지로 AI 원본(b7c2ed0), 현재 170x170 PNG의 4배 확대본, 전투 스프라이트 WordIdle1.png의 4배 확대본을 첨부. 생성 원본 1254x1254를 `pixelate.py --target 170x170 --keep-lines 2`로 변환.
+
+Redraw the attached reference image as true pixel art for the game WordVenture. Dialogue portrait of Word, a young red-haired mage girl with a yellow ribbon, black cloak, red scarf and a staff with a blue orb, bust shot. Keep the same composition, character design, pose and colours as the reference. Draw it on an exact 170x170 pixel grid: every art pixel is one equal square cell, then enlarge with nearest-neighbour by an integer factor. Hard edges, no anti-aliasing, no gradients, no dithering noise, no blur, flat colour clusters, limited palette of about 32 colours, clean 1-pixel dark outline. Transparent background. No text, UI or logos. Match the palette and density of the other attached game art.
