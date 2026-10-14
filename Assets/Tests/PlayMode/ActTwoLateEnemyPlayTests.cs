@@ -156,6 +156,20 @@ namespace WordVenture.Tests
             .Cast<Component>().Where(e => e.name.StartsWith(prefabName + "(") && (bool)Property(e, "IsAlive")).ToArray();
 
         [UnityTest]
+        public IEnumerator 분열_슬라임이_사거리_끝에_멈추면_다음_턴에_워드를_때린다()
+        {
+            float frontLineX = (float)FormationType.GetMethod("FrontLineX").Invoke(null, new object[] { Player.transform.position.x });
+            Component split = CreateEnemy("SplitSlime", frontLineX + 3f, 40, 10, "Fire");
+            yield return null;
+            int before = PlayerHp;
+
+            Call(split, "PlayTurnAction", FrontLineDistance(split));
+            yield return null;
+
+            Assert.That(PlayerHp, Is.LessThan(before), "사거리 3에 선 근접 적이 공격 동작만 하고 피해를 주지 않는다");
+        }
+
+        [UnityTest]
         public IEnumerator 분열_슬라임이_쓰러지면_작은_슬라임_두_마리가_웨이브에_더해진다()
         {
             Component split = CreateEnemy("SplitSlime", 4f, 40, 10, "Fire");
