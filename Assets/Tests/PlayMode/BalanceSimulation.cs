@@ -149,6 +149,7 @@ namespace WordVenture.Tests
             public int finalHp;
             public int spawnsCast;
             public int spellsCast;
+            public int discards;
             public string upgrades;
         }
 
@@ -176,14 +177,17 @@ namespace WordVenture.Tests
             for (result.turns = 1; result.turns <= MaxTurns && InBattle; result.turns++)
             {
                 yield return SkipDialogue();
+                int castsThisTurn = 0;
                 for (int cast = 0; cast < CastsPerTurn && InBattle; cast++)
                 {
                     bool casted = false;
                     yield return CastBestAction(result, done => casted = done);
                     if (!casted) break;
+                    castsThisTurn++;
                     TrackHp(result, ref lastHp);
                 }
                 if (!InBattle) break;
+                if (castsThisTurn == 0 && TryDiscardUnusable(PlayerUpgradesHandLimit)) result.discards++;
                 Call(Battle, "TurnEndButton");
                 yield return WaitForPlayerTurn();
                 TrackHp(result, ref lastHp);
@@ -340,6 +344,23 @@ namespace WordVenture.Tests
                 }
             }
             return best;
+        }
+
+        static int PlayerUpgradesHandLimit => (int)Runtime("Core.PlayerUpgrades").GetProperty("HandLimit").GetValue(null);
+
+        // 이번 턴에 낼 수 있는 조합이 없고 손패가 가득 차 있을 때 가장 쓸모없는 카드 한 장을 버린다.
+        // Spawn 마법, 체력이 충분할 때의 Holy 속성, 그 외 아무 카드 순서다.
+        static bool TryDiscardUnusable(int handLimit)
+        {
+            if (!InBattle) return false;
+            object manager = StaticGet("Cards.CardManager", "Inst");
+            var hand = ((IEnumerable)Get(manager, "HandCards")).Cast<Component>()
+                .Where(card => card != null && card.gameObject.activeInHierarchy).ToList();
+            if (hand.Count < handLimit) return false;
+            Component victim = hand.FirstOrDefault(card => CardType(card) == "Spawn")
+                ?? hand.FirstOrDefault(card => CardType(card) == "Holy" && PlayerHp > HealBelowHp)
+                ?? hand.FirstOrDefault();
+            return victim != null && (bool)Call(manager, "TryDiscard", victim);
         }
 
         static string CardType(Component card) => Get(card, "cardType").ToString();
