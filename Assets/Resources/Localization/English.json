@@ -398,6 +398,8 @@
     {"ko": "등급 보너스 +{0}", "en": "Grade Bonus +{0}"},
     {"ko": "Spawn 주문을 얻으면 열립니다", "en": "Unlocks when you get the Spawn spell"},
     {"ko": "잠김", "en": "Locked"},
-    {"ko": "스테이지를 깨면 마력 조각을 얻습니다. 결과 등급이 높을수록 더 받습니다.", "en": "Clear stages to earn Mana Shards. Higher result grades give more."}
+    {"ko": "스테이지를 깨면 마력 조각을 얻습니다. 결과 등급이 높을수록 더 받습니다.", "en": "Clear stages to earn Mana Shards. Higher result grades give more."},
+    {"ko": "버리기", "en": "Discard"},
+    {"ko": "턴마다 1장", "en": "1 per turn"}
   ]
 }

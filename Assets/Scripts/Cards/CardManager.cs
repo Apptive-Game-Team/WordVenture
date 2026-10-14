@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Battle.Turns;
 using Combat.UI;
 using Core;
+using DG.Tweening;
 using Map;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -124,6 +126,7 @@ namespace Cards
         {
             //WordVenture.Map.MapMove.StagePosition = 0;
             WordOS_state();
+            CreateDiscardSpot();
         }
 
         void Update()
@@ -163,6 +166,7 @@ namespace Cards
             {
                 DragCard(mouseWorldPosition);
             }
+            RefreshDiscardSpot(mouseWorldPosition);
 
         }
 
@@ -199,7 +203,11 @@ namespace Cards
         {
             float x = (cardLeft.position.x + cardRight.position.x) * 0.5f + (activeBurns % 2 == 0 ? -1f : 1f) * 1.2f;
             float y = cardLeft.position.y + 4f;
-            Vector3 burnPosition = new Vector3(x, y, card.transform.position.z);
+            BurnCard(card, new Vector3(x, y, card.transform.position.z));
+        }
+
+        void BurnCard(Card card, Vector3 burnPosition)
+        {
             float delay = activeBurns * 0.15f;
             activeBurns++;
             CardBurnVfx.Play(card, burnPosition, delay);
@@ -211,6 +219,74 @@ namespace Cards
             yield return new WaitForSeconds(1.2f);
             activeBurns = Mathf.Max(0, activeBurns - 1);
         }
+
+        #region Discard
+
+        // 손패 오른쪽 옆. 가장자리 카드(손패 끝에서 약 0.7)와 겹치지 않고 화면 오른쪽 끝(월드 x 8.9) 안에 든다.
+        const float DiscardSpotOffsetX = 3.2f;
+        // 한 턴에 버릴 수 있는 카드 수는 1장이다. 버린 턴 번호를 기억해 다음 턴이 되면 풀린다.
+        int lastDiscardTurn = -1;
+        DiscardSpot discardSpot;
+
+        public bool CanDiscard
+        {
+            get
+            {
+                if (InteractionLock.IsLocked || IsDiscardBlockedByTutorial()) return false;
+                TurnBattleSystem battle = TurnBattleSystem.Instance;
+                if (battle == null || !battle.IsPlayerTurn || battle.IsEndingPlayerTurn) return false;
+                CombineZone zone = CombineZone.Instance;
+                if (zone != null && (zone.IsCasting || zone.IsAwaitingTarget)) return false;
+                return lastDiscardTurn != battle.TurnNumber;
+            }
+        }
+
+        // 튜토리얼은 정해진 카드만 정해진 칸에 놓게 안내하므로 끝나기 전에는 버릴 수 없다.
+        static bool IsDiscardBlockedByTutorial()
+        {
+            return global::Tutorial.TutorialController.Instance != null && !SaveLoadController.IsTutorialEnded;
+        }
+
+        // 손패의 카드 한 장을 태워 버린다. 카드를 쓴 것이 아니므로 BattleStats.CardsUsed는 올리지 않는다.
+        public bool TryDiscard(Card card)
+        {
+            if (card == null || !myCards.Contains(card) || !CanDiscard) return false;
+
+            lastDiscardTurn = TurnBattleSystem.Instance.TurnNumber;
+            // 조합칸에 올려 둔 카드도 버릴 수 있으므로 칸 목록에서 먼저 뺀다.
+            CombineZone.Instance.spellCards.Remove(card.gameObject);
+            CombineZone.Instance.magicTypeCards.Remove(card.gameObject);
+            myCards.Remove(card);
+            if (selectCard == card) selectCard = null;
+
+            // 손패 정렬이 걸어 둔 이동 tween이 남아 있으면 불타는 카드와 위치를 다투므로 끊는다.
+            card.transform.DOKill();
+            Vector3 burnPosition = card.transform.position;
+            if (discardSpot != null) burnPosition = new Vector3(discardSpot.Center.x, discardSpot.Center.y, burnPosition.z);
+            BurnCard(card, burnPosition);
+            SetOriginOrder();
+            CardAlignment();
+            return true;
+        }
+
+        void CreateDiscardSpot()
+        {
+            if (cardLeft == null || cardRight == null || cardPrefab == null) return;
+            var cardRenderer = cardPrefab.GetComponent<SpriteRenderer>();
+            Vector3 position = new Vector3(cardRight.position.x + DiscardSpotOffsetX, cardRight.position.y + 1.2f, 0f);
+            discardSpot = DiscardSpot.Create(position, cardRenderer != null ? cardRenderer.sortingLayerID : 0);
+        }
+
+        void RefreshDiscardSpot(Vector3 mouseWorldPosition)
+        {
+            if (discardSpot == null) return;
+            bool tutorial = IsDiscardBlockedByTutorial();
+            if (discardSpot.gameObject.activeSelf == tutorial) discardSpot.gameObject.SetActive(!tutorial);
+            if (tutorial) return;
+            discardSpot.SetState(CanDiscard, isMyCardDrag && discardSpot.Contains(mouseWorldPosition));
+        }
+
+        #endregion
 
         public void PopCard(Card card)
         {
@@ -417,6 +493,11 @@ namespace Cards
             else if (onPushArea3 && selectCard.CompareTag("Target"))
             {
                 PlaceCard(selectCard, pushArea3);
+            }
+            else if (discardSpot != null && discardSpot.gameObject.activeSelf && discardSpot.Contains(Util.MousePos)
+                && TryDiscard(selectCard))
+            {
+                // 버린 카드는 TryDiscard가 태운다.
             }
             else
             {

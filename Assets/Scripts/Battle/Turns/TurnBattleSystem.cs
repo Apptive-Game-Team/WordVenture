@@ -79,6 +79,7 @@ namespace Battle.Turns
         Turn currentTurn;
         bool endingPlayerTurn;
         public bool IsEndingPlayerTurn => endingPlayerTurn;
+        public bool IsPlayerTurn => currentTurn == PlayerTurn;
         public event System.Action PlayerTurnEnded;
         // 전투의 몇 번째 플레이어 턴인지. 첫 턴이 1이다. 적 공격력 상승과 빠른 클리어 보상이 이 값을 쓴다.
         public int TurnNumber { get; private set; }
