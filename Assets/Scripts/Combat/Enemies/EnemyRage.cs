@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Combat.Enemies
 {
-    // 전투 턴이 3번 지날 때마다 모든 적의 공격력이 20%씩 더해서 커진다. 전투 전체에 걸리므로 나중 웨이브의 적도 현재 단계로 나온다.
+    // 전투 턴이 3번 지날 때마다 모든 적의 공격력이 10%씩 더해서 커진다. 전투 전체에 걸리므로 나중 웨이브의 적도 현재 단계로 나온다.
     public static class EnemyRage
     {
         public const int TurnsPerLevel = 3;
-        public const float AttackPerLevel = 0.2f;
+        public const float AttackPerLevel = 0.1f;
         public const float ScalePerLevel = 0.06f;
         public const float MaxScaleBonus = 0.3f;
 

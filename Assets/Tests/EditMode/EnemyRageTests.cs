@@ -25,17 +25,17 @@ namespace WordVenture.Tests
         }
 
         [TestCase(0, 1f)]
-        [TestCase(1, 1.2f)]
-        [TestCase(3, 1.6f)]
+        [TestCase(1, 1.1f)]
+        [TestCase(3, 1.3f)]
         public void 단계마다_공격력_배율이_더해서_커진다(int level, float multiplier)
         {
             Assert.That((float)Call("AttackMultiplier", level), Is.EqualTo(multiplier).Within(0.0001f));
         }
 
         [TestCase(10, 0, 10)]
-        [TestCase(10, 1, 12)]
-        [TestCase(7, 1, 8)]
-        [TestCase(7, 2, 9)]
+        [TestCase(10, 1, 11)]
+        [TestCase(7, 1, 7)]
+        [TestCase(7, 2, 8)]
         [TestCase(1, 1, 1)]
         [TestCase(0, 5, 0)]
         public void 피해는_내림하고_분노가_없을_때보다_작아지지_않는다(int damage, int level, int expected)
