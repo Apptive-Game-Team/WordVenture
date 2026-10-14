@@ -5,7 +5,7 @@
 ## 만드는 방법
 
 1. Codex의 내장 이미지 생성 도구로 만든다. 프롬프트 원문은 `prompts/`에 있고, 기존 그림을 화풍 참고 이미지로 첨부했다.
-   - 배경: 고원·빗길 전투 배경(`Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `Rainy/KakaoTalk_20240701_192204698_02.png`)
+   - 배경: 고원·빗길 전투 배경(`Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `Rainy/RainyBackground_01.png`)
    - 초상화: 워드·평원 주민 초상화(`Assets/Art/Story/Portraits/WordDialogue.png`, `VillagerDialogue.png`)
    - 적: 보라 원거리 슬라임 프레임 8장을 생성 규격(1536×1024, 4×2칸, 마젠타 배경)에 맞게 배치한 그림
 2. `import_generated.py`가 생성 그림을 게임 에셋으로 바꾸고 `.meta`를 만든다. 저장소 루트에서 실행한다.
@@ -30,7 +30,7 @@ python3 docs/design/act-two-art/import_generated.py <생성 폴더>
 
 ## 적 슬라임 다시 그리기
 
-생성한 적 프레임은 몸 모양, 눈 위치, 테두리 굵기가 기존 슬라임과 달라서 `build_slimes.py`로 다시 그렸다(6종). 기존 보스 슬라임(악마, 꽃, 선인장)과 같은 방식이다.
+생성한 적 프레임은 몸 모양, 눈 위치, 테두리 굵기가 기존 슬라임과 달라서 `build_slimes.py`로 다시 그렸다(#116 에서 공통 캐릭터 스타일로 Codex 로 다시 그리면서 이 스크립트는 지웠다. 지금 절차는 add-slime skill 의 Art 절)(6종). 기존 보스 슬라임(악마, 꽃, 선인장)과 같은 방식이다.
 
 - 몸은 보라 원거리 슬라임 프레임 8장을 그대로 쓰고 색 4개(몸, 테두리와 눈, 아래 띠, 반사광)만 바꾼다. 그래서 눈 위치와 프레임마다의 움직임이 기존 슬라임과 같다.
 - 개성은 몸 위의 장식으로 준다: 돌진 뿔, 폭발 심지, 치유 새싹, 곡사 포신, 방패, 분열 용암 금. 장식 한 칸은 2x2칸으로 그려 몸과 같은 굵기의 픽셀이 된다.
@@ -38,6 +38,4 @@ python3 docs/design/act-two-art/import_generated.py <생성 폴더>
 - 최종 보스(Surge)는 이 스크립트로 만들지 않는다. 초록·보라·노랑 소용돌이와 결정이 있는 이전 512×512 그림을 그대로 쓰고, 스크립트는 Surge 프레임을 덮어쓰지 않는다.
 
 ```bash
-python3 docs/design/act-two-art/build_slimes.py            # 에셋을 덮어쓴다
-python3 docs/design/act-two-art/build_slimes.py preview.png # 비교용 그림만 만든다
 ```

@@ -13,14 +13,15 @@ namespace Combat.Enemies
         SpriteRenderer render;
         float elapsed;
 
-        // diameter는 폭발 그림이 차지할 가로 길이(unit)다. body의 정렬 층 위에 그린다.
-        public static BlastVfx Spawn(Vector3 position, Sprite[] frames, float diameter, SpriteRenderer body)
+        // diameter는 폭발 그림 한 칸이 차지할 가로 길이(unit), frameWidth는 그 한 칸의 원래 가로 길이(unit)다.
+        // 프레임은 투명 여백을 잘라낸 스프라이트라 bounds가 프레임마다 달라서, 칸 크기를 따로 받는다.
+        // body의 정렬 층 위에 그린다.
+        public static BlastVfx Spawn(Vector3 position, Sprite[] frames, float diameter, float frameWidth, SpriteRenderer body)
         {
             if (frames == null || frames.Length == 0 || frames[0] == null) return null;
             var go = new GameObject("BlastVfx");
             go.transform.position = position;
-            // 그림 한 장의 가로가 1 unit이 아니어도 diameter에 맞춘다.
-            float scale = diameter / frames[0].bounds.size.x;
+            float scale = diameter / frameWidth;
             go.transform.localScale = new Vector3(scale, scale, 1f);
             var vfx = go.AddComponent<BlastVfx>();
             vfx.frames = frames;
