@@ -171,6 +171,7 @@ namespace Combat.Enemies
             // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
             if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
             else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
+            if (!string.IsNullOrEmpty(hit.Reaction)) Core.BattleStats.RecordCombo();
             HitStrength strength = HitImpact.Classify(hit.Affinity, !string.IsNullOrEmpty(hit.Reaction));
             if (strength != HitStrength.None) PlayHitImpact(strength, hit.Affinity);
             TakeHit(damage);

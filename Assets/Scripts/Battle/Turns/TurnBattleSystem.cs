@@ -107,6 +107,7 @@ namespace Battle.Turns
 
         private void Start()
         {
+            BattleStats.Reset();
             currentTurn = PlayerTurn;
             currentTurn.OnStart();
         }
