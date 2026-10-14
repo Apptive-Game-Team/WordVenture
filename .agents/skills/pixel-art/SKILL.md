@@ -28,17 +28,25 @@ never used directly. It is always snapped with `scripts/pixelate.py`.
 | Import | Point filter, no mipmaps, no compression |
 | Colours | at most 64 per image (fewer for small sprites) |
 
-Logical sizes of current assets, for matching new ones:
+Logical sizes of current assets (measured on develop, #116), for matching new ones:
 
-| Asset kind | Art px |
-|---|---|
-| Full-screen background (story, title, ending) | 480x270 |
-| Dialogue portrait (`DialogueWindowPresentation`, 63% of screen height) | 170x170 |
-| Title logo | 275x91 |
-| Word / normal enemies | 69x69 frame |
-| Bosses | 97x97 frame |
-| Cards in hand | 52x52 |
-| Projectiles | 28x28 |
+| Asset kind | Art px | PPU |
+|---|---|---|
+| Story, title and ending background (SpriteRenderer, world width 4.8) | 480x270 | 100 |
+| Battle and dialogue background (battle object scale 2, `StageDialogueView` envelope) | 552x276 | 53.90625 |
+| Game over and game clear background | 480x240 | 46.875 |
+| World map (MapScene background scale 1) | 495x276 | 27 |
+| Dialogue portrait (`DialogueWindowPresentation`, 63% of screen height) | 170x170 | UI |
+| Word in battle and normal slimes (prefab scale 0.5) | 69x69 frame | 13.5 |
+| Bosses (prefab scale 0.7) / Shield (0.65) / Surge (0.91) | 97 / 90 / 126 | 18.9 / 17.55 / 24.57 |
+| Enemy projectiles (prefab scale 0.2) | 28x28 before trim | 5.4 |
+| Spell effects (prefab scale 5 or 10, PPU = frame width) | 128 or 256 frames | 4.22 px per texel, kept |
+| Cards in hand (`Card.prefab` root and runtime scale 0.4) | 34x50 | 10.8 |
+
+Known exceptions, kept on purpose: spell effect sheets (4.22 px per texel, 5% off);
+`SplitSlimeSmall` (prefab scale 0.3 reuses the 0.5 frames, 2.4 px); `ElementalStatusOverlay`,
+`AffinityMark` and `ReactionBurst` are sized by the enemy's body at runtime, about 4 px on a
+normal slime and larger on bosses; `Assets/Art/Icon.png` is the app icon, not drawn in game.
 
 ## Workflow: new image
 
@@ -104,6 +112,43 @@ Logical sizes of current assets, for matching new ones:
    Codex at the target art size. Then run "new image" steps 3-5. Keep the list in
    [`regen-candidates.md`](regen-candidates.md) up to date.
 
+## Workflow: measure the whole game
+
+`scripts/PixelGridReport.cs` measures, for every SpriteRenderer, UI Image, serialized
+sprite field and animation sprite in the build scenes and in every prefab, how many 1080p
+screen px one texel covers (`texpx`). A prefab is measured at its own root scale, as if
+instantiated with no parent (slimes 0.5, spells 5 or 10). It cannot see sizes set by code:
+read the script for anything assigned or scaled at runtime (`StageManager` backgrounds,
+`MapMove` maps, VFX sized by the enemy body, cards). `scripts/PixelGridCapture.cs` renders
+every build scene at 1920x1080 for a before and after comparison (edit mode, so UI built at
+runtime is missing).
+
+Both are editor scripts that are not kept in `Assets/`. Copy the project and run them there:
+
+```bash
+mkdir -p /mnt/c/temp/wv-pixel && git archive HEAD Assets Packages ProjectSettings docs | tar -x -C /mnt/c/temp/wv-pixel
+mkdir -p /mnt/c/temp/wv-pixel/Assets/Editor/PixelGrid && cp .agents/skills/pixel-art/scripts/PixelGrid*.cs /mnt/c/temp/wv-pixel/Assets/Editor/PixelGrid/
+"/mnt/c/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Unity.exe" -batchmode -nographics -projectPath 'C:\temp\wv-pixel' -executeMethod PixelGridReport.Run -quit -logFile 'C:\temp\wv-pixel\report.log'
+"/mnt/c/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Unity.exe" -batchmode -projectPath 'C:\temp\wv-pixel' -executeMethod PixelGridCapture.Run -quit -logFile 'C:\temp\wv-pixel\capture.log'
+```
+
+The report is `C:\temp\wv-pixel\pixel-report.json`, the captures `C:\temp\wv-pixel\captures\`.
+Target art size of a texture = texture size x texpx / 4.
+
+## Workflow: animation sets and margins
+
+```bash
+# shrink all frames of one animation together (same palette and cell boundaries), exact PPU
+python3 .agents/skills/pixel-art/scripts/resample_set.py --target 69 --ppu 13.5 --keep-lines 2 FRAME_*.png
+# cut the transparent margin of a set without moving it on screen (pivot follows the crop)
+python3 .agents/skills/pixel-art/scripts/trim_set.py FRAME_*.png
+```
+
+Set `--ppu` to 27 x the scale the sprite is drawn at. Trim only sprites that a
+SpriteRenderer draws and no code measures: not UI Image sprites, not slime frames (the
+encyclopedia shows them in a UI Image), not cards (the tutorial highlight uses their
+bounds), not explosion frames (`BlastVfx` scales by their bounds), not sprite sheets.
+
 ## Workflow: find unused images
 
 ```bash
@@ -122,8 +167,11 @@ folder becomes empty.
 
 - Never save an upscaled copy (2x/4x/8x) to the project. Upscaling is the job of PPU and
   the Point filter.
-- Non-uniform transform scale (for example card scale `(0.379, 0.42)`) makes pixels
-  non-square. Prefer uniform scales for new objects.
+- Non-uniform transform scale makes pixels non-square. The battle background was (1.8, 2)
+  and the map (1.19, 1) until #116; use uniform scales, or draw the art at the on-screen
+  aspect and give the object scale 1.
+- A prefab's root scale counts. Slime prefabs are 0.5, spell prefabs 5 or 10: measure with
+  the root scale, never as if the root were 1.
 - Changing a texture size without updating the PPU changes the in-game size. Always use
   `--update-meta`, or compute the PPU by hand.
 - Do not run the tool on fonts, TextMeshPro sprite atlases or WebGL template icons.
