@@ -63,6 +63,8 @@ namespace Account
         {
             AccountResponse response = default;
             yield return AuthorizedValue("PUT", SaveKey, CloudSave.FromLocal().Serialize(), value => response = value);
+            if (response.IsSuccess)
+                yield return AuthorizedValue("PUT", UpgradeCloudSave.ServerKey, UpgradeCloudSave.FromLocal().Serialize(), value => response = value);
             done(response.IsSuccess
                 ? new AccountResult(true, "진행 상황을 서버에 저장했습니다.")
                 : Failed(response));
@@ -80,13 +82,29 @@ namespace Account
             {
                 done(Failed(response), null);
             }
-            else if (CloudSave.TryParse(ReadValue(response.Body), out CloudSave save))
+            else if (!CloudSave.TryParse(ReadValue(response.Body), out CloudSave save))
             {
-                done(new AccountResult(true, "서버에서 진행 상황을 불러왔습니다."), save);
+                done(new AccountResult(false, "서버에 저장된 데이터를 읽을 수 없습니다."), null);
             }
             else
             {
-                done(new AccountResult(false, "서버에 저장된 데이터를 읽을 수 없습니다."), null);
+                // 업그레이드 키가 없는 예전 저장은 그대로 성공이고, 이 기기의 업그레이드를 건드리지 않는다.
+                yield return AuthorizedValue("GET", UpgradeCloudSave.ServerKey, null, value => response = value);
+                if (response.IsSuccess)
+                {
+                    if (!UpgradeCloudSave.TryParse(ReadValue(response.Body), out UpgradeCloudSave upgrades))
+                    {
+                        done(new AccountResult(false, "서버에 저장된 데이터를 읽을 수 없습니다."), null);
+                        yield break;
+                    }
+                    save.Upgrades = upgrades;
+                }
+                else if (!AccountFailure.IsKeyMissing(response.Status, response.Body))
+                {
+                    done(Failed(response), null);
+                    yield break;
+                }
+                done(new AccountResult(true, "서버에서 진행 상황을 불러왔습니다."), save);
             }
         }
 

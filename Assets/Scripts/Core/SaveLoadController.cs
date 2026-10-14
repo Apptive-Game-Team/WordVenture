@@ -146,6 +146,7 @@ namespace Core
             PlayerPrefs.DeleteKey(ActTwoDialogueSeenKey);
             PlayerPrefs.DeleteKey(ShowsActOneMapKey);
             for (int slot = 0; slot < SeenSlimeSlots; slot++) PlayerPrefs.DeleteKey(SeenSlimesKey + slot);
+            PlayerUpgrades.ResetAll();
             PlayerPrefs.Save();
         }
     }
