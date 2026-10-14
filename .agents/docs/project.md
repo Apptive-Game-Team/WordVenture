@@ -9,7 +9,7 @@ Agents must verify commands against repository configuration before running them
 - Primary users: players of the downloadable builds and the web build.
 - Core domain: card combination, elemental matchups, stage progression, story
   and tutorial.
-- Runtime environment: Unity 2022.3.34f1 (C#). Release builds target
+- Runtime environment: Unity 2022.3.62f3 (C#). Release builds target
   StandaloneWindows64, StandaloneOSX, and WebGL.
 
 ## Architecture
@@ -33,11 +33,25 @@ Agents must verify commands against repository configuration before running them
 - Persistent data: game data and dialogue in ScriptableObjects
   (`Assets/ScriptableObjects/`); player progress in PlayerPrefs.
 
+## Scene Conventions
+
+- Place UI that every scene shows, such as the settings menu
+  (`Assets/Prefabs/UI/SettingsMenu.prefab`), as a prefab instance in each scene
+  file. Do not create it at runtime with `RuntimeInitializeOnLoadMethod`,
+  `Resources.Load`, or `Instantiate`, and do not carry it across scenes with
+  `DontDestroyOnLoad`. A runtime-created menu button sometimes failed to
+  appear, and a scene file did not show whether the menu was there.
+- Set a per-scene difference, such as the menu button position in MapScene, as
+  a prefab override in that scene instead of a branch on the scene name in code.
+- When adding a scene to build settings, place `SettingsMenu.prefab` and an
+  `EventSystem` in it. `PrefabWiringTests` fails for a build scene that lacks
+  either.
+
 ## Commands
 
 | Purpose | Command |
 |---|---|
-| Install dependencies | Open the project in Unity Hub with Unity 2022.3.34f1; packages resolve on import |
+| Install dependencies | Open the project in Unity Hub with Unity 2022.3.62f3; packages resolve on import |
 | Run locally | Open `Assets/Scenes/TitleScene.unity` in the editor and press Play |
 | Format | TODO |
 | Lint | TODO |
@@ -50,7 +64,7 @@ Agents must verify commands against repository configuration before running them
 
 - Supported platforms: Windows (StandaloneWindows64), macOS (StandaloneOSX,
   unsigned), WebGL.
-- Compatibility requirements: keep the Unity version at 2022.3.34f1, matching
+- Compatibility requirements: keep the Unity version at 2022.3.62f3, matching
   `ProjectSettings/ProjectVersion.txt` and `UNITY_VERSION` in both workflows.
   Commit Unity `.meta` files together with every added or moved asset.
 - Performance constraints: TODO

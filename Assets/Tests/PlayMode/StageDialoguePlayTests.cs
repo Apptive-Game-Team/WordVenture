@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace WordVenture.Tests
 {
     public sealed class StageDialoguePlayTests
     {
-        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition" };
+        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -69,11 +70,12 @@ namespace WordVenture.Tests
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, oldLock);
         }
 
-        static void PlayStage(int stage)
+        static void PlayStage(int stage, bool isFirstClear = true)
         {
             var singleton = Object.FindObjectOfType(Runtime("Combat.Stage.StageDataSingleton"));
             if (singleton == null) singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, stage);
+            Runtime("Combat.Stage.StageDataSingleton").GetField("isFirstClear").SetValue(singleton, isFirstClear);
         }
 
         static IEnumerator ClearStage(int stage)
@@ -82,6 +84,19 @@ namespace WordVenture.Tests
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, stage + 1);
             yield return SceneManager.LoadSceneAsync("GameClearScene");
             yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 이미_깬_마왕을_다시_깨면_엔딩_없이_클리어_화면에_남는다()
+        {
+            // 2부 진행 중(StagePosition 5)에 1부 맵에서 마왕(4)을 다시 깬 상황이다. 대화는 이미 읽었다.
+            PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
+            PlayStage(4, false);
+            Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 5);
+            yield return SceneManager.LoadSceneAsync("GameClearScene");
+            for (int i = 0; i < 10; i++) yield return null;
+            Assert.That(SceneManager.GetActiveScene().name, Is.EqualTo("GameClearScene"), "다시 깬 마왕전이 엔딩으로 넘어갔다");
+            Assert.That(Field(Object.FindObjectOfType(Runtime("Scenes.GameClearController")), "talking"), Is.False);
         }
 
         static IEnumerator FinishDialogue()
@@ -236,6 +251,77 @@ namespace WordVenture.Tests
                 Assert.That(enemies.Count, Is.GreaterThan(spawned));
             }
             Assert.That(PlayerPrefs.GetInt("ActOneDialogueSeen") & (1 << 28 | 1 << 29), Is.EqualTo(1 << 28 | 1 << 29));
+        }
+
+        [Test]
+        public void EveryWordGestureHasItsOwnPortrait()
+        {
+            Object data = Resources.Load("Story/ActOneDialogues");
+            Type gestureType = Runtime("Story.WordGesture");
+            Sprite usual = (Sprite)Get(data, "wordPortrait");
+            var portraits = Enum.GetValues(gestureType).Cast<object>()
+                .Where(g => (int)g != 0)
+                .Select(g => (Sprite)Call(data, "WordPortraitFor", g))
+                .ToArray();
+            Assert.That(portraits, Has.All.Not.Null);
+            Assert.That(portraits, Has.None.SameAs(usual), "몸짓마다 평소 초상화가 아닌 그림이 있다.");
+            Assert.That(portraits.Distinct().Count(), Is.EqualTo(portraits.Length));
+            Assert.That(Call(data, "WordPortraitFor", Enum.ToObject(gestureType, 0)), Is.SameAs(usual));
+        }
+
+        // 나레이션 줄 문장 일부 → docs/design 아래 미리보기 파일 이름
+        static readonly Dictionary<string, string> GesturePreviews = new Dictionary<string, string>
+            {
+                { "무너진 산골짜기의 집을 떠올리며", "word-gesture-narration-preview.png" },
+                { "바위 쪽을 가리키고", "word-gesture-point-worried-preview.png" },
+                { "마법서 표지를 내밀었다", "word-gesture-cover-preview.png" },
+            };
+
+        [UnityTest]
+        public IEnumerator NarrationKeepsBothPortraitsAndShowsWordGestures()
+        {
+            Object data = Resources.Load("Story/ActOneDialogues");
+            Type viewType = Runtime("Story.StageDialogueView");
+            var listener = (Color)Get(Resources.Load("Story/DialogueWindowStyle"), "listenerColor");
+            int narrationLines = 0, gestureLines = 0;
+            foreach (object chapter in (Array)Get(data, "chapters"))
+            {
+                var view = (Component)new GameObject("StageDialogue", typeof(RectTransform)).AddComponent(viewType);
+                Call(view, "Begin", data, chapter, null, true);
+                var word = view.transform.Find("ChatWindow/DialogueWindow/WordPortrait").GetComponent<UnityEngine.UI.Image>();
+                var other = view.transform.Find("ChatWindow/DialogueWindow/OtherPortrait").GetComponent<UnityEngine.UI.Image>();
+                bool speakerAppeared = false;
+                foreach (object line in (Array)Get(chapter, "lines"))
+                {
+                    bool wordSpeaking = (bool)Get(line, "wordSpeaking");
+                    bool narration = (bool)Get(line, "narration");
+                    object gesture = Get(line, "gesture");
+                    bool gestured = (int)gesture != 0;
+                    bool speakerTalking = !wordSpeaking && !narration;
+                    speakerAppeared |= speakerTalking;
+                    string where = Get(chapter, "title") + " / " + Get(line, "text");
+
+                    Assert.That(word.gameObject.activeSelf, Is.True, "워드 초상화가 사라졌다: " + where);
+                    Assert.That(word.sprite, Is.SameAs(Call(data, "WordPortraitFor", gesture)), where);
+                    Assert.That(word.color, Is.EqualTo(wordSpeaking || gestured ? Color.white : listener), where);
+                    Assert.That(other.gameObject.activeSelf, Is.EqualTo(speakerAppeared), "상대 초상화 표시가 틀렸다: " + where);
+                    if (speakerAppeared)
+                        Assert.That(other.color, Is.EqualTo(speakerTalking ? Color.white : listener), where);
+                    if (narration) narrationLines++;
+                    if (gestured) gestureLines++;
+                    string preview = GesturePreviews.Where(p => ((string)Get(line, "text")).Contains(p.Key))
+                        .Select(p => p.Value).FirstOrDefault();
+
+                    Call(view, "Advance"); // 타이핑을 끝낸다.
+                    if (preview != null) CapturePreview(preview);
+                    Call(view, "Advance"); // 다음 줄로 넘어간다.
+                }
+                Object.Destroy(view.gameObject);
+                yield return null;
+            }
+            Assert.That(narrationLines, Is.EqualTo(66));
+            Assert.That(gestureLines, Is.EqualTo(33));
+            Assert.That(Locked, Is.False);
         }
 
         static void CapturePreview(string file)

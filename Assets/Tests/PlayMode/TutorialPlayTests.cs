@@ -162,6 +162,8 @@ namespace WordVenture.Tests
                 yield return null;
                 yield return null;
                 RuntimeType("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
+                Object stageData = Object.FindObjectOfType(RuntimeType("Combat.Stage.StageDataSingleton"));
+                RuntimeType("Combat.Stage.StageDataSingleton").GetField("isFirstClear").SetValue(stageData, true);
                 yield return SceneManager.LoadSceneAsync("GameClearScene");
                 yield return null;
 

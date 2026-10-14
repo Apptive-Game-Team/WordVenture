@@ -6,12 +6,14 @@ namespace Combat.Enemies
     {
         [SerializeField] GameObject fireShoot;
 
+        public override string AttackDescription => "사거리 안까지 다가와 마법 탄을 쏜다. 탄은 처음 닿은 아군 슬라임이나 워드에게 맞는다.";
+
         protected override void Start()
         {
             base.Start();
         }
 
-        public override void Attack(float distanceToPlayer)
+        public override void Attack(float distanceToFrontLine)
         {
             Animator.RangeAttack();
             GameObject projectile = Instantiate(fireShoot, transform.position,Quaternion.identity);

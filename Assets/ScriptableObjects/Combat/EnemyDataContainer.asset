@@ -15,6 +15,7 @@ MonoBehaviour:
   enemyDatas:
   - id: 0
     name: S0_Ranged_Slime
+    displayName: "\uBD88\uAF43 \uACE0\uC591\uC774 \uC2AC\uB77C\uC784"
     prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
     maxHp: 10
     moveDistance: 5
@@ -23,6 +24,7 @@ MonoBehaviour:
     type: 4
   - id: 1
     name: S0_Melee_Slime
+    displayName: "\uB2EC\uAD70 \uBC14\uC704 \uC2AC\uB77C\uC784"
     prefab: {fileID: 3875069317159495427, guid: 9eaf74541e43044e5a7d01379fff83d4, type: 3}
     maxHp: 20
     moveDistance: 1
@@ -31,6 +33,7 @@ MonoBehaviour:
     type: 4
   - id: 2
     name: S0_Boss_Slime
+    displayName: 
     prefab: {fileID: 1380314620153829809, guid: 056c6580aef7a40369058e3309577396, type: 3}
     maxHp: 20
     moveDistance: 5
@@ -39,6 +42,7 @@ MonoBehaviour:
     type: 4
   - id: 3
     name: S1_Ranged_Slime
+    displayName: "\uBB3C\uBC29\uC6B8 \uC2AC\uB77C\uC784"
     prefab: {fileID: 1197030555564479174, guid: a1d21b3baf172466b9a77b53e3c97624, type: 3}
     maxHp: 20
     moveDistance: 5
@@ -47,6 +51,7 @@ MonoBehaviour:
     type: 5
   - id: 4
     name: S1_Melee_Slime
+    displayName: "\uC9D1\uAC8C \uC2AC\uB77C\uC784"
     prefab: {fileID: 3011871007109280695, guid: fc242352f9ca64931a39153bf8cacd63, type: 3}
     maxHp: 30
     moveDistance: 5
@@ -55,6 +60,7 @@ MonoBehaviour:
     type: 5
   - id: 5
     name: S1_Boss_Slime
+    displayName: "\uBB3C\uACE0\uAE30 \uB300\uC7A5 \uC2AC\uB77C\uC784"
     prefab: {fileID: 6439746551030919793, guid: 4932124741aac40dfa173dee0eb68cb6, type: 3}
     maxHp: 30
     moveDistance: 5
@@ -63,6 +69,7 @@ MonoBehaviour:
     type: 5
   - id: 6
     name: S2_Ranged_Slime
+    displayName: "\uD759\uB354\uBBF8 \uC2AC\uB77C\uC784"
     prefab: {fileID: 5260748899496303554, guid: be15f7520e6bd4f83b8c8688c436578f, type: 3}
     maxHp: 20
     moveDistance: 5
@@ -71,6 +78,7 @@ MonoBehaviour:
     type: 6
   - id: 7
     name: S2_Melee_Slime
+    displayName: "\uBC14\uC704 \uC2AC\uB77C\uC784"
     prefab: {fileID: 3875069317159495427, guid: 9eaf74541e43044e5a7d01379fff83d4, type: 3}
     maxHp: 30
     moveDistance: 5
@@ -79,6 +87,7 @@ MonoBehaviour:
     type: 6
   - id: 8
     name: S2_Boss_Slime
+    displayName: "\uC120\uC778\uC7A5 \uB300\uC7A5 \uC2AC\uB77C\uC784"
     prefab: {fileID: 788844158664530751, guid: 2345231749abb4420975a2ad0293e5b6, type: 3}
     maxHp: 30
     moveDistance: 5
@@ -87,6 +96,7 @@ MonoBehaviour:
     type: 6
   - id: 9
     name: S3_Ranged_Slime
+    displayName: "\uBC88\uAC2F\uBD88 \uC2AC\uB77C\uC784"
     prefab: {fileID: 5468929451589641127, guid: 27d904c5eea894a0087b06aac93e9b38, type: 3}
     maxHp: 20
     moveDistance: 5
@@ -95,6 +105,7 @@ MonoBehaviour:
     type: 7
   - id: 10
     name: S3_Melee_Slime
+    displayName: "\uB124\uC628 \uC2AC\uB77C\uC784"
     prefab: {fileID: 5185469052702614032, guid: 6ba52dbeac0b546ad9e989afe6d5943d, type: 3}
     maxHp: 30
     moveDistance: 10
@@ -103,6 +114,7 @@ MonoBehaviour:
     type: 7
   - id: 11
     name: S3_Boss_Slime
+    displayName: "\uBA39\uAD6C\uB984 \uB300\uC7A5 \uC2AC\uB77C\uC784"
     prefab: {fileID: 431560386325625679, guid: e0484e8c18b80473da18d564cf822763, type: 3}
     maxHp: 30
     moveDistance: 10
@@ -111,6 +123,7 @@ MonoBehaviour:
     type: 7
   - id: 12
     name: S4_Ranged_Slime
+    displayName: "\uBCF4\uB78F\uBE5B \uC2AC\uB77C\uC784"
     prefab: {fileID: 5602786518308742389, guid: fc49b018e847244868444de9882e92be, type: 3}
     maxHp: 25
     moveDistance: 5
@@ -119,6 +132,7 @@ MonoBehaviour:
     type: 3
   - id: 13
     name: S4_Melee_Slime
+    displayName: "\uADF8\uB9BC\uC790 \uC2AC\uB77C\uC784"
     prefab: {fileID: 4671744952956411435, guid: 695144d46623249eb905af52faa8905f, type: 3}
     maxHp: 35
     moveDistance: 10
@@ -127,6 +141,7 @@ MonoBehaviour:
     type: 3
   - id: 14
     name: SlimeKing1
+    displayName: "\uC2AC\uB77C\uC784 \uB9C8\uC655"
     prefab: {fileID: 7553110375488349761, guid: 62e86b2c908f74fa2af9e2ff69941c1c, type: 3}
     maxHp: 20
     moveDistance: 5
@@ -135,9 +150,136 @@ MonoBehaviour:
     type: 3
   - id: 15
     name: SlimeKing2
+    displayName: "\uC5B8\uB370\uB4DC \uC2AC\uB77C\uC784 \uB9C8\uC655"
     prefab: {fileID: 962535333444052846, guid: d509850d593594349a35232db741e118, type: 3}
     maxHp: 80
     moveDistance: 5
     attackRange: 3
     damage: 10
     type: 8
+  - id: 16
+    name: S5_Ranged_Slime
+    displayName: "\uC11C\uB9AC \uBB3C\uBC29\uC6B8 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 1197030555564479174, guid: a1d21b3baf172466b9a77b53e3c97624, type: 3}
+    maxHp: 25
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 5
+  - id: 17
+    name: S5_Melee_Slime
+    displayName: "\uB098\uC774\uD14C \uB3CC \uC2AC\uB77C\uC784"
+    prefab: {fileID: 3940572424292676689, guid: 2aeab4c36574d41bfb99725c793062c9, type: 3}
+    maxHp: 40
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 6
+  - id: 18
+    name: S5_Elite_Slime
+    displayName: "\uCC9C\uB465 \uBA39\uAD6C\uB984 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 431560386325625679, guid: e0484e8c18b80473da18d564cf822763, type: 3}
+    maxHp: 45
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 7
+  - id: 19
+    name: S6_Ranged_Slime
+    displayName: "\uD611\uACE1 \uBC88\uAC2F\uBD88 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5468929451589641127, guid: 27d904c5eea894a0087b06aac93e9b38, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 7
+  - id: 20
+    name: S6_Mortar_Slime
+    displayName: "\uACE1\uC0AC \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5602786518308742389, guid: d9daf3e6aa06439a81c5654247d39682, type: 3}
+    maxHp: 25
+    moveDistance: 0
+    attackRange: 99
+    damage: 10
+    type: 7
+  - id: 21
+    name: S6_Charge_Slime
+    displayName: "\uB3CC\uC9C4 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 3011871007109280695, guid: eca380a216e348b88a3526f77b2cc015, type: 3}
+    maxHp: 35
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 6
+  - id: 22
+    name: S6_Shield_Slime
+    displayName: "\uBC29\uD328 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 4671744952956411435, guid: c4013b36b7324bf8ba6dc9d6d4b53b0c, type: 3}
+    maxHp: 60
+    moveDistance: 3
+    attackRange: 3
+    damage: 5
+    type: 6
+  - id: 23
+    name: S7_Ranged_Slime
+    displayName: "\uC7BF\uB354\uBBF8 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5260748899496303554, guid: be15f7520e6bd4f83b8c8688c436578f, type: 3}
+    maxHp: 30
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 4
+  - id: 24
+    name: S7_Split_Slime
+    displayName: "\uBD84\uC5F4 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 3875069317159495427, guid: 7d0c734b9cad48569c85144469a3b56d, type: 3}
+    maxHp: 40
+    moveDistance: 5
+    attackRange: 3
+    damage: 10
+    type: 4
+  - id: 25
+    name: S7_Split_Small
+    displayName: "\uC791\uC740 \uBD84\uC5F4 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 3875069317159495427, guid: a22338b4b4d74603a9ccb334942d5941, type: 3}
+    maxHp: 20
+    moveDistance: 5
+    attackRange: 3
+    damage: 8
+    type: 4
+  - id: 26
+    name: S8_Explode_Slime
+    displayName: "\uD3ED\uBC1C \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5185469052702614032, guid: 4a094ed80eac435bb15c9b01b51a4169, type: 3}
+    maxHp: 45
+    moveDistance: 5
+    attackRange: 3
+    damage: 15
+    type: 7
+  - id: 27
+    name: S8_Heal_Slime
+    displayName: "\uCE58\uC720 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5152970759226599136, guid: 1833aa0db5804c70ae02b5997f60fb4c, type: 3}
+    maxHp: 50
+    moveDistance: 0
+    attackRange: 99
+    damage: 10
+    type: 5
+  - id: 28
+    name: S8_Ranged_Slime
+    displayName: "\uC232 \uACE0\uC591\uC774 \uC2AC\uB77C\uC784"
+    prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
+    maxHp: 50
+    moveDistance: 5
+    attackRange: 10
+    damage: 10
+    type: 6
+  - id: 29
+    name: S9_Surge_Boss
+    displayName: "\uD3ED\uC8FC\uD55C \uB9C8\uB825\uC758 \uD615\uC0C1"
+    prefab: {fileID: 1380314620153829809, guid: 20fe90a8e19b448eb3e9ab70e5cff10e, type: 3}
+    maxHp: 260
+    moveDistance: 2
+    attackRange: 3
+    damage: 15
+    type: 3

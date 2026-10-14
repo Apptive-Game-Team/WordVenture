@@ -1,4 +1,5 @@
 using Map;
+using Story;
 using UnityEngine;
 
 namespace Core
@@ -8,22 +9,66 @@ namespace Core
     {
         public const string TutorialEndedKey = "TutorialEnded";
         public const string StageDialogueSeenKey = "ActOneDialogueSeen";
+        public const string ActTwoDialogueSeenKey = "ActTwoDialogueSeen";
+        public const string ShowsActOneMapKey = "ShowsActOneMap";
+        // 도감에 기록한 적 id. int 하나에 31개씩 SeenSlimes0, SeenSlimes1 에 비트로 기록한다.
+        public const string SeenSlimesKey = "SeenSlimes";
+        const int SeenSlimeSlots = 2;
 
-        // seenBit 는 StageDialogueChapter.SeenBit 이다.
+        // 1부를 끝낸 뒤 맵에서 마지막으로 1부 맵을 보고 있었는지. 전투를 마치고 돌아왔을 때 같은 장을 연다.
+        public static bool ShowsActOneMap
+        {
+            get => PlayerPrefs.GetInt(ShowsActOneMapKey, 0) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(ShowsActOneMapKey, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
+        // seenBit 는 StageDialogueChapter.SeenBit 이다. PlayerPrefs의 int 하나는 31비트까지 쓰므로
+        // 1부 비트(0~29)와 2부 비트(32~61)를 다른 키에 기록한다.
         public static bool HasSeenStageDialogue(int seenBit)
         {
-            return seenBit >= 0 && seenBit < 31
-                && (PlayerPrefs.GetInt(StageDialogueSeenKey, 0) & (1 << seenBit)) != 0;
+            if (!TryGetDialogueSeenSlot(seenBit, out string key, out int bit)) return false;
+            return (PlayerPrefs.GetInt(key, 0) & (1 << bit)) != 0;
         }
 
         public static void MarkStageDialogueSeen(int seenBit)
         {
-            if (seenBit < 0 || seenBit >= 31) return;
-            PlayerPrefs.SetInt(StageDialogueSeenKey,
-                PlayerPrefs.GetInt(StageDialogueSeenKey, 0) | (1 << seenBit));
+            if (!TryGetDialogueSeenSlot(seenBit, out string key, out int bit)) return;
+            PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key, 0) | (1 << bit));
             PlayerPrefs.SetInt("StagePosition", MapMove.StagePosition);
             PlayerPrefs.Save();
         }
+        static bool TryGetDialogueSeenSlot(int seenBit, out string key, out int bit)
+        {
+            key = seenBit >= StageDialogueChapter.ActTwoBitOffset ? ActTwoDialogueSeenKey : StageDialogueSeenKey;
+            bit = seenBit >= StageDialogueChapter.ActTwoBitOffset ? seenBit - StageDialogueChapter.ActTwoBitOffset : seenBit;
+            return seenBit >= 0 && bit < 31;
+        }
+
+        public static bool HasSeenSlime(int enemyId)
+        {
+            if (!TryGetSlimeSeenSlot(enemyId, out string key, out int bit)) return false;
+            return (PlayerPrefs.GetInt(key, 0) & (1 << bit)) != 0;
+        }
+
+        // 적을 소환할 때마다 불리므로 처음 만난 적일 때만 저장한다.
+        public static void MarkSlimeSeen(int enemyId)
+        {
+            if (HasSeenSlime(enemyId) || !TryGetSlimeSeenSlot(enemyId, out string key, out int bit)) return;
+            PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key, 0) | (1 << bit));
+            PlayerPrefs.Save();
+        }
+
+        static bool TryGetSlimeSeenSlot(int enemyId, out string key, out int bit)
+        {
+            key = SeenSlimesKey + enemyId / 31;
+            bit = enemyId % 31;
+            return enemyId >= 0 && enemyId < SeenSlimeSlots * 31;
+        }
+
         public static bool IsTutorialEnded => PlayerPrefs.GetInt(TutorialEndedKey, 0) == 1;
 
         public static void MarkTutorialEnded()
@@ -98,6 +143,9 @@ namespace Core
             PlayerPrefs.SetInt("StagePosition", -1);
             PlayerPrefs.DeleteKey(TutorialEndedKey);
             PlayerPrefs.DeleteKey(StageDialogueSeenKey);
+            PlayerPrefs.DeleteKey(ActTwoDialogueSeenKey);
+            PlayerPrefs.DeleteKey(ShowsActOneMapKey);
+            for (int slot = 0; slot < SeenSlimeSlots; slot++) PlayerPrefs.DeleteKey(SeenSlimesKey + slot);
             PlayerPrefs.Save();
         }
     }

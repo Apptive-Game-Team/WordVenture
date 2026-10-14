@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle.Turns;
 using Cards;
-using Core;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace Combat.Enemies
         {
             this.Enemy = enemy;
         }
-        public abstract void PlayAction(float distanceToPlayer);
+        public abstract void PlayAction(float distanceToFrontLine);
 
     }
 
@@ -24,9 +23,9 @@ namespace Combat.Enemies
 
         public EnemyAttackAction(Enemy enemy) : base(enemy) { }
 
-        public override void PlayAction(float distanceToPlayer)
+        public override void PlayAction(float distanceToFrontLine)
         {
-            Enemy.Attack(distanceToPlayer);
+            Enemy.Attack(distanceToFrontLine);
         }
     }
 
@@ -34,18 +33,18 @@ namespace Combat.Enemies
     {
 
         public EnemyMoveAction(Enemy enemy) : base(enemy) { }
-        public override void PlayAction(float distanceToPlayer)
+        public override void PlayAction(float distanceToFrontLine)
         {
 
             float tempMoveDistance;
 
-            if (distanceToPlayer > Enemy.moveDistance + Enemy.attackRange)
+            if (distanceToFrontLine > Enemy.moveDistance + Enemy.attackRange)
             {
                 tempMoveDistance = Enemy.moveDistance;
             }
             else
             {
-                tempMoveDistance = distanceToPlayer - Enemy.attackRange;
+                tempMoveDistance = distanceToFrontLine - Enemy.attackRange;
             }
 
             Enemy.StartCoroutine(Enemy.MoveDistance(tempMoveDistance));
@@ -74,12 +73,12 @@ namespace Combat.Enemies
         public ElementalStatus Status { get; private set; } = new ElementalStatus();
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
         protected int AttackDamage => Status.GetAttackDamage(Damage);
-        TMP_Text statusText;
         SpriteRenderer bodyRenderer;
+        ReactionBurstVfx reactionBurst;
+        HitFlashVfx hitFlash;
+        AffinityMarkVfx affinityMark;
         Color originalBodyColor;
         bool tookTurn;
-        string reactionText;
-        float reactionUntil;
 
         public float moveDistance = 5;
 
@@ -89,6 +88,11 @@ namespace Combat.Enemies
         float turnTime;
 
         [SerializeField] private List<EnemyAction> enemyActions = new List<EnemyAction>();
+
+        // 도감에 보이는 공격 방식. 문장을 바꾸면 English.json 도 고친다.
+        public virtual string AttackDescription => "";
+        // 웨이브 도중에 부르는 적의 id. 없으면 -1. 깬 스테이지로 도감을 채울 때 부른 적까지 기록한다.
+        public virtual int SummonedEnemyId => -1;
 
         public void InitEnemyData(EnemyData enemyData)
         {
@@ -100,7 +104,6 @@ namespace Combat.Enemies
             Damage = enemyData.damage;
             enemyType = enemyData.type;
             Status = new ElementalStatus(enemyType);
-            reactionText = string.Empty;
             tookTurn = false;
             UpdateIndicator();
         }
@@ -113,10 +116,10 @@ namespace Combat.Enemies
 
 
 
-        private ActionType MakeActionDecision(float distanceToPlayer)
+        private ActionType MakeActionDecision(float distanceToFrontLine)
         {
 
-            if (distanceToPlayer > attackRange)
+            if (distanceToFrontLine > attackRange)
             {
                 return ActionType.MOVE;
             } else
@@ -131,10 +134,9 @@ namespace Combat.Enemies
             UpdateStatusIndicator();
         }
 
+        // 상태 이상은 몸 색과 ElementalStatusVfx로만 보여 준다. 머리 위에 글자를 띄우지 않는다.
         void UpdateStatusIndicator()
         {
-            if (statusText != null)
-                statusText.text = Time.time < reactionUntil ? reactionText : string.Empty;
             if (bodyRenderer != null)
             {
                 Color tint = Status.Frozen || Status.Chill > 0 ? new Color(0.5f, 0.85f, 1f)
@@ -145,23 +147,31 @@ namespace Combat.Enemies
             }
         }
 
-        void Update()
-        {
-            if (!string.IsNullOrEmpty(reactionText) && Time.time >= reactionUntil)
-            {
-                reactionText = string.Empty;
-                UpdateStatusIndicator();
-            }
-        }
-
         public void TakeSpellHit(MagicType element, MagicType spell, float baseDamage, float affinity)
         {
             if (!IsAlive) return;
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
-            reactionText = Localization.Translate(hit.Reaction);
-            reactionUntil = Time.time + 1.5f;
-            TakeHit(hit.Damage + hit.ExtraDamage);
+            int damage = hit.Damage + hit.ExtraDamage;
+            bool guarded = damage > 0 && ShieldEnemy.IsGuarding(this);
+            // 바로 앞에 방패 슬라임이 있으면 피해가 절반이 된다. 신성의 회복(음수 피해)은 줄이지 않는다.
+            if (guarded) damage /= 2;
+            // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
+            if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
+            else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
+            HitStrength strength = HitImpact.Classify(hit.Affinity, !string.IsNullOrEmpty(hit.Reaction));
+            if (strength != HitStrength.None) PlayHitImpact(strength, hit.Affinity);
+            TakeHit(damage);
             UpdateStatusIndicator();
+        }
+
+        // 주문과 아군 슬라임의 직접 타격에만 쓴다. 화상, Kill(), Heal()은 타격 효과를 내지 않는다.
+        void PlayHitImpact(HitStrength strength, float affinity)
+        {
+            hitFlash.Play(strength);
+            // 원소 반응도 상성 표시는 따로 보여 준다. 상성이 정확히 1이면 표시하지 않는다.
+            if (affinity > 1f) affinityMark.Play(AffinityMarkVfx.Mark.Weak);
+            else if (affinity < 1f) affinityMark.Play(AffinityMarkVfx.Mark.Resisted);
+            HitImpact.Play(strength);
         }
 
         public void EndTurnStatuses()
@@ -176,7 +186,8 @@ namespace Combat.Enemies
 
 
 
-        public void PlayTurnAction(float distanceToPlayer)
+        // distanceToFrontLine은 맨 앞 아군 슬라임까지의 거리다. 아군이 없으면 워드까지의 거리다.
+        public void PlayTurnAction(float distanceToFrontLine)
         {
             if (!IsAlive) return;
             tookTurn = true;
@@ -185,9 +196,14 @@ namespace Combat.Enemies
                 UpdateStatusIndicator();
                 return;
             }
-            enemyActions[(int) MakeActionDecision(distanceToPlayer)].PlayAction(distanceToPlayer);
+            TakeTurnAction(distanceToFrontLine);
         }
 
+        // 빙결로 턴을 건너뛰지 않았을 때 하는 행동. 예고를 하고 다음 턴에 공격하는 적이 바꾼다.
+        protected virtual void TakeTurnAction(float distanceToFrontLine)
+        {
+            enemyActions[(int) MakeActionDecision(distanceToFrontLine)].PlayAction(distanceToFrontLine);
+        }
 
         // moveSpeed는 turnTime 안에 moveDistance를 지나도록 정해진다. 그런데 대기는
         // 0.01초를 요청하면서 실제 프레임은 그보다 길고, 이동량은 프레임 시간이 아닌
@@ -217,6 +233,12 @@ namespace Combat.Enemies
             bodyRenderer = GetComponent<SpriteRenderer>();
             if (bodyRenderer != null) originalBodyColor = bodyRenderer.color;
             gameObject.AddComponent<ElementalStatusVfx>().Initialize(this, bodyRenderer);
+            reactionBurst = gameObject.AddComponent<ReactionBurstVfx>();
+            reactionBurst.Initialize(bodyRenderer);
+            hitFlash = gameObject.AddComponent<HitFlashVfx>();
+            hitFlash.Initialize(bodyRenderer);
+            affinityMark = gameObject.AddComponent<AffinityMarkVfx>();
+            affinityMark.Initialize(bodyRenderer);
         }
 
         protected virtual void Start()
@@ -257,12 +279,13 @@ namespace Combat.Enemies
             Animator.MoveEnd();
         }
 
-        virtual public void Attack(float distanceToPlayer)
+        virtual public void Attack(float distanceToFrontLine)
         {
             Animator.Attack();
         }
 
-        protected void Death()
+        // 분열·폭발 슬라임은 쓰러질 때 일을 더 한다.
+        protected virtual void Death()
         {
             Animator.Death();
             StartCoroutine(DeathCounter());
@@ -271,6 +294,17 @@ namespace Combat.Enemies
         {
             yield return new WaitForSeconds(0.25f);
             gameObject.SetActive(false);
+        }
+
+        public int MissingHp => IsAlive ? MaxHp - Hp : 0;
+
+        // 치유 슬라임이 부른다. 최대 체력을 넘지 않는다.
+        public void Heal(int amount)
+        {
+            if (!IsAlive || amount <= 0) return;
+            Hp = Mathf.Min(MaxHp, Hp + amount);
+            reactionBurst.Play(ReactionBurstVfx.Burst.Heal);
+            UpdateIndicator();
         }
 
         // 남은 체력만큼 피해를 줘서 평소와 같은 사망 처리로 쓰러뜨린다. 이미 쓰러진 적은 건드리지 않는다.
@@ -301,20 +335,6 @@ namespace Combat.Enemies
             HpText = gameObject.GetComponentInChildren<TMP_Text>();
             if (HpText == null) return;
             HpText.SetText(MaxHp.ToString());
-            statusText = Instantiate(HpText, HpText.transform.parent);
-            statusText.name = "ElementalStatusText";
-            var presentation = Resources.Load<ElementalStatusPresentation>("Combat/ElementalStatusPresentation");
-            if (presentation != null && presentation.font != null) statusText.font = presentation.font;
-            statusText.raycastTarget = false;
-            statusText.richText = true;
-            statusText.enableAutoSizing = false;
-            statusText.fontSize = HpText.fontSize * 0.7f;
-            statusText.enableWordWrapping = false;
-            statusText.alignment = TextAlignmentOptions.Center;
-            statusText.rectTransform.anchoredPosition += new Vector2(0, HpText.rectTransform.rect.height * 0.8f);
-            statusText.rectTransform.sizeDelta = new Vector2(HpText.rectTransform.rect.width * 6f,
-                HpText.rectTransform.rect.height * 2f);
-            statusText.text = string.Empty;
         }
 
     }

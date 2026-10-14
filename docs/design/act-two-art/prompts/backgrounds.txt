@@ -1,0 +1,22 @@
+Use your built-in image generation tool to create FIVE new image files in the current working directory, one image per file, and do not create or edit anything else. Generate them one at a time. Attach both reference images to every generation.
+
+`reference-battle-highland.png` and `reference-battle-rain.png` are the existing battle backgrounds of this game. The new backgrounds MUST look like they were drawn by the same artist in the same simple style. Study the references carefully. Their style is:
+- Very simple, flat, low-detail pixel art. Each image uses only about 30 colors in total.
+- Large flat shapes with blocky, slightly jagged pixel edges. NO outlines anywhere. NO small details: no individual leaves, bricks, windows, planks, cracks, fences, sparkles, or texture noise.
+- The picture is a stack of horizontal layers, back to front: a flat pale sky with a few big simple cloud shapes, 2-3 layers of distant scenery silhouettes that get darker and more saturated toward the front, then a wide flat ground made of 2-4 horizontal color bands with only a few simple dash marks.
+- Soft, slightly desaturated pastel colors with a gentle atmospheric fade on the far layers.
+- Big pixels: the image should look like a small picture of about 256 x 128 pixels scaled up 4 times.
+
+Composition rules:
+- Exactly 1536 x 1024 pixels. The game keeps only the band from y=128 to y=896; the top 128 px only continue the sky and the bottom 128 px only continue the ground.
+- The flat ground bands take the lower part of that band (roughly y=600 to y=896), like the references. Characters stand there, so keep the ground empty.
+- No characters, creatures, text, UI, frame, or watermark.
+
+Files (keep each theme recognizable but drawn with the simple big shapes described above):
+1. `FrostVillage.png` - pale blue sky, distant snowy mountain silhouettes, a layer of simple dark-green pine silhouettes with white snow caps, two or three tiny simple house silhouettes with white roofs far back, white and pale-blue snow ground bands.
+2. `ThunderCanyon.png` - dark purple stormy sky with two or three simple yellow zigzag lightning shapes far away, red-brown canyon rock silhouettes in layers, brown dirt ground bands.
+3. `AshenRuins.png` - hazy orange-grey sky, grey silhouettes of a few broken pillars and one arch far back, ash-grey ground bands.
+4. `TwistedForest.png` - dim green-violet sky, layers of dark purple-green twisted tree silhouettes, a few tiny violet glowing dots, mossy green ground bands.
+5. `WorldTreeHeart.png` - warm golden-green sky glow, one huge simple world tree trunk silhouette in the center far back with a big round canopy shape, a few simple root arches, golden-green ground bands.
+
+When done, reply with the five file names.

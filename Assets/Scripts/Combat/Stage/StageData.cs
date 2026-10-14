@@ -10,6 +10,8 @@ namespace Combat.Stage
         public string stageName;
         public Sprite background;
         public WaveData waveData;
+        // 비워 두면 StageManager의 스테이지 순서 음악을 쓴다.
+        public AudioClip music;
     }
 
     [System.Serializable]

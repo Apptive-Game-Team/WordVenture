@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Combat.Allies;
 using Core;
 using UnityEngine;
 
@@ -50,8 +51,23 @@ namespace Combat.Enemies
             InitList(enemies);
             foreach(Enemy enemy in enemies)
             {
-                enemy.PlayTurnAction(enemy.transform.position.x - player.transform.position.x);
+                // 앞 적의 공격으로 아군 슬라임이 쓰러질 수 있으므로 적마다 기준선을 다시 구한다.
+                float frontLineX = AllyFormation.FrontLineX(player.transform.position.x);
+                enemy.PlayTurnAction(enemy.transform.position.x - frontLineX);
             }
+        }
+
+        // 워드에 가장 가까운 살아 있는 적. 아군 슬라임이 공격할 대상이다.
+        public Enemy FindFrontEnemy()
+        {
+            Enemy front = null;
+            foreach (GameObject enemyObject in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                Enemy enemy = enemyObject.GetComponent<Enemy>();
+                if (enemy == null || !enemy.IsAlive) continue;
+                if (front == null || enemy.transform.position.x < front.transform.position.x) front = enemy;
+            }
+            return front;
         }
 
         public void SpawnEnemies()

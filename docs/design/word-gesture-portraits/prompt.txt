@@ -1,0 +1,25 @@
+Use your built-in image generation tool in EDIT mode. For every file, the base image is `reference-word.png`, the existing dialogue portrait of Word, the heroine of this game. Do not create, edit, or delete anything other than the files listed below, and do not touch any other directory. Generate them one at a time.
+
+The most important rule: Word must look like the SAME drawing as `reference-word.png`, not a new drawing of a similar girl. Keep EXACTLY the same face shape and jawline, the same eye shape, eye size and eye spacing, the same crimson-pink eye color with one highlight, the same small nose and mouth position, the same hair silhouette and bangs, the same yellow ribbon headband, the same black hooded cloak, red bow and dark blue dress, the same pixel size (chunky clusters), the same 2-tone cel shading, dark outlines and colors, the same three-quarter view turned slightly to the viewer's RIGHT, and the same size and position on the canvas. Her face should not become rounder, younger, or cuter. Change ONLY what each file asks for: arms, hands, props, head angle, eyelids, eyebrows, and mouth. Her mouth stays closed in every image.
+
+Output for every file: square 1024 x 1024 canvas, solid flat magenta (#FF00FF) background everywhere outside the character (the reference has a transparent background; fill it with magenta). No magenta inside the character. No text, no letters, no speech bubbles, no motion lines, no scenery, no other characters. Hands and props stay inside the canvas. When the staff is visible it is the same grey crescent staff with a dark blue orb as in the reference.
+
+Files:
+1. `WordNod.png` - gentle nod: head dipped forward and slightly down, eyes gently closed, a small soft closed-mouth smile. Staff held exactly as in the reference.
+2. `WordNodFirm.png` - firm nod of resolve: head dipped slightly forward, eyes OPEN looking straight ahead, eyebrows set low and straight, lips pressed together, determined. Staff held as in the reference, grip tightened.
+3. `WordShakeHead.png` - sad head shake: head turned a little to one side, eyes half closed and looking down, eyebrows drawn up together in sorrow, small closed frown. Staff held as in the reference.
+4. `WordShakeHeadFirm.png` - defiant head shake to an enemy: head turned a little to one side, eyes OPEN and glaring firmly toward the viewer's right, eyebrows lowered, lips pressed, unafraid. Staff held as in the reference, gripped tightly.
+5. `WordTouchThroat.png` - telling someone she cannot speak: one hand lightly touching her own throat, eyes cast down, eyebrows drawn up in sadness. The other hand holds the staff as in the reference.
+6. `WordTilt.png` - puzzled: head tilted to one side, eyes open and curious, eyebrows slightly raised, one finger touching her chin. Staff leaning on her shoulder.
+
+When done, reply with the six file names.
+
+Files:
+1. `WordPoint.png` - pointing, serious: one arm extended forward to the viewer's RIGHT with the index finger pointing that way, eyes looking where she points, serious focused face. The other hand holds the staff.
+2. `WordPointWorried.png` - pointing, worried: same pointing arm to the viewer's RIGHT, eyes looking toward the viewer's right, eyebrows raised and drawn together in worry. The other hand holds the staff.
+3. `WordShowBook.png` - showing an open book: she holds her grandfather's old spellbook OPEN and UPRIGHT in front of her chest with both hands gripping the outer edges, both cream pages facing the viewer flat and straight-on so the book reads as one wide rectangle split by a vertical center line. A few simple short dark lines as handwriting and one small circle diagram on the pages. Thin brown leather border. The top edge of the book is below her chin. Earnest serious face. No staff.
+4. `WordShowCover.png` - showing a closed book's cover, a little hesitant: she holds the CLOSED spellbook upright in front of her chest with both hands, its FRONT COVER facing the viewer flat and straight-on: a plain worn dark-brown leather rectangle with a simple gold circle emblem in the middle and a tiny pale scribble in the lower right corner (not legible letters). Smudges of soot on the cover. Her eyes glance slightly aside, eyebrows a little raised, hesitant. The top edge of the book is below her chin. No staff.
+5. `WordRaiseCard.png` - raising a card, determined: one hand raised to shoulder height holding up a single plain rectangular cream-colored card with a simple pink border (no text), eyebrows lowered, determined eyes. The other hand holds the staff.
+6. `WordPalmOut.png` - "wait here": one arm extended forward toward the viewer's RIGHT with the open palm facing outward like a gentle stop sign, calm reassuring face with a very slight soft smile. The other hand holds the staff.
+
+When done, reply with the six file names.

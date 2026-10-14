@@ -14,7 +14,7 @@ namespace WordVenture.Tests
 {
     public sealed class LocalizationPlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language", "SeenSlimes0", "SeenSlimes1" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -58,12 +58,14 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 영어를_고르면_타이틀_스토리_튜토리얼이_영어로_나오고_버튼으로_되돌린다()
+        public IEnumerator 영어를_고르면_설정_메뉴_스토리_튜토리얼이_영어로_나오고_설정_메뉴로_되돌린다()
         {
-            Button language = GameObject.Find("LanguageButton").GetComponent<Button>();
-            Assert.That(Text(Label(language)), Is.EqualTo("한국어"), "버튼에는 바꿀 언어를 적는다.");
-            Assert.That(Text(Label(GameObject.Find("CreditsButton").GetComponent<Button>())), Is.EqualTo("Credits"));
+            SettingsMenuPlayTests.Open();
+            Assert.That(Text(Label(SettingsMenuPlayTests.MenuButton("languageButton"))), Is.EqualTo("한국어"),
+                "버튼에는 바꿀 언어를 적는다.");
+            Assert.That(Text(Label(SettingsMenuPlayTests.MenuButton("creditsButton"))), Is.EqualTo("Credits"));
             SharedDialoguePlayTests.Capture("localization-title-english.png");
+            SettingsMenuPlayTests.Close();
 
             yield return SceneManager.LoadSceneAsync("StoryScene");
             yield return null;
@@ -90,11 +92,15 @@ namespace WordVenture.Tests
 
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
-            GameObject.Find("LanguageButton").GetComponent<Button>().onClick.Invoke();
+            SettingsMenuPlayTests.Open();
+            SettingsMenuPlayTests.MenuButton("languageButton").onClick.Invoke();
             yield return null;
             yield return null;
-            Assert.That(Text(Label(GameObject.Find("CreditsButton").GetComponent<Button>())), Is.EqualTo("크레딧"));
-            Assert.That(Text(Label(GameObject.Find("LanguageButton").GetComponent<Button>())), Is.EqualTo("English"));
+            Assert.That(SettingsMenuPlayTests.IsOpen, Is.False, "타이틀에서는 씬을 다시 열면서 메뉴를 닫는다.");
+            SettingsMenuPlayTests.Open();
+            Assert.That(Text(Label(SettingsMenuPlayTests.MenuButton("creditsButton"))), Is.EqualTo("크레딧"));
+            Assert.That(Text(Label(SettingsMenuPlayTests.MenuButton("languageButton"))), Is.EqualTo("English"));
+            SettingsMenuPlayTests.Close();
             Assert.That(PlayerPrefs.GetInt("Language"), Is.EqualTo(0), "고른 언어를 저장한다.");
         }
 

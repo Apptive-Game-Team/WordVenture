@@ -1,4 +1,5 @@
 using Cards;
+using Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,10 +20,12 @@ namespace Tutorial
         {
             guidance = guide;
             ghost = Image("DemoCard");
+            ghost.preserveAspect = true;
             var label = new GameObject("CardName", typeof(RectTransform)).GetComponent<RectTransform>();
             label.SetParent(ghost.transform, false);
-            label.anchorMin = new Vector2(0.2f, 0.7f);
-            label.anchorMax = new Vector2(0.8f, 0.95f);
+            // 카드 그림(34x50 픽셀)의 이름 띠는 위에서 3~11번째 줄, 좌우 3픽셀 안쪽이다.
+            label.anchorMin = new Vector2(0.09f, 0.76f);
+            label.anchorMax = new Vector2(0.91f, 0.94f);
             label.offsetMin = label.offsetMax = Vector2.zero;
             cardName = label.gameObject.AddComponent<TextMeshProUGUI>();
             cardName.font = font;
@@ -107,7 +110,7 @@ namespace Tutorial
             ghost.color = new Color(1, 1, 1, ghostAlpha);
             TMP_Text originalName = source.GetComponentInChildren<TMP_Text>();
             cardName.text = originalName != null ? originalName.text : "";
-            cardName.color = new Color(0.2f, 0.15f, 0.2f, ghostAlpha);
+            cardName.color = new Color(UiPalette.Text.r, UiPalette.Text.g, UiPalette.Text.b, ghostAlpha);
         }
 
         void ShowClick(Vector2 contact)

@@ -10,14 +10,20 @@ namespace Scenes
     {
         SaveLoadController saveLoadController;
         [SerializeField] GameObject continueButton;
+        [SerializeField] TitleStageView stageView;
 
         private void Start()
         {
             saveLoadController = GameObject.Find("SaveLoadController").GetComponent<SaveLoadController>();
-            if (saveLoadController.LoadPlayData() == -1)
-            {
-                continueButton.SetActive(false);
-            }
+            ShowSavedProgress();
+        }
+
+        // 서버에서 진행도를 불러온 뒤에도 다시 불러 이어하기 버튼과 배경을 맞춘다.
+        public void ShowSavedProgress()
+        {
+            int stagePosition = saveLoadController.LoadPlayData();
+            continueButton.SetActive(stagePosition != -1);
+            stageView.Show(stagePosition);
         }
 
 

@@ -39,6 +39,10 @@ namespace Cards
             areaHitFilter = new ContactFilter2D().NoFilter();
         }
 
+        // Spawn 카드는 서리 마을(스테이지 5)을 클리어한 뒤 스테이지 6부터 손패에 섞인다.
+        const int SpawnUnlockStage = 6;
+        const int SpawnCardPercent = 3;
+
         [FormerlySerializedAs("wordSO")] [SerializeField] WordScriptableObject wordSo;
         [SerializeField] GameObject cardPrefab;
         [SerializeField] List<Card> myCards;
@@ -142,6 +146,14 @@ namespace Cards
                 return;
             }
 
+#if UNITY_EDITOR
+            // 테스트용: 에디터에서 S 키로 Spawn 카드를 한 장 받는다. 빌드에는 들어가지 않는다.
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                AddCard(FindWord(MagicType.Spawn));
+            }
+#endif
+
             // Util.MousePos는 접근할 때마다 Camera.main 조회와 좌표 변환을 다시 한다.
             // 한 프레임에 한 번만 구해서 돌려쓴다.
             Vector3 mouseWorldPosition = Util.MousePos;
@@ -156,9 +168,15 @@ namespace Cards
 
         public void AddCard(string tag)
         {
+            AddCard(PopWord(tag));
+        }
+
+        void AddCard(Word word)
+        {
+            if (word == null) return;
             var cardObject = Instantiate(cardPrefab, cardSpawnPoint.position, Quaternion.identity);
             var card = cardObject.GetComponent<Card>();
-            card.Setup(PopWord(tag));
+            card.Setup(word);
             myCards.Add(card);
 
             SetOriginOrder();
@@ -183,7 +201,7 @@ namespace Cards
         public void CardAlignment()
         {
             List<Prs> originCardPrSs = new List<Prs>();
-            originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, new Vector3(1.896733f, 2.1f, 1) * 0.2f);
+            originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, Vector3.one * 0.4f);
 
             var targetCards = myCards;
 
@@ -212,7 +230,8 @@ namespace Cards
             for (int i = 0;i< objCount;i++)
             {
                 var targetPos = Vector3.Lerp(left.position, right.position, objLerps[i]);
-                targetPos.y += 0.5f;
+                // 손패 기준점(CardLeft, CardRight)은 화면 아래 끝보다 조금 아래에 있다. 카드 높이 1.85의 절반보다 더 올려야 카드 아래 테두리가 화면에 들어온다.
+                targetPos.y += 1.2f;
                 var targetRot = Quaternion.identity;
 
                 // float curve = Mathf.Sqrt(Mathf.Pow(height, 2) - Mathf.Pow(objLerps[i] - 0.5f, 2));
@@ -281,8 +300,28 @@ namespace Cards
                     wordSo.words[7].percent = 3;
                     break;
                 default:
+                    // 스테이지 5 이후는 스테이지 4와 같은 비율을 쓴다.
+                    wordSo.words[0].percent = 5;
+                    wordSo.words[1].percent = 5;
+                    wordSo.words[2].percent = 5;
+                    wordSo.words[3].percent = 3;
+                    wordSo.words[4].percent = 3;
+                    wordSo.words[5].percent = 3;
+                    wordSo.words[6].percent = 3;
+                    wordSo.words[7].percent = 3;
                     break;
             }
+
+            Word spawnWord = FindWord(MagicType.Spawn);
+            if (spawnWord != null)
+            {
+                spawnWord.percent = MapMove.StagePosition >= SpawnUnlockStage ? SpawnCardPercent : 0;
+            }
+        }
+
+        Word FindWord(MagicType magicType)
+        {
+            return Array.Find(wordSo.words, word => word.magicType == magicType);
         }
 
         #region MyCard

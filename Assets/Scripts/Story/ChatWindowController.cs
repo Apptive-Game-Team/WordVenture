@@ -101,6 +101,11 @@ namespace Story
             Presentation.SetPortraits(left, right, leftSpeaking);
         }
 
+        public void SetPortraits(Sprite left, Sprite right, bool leftLit, bool rightLit)
+        {
+            Presentation.SetPortraits(left, right, leftLit, rightLit);
+        }
+
         /// <summary>
         /// 기존 씬의 직렬화 연결은 유지하면서 공통 대화창을 구성한다.
         /// </summary>

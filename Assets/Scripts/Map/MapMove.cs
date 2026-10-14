@@ -1,5 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using Combat;
+using Combat.Enemies;
 using Combat.Stage;
+using Combat.UI;
 using Core;
 using DG.Tweening;
 using Story;
@@ -7,6 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.Serialization;
 
 namespace Map
@@ -25,6 +30,23 @@ namespace Map
         [FormerlySerializedAs("Stage2")] [SerializeField] Sprite stage2;
         [FormerlySerializedAs("Stage3")] [SerializeField] Sprite stage3;
         [FormerlySerializedAs("Stage4")] [SerializeField] Sprite stage4;
+        // 1부를 끝내면(StagePosition 5 이상) 이 장의 배경과 지점으로 바꿔 보여 준다.
+        [SerializeField] MapChapter actTwoMap;
+        // 1부를 끝낸 뒤에만 보이는, 1부 맵과 2부 맵을 오가는 버튼. Tab 키로도 바꾼다.
+        [SerializeField] Button chapterSwitchButton;
+        [SerializeField] TextMeshProUGUI chapterSwitchLabel;
+        // 슬라임 도감이 읽는 적 수치와 마법 상성. 전투 씬과 같은 에셋이다.
+        [SerializeField] EnemyDataContainer enemyDataContainer;
+        [SerializeField] MagicAffinityTable magicAffinityTable;
+        // 이미 깬 스테이지의 적을 도감에 기록할 때 읽는다. TurnBattleScene 의 StageManager.stageDataList 와 같은 목록이다.
+        [SerializeField] List<StageData> stageDataList;
+        const int ActOneLastStageID = 4;
+        // 2부 맵에서 1부 맵으로 돌아올 때 지점을 되돌려 놓을 씬 원래 위치.
+        Vector3[] actOneStageLocations;
+        // 지금 맵에 보이는 장. 1부면 null이다.
+        MapChapter chapter;
+        // 지점 번호 position에 더하면 스테이지 번호가 된다. 1부는 0, 2부는 5다.
+        int firstStageID;
         int position = 0;
         public static int StagePosition;
 
@@ -45,11 +67,76 @@ namespace Map
             backgroundRenderer = background.GetComponent<SpriteRenderer>();
             stageLocations = new[] { village, battle1, battle2, battle3, boss };
             mapCamera = Camera.main;
+            actOneStageLocations = System.Array.ConvertAll(stageLocations, location => location.transform.position);
+            if (CanSwitchChapter && !SaveLoadController.ShowsActOneMap) UseChapter(actTwoMap);
         }
+
+        bool CanSwitchChapter => actTwoMap != null && StagePosition >= actTwoMap.firstStageID;
+
+        // 지점 오브젝트는 스프라이트 없이 위치만 나타내므로, 장의 좌표로 옮겨서 그대로 쓴다.
+        // mapChapter가 null이면 1부 맵으로 돌아간다.
+        void UseChapter(MapChapter mapChapter)
+        {
+            chapter = mapChapter;
+            if (mapChapter == null)
+            {
+                firstStageID = 0;
+                for (int i = 0; i < stageLocations.Length; i++)
+                    stageLocations[i].transform.position = actOneStageLocations[i];
+                return;
+            }
+
+            firstStageID = mapChapter.firstStageID;
+            for (int i = 0; i < stageLocations.Length && i < mapChapter.stagePoints.Length; i++)
+            {
+                Vector3 point = stageLocations[i].transform.position;
+                point.x = mapChapter.stagePoints[i].x;
+                point.y = mapChapter.stagePoints[i].y;
+                stageLocations[i].transform.position = point;
+            }
+        }
+
+        int LastPlayableStageID => chapter != null ? chapter.lastPlayableStageID : ActOneLastStageID;
 
         private void Start()
         {
             InitShowBattles();
+            InitChapterSwitchButton();
+            SlimeEncyclopediaView.RecordClearedStages(stageDataList, enemyDataContainer, StagePosition);
+            SlimeEncyclopediaView.CreateOpenButton(OpenEncyclopedia);
+        }
+
+        void OpenEncyclopedia()
+        {
+            if (enteringStage) return;
+            SlimeEncyclopediaView.Open(enemyDataContainer, magicAffinityTable);
+        }
+
+        void InitChapterSwitchButton()
+        {
+            if (chapterSwitchButton == null) return;
+            chapterSwitchButton.gameObject.SetActive(CanSwitchChapter);
+            chapterSwitchButton.onClick.AddListener(SwitchChapter);
+            ShowChapterSwitchLabel();
+        }
+
+        void ShowChapterSwitchLabel()
+        {
+            if (chapterSwitchLabel == null) return;
+            chapterSwitchLabel.text = Localization.Translate(chapter != null ? "1부 맵으로 (Tab)" : "2부 맵으로 (Tab)");
+        }
+
+        void SwitchChapter()
+        {
+            if (!CanSwitchChapter || InteractionLock.IsLocked || enteringStage) return;
+
+            movement?.Kill();
+            UseChapter(chapter != null ? null : actTwoMap);
+            SaveLoadController.ShowsActOneMap = chapter == null;
+            WordPosition(StagePosition);
+            // 배경과 스테이지 문구는 지금 장을 기준으로 그리므로 다음 프레임에 다시 그린다.
+            renderedStagePosition = -1;
+            ShowChapterSwitchLabel();
         }
 
         void Update()
@@ -102,11 +189,26 @@ namespace Map
             bool up = Input.GetKeyDown(KeyCode.UpArrow);
             bool down = Input.GetKeyDown(KeyCode.DownArrow);
 
-            if (right || (up && (position == 0 || position == 2)))
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                SwitchChapter();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                OpenEncyclopedia();
+                return;
+            }
+
+            // 1부 길은 위아래로 꺾이므로 지점마다 위아래 키의 방향이 다르다. 2부 길은 순서대로 이어 간다.
+            bool next = chapter != null ? right || up : right || (up && (position == 0 || position == 2));
+            bool previous = chapter != null ? left || down : left || (down && (position == 1 || position == 3));
+            if (next)
             {
                 MoveToStage(position + 1);
             }
-            else if (left || (down && (position == 1 || position == 3)))
+            else if (previous)
             {
                 MoveToStage(position - 1);
             }
@@ -159,9 +261,12 @@ namespace Map
             }
         }
 
+        // target은 지금 장 안의 지점 번호다. 전투 데이터가 아직 없는 지점은 보이기만 하고 들어갈 수 없다.
         bool IsStageUnlocked(int target)
         {
-            return target >= 0 && target < stageLocations.Length && target <= StagePosition;
+            int stageID = firstStageID + target;
+            return target >= 0 && target < stageLocations.Length && stageID <= StagePosition
+                && stageID <= LastPlayableStageID;
         }
 
         void MoveToStage(int target)
@@ -182,29 +287,36 @@ namespace Map
         }
         void ShowStage()
         {
-            stage.text = "Stage : " + StagePosition;
+            string text = Localization.Translate("스테이지") + " " + StagePosition;
+            stage.text = StagePosition > LastPlayableStageID && StagePosition <= LastStageIDOnMap
+                ? text + " (" + Localization.Translate("준비 중") + ")"
+                : text;
         }
 
-        public void SelectStage(int stagePosition)
+        int LastStageIDOnMap => firstStageID + stageLocations.Length - 1;
+
+        // locationIndex는 지금 장 안의 지점 번호다.
+        public void SelectStage(int locationIndex)
         {
-            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(stagePosition) ||
-                stagePosition != position ||
+            if (InteractionLock.IsLocked || enteringStage || !IsStageUnlocked(locationIndex) ||
+                locationIndex != position ||
                 (movement != null && movement.IsActive() && movement.IsPlaying()))
             {
                 return;
             }
 
             enteringStage = true;
-            StageDataSingleton.Instance.stagePosition = stagePosition;
-            StageDialogueChapter chapter = StageDialogueView.FindUnseen(stagePosition,
+            int stageID = firstStageID + locationIndex;
+            StageDataSingleton.Instance.stagePosition = stageID;
+            StageDialogueChapter dialogue = StageDialogueView.FindUnseen(stageID,
                 StageDialogueMoment.Enter, 0, out StageDialogueData data);
-            if (chapter != null) StartCoroutine(EnterAfterDialogue(data, chapter));
+            if (dialogue != null) StartCoroutine(EnterAfterDialogue(data, dialogue));
             else SceneManager.LoadScene("TurnBattleScene");
         }
 
-        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter chapter)
+        IEnumerator EnterAfterDialogue(StageDialogueData data, StageDialogueChapter dialogue)
         {
-            yield return StageDialogueView.Play(data, chapter, false);
+            yield return StageDialogueView.Play(data, dialogue, false);
             SceneManager.LoadScene("TurnBattleScene");
         }
 
@@ -217,7 +329,14 @@ namespace Map
 
         void ShowBattle(int stagePosition)
         {
-            switch (stagePosition)
+            if (chapter != null)
+            {
+                backgroundRenderer.sprite = chapter.background;
+                return;
+            }
+
+            // 2부를 진행 중에 1부 맵을 열면 1부를 끝낸 배경(stage4)을 보여 준다.
+            switch (Mathf.Min(stagePosition, ActOneLastStageID + 1))
             {
                 case 1:
                     backgroundRenderer.sprite = stage1;
@@ -241,15 +360,15 @@ namespace Map
 
         void WordPosition(int stagePosition)
         {
-            position = Mathf.Clamp(stagePosition, 0, stageLocations.Length - 1);
+            position = Mathf.Clamp(Mathf.Min(stagePosition, LastPlayableStageID) - firstStageID, 0, stageLocations.Length - 1);
             character.transform.position = stageLocations[position].transform.position;
         }
 #if UNITY_EDITOR
-        // 테스트용: 에디터에서 C 키로 다음 스테이지를 연다. 마왕 성(4)까지만 연다.
+        // 테스트용: 에디터에서 C 키로 다음 스테이지를 연다. 지금 장의 마지막 지점까지만 연다.
         void UnlockNextStageForTest()
         {
             if (InteractionLock.IsLocked || enteringStage || !Input.GetKeyDown(KeyCode.C)) return;
-            if (StagePosition < stageLocations.Length - 1) StagePosition++;
+            if (StagePosition < LastStageIDOnMap) StagePosition++;
         }
 #endif
     }

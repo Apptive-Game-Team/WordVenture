@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlainStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageID: 0
-  stageName: 
+  stageName: 평원
   background: {fileID: 21300000, guid: 22934f4ac00e34dfd9cb33569822d181, type: 3}
   waveData:
     enemyWaves:

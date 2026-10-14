@@ -1,3 +1,4 @@
+using Combat.Allies;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -6,17 +7,19 @@ namespace Combat.Enemies
     {
         [SerializeField] GameObject fireShoot;
 
+        public override string AttackDescription => "다가와 근접 공격하고, 이동을 마칠 때마다 공격력의 70% 로 마법 탄을 쏜다.";
+
         protected override void Start()
         {
             base.Start();
         }
 
-        public override void Attack(float distanceToPlayer)
+        public override void Attack(float distanceToFrontLine)
         {
-            base.Attack(distanceToPlayer);
-            if (distanceToPlayer < attackRange)
+            base.Attack(distanceToFrontLine);
+            if (distanceToFrontLine < attackRange)
             {
-                Player.PlayerInt().TakeHit(AttackDamage);
+                AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
             }
         }
         protected override void StopMove()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RainStage
   m_EditorClassIdentifier: Assembly-CSharp::StageData
   stageID: 3
-  stageName: 
+  stageName: 빗길
   background: {fileID: 21300000, guid: 0c7860b01c549e643978c99b85b90efe, type: 3}
   waveData:
     enemyWaves:

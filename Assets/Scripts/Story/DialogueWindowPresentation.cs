@@ -62,12 +62,18 @@ namespace Story
 
         public void SetPortraits(Sprite left, Sprite right, bool leftSpeaking)
         {
+            SetPortraits(left, right, leftSpeaking, !leftSpeaking);
+        }
+
+        // 나레이션처럼 아무도 말하지 않는 줄은 두 초상화를 모두 어둡게 둘 수 있다.
+        public void SetPortraits(Sprite left, Sprite right, bool leftLit, bool rightLit)
+        {
             LeftPortrait.sprite = left;
             RightPortrait.sprite = right;
             LeftPortrait.gameObject.SetActive(left != null);
             RightPortrait.gameObject.SetActive(right != null);
-            LeftPortrait.color = leftSpeaking ? Color.white : style.listenerColor;
-            RightPortrait.color = leftSpeaking ? style.listenerColor : Color.white;
+            LeftPortrait.color = leftLit ? Color.white : style.listenerColor;
+            RightPortrait.color = rightLit ? Color.white : style.listenerColor;
         }
 
         public void SetSpeaker(string name)

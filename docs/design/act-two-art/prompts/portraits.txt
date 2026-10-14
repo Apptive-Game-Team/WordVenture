@@ -1,0 +1,23 @@
+Use your built-in image generation tool to create FIVE new image files in the current working directory, one image per file, and do not create or edit anything else. Generate them one at a time. Attach both reference images to every generation.
+
+`reference-word.png` and `reference-villager.png` are existing dialogue portraits of this game. Every new portrait MUST look like it was drawn by the same artist in the same style, next to these two. Study them carefully. Their style is:
+- Cute anime style: large expressive eyes with a single highlight, small nose and mouth, smooth simple face, youthful soft proportions. NOT realistic, NOT gritty.
+- Simple flat cel shading with only 2 tones per material (base + one shadow), a dark outline around shapes.
+- Low detail: big pixel clusters about 8-10 px wide, no fine texture, no fabric weave, no wrinkles, no individual hair strands, no small accessories beyond what is listed.
+- Soft, slightly muted colors.
+- Framing exactly like the references: waist-up, three-quarter view, the figure occupies about the same area of the canvas as in the references, with head and shoulders fully visible and a small empty margin around the head.
+
+Rules for every image:
+- Square canvas, 1024 x 1024.
+- Solid flat magenta background (#FF00FF) everywhere outside the character. Do not use magenta or pink-purple inside the character.
+- Each character faces slightly LEFT.
+- No text, no frame, no scenery, no other characters.
+
+Files:
+1. `FrostVillager.png` - a young man from a snowy village: brown hood with a simple white fur trim pushed back, short dark blond hair, rosy cheeks, a plain blue scarf, worried but hopeful face.
+2. `CanyonRanger.png` - a young woman canyon ranger: short dark brown hair, light tan skin, simple brown leather vest with a small yellow badge, a coiled rope on one shoulder, serious face.
+3. `RuinsScholar.png` - a kind old scholar: round glasses, short grey beard, simple dark green robe, holding a small brown book, curious face.
+4. `ForestRefugee.png` - a girl about twelve: black hair in one braid, simple torn grey-green cloak, holding a small glowing lantern, frightened but brave face.
+5. `MagicSurge.png` - the final boss, a big slime made of runaway magic, drawn in the same cute game style as the slimes of this game: a large rounded translucent body glowing gold, green and violet, a few simple crystal shapes inside, two big simple white eyes with a sad, angry look. It fills about the same area as a waist-up character.
+
+When done, reply with the five file names.

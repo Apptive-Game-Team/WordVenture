@@ -1,0 +1,18 @@
+Use your built-in image generation tool to create new sprite atlas image files in the current working directory, one image per file, and do not create or edit anything else. Generate them one at a time.
+
+`reference-slime-atlas.png` is the exact layout to follow. It is an existing enemy slime from the 2D pixel-art game WordVenture, drawn as 8 animation frames on a magenta background in a 4 x 2 grid of cells (each cell 384 wide x 512 tall). Frame order, left to right then top to bottom:
+1 idle A, 2 idle B (slightly squashed), 3 squash before a hop, 4 hop/attack stretch, 5 hurt (eyes > <, small particles), 6 defeated (melting, tears), 7 range attack charge (eyes closed), 8 range attack release (mouth wide open).
+
+Rules for every atlas:
+- Exactly 1536 x 1024 pixels with the same 4 x 2 grid of 384 x 512 cells. Draw one frame per cell, same order as the reference.
+- Solid flat magenta (#FF00FF) background everywhere. Do not use magenta inside the creature.
+- Match the reference style exactly: chunky pixel art, thick dark outline, simple two- or three-tone shading, small cute dot eyes, the same size of creature in each cell as the reference (about 60% of the cell width), the creature's bottom resting on the same baseline as the reference frames, horizontally centered in its cell.
+- The creature faces LEFT. Keep its silhouette, colors and size consistent across all 8 frames; only the pose and face change.
+- No text, no numbers, no grid lines, no shadows on the background.
+
+Files to create:
+1. `Explode.png` - an exploding slime: bright yellow-green body with a lit fuse sticking out of its top and small sparks; in frames 7-8 it swells up and glows red, about to burst.
+2. `Heal.png` - a healing slime: soft pink-white body with a small green leaf sprout on its head and a gentle glow; in frames 7-8 it releases small green plus-shaped healing sparkles.
+3. `Surge.png` - the final boss "runaway magic": a large slime made of swirling translucent gold, green and violet light, with crystal shards floating inside and two bright white eyes. Make it clearly bigger and more imposing than a normal slime, but still keep it inside each cell with the bottom on the same baseline. In frames 7-8 it gathers and releases a burst of light.
+
+When done, reply with the file names.

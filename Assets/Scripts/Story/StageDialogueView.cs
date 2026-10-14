@@ -73,13 +73,17 @@ namespace Story
             {
                 Image backdrop = DialogueWindowPresentation.Picture("Backdrop", transform, Vector2.zero, Vector2.one, Color.white);
                 backdrop.sprite = chapter.background;
+                // 2:1 전투 배경을 화면 비율로 늘리면 픽셀이 세로로 길어진다. 비율을 지킨 채 화면을 덮고 넘치는 좌우는 잘린다.
+                var fitter = backdrop.gameObject.AddComponent<AspectRatioFitter>();
+                fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                fitter.aspectRatio = chapter.background.rect.width / chapter.background.rect.height;
             }
             Image shade = DialogueWindowPresentation.Picture("Shade", transform, Vector2.zero, Vector2.one,
                 new Color(0.04f, 0.03f, 0.09f, 0.35f));
             // 대화 중 클릭이 뒤의 맵이나 전투로 전달되지 않게 막는다.
             shade.raycastTarget = true;
             Label("ChapterTitle", transform, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f),
-                Localization.Translate(chapter.title), data.font, 38, new Color(1f, 0.88f, 0.63f));
+                Localization.Translate(chapter.title), data.font, 38, UiPalette.Text);
 
             var window = new GameObject("ChatWindow", typeof(RectTransform));
             window.transform.SetParent(transform, false);
@@ -108,17 +112,23 @@ namespace Story
         {
             StageDialogueLine current = chapter.lines[line];
             // 상대 초상화는 상대가 처음 말할 때부터 보여 준다. 워드의 혼잣말로 시작하는 대화에서 미리 나오지 않게 한다.
-            if (!current.wordSpeaking && !current.narration) speakerAppeared = true;
-            chat.SetPortraits(dialogueData.wordPortrait, speakerAppeared ? chapter.speakerPortrait : null, current.wordSpeaking);
-            // 이름을 비우면 공통 대화창이 이름과 초상화를 숨기고 나레이션으로 보여 준다.
+            bool speakerTalking = !current.wordSpeaking && !current.narration;
+            if (speakerTalking) speakerAppeared = true;
+            // 이름을 비우면 공통 대화창이 이름을 숨기고 나레이션으로 보여 준다. 이때 초상화도 지우므로
+            // 초상화는 대사를 넣은 뒤에 다시 설정한다. 지역 대화는 나레이션 중에도 두 인물을 남겨 둔다.
             string speaker = current.narration ? "" : current.wordSpeaking ? "워드" : chapter.speakerName;
             chat.UpdateChatStream(speaker, current.text);
+            // 몸짓 나레이션은 워드가 대답하는 줄이므로 워드를 밝게 보여 준다.
+            bool wordLit = current.wordSpeaking || current.gesture != WordGesture.None;
+            chat.SetPortraits(dialogueData.WordPortraitFor(current.gesture),
+                speakerAppeared ? chapter.speakerPortrait : null, wordLit, speakerTalking);
         }
 
         void Update()
         {
             if (chat == null || finishing) return;
-            if (Input.anyKeyDown) Advance();
+            // 대화창이 IsLocked 를 잡고 있으므로 설정 메뉴가 열렸는지는 IsPaused 로 따로 본다.
+            if (!InteractionLock.IsPaused && Input.anyKeyDown) Advance();
         }
 
         public void Advance()

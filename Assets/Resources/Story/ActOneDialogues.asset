@@ -13,6 +13,31 @@ MonoBehaviour:
   m_Name: ActOneDialogues
   m_EditorClassIdentifier:
   wordPortrait: {fileID: 21300000, guid: 4b11d118601649689dbff602bda3aab4, type: 3}
+  gesturePortraits:
+  - gesture: 1
+    portrait: {fileID: 21300000, guid: 933d020b58f44e65b0d785c1f7e7774a, type: 3}
+  - gesture: 2
+    portrait: {fileID: 21300000, guid: 06c672c795e34291a4245b7d873886b2, type: 3}
+  - gesture: 3
+    portrait: {fileID: 21300000, guid: 3532e203c5b44229b520289e7b422c05, type: 3}
+  - gesture: 4
+    portrait: {fileID: 21300000, guid: c206665f424b496090e9ddabe52c99e1, type: 3}
+  - gesture: 5
+    portrait: {fileID: 21300000, guid: e965a5282d084d5a89b6a9ce8305b556, type: 3}
+  - gesture: 6
+    portrait: {fileID: 21300000, guid: 51d9ed3a93f642c0b64594803e842281, type: 3}
+  - gesture: 7
+    portrait: {fileID: 21300000, guid: 53a3f8021a534d91b60f96e1f7dd3bef, type: 3}
+  - gesture: 8
+    portrait: {fileID: 21300000, guid: 2c4d9a7194e0416fb11a1af27b085640, type: 3}
+  - gesture: 9
+    portrait: {fileID: 21300000, guid: e68a5ff30f78431291a1155709494872, type: 3}
+  - gesture: 10
+    portrait: {fileID: 21300000, guid: ee1daf037c4e49b58018a3de2fd2b433, type: 3}
+  - gesture: 11
+    portrait: {fileID: 21300000, guid: 2893518f1c344927b7e4547cc52875f5, type: 3}
+  - gesture: 12
+    portrait: {fileID: 21300000, guid: ca6e1f029377475990077d7e067cf7c9, type: 3}
   font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   chapters:
   - stageID: 0
@@ -25,28 +50,56 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 1
       narration: 0
-      text: "…할아버지."
+      gesture: 0
+      text: "……"
     - wordSpeaking: 0
       narration: 1
+      gesture: 0
       text: "할아버지의 목소리가 사라진 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "저기… 마법사님? 이제 나와도 되나요? 슬라임들이 길을 막아서 꼼짝도 못 하고 있었어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "…네. 여기는 이제 괜찮아요. 혹시 슬라임 마왕이 있는 곳을 아세요?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 고개를 끄덕이고, 슬라임이 사라진 길을 손으로 가리켰다."
     - wordSpeaking: 0
       narration: 0
-      text: "해안 너머로 갔다는 말은 들었어요. 우리 마을도 습격을 받아서… 돌아갈 집이 없네요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "…저도요."
+      gesture: 0
+      text: "정말 다 물리쳐 주셨네요. 고마워요. …그런데 왜 아무 말씀도 안 하세요?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 12
+      text: "워드는 목을 짚고 천천히 고개를 저었다."
     - wordSpeaking: 0
       narration: 0
-      text: "저희는 남쪽의 안전한 마을로 피하려고 해요. 길을 열어 줘서 고마워요."
+      gesture: 0
+      text: "아… 말을 못 하시는군요. 죄송해요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 5
+      text: "워드는 품에서 할아버지의 마법서를 꺼내, 슬라임 마왕이 그려진 쪽을 펼쳐 보였다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "슬라임 마왕을 찾으시는군요. 해안 너머로 갔다는 말은 들었어요. 우리 마을도 습격을 받아서… 돌아갈 집이 없네요."
     - wordSpeaking: 1
       narration: 0
-      text: "저는 마왕을 찾아야 해요. 가시는 길, 조심하세요."
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 무너진 산골짜기의 집을 떠올리며 마법서를 꼭 끌어안았다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "저희는 남쪽의 안전한 마을로 피하려고 해요. 길을 열어 줘서 고마워요. 가시는 길, 조심하세요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 1
+      text: "워드는 짧게 고개를 숙여 인사하고, 해안 쪽으로 걸음을 옮겼다."
   - stageID: 1
     moment: 0
     wave: 0
@@ -57,22 +110,40 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "거기 누구요? …마법사로구먼. 슬라임들이 배를 다 뒤집어 놔서 바다로는 못 나가오."
-    - wordSpeaking: 1
-      narration: 0
-      text: "다친 사람은 없어요? 같이 계신 분들은요?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 10
+      text: "워드는 바위 쪽을 가리키고, 걱정스러운 얼굴로 어부를 바라보았다."
     - wordSpeaking: 0
       narration: 0
-      text: "손주 녀석이 발을 삐었소. 나머지는 저 바위 뒤에 숨어 있고."
-    - wordSpeaking: 1
-      narration: 0
-      text: "제가 지나온 길에는 이제 슬라임이 없어요. 그 길로 가면 남쪽 마을까지 갈 수 있어요."
+      gesture: 0
+      text: "다친 사람이 있냐고? 손주 녀석이 발을 삐었소. 나머지는 저 바위 뒤에 숨어 있고."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 자신이 걸어온 길을 가리킨 뒤, 남쪽을 향해 손을 크게 저었다."
     - wordSpeaking: 0
       narration: 0
-      text: "고맙소. 은인의 이름이라도 알려 주겠소?"
-    - wordSpeaking: 1
+      gesture: 0
+      text: "저 길로 가면 남쪽까지 갈 수 있다는 거요? 슬라임은 이미 다 치웠다는 얘기로군. 고맙소."
+    - wordSpeaking: 0
       narration: 0
-      text: "워드예요. …조심히 가세요."
+      gesture: 0
+      text: "은인의 이름이라도 알려 주겠소?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 11
+      text: "워드는 잠시 망설이다가 마법서 표지를 내밀었다. 표지 귀퉁이에 할아버지의 글씨로 '워드에게'라고 적혀 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "워드… 워드라고 부르면 되겠소? 말은 못 해도 마음은 다 전해졌소. 조심히 가시오."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 1
+      text: "워드는 고개를 끄덕이고, 손주를 업고 떠나는 어부의 뒷모습을 끝까지 지켜보았다."
   - stageID: 2
     moment: 0
     wave: 0
@@ -83,22 +154,32 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "누나, 마법사 맞죠? 도와주세요. 양들을 데리고 내려가다가 동생을 놓쳤어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "어디서 헤어졌어? 천천히 말해 봐."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 4
+      text: "워드는 소년 앞에 무릎을 꿇고 눈을 맞췄다. 그리고 손가락으로 사방을 가리키며 고개를 갸웃했다."
     - wordSpeaking: 0
       narration: 0
-      text: "저 바위 언덕 너머요. 슬라임이 몰려와서… 저만 도망쳤어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "방금 그쪽에서 오는 길이야. 울고 있던 아이를 빈 오두막에 숨겨 두고 왔어. 지금 가면 만날 수 있어."
+      gesture: 0
+      text: "어디서 헤어졌냐고요? 저 바위 언덕 너머요. 슬라임이 몰려와서… 저만 도망쳤어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 방금 지나온 언덕 너머의 빈 오두막을 가리켰다. 그리고 손바닥을 땅 가까이 내려 작은 아이의 키를 그려 보였다."
     - wordSpeaking: 0
       narration: 0
-      text: "정말요? 고맙습니다! 누나도 다 끝나면 남쪽 마을에 들러요. 따뜻한 양젖 수프 해 드릴게요."
-    - wordSpeaking: 1
+      gesture: 0
+      text: "저 오두막에 이만한 아이가 있다고요? 제 동생이에요! 고맙습니다!"
+    - wordSpeaking: 0
       narration: 0
-      text: "…응. 꼭 들를게."
+      gesture: 0
+      text: "누나도 다 끝나면 남쪽 마을에 들러요. 따뜻한 양젖 수프 해 드릴게요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 1
+      text: "워드는 소년의 머리를 쓰다듬으며 천천히 고개를 끄덕였다."
   - stageID: 3
     moment: 0
     wave: 0
@@ -109,21 +190,35 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "멈춰! …사람이었군. 이 앞은 마왕 성으로 가는 길이다. 피난민은 전부 내려보냈어."
-    - wordSpeaking: 1
-      narration: 0
-      text: "혼자 남아서 길을 지키고 있었어요?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 10
+      text: "워드는 빗속에 혼자 선 경비병을 보고, 텅 빈 초소를 가리켰다."
     - wordSpeaking: 0
       narration: 0
-      text: "누군가는 마지막 사람이 지나갈 때까지 있어야 하니까. 넌 왜 거꾸로 올라가지?"
-    - wordSpeaking: 1
-      narration: 0
-      text: "마왕 때문에 할아버지를 잃었어요. 처음엔 복수만 생각하며 여기까지 왔어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "그런데 오는 길에 만난 사람들이 또 집을 잃지 않았으면 좋겠어요. 여기서 끝낼게요."
+      gesture: 0
+      text: "혼자 남아서 뭘 하냐고? 누군가는 마지막 사람이 지나갈 때까지 있어야 하니까. 넌 왜 거꾸로 올라가지?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 11
+      text: "워드는 대답 대신 할아버지의 마법서를 꺼내 들었다. 표지에 묻은 그을음이 빗물에 번졌다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "그리고 지나온 길을 돌아보았다. 평원에서, 해안에서, 고원에서 만난 사람들의 얼굴이 떠올랐다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
+      text: "처음엔 복수하러 나섰겠지. 그런데 지금은 지나온 마을 사람들을 생각하는 얼굴이군."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 8
+      text: "워드는 고개를 끄덕였다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
       text: "…그럼 길은 내가 지키겠다. 살아서 돌아와라, 마법사."
   - stageID: 4
     moment: 1
@@ -135,16 +230,24 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 1
       narration: 0
-      text: "드디어… 여기까지 왔어."
-    - wordSpeaking: 1
-      narration: 0
-      text: "할아버지, 보고 계세요? 할아버지가 남긴 마법서로 여기까지 왔어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "평원에서, 해안에서, 고원에서 만난 사람들도 다들 무사히 내려갔어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "이번에는 도망치지 않아. 슬라임 마왕, 여기서 끝내자."
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "드디어 마왕 성 앞이었다. 워드는 젖은 망토를 여미고 성문을 올려다보았다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "할아버지가 남긴 마법서를 펼치자 손때 묻은 글씨가 보였다. 이 마법서 덕분에 여기까지 올 수 있었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "평원에서, 해안에서, 고원에서 만난 사람들도 지금쯤 무사히 내려갔을 것이다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "이번에는 도망치지 않는다. 워드는 카드를 쥐고 성문 안으로 걸어 들어갔다."
   - stageID: 4
     moment: 2
     wave: 2
@@ -155,25 +258,36 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "샌즈의 냄새가 나는군. 그 늙은이가 살려 보낸 꼬마인가."
-    - wordSpeaking: 1
-      narration: 0
-      text: "할아버지 이름을 함부로 부르지 마."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "할아버지의 이름이 나오자, 워드는 지팡이를 쥔 손에 힘을 주었다."
     - wordSpeaking: 0
       narration: 0
-      text: "함부로? 그자는 내 동족을 수없이 베어 넘겼다. 우리는 빚을 받으러 갔을 뿐이다."
-    - wordSpeaking: 1
-      narration: 0
-      text: "그래서 아무 상관 없는 마을까지 덮쳤어? 평원도, 해안도, 고원도."
+      gesture: 0
+      text: "노려보기만 하는군. 그자는 내 동족을 수없이 베어 넘겼다. 우리는 빚을 받으러 갔을 뿐이다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 9
+      text: "워드는 고개를 저었다. 그리고 지나온 길, 평원과 해안과 고원이 있는 쪽을 차례로 가리켰다."
     - wordSpeaking: 0
       narration: 0
-      text: "슬라임에게 상관없는 인간 따위는 없다. 너도 결국 샌즈처럼 우리를 베러 온 것 아니냐."
+      gesture: 0
+      text: "상관없는 마을까지 왜 덮쳤냐는 건가? 슬라임에게 상관없는 인간 따위는 없다. 너도 결국 샌즈처럼 우리를 베러 온 것 아니냐."
     - wordSpeaking: 1
       narration: 0
-      text: "…처음엔 그랬어. 지금은 더는 아무도 집을 잃지 않게 하려고 왔어."
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 대답 대신, 마왕과 성 밖의 마을들 사이를 막아서듯 섰다."
     - wordSpeaking: 0
       narration: 0
-      text: "말은 잘하는군. 그 카드 몇 장으로 무엇을 지킬 수 있는지 보여 봐라!"
+      gesture: 0
+      text: "말 한마디 없이 덤비겠다는 거냐. 그 카드 몇 장으로 무엇을 지킬 수 있는지 보여 봐라!"
   - stageID: 4
     moment: 2
     wave: 3
@@ -184,21 +298,35 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "끝났다고… 생각했나…"
-    - wordSpeaking: 1
-      narration: 0
-      text: "분명히 쓰러뜨렸는데… 다시 일어났어?"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "쓰러졌던 마왕의 몸이 다시 일어섰다. 워드는 놀라 한 걸음 물러섰다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "동족의 원한이… 나를 놓아주지 않는다. 죽어서도… 샌즈의 핏줄을 남겨 둘 수는 없다!"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "원한 때문에 죽어서도 싸우는 모습이었다. 워드는 할아버지를 잃은 날의 자신을 떠올렸다. 자신도 저렇게 될 뻔했다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "마왕의 원한도, 자신의 복수도 이번에 끝내야 했다."
     - wordSpeaking: 1
       narration: 0
-      text: "원한 때문에 죽어서도 싸우는 거구나. …나도 그렇게 될 뻔했어."
-    - wordSpeaking: 1
-      narration: 0
-      text: "하지만 난 여기서 멈출 거야. 네 원한도, 내 복수도 이번에 같이 끝내자."
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 6
+      text: "워드는 물러섰던 발을 다시 앞으로 내딛고, 마지막 카드를 꺼내 들었다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "크하하… 그렇다면 함께 썩어 가자, 꼬마 마법사!"
   - stageID: 4
     moment: 0
@@ -210,25 +338,393 @@ MonoBehaviour:
     lines:
     - wordSpeaking: 0
       narration: 1
+      gesture: 0
       text: "슬라임 마왕이 쓰러지자, 성을 뒤덮고 있던 검은 기운이 걷혔다."
     - wordSpeaking: 0
       narration: 1
+      gesture: 0
       text: "워드는 빗길과 고원과 해안을 지나 왔던 길을 되짚어 내려갔다. 며칠 뒤, 남쪽 마을의 불빛이 보였다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
       text: "마법사님! 평원에서 만났던 그 마법사님 맞죠? 저희는 남쪽 마을까지 무사히 왔어요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "무사하셨군요. 다행이에요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 주민의 얼굴을 알아보고 안도한 듯 미소 지었다."
     - wordSpeaking: 0
       narration: 0
-      text: "해안의 어부 할아버지도, 고원의 양치기 아이도 여기 와 있어요. 다들 워드라는 마법사 이야기를 하더라고요."
-    - wordSpeaking: 1
-      narration: 0
-      text: "마왕은 이제 없어요. 다들 집으로 돌아갈 수 있을 거예요."
+      gesture: 0
+      text: "해안의 어부 할아버지도, 고원의 양치기 아이도 여기 와 있어요. 다들 말 없는 마법사 워드 이야기를 하더라고요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 마왕 성이 있던 북쪽을 가리킨 뒤, 편 손을 천천히 아래로 내렸다. 이제 다 끝났다는 뜻이었다."
     - wordSpeaking: 0
       narration: 0
+      gesture: 0
+      text: "마왕이 쓰러졌다는 거죠? 그럼 다들 집으로 돌아갈 수 있겠네요!"
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
       text: "당신은 돌아갈 곳이 있어요? 없다면 언제든 여기로 와요. 이번에는 우리가 맞아 줄게요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 1
+      text: "워드는 산골짜기 쪽을 한 번 가리키고, 다시 마을을 가리켰다. 그리고 고개를 끄덕였다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "고향에 먼저 다녀오신다고요? 네, 기다릴게요. 꼭 들러요."
+  - stageID: 5
+    moment: 1
+    wave: 0
+    title: "서리 마을 · 얼어붙은 길"
+    speakerName: "서리 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: 5760ddef51b347e991221da66f0f3253, type: 3}
+    background: {fileID: 21300000, guid: b3e3c51d26844df7ace614b53bf48fbc, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "할아버지의 비석에 다녀온 지 며칠 뒤, 북쪽 서리 마을이 한여름에 얼어붙었다는 소식이 들려왔다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "마을로 가는 길이 얼음에 막혔어요. 안에 아직 사람들이 갇혀 있어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 6
+      text: "워드는 얼음 너머를 가리킨 뒤, 손에 쥔 카드를 들어 보였다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "길을 열어 주시겠다고요? 조심하세요. 길을 막은 건 슬라임들이에요."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "그런데 이상해요. 이 근처 슬라임은 원래 사람을 피했거든요. 요즘은 먼저 덤벼들어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 7
+      text: "마왕은 이미 쓰러졌는데. 워드는 잠시 고개를 갸웃했지만, 곧 주민에게 손바닥을 펴 보였다. 여기서 기다리라는 뜻이었다."
+  - stageID: 5
+    moment: 0
+    wave: 0
+    title: "서리 마을 · 할아버지가 맡긴 카드"
+    speakerName: "서리 마을 주민"
+    speakerPortrait: {fileID: 21300000, guid: 5760ddef51b347e991221da66f0f3253, type: 3}
+    background: {fileID: 21300000, guid: b3e3c51d26844df7ace614b53bf48fbc, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "길이 열렸어요! 갇혀 있던 사람들도 모두 나왔어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 사람들 사이를 돌아다니며 한 명씩 얼굴을 살폈다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "다들 무사해요. 그런데 마법사님, 혹시 샌즈라는 모험가를 아세요? 카드를 쓰는 모습이 꼭 닮아서요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 5
+      text: "워드는 눈을 크게 떴다. 그리고 마법서 첫 장에 적힌 샌즈의 이름을 가리킨 뒤, 자신을 가리켰다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "샌즈 님의 손녀분이세요? 역시! 오래전에 그분이 이 마을에 카드 한 장을 맡기고 가셨어요. 언젠가 찾으러 오겠다고 하셨죠."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "주민이 건넨 낡은 카드에는 할아버지의 글씨로 Spawn이라고 적혀 있었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "슬라임을 내 편으로 부르는 마법이었다. 워드는 카드를 오래 들여다보았다. 할아버지도 슬라임과 싸우지 않는 방법을 찾고 있었던 걸까."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "그러고 보니 남쪽 협곡에도 번개가 그치지 않는대요. 이상해진 곳이 여기만이 아닌가 봐요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 8
+      text: "워드는 카드를 품에 넣고, 남쪽을 바라보며 고개를 끄덕였다."
+  - stageID: 6
+    moment: 1
+    wave: 0
+    title: "벼락 협곡 · 끊긴 길"
+    speakerName: "협곡 순찰대원"
+    speakerPortrait: {fileID: 21300000, guid: 5394c1ddac5745d9857557188bd4be20, type: 3}
+    background: {fileID: 21300000, guid: d82ef99697a64615b1270f279942a96f, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "서리 마을에서 남쪽으로 내려가자, 구름 한 점 없는 하늘에서 번개가 쉴 새 없이 떨어지고 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "거기 멈춰요! 번개 때문에 협곡 길이 막혔어요. 안쪽 슬라임들은 멀리서 바위까지 던져요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 협곡 안쪽을 가리키고, 손으로 바위가 날아오는 길을 그려 보였다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "바위가 어디로 떨어지냐고요? 떨어질 자리에 표시가 생겨요. 그리고 몸을 웅크린 놈은 곧 달려드니까 조심해요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 불러낸 슬라임들을 앞으로 내보내고, 멀리서 바위를 던지는 슬라임을 똑바로 가리켰다."
+  - stageID: 6
+    moment: 0
+    wave: 0
+    title: "벼락 협곡 · 다시 열린 길"
+    speakerName: "협곡 순찰대원"
+    speakerPortrait: {fileID: 21300000, guid: 5394c1ddac5745d9857557188bd4be20, type: 3}
+    background: {fileID: 21300000, guid: d82ef99697a64615b1270f279942a96f, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "번개가 그쳤어요. 길이 다시 열렸네요!"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 4
+      text: "워드는 하늘을 올려다본 뒤, 순찰대원을 보며 고개를 갸웃했다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "번개가 어디서 시작됐냐고요? 동쪽 잿빛 유적에서 마력이 새어 나온다는 소문이 있어요. 옛날에 마법 연구소가 있던 곳이에요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "얼음도 번개도 같은 마력 때문일지 몰랐다. 워드는 동쪽으로 발걸음을 돌렸다."
+  - stageID: 7
+    moment: 1
+    wave: 0
+    title: "잿빛 유적 · 재 속의 기록"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 21300000, guid: 1752d590c3284f99a5dd8af780317c0f, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "잿빛 유적은 오래전 마법사들이 마력을 연구하던 곳이었다. 지금은 바닥에 재가 눈처럼 쌓여 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "잠깐만요, 마법사님! 안쪽 슬라임은 쓰러뜨리면 둘로 갈라져요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 손가락 두 개를 펴 보인 뒤, 하나씩 접었다. 갈라진 쪽까지 모두 쓰러뜨리겠다는 뜻이었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "그리고… 안쪽 연구실에 제 연구 기록을 두고 나왔어요. 세계수에 관한 기록이에요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 연구실 쪽을 가리키고, 자신의 가슴을 가볍게 두드렸다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "찾아와 주시겠다고요? 고마워요. 조심하세요!"
+  - stageID: 7
+    moment: 2
+    wave: 2
+    title: "잿빛 유적 · 갈라지는 슬라임"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "조심해요! 갈라지는 슬라임이 두 마리나 와요!"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드가 앞을 가리키자, 불러낸 슬라임들이 앞으로 나서 길을 막았다."
+  - stageID: 7
+    moment: 0
+    wave: 0
+    title: "잿빛 유적 · 세계수로 모이는 마력"
+    speakerName: "유적 연구자"
+    speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
+    background: {fileID: 21300000, guid: 1752d590c3284f99a5dd8af780317c0f, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "찾았군요! 이 기록이에요. 세계수 뿌리 아래로 마력이 계속 모이고 있었어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 기록을 들여다보다가, 서리 마을과 벼락 협곡이 있던 쪽을 차례로 가리켰다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "맞아요. 서리 마을의 얼음도, 협곡의 번개도 세계수에서 넘친 마력 때문이었어요."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "세계수로 가려면 숲을 지나야 해요. 그런데 지금 숲은 사람이 다닐 수 있는 곳이 아니에요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 잠시 숲 쪽을 바라보다가, 망설임 없이 걸음을 옮겼다. 숲에도 아직 빠져나오지 못한 사람들이 있을 것이다."
+  - stageID: 8
+    moment: 1
+    wave: 0
+    title: "뒤틀린 숲 · 숲을 빠져나온 아이"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 21300000, guid: 03dcc5e3f768401f9d7b22c835e5c904, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "세계수로 가는 숲은 나무가 뒤틀리고 빛이 바래 있었다. 숲에서 사람들이 하나둘 도망쳐 나오고 있었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "언니, 마법사예요? 숲속에 아직 우리 마을 사람들이 있어요."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 7
+      text: "워드는 아이와 눈높이를 맞추고 숲을 가리켰다. 그리고 아이의 발밑을 가리켰다. 여기서 기다리라는 뜻이었다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "몸에서 불꽃이 튀는 슬라임은 가까이 오면 터져요! 터지기 전에 쓰러뜨려야 해요."
+  - stageID: 8
+    moment: 2
+    wave: 1
+    title: "뒤틀린 숲 · 뒤에서 돕는 슬라임"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "뒤에 있는 분홍 슬라임이 다른 슬라임들을 낫게 해 줘요!"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 6
+      text: "워드는 고개를 끄덕이고, 뒤에 있는 분홍 슬라임을 향해 카드를 들었다."
+  - stageID: 8
+    moment: 0
+    wave: 0
+    title: "뒤틀린 숲 · 혼자 가는 길"
+    speakerName: "숲 피난민"
+    speakerPortrait: {fileID: 21300000, guid: e8d8ffa51b9645cd953ba2fca24c813f, type: 3}
+    background: {fileID: 21300000, guid: 03dcc5e3f768401f9d7b22c835e5c904, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "다들 나왔어요! 고마워요, 언니."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 3
+      text: "워드는 사람들에게 마을 쪽을 가리킨 뒤, 자신은 숲 안쪽을 가리켰다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "혼자 가요? 세계수에는 무서운 게 산다던데…"
     - wordSpeaking: 1
       narration: 0
-      text: "할아버지께 먼저 다녀올게요. …그다음엔, 꼭 들를게요."
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 아이의 머리를 쓰다듬고 새끼손가락을 내밀었다. 꼭 돌아오겠다는 약속이었다."
+  - stageID: 9
+    moment: 1
+    wave: 0
+    title: "세계수의 심장 · 뭉친 마력"
+    speakerName: ""
+    speakerPortrait: {fileID: 0}
+    background: {fileID: 21300000, guid: 97b69cad2d4840909b1be5936d5315fc, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "세계수 뿌리 아래, 넘쳐흐른 마력이 하나로 뭉쳐 형체를 이루고 있었다."
+    - wordSpeaking: 1
+      narration: 0
+      gesture: 0
+      text: "……"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "유적에서 본 기록과 같았다. 여러 지역의 마법을 어지럽히고, 슬라임들이 사람을 덮치게 만든 것이 바로 이 마력이었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "마력에 물든 슬라임들이 형체 주위로 모여들었다."
+  - stageID: 9
+    moment: 2
+    wave: 2
+    title: "세계수의 심장 · 폭주한 마력의 형상"
+    speakerName: "폭주한 마력의 형상"
+    speakerPortrait: {fileID: 21300000, guid: a1febd8ccfc54e3185110405be77874c, type: 3}
+    background: {fileID: 0}
+    lines:
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "…돌려…줘…"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 4
+      text: "워드는 형체를 올려다보며 고개를 갸웃했다."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "잃어버린 것을… 사라진 사람들을… 전부 돌려줘…"
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 그 목소리를 알 것 같았다. 할아버지가 돌아오기를 매일 바라던 자신과 닮아 있었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 2
+      text: "하지만 잃은 것을 되찾겠다고 남은 사람들까지 다치게 할 수는 없었다. 워드는 천천히 고개를 저었다."
+  - stageID: 9
+    moment: 0
+    wave: 0
+    title: "세계수의 심장 · 다시 초록빛으로"
+    speakerName: ""
+    speakerPortrait: {fileID: 0}
+    background: {fileID: 21300000, guid: 97b69cad2d4840909b1be5936d5315fc, type: 3}
+    lines:
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "형체가 흩어지자 세계수의 잎이 다시 초록빛으로 물들었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드는 세계수 아래에 주저앉아 할아버지의 마법서를 펼쳤다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "워드의 입술이 떨렸다. 할아버지를 잃은 날 이후로 한 번도 나오지 않던 목소리였다."
+    - wordSpeaking: 1
+      narration: 0
+      gesture: 0
+      text: "…끝났어요, 할아버지."
+    - wordSpeaking: 1
+      narration: 0
+      gesture: 0
+      text: "이번에는 복수하려고 싸운 게 아니라, 지키려고 싸웠어요."

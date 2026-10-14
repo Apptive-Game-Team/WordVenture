@@ -1,3 +1,4 @@
+using Combat.Allies;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -34,6 +35,14 @@ namespace Combat.Enemies
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // 왼쪽으로 날아가므로 맨 앞 아군 슬라임에 먼저 닿는다.
+            AllySlime ally = collision.GetComponent<AllySlime>();
+            if (ally != null && ally.IsAlive)
+            {
+                ally.TakeHit(damage);
+                Destroy(gameObject);
+                return;
+            }
             if (collision.CompareTag("Me")) {
                 Player.PlayerInt().TakeHit(damage);
                 Destroy(gameObject);
