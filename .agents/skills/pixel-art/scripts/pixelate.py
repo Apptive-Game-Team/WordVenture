@@ -54,8 +54,10 @@ def palette_indices(img_rgba, colors, alpha_threshold):
     return idx, pal
 
 
-def mode_pool(idx, K, LW, LH, phase=True):
-    """Each output cell takes the most frequent palette index of the source pixels it covers."""
+def mode_pool(idx, K, LW, LH, phase=True, weights=None):
+    """Each output cell takes the most frequent palette index of the source pixels it covers.
+
+    weights (per index) lets thin features such as outlines win cells they only partly cover."""
     h, w = idx.shape
     sx, sy = w / LW, h / LH
     steps = [i / 4 for i in range(4)] if phase and min(sx, sy) >= 2 else [0.0]
@@ -66,18 +68,39 @@ def mode_pool(idx, K, LW, LH, phase=True):
             cy = np.clip(((np.arange(h) + fy * sy) // sy).astype(int), 0, LH - 1)
             cell = cy[:, None] * LW + cx[None, :]
             c = np.bincount((cell * K + idx).ravel(), minlength=LW * LH * K).reshape(-1, K)
+            if weights is not None:
+                c = c * weights
             score = c.max(1).sum()
             if best is None or score > best[0]:
                 best = (score, c.argmax(1).reshape(LH, LW), cell)
     return best[1], best[2]
 
 
-def pixelate(src, LW, LH, colors=64, alpha_threshold=128, alpha_levels=0, despeckle=False):
+def outline_index(idx, K):
+    """Palette index drawn most often along the sprite silhouette (its outline colour)."""
+    clear = np.pad(idx == K - 1, 1, constant_values=True)
+    edge = (idx != K - 1) & (clear[:-2, 1:-1] | clear[2:, 1:-1] | clear[1:-1, :-2] | clear[1:-1, 2:])
+    return int(np.bincount(idx[edge], minlength=K).argmax()) if edge.any() else None
+
+
+def pixelate(src, LW, LH, colors=64, alpha_threshold=128, alpha_levels=0, despeckle=False, keep_lines=0.0):
     im = src.convert('RGBA')
     a = np.asarray(im)
     idx, pal = palette_indices(im, colors, alpha_threshold)
     K = len(pal) + 1  # last class = transparent
-    mode, cell = mode_pool(idx, K, LW, LH)
+    weights = None
+    line = outline_index(idx, K) if keep_lines else None
+    if line is not None:
+        # outline and colours as dark as it are lines: let them win cells they half cover
+        lum = pal.astype(float) @ [0.299, 0.587, 0.114]
+        weights = np.ones(K)
+        weights[:-1][lum <= lum[line] + 24] = keep_lines
+    mode, cell = mode_pool(idx, K, LW, LH, weights=weights)
+    if line is not None:
+        # close the silhouette: every opaque pixel touching transparency becomes outline
+        clear = np.pad(mode == K - 1, 1, constant_values=True)
+        edge = (mode != K - 1) & (clear[:-2, 1:-1] | clear[2:, 1:-1] | clear[1:-1, :-2] | clear[1:-1, 2:])
+        mode = np.where(edge, line, mode)
     if despeckle:
         m = np.pad(mode, 1, mode='edge')
         up, dn, lf, rt = m[:-2, 1:-1], m[2:, 1:-1], m[1:-1, :-2], m[1:-1, 2:]
@@ -154,6 +177,8 @@ def main():
     p.add_argument('--alpha-threshold', type=int, default=128)
     p.add_argument('--alpha-levels', type=int, default=0, help='keep soft alpha as N uniform steps (VFX glow)')
     p.add_argument('--despeckle', action='store_true', help='drop lone pixels (backgrounds from soft AI gradients)')
+    p.add_argument('--keep-lines', type=float, default=0, metavar='W',
+                   help='sprites with dark outlines: weight outline-dark colours W (try 2.5) and redraw the silhouette outline')
     p.add_argument('--snap', type=float, default=0.08, help='max relative size change to keep real pixel art at an integer multiple')
     p.add_argument('--update-meta', action='store_true', help="rewrite dst.meta: PPU so 1 texel = UNIT px, sprite rects, point filter")
     p.add_argument('--keep-ppu', action='store_true', help='with --update-meta: leave PPU (UI-only images)')
@@ -161,7 +186,7 @@ def main():
     src = Image.open(args.src)
     a = np.asarray(src.convert('RGBA'))
     (LW, LH), how = plan_size(src.width, src.height, args, a)
-    out = pixelate(src, LW, LH, args.colors, args.alpha_threshold, args.alpha_levels, args.despeckle)
+    out = pixelate(src, LW, LH, args.colors, args.alpha_threshold, args.alpha_levels, args.despeckle, args.keep_lines)
     os.makedirs(os.path.dirname(os.path.abspath(args.dst)), exist_ok=True)
     out.save(args.dst, optimize=True)
     msg = f'{args.src} {src.width}x{src.height} -> {args.dst} {LW}x{LH} ({how})'

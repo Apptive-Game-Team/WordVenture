@@ -68,7 +68,12 @@ Logical sizes of current assets, for matching new ones:
    # or an exact art size:  --target 480x270
    # sprites with soft glow:  --alpha-levels 4 --alpha-threshold 96
    # backgrounds with AI gradient speckle:  --despeckle
+   # characters/portraits with dark outlines:  --keep-lines 2
    ```
+
+   `--keep-lines` gives outline-dark colours extra weight and redraws the silhouette
+   outline, so 1-pixel lines do not break into dashes when shrinking. Values above 2
+   thicken lines too much.
 
 4. **Import settings**: once Unity has created the `.meta`, rerun the same command with
    `--update-meta`. It sets PPU 27, Point filter, no mipmaps, and no compression. Add
