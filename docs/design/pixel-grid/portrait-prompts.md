@@ -302,3 +302,19 @@ anti-aliasing, no gradients, no dithering noise, no blur, flat colour clusters,
 limited palette of about 32 colours, clean 1-pixel dark outline.
 Transparent background. No text, UI or logos. Match the palette and density of the other attached game art.
 ```
+
+## 워드 13장 눈·눈썹 다시 그리기
+
+위에서 만든 워드 초상화 13장은 속눈썹 픽셀이 흩어지고, 눈썹이 점으로 끊기고, 두 눈 크기가 달랐다. 그래서 얼굴만 한 번 더 그렸다. 첨부: develop 의 원본 1254x1254 PNG, 그때의 170x170 PNG 4배 확대본. 프롬프트는 각 초상화의 위 프롬프트 앞에 아래 첨부 설명을 붙이고, 뒤에 얼굴 규칙을 붙였다. 결과는 `pixelate.py --target 170x170 --keep-lines 2` 로 변환했다.
+
+```text
+Attached: (1) the original high-resolution dialogue portrait of this character (expression and design reference), (2) the approved current pixel-art version on the 170x170 grid, enlarged 4x (framing, pixel density, outline and palette reference).
+
+[각 초상화의 위 프롬프트]
+
+FACE FIX, the main point of this redraw: reference (2) is the approved current version; keep its framing, head size, head position, pose, hands, staff, clothes and palette exactly, and redraw only the face more cleanly, following reference (1) for the expression.
+- Both eyes are the same size and shape and sit at the same height (a turned head may make the far eye slightly narrower). Each eye: a clean dark upper eyelash line 2 pixels thick with one small flick at the outer corner, a magenta iris with a darker pupil area and one white highlight, a thin 1-pixel lower line. No extra lash strokes, no stray dark pixels around the eyes, no double lines above the eyes.
+- Eyebrows: one short, thin, smoothly curved 1-pixel line per eye in a dark red-brown hair-shadow colour, just above the eye and partly under the bangs. Never scattered dots or broken dashes.
+- Nose: at most one or two pixels. Mouth: one short clean line matching the expression.
+- Hair strands over the forehead are clean lines, not noise.
+```
