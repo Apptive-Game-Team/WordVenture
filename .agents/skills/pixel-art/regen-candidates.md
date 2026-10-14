@@ -19,10 +19,6 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 | 에셋 | 대상 | 옵션 | 현재 상태 |
 |---|---|---|---|
 | `Assets/Art/UI/NewCardTitle.png` | 267x45 | 투명 배경 | 기존 6.5px 블록을 늘림. 2026-10-14에 재생성했지만 Codex가 약 14.6px 칸으로 그려 260칸으로 줄이면 1.95배라 가장자리가 깨졌다. 지금 PNG가 더 깨끗해서 유지함 |
-| `Assets/Art/Battle/Backgrounds/PlainBackground.png` | 1024x512 | | 256x128 원본을 4배로 붙여 둠, 실제 블록 16px |
-| `Assets/Art/Tutorial/PlainBackground.png`, `Assets/ThirdParty/ArtResource/JinWook/Desert/HIghland.png`, `.../Ocean/SeaBackground.png`, `.../WorldMap/KakaoTalk_20240701_202830558.png` (스테이지 배경 4종) | 512x256 | | 256x128 원본을 2배로 붙여 둠, 실제 블록 8px |
-| `Assets/ThirdParty/ArtResource/JinWook/GameOverBackground/*.png` (3장, 애니메이션 프레임) | 512x256 | | 실제 블록 8px. 세 장의 차이를 유지할 것 |
-| `Assets/ThirdParty/ArtResource/JinWook/WorldMap/DefaultBG.png`, `Stage1BG.png`~`Stage4BG.png` | 494x329 | | 384x256 원본을 1.29배로 늘려 외곽선 두께가 고르지 않음. 5장의 길·지형 위치가 같아야 함(맵 노드 좌표가 고정) |
 
 ## 줄이면서 디테일이 뭉개진 것
 
@@ -38,3 +34,6 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 대화 초상화 7장(Fisherman, Guard, Guide, Shepherd, Villager, SlimeKing, UndeadSlimeKing): 새 WordDialogue.png를 프레이밍 기준으로 함께 첨부해 재생성하고 `--target 170x170 --keep-lines 2`로 변환
 - 스토리·타이틀 배경 6장(`MountainHome*.png` 4장, `WorldTreeEpilogue.png`, `MountainValley.png`): 재생성해 `--target 480x270 --despeckle`로 변환. 습격·폐허·추모 3장은 새 MountainHome을 편집 대상으로 넘겨 집과 산 위치를 맞춤. `MountainHomeAttack.png`는 기본 팔레트가 불덩이 중심의 크림색을 연두색으로 합쳐서, 생성 원본을 480x270으로 BOX 축소한 이미지에서 64색 팔레트를 뽑아 원본에 먼저 적용한 뒤 변환
 - 타이틀 로고(`WordVentureLogo.png`): 재생성 원본을 내용 영역으로 자른 뒤 기존 로고의 내용 영역(215x58, 위치 31,18)에 맞춰 변환
+- 전투 배경(`Assets/Art/Battle/Backgrounds/PlainBackground.png`, 1024x512)과 스테이지 배경 4종(512x256): 재생성해 `--target`으로 변환. 폐허 배경(`KakaoTalk_20240701_202830558.png`)은 `--despeckle` 추가
+- 게임오버 3프레임: 1프레임을 재생성하고, 2·3프레임은 1프레임을 편집 대상으로 넘겨 생성. 캐릭터가 프레임마다 흔들리지 않도록 2·3프레임은 1프레임 위에 글자 영역(위 60줄)과 눈물 픽셀만 옮기고 1프레임 팔레트로 맞춤
+- 맵 배경 5장: DefaultBG만 재생성(기존 대비 랜드마크 위치 차이 1~2아트픽셀). Stage1~4BG는 DefaultBG에서 깬 랜드마크(버섯 집, 야자 섬, 바위 폐허, 나무 바위 순서로 누적)를 회색으로 바꿔 만듦. 회색은 DefaultBG 팔레트에 있는 회색 중 밝기가 가장 가까운 것을 써서 64색 이하 유지
