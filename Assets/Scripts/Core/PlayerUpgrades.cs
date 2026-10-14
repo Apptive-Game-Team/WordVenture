@@ -111,6 +111,8 @@ namespace Core
         public static int SpellBaseDamage => BaseSpellDamage + SpellDamagePerLevel * GetLevel(UpgradeKind.Attack);
         public static int PlayerMaxHp => BasePlayerMaxHp + PlayerMaxHpPerLevel * GetLevel(UpgradeKind.MaxHp);
         public static int HandLimit => BaseHandLimit + HandLimitPerLevel * GetLevel(UpgradeKind.HandLimit);
+        // 주문 카드와 속성 카드는 각각 손패 한도의 절반까지 든다.
+        public static int HandLimitPerKind => HandLimit / 2;
         public static int AllyMaxHp => BaseAllyMaxHp + AllyMaxHpPerLevel * GetLevel(UpgradeKind.Ally);
         public static int AllyAttackDamage => BaseAllyAttackDamage + AllyAttackDamagePerLevel * GetLevel(UpgradeKind.Ally);
 

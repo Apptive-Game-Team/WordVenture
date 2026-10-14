@@ -182,9 +182,10 @@ namespace Cards
             var card = cardObject.GetComponent<Card>();
             card.Setup(word);
 
-            // 손패가 가득 차면 뽑은 카드는 손패에 들어가지 않고 불타 사라진다.
+            // 손패가 가득 차면 뽑은 카드는 손패에 들어가지 않고 불타 사라진다. 한도는 주문 카드와 속성 카드에 반씩 따로 건다.
+            // 한 장을 버린 뒤 주문 카드만 들어오고 속성 카드가 타는 일이 반복되면 짝이 깨져 조합할 수 없게 된다.
             // 조합칸에서 돌아오는 카드는 이 길을 거치지 않으므로 한도를 넘어도 태우지 않는다.
-            if (myCards.Count >= PlayerUpgrades.HandLimit)
+            if (CountInHand(word.tag) >= PlayerUpgrades.HandLimitPerKind)
             {
                 BurnCard(card);
                 return;
@@ -288,6 +289,14 @@ namespace Cards
         }
 
         #endregion
+
+        int CountInHand(string tag)
+        {
+            int count = 0;
+            foreach (Card held in myCards)
+                if (held != null && held.word.tag == tag) count++;
+            return count;
+        }
 
         public void PopCard(Card card)
         {

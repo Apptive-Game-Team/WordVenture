@@ -109,6 +109,20 @@ namespace WordVenture.Tests
             Assert.That(HandCount, Is.EqualTo(HandLimit));
         }
 
+        // 주문 카드만 계속 들어와도 속성 카드 자리를 차지하지 않는다. 짝이 깨져 조합할 수 없게 되는 것을 막는다.
+        [UnityTest]
+        public IEnumerator 손패_한도는_주문_카드와_속성_카드에_반씩_걸린다()
+        {
+            yield return LoadBattle();
+            var addCard = Manager.GetType().GetMethod("AddCard", new[] { typeof(string) });
+            for (int i = 0; i < 4; i++) addCard.Invoke(Manager, new object[] { "Spell" });
+            var hand = ((System.Collections.IEnumerable)Manager.GetType().GetProperty("HandCards").GetValue(Manager)).Cast<Component>().ToList();
+            Assert.That(hand.Count(card => card.CompareTag("Spell")), Is.EqualTo(HandLimit / 2));
+            addCard.Invoke(Manager, new object[] { "MagicType" });
+            hand = ((System.Collections.IEnumerable)Manager.GetType().GetProperty("HandCards").GetValue(Manager)).Cast<Component>().ToList();
+            Assert.That(hand.Count(card => card.CompareTag("MagicType")), Is.GreaterThanOrEqualTo(1), "주문 카드가 속성 카드 자리를 막았다");
+        }
+
         [UnityTest]
         public IEnumerator 카드를_쓰지_않고_턴을_넘겨도_손패가_한도를_넘지_않는다()
         {
