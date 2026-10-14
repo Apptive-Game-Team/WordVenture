@@ -145,11 +145,25 @@ python3 .agents/skills/pixel-art/scripts/resample_set.py --target 69 --ppu 13.5 
 python3 .agents/skills/pixel-art/scripts/trim_set.py FRAME_*.png
 ```
 
-Set `--ppu` to 27 x the scale the sprite is drawn at. Trim only sprites that a
-SpriteRenderer draws and no code measures: not UI Image sprites (the title logo is one;
-trimming stretches the content over the same rect), not slime frames (the
-encyclopedia shows them in a UI Image), not cards (the tutorial highlight uses their
-bounds), not explosion frames (`BlastVfx` scales by their bounds), not sprite sheets.
+Set `--ppu` to 27 x the scale the sprite is drawn at.
+
+```bash
+# sprite sheets (spriteMode 2): cut every sprite to its content and repack the sheet
+python3 .agents/skills/pixel-art/scripts/trim_sheet.py SHEET.png
+```
+
+Both trim scripts move the pivot by the crop offset, so a sprite drawn by a SpriteRenderer
+stays exactly where it was. Do not trim:
+- UI Image sprites whose rect does not follow the sprite: the title logo and the dialogue
+  portraits (`preserveAspect` in a fixed slot) would grow, and portrait heads would jump
+  between speakers. The tutorial hand's pivot is set in code.
+- Sprites whose size a script reads. `BlastVfx` takes the explosion frame width as a
+  constant for this reason; `TitleStageView` covers the screen with a background's bounds;
+  the tutorial highlight wraps cards by their bounds.
+- Atlases that code cuts into a grid (`Resources/Combat`).
+
+Slime frames are trimmed; the encyclopedia shows them with `preserveAspect`, so a trimmed
+slime fills its cell instead of sitting small in a mostly empty frame.
 
 ## Workflow: find unused images
 

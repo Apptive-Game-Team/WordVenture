@@ -33,3 +33,4 @@ python3 .agents/skills/pixel-art/scripts/pixelate.py <codex 출력>.png <대상>
 - 슬라임 22종, 워드 전투 7프레임, 적 투사체 8색: `resample_set.py`로 69/90/97/126칸, 28칸으로 줄임.
   2부 슬라임은 `docs/design/act-two-art/build_slimes.py`가 128칸에서 그려 같은 방법으로 줄인다.
 - 로고, 타이틀 머리, NEW CARD·GAME OVER 글자, 박격포 표적: 줄이거나 예전 결과를 씀. 타이틀 머리와 글자 두 장은 투명 여백도 잘라냄(로고는 UI Image 라 자르지 않음).
+- 투명 여백: 슬라임 22종 프레임, 주문 이펙트 시트 20장(`trim_sheet.py`), 워드·투사체·타이틀 머리·글자 두 장을 잘라냄. 대화 초상화, 로고, 튜토리얼 손, 조합 버튼, `Resources/Combat` 아틀라스는 UI 배치나 코드가 크기를 읽어서 자르지 않음.

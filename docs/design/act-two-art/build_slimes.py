@@ -5,10 +5,11 @@
 
 기존 보스 슬라임(악마, 꽃, 선인장)처럼 몸은 기준 슬라임 그대로 두고 색 4개만 바꾼 뒤 장식을 얹는다.
 그래서 몸 모양, 눈 위치, 프레임마다의 움직임이 기존 슬라임과 같다. 128x128 칸 위에서 그린 뒤, 프리팹 스케일 0.5에서
-화면 1칸 = 4px가 되도록 69x69로 줄여 저장한다(PPU 13.5, #116). 줄이기 전 기준 슬라임 128칸 원본은 base/ 에 있다.
+화면 1칸 = 4px가 되도록 69x69로 줄이고 투명 여백을 잘라 저장한다(PPU 13.5, #116). 줄이기 전 기준 슬라임 128칸 원본은 base/ 에 있다.
 최종 보스(Surge)는 고유한 그림을 쓰므로 이 스크립트가 만들거나 덮어쓰지 않는다.
 """
 import json
+import re
 import sys
 import uuid
 from pathlib import Path
@@ -353,6 +354,17 @@ def to_grid(frames, size=FRAME_SIZE):
     return [small.crop((i * size, 0, (i + 1) * size, size)) for i in range(len(frames))]
 
 
+def trim(frames):
+    """투명 여백을 잘라낸다. 모든 프레임을 보이는 칸의 합집합으로 똑같이 자르고, 프레임 가운데였던
+    pivot 을 잘린 그림 기준으로 옮겨 화면 위치가 그대로다. pixel-art skill 의 trim_set.py 와 같다."""
+    size = frames[0].width
+    boxes = [f.getchannel("A").getbbox() for f in frames]
+    x0, y0 = min(b[0] for b in boxes), min(b[1] for b in boxes)
+    x1, y1 = max(b[2] for b in boxes), max(b[3] for b in boxes)
+    pivot = ((size / 2 - x0) / (x1 - x0), (size / 2 - (size - y1)) / (y1 - y0))
+    return [f.crop((x0, y0, x1, y1)) for f in frames], pivot
+
+
 def frames_for(name):
     spec = SLIMES[name]
     if "scale" in spec:
@@ -388,12 +400,17 @@ def write_assets():
             entries.append({"path": str(path.relative_to(ROOT)), "guid": uuid.uuid4().hex})
         template = first.with_name(first.name + ".meta").read_text(encoding="utf-8")
         template_guid = next(line.split()[1] for line in template.splitlines() if line.startswith("guid:"))
+        frames, pivot = trim(frames)
         for frame, entry in zip(frames, entries):
             path = ROOT / entry["path"]
             frame.save(path)
             meta = path.with_name(path.name + ".meta")
             if not meta.exists():
                 meta.write_text(template.replace(template_guid, entry["guid"]), encoding="utf-8")
+            text = meta.read_text(encoding="utf-8")
+            text = re.sub(r"spritePivot: \{x: [-\d.e]+, y: [-\d.e]+\}", "spritePivot: {x: %.6g, y: %.6g}" % pivot, text)
+            text = re.sub(r"(\n  alignment:) \d+", r"\1 9", text)
+            meta.write_text(text, encoding="utf-8", newline="")
     (ROOT / "docs/design/act-two-art/manifest.json").write_text(
         json.dumps(MANIFEST, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

@@ -11,6 +11,8 @@ namespace Combat.Enemies
         const float WindupTrembleDistance = 0.05f;
         // 폭발 그림의 가로 길이는 피해 범위의 지름과 같다.
         const float BlastDiameter = BlastRadius * 2f;
+        // 폭발 그림(FireExplode) 한 칸은 256px, PPU 256 이라 1 unit 이다. 여백을 잘라낸 스프라이트라 bounds 로는 알 수 없다.
+        const float BlastFrameWidth = 1f;
 
         [SerializeField] Sprite[] blastFrames;
 
@@ -63,7 +65,7 @@ namespace Combat.Enemies
         // 슬라임은 곧 꺼지므로 폭발 그림은 슬라임과 따로 재생한다.
         void PlayBlast()
         {
-            BlastVfx.Spawn(transform.position, blastFrames, BlastDiameter, GetComponent<SpriteRenderer>());
+            BlastVfx.Spawn(transform.position, blastFrames, BlastDiameter, BlastFrameWidth, GetComponent<SpriteRenderer>());
         }
 
         void DamageNearbyEnemies()

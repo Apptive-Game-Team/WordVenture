@@ -21,12 +21,15 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+sys.path.insert(0, str(Path(__file__).parent))
+from resample_set import load, save  # noqa: E402  (GIF-aware: Unity reads a GIF's first frame)
+
 
 def main():
     paths = [Path(p) for p in sys.argv[1:]]
     if not paths:
         sys.exit(__doc__)
-    imgs = [np.asarray(Image.open(p).convert("RGBA")) for p in paths]
+    imgs = [np.asarray(load(p)) for p in paths]
     H, W = imgs[0].shape[:2]
     if any(a.shape[:2] != (H, W) for a in imgs):
         sys.exit("all frames must have the same size")
@@ -46,7 +49,7 @@ def main():
         nw, nh = x1 - x0, y1 - y0
         npx = (px * W - x0) / nw
         npy = (py * H - (H - y1)) / nh
-        Image.fromarray(np.ascontiguousarray(a[y0:y1, x0:x1])).save(p, optimize=True)
+        save(Image.fromarray(np.ascontiguousarray(a[y0:y1, x0:x1])), p)
         s = re.sub(r"spritePivot: \{x: [-\d.e]+, y: [-\d.e]+\}", f"spritePivot: {{x: {npx:.6g}, y: {npy:.6g}}}", s)
         s = re.sub(r"(\n  alignment:) \d+", r"\1 9", s)
         meta.write_text(s, encoding="utf-8", newline="")
