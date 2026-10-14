@@ -1,6 +1,7 @@
 using System;
 using Cards;
 using Combat.Enemies;
+using Core;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -12,8 +13,8 @@ namespace Combat.Allies
     // 적과 구별되도록 prefab에서 오른쪽을 보게 하고, 크기를 줄이고, HP 표시를 초록색으로 칠했다.
     public class AllySlime : MonoBehaviour
     {
-        public const int MaxHp = 8;
-        public const int AttackDamage = 4;
+        public static int MaxHp => PlayerUpgrades.AllyMaxHp;
+        public static int AttackDamage => PlayerUpgrades.AllyAttackDamage;
         const float MoveSeconds = 0.3f;
         const float DeathSeconds = 0.25f;
 
