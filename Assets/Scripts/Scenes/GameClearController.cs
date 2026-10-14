@@ -115,6 +115,7 @@ namespace Scenes
                 yield break;
             }
             talking = false;
+            StageRewardView.Show(StageDataSingleton.Instance);
         }
 
         bool IsFirstClear => StageDataSingleton.Instance.isFirstClear;

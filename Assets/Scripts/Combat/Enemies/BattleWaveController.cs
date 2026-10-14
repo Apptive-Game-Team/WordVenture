@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Battle.Turns;
 using Combat.Stage;
+using Core;
 using Map;
 using Story;
 using UnityEngine;
@@ -81,6 +83,11 @@ namespace Combat.Enemies
                 StageDataSingleton stageData = StageDataSingleton.Instance;
                 stageData.isFirstClear = stageData.stagePosition == MapMove.StagePosition;
                 if (stageData.isFirstClear) MapMove.StagePosition++;
+                // 엔딩으로 가는 마지막 지역도 여기서 지급한다. AddShards 가 PlayerPrefs.Save 까지 한다.
+                int turns = TurnBattleSystem.Instance != null ? TurnBattleSystem.Instance.TurnNumber : int.MaxValue;
+                stageData.lastClearTurns = turns;
+                stageData.lastReward = StageReward.Calculate(stageData.stagePosition, stageData.isFirstClear, turns);
+                PlayerUpgrades.AddShards(stageData.lastReward.Total);
                 SceneManager.LoadScene("GameClearScene");
             }
         }
