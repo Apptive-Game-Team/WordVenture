@@ -99,6 +99,8 @@ namespace WordVenture.Tests
                 "Resources/Combat/AllySlime prefab을 불러오지 못했다");
             Call(formation, "Spawn", Enum.Parse(Runtime("Cards.MagicType"), "Holy"), affinity);
             FieldInfo playerHp = Runtime("Combat.Enemies.Player").GetField("Hp", BindingFlags.Instance | BindingFlags.NonPublic);
+            // 회복은 최대 HP를 넘지 않으므로 먼저 다치게 해 둔다.
+            Call(player, "TakeHit", 10);
             int playerHpBefore = (int)playerHp.GetValue(player);
 
             Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
