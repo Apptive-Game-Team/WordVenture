@@ -77,7 +77,13 @@ namespace Combat.Spells
         }
         float speed = 10;
         Vector3 moveVector;
-        int damage = PlayerUpgrades.SpellBaseDamage;
+        int damage;
+
+        // PlayerPrefs 는 MonoBehaviour 생성자(필드 초기화)에서 읽을 수 없다. InitProjectileDamage 는 Awake 뒤에 불린다.
+        void Awake()
+        {
+            damage = PlayerUpgrades.SpellBaseDamage;
+        }
 
         public void InitProjectileDamage(int damage)
         {
