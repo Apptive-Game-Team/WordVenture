@@ -4,8 +4,9 @@
 저장소 루트에서 실행한다. 미리보기 경로를 주면 에셋은 건드리지 않고 비교용 그림만 만든다.
 
 기존 보스 슬라임(악마, 꽃, 선인장)처럼 몸은 기준 슬라임 그대로 두고 색 4개만 바꾼 뒤 장식을 얹는다.
-그래서 몸 모양, 눈 위치, 프레임마다의 움직임이 기존 슬라임과 같다. 기존 그림은 4픽셀 덩어리라서
-128x128 칸 위에서 그리고 4배로 키운다. 최종 보스(Surge)는 고유한 그림을 쓰므로 이 스크립트가 만들거나 덮어쓰지 않는다.
+그래서 몸 모양, 눈 위치, 프레임마다의 움직임이 기존 슬라임과 같다. 128x128 칸 위에서 그린 뒤, 프리팹 스케일 0.5에서
+화면 1칸 = 4px가 되도록 69x69로 줄여 저장한다(PPU 13.5, #116). 줄이기 전 기준 슬라임 128칸 원본은 base/ 에 있다.
+최종 보스(Surge)는 고유한 그림을 쓰므로 이 스크립트가 만들거나 덮어쓰지 않는다.
 """
 import json
 import sys
@@ -15,11 +16,18 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / ".agents/skills/pixel-art/scripts"))
+from pixelate import pixelate  # noqa: E402
+
 MANIFEST = json.loads((ROOT / "docs/design/act-two-art/manifest.json").read_text(encoding="utf-8"))
-BASE = ROOT / "Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/KakaoTalk_20240702_171522097_0{}.png"
+# 기준 보라 원거리 슬라임 8프레임의 128칸 원본. 게임의 프레임은 69칸으로 줄어 있어 여기서 읽지 않는다.
+BASE = ROOT / "docs/design/act-two-art/base/RangedPurple_0{}.png"
 CELL = 4
 GRID = 128
-FRAME_SIZE = 512
+# 저장 크기: 128칸 그림을 화면 1칸 = 4px 격자로 줄인 크기. 512 x 프리팹 스케일 x 1.08 / 4 이고,
+# .meta 의 PPU 는 27 x 프리팹 스케일이다. 프리팹 스케일 0.5 -> 69칸(PPU 13.5), Shield 는 0.65 -> 90칸(PPU 17.55).
+FRAME_SIZE = 69
+FRAME_SIZES = {"Shield": 90}
 PART_SCALE = 2
 
 # 기준 슬라임의 색 4개: 몸, 테두리와 눈, 아래 띠, 반사광
@@ -335,36 +343,36 @@ def build_frame(spec, index, windup=None):
     return image
 
 
-def upscale(image, scale):
-    big = image.resize((GRID * scale, GRID * scale), Image.NEAREST)
-    if scale == CELL:
-        return big
-    # 캔버스는 512로 같게 두고, 바닥선을 기준 슬라임과 맞춘다.
-    base_bottom = 75 * CELL
-    bottom = max(y for y in range(big.height) for x in range(0, big.width, scale) if big.getpixel((x, y))[3])
-    left = (big.width - FRAME_SIZE) // 2
-    top = bottom - base_bottom
-    return big.crop((left, top, left + FRAME_SIZE, top + FRAME_SIZE))
+def to_grid(frames, size=FRAME_SIZE):
+    """128칸 프레임들을 한 장에 이어 붙여 함께 69칸으로 줄인다. 프레임마다 팔레트와 칸 경계가 같아진다.
+    pixel-art skill 의 resample_set.py 와 같은 방법이다."""
+    sheet = Image.new("RGBA", (GRID * len(frames), GRID))
+    for i, frame in enumerate(frames):
+        sheet.paste(frame, (i * GRID, 0))
+    small = pixelate(sheet, size * len(frames), size, keep_lines=2).convert("RGBA")
+    return [small.crop((i * size, 0, (i + 1) * size, size)) for i in range(len(frames))]
 
 
 def frames_for(name):
     spec = SLIMES[name]
-    scale = spec.get("scale", CELL)
-    frames = [upscale(build_frame(spec, i), scale) for i in range(8)]
+    if "scale" in spec:
+        raise ValueError("scale 은 더 쓰지 않는다: 큰 슬라임은 128칸 위에 더 크게 그린다")
+    frames = [build_frame(spec, i) for i in range(8)]
     if "windup" in spec:
-        frames += [upscale(build_frame(spec, i, spec["windup"]), scale) for i in range(2)]
-    return frames
+        frames += [build_frame(spec, i, spec["windup"]) for i in range(2)]
+    return to_grid(frames, FRAME_SIZES.get(name, FRAME_SIZE))
 
 
 def preview(path):
     names = list(SLIMES)
-    reference = [Image.open(str(BASE).format(i + 1)).convert("RGBA") for i in range(8)]
+    reference = to_grid([Image.open(str(BASE).format(i + 1)).convert("RGBA") for i in range(8)])
     cell = 200
     sheet = Image.new("RGBA", (cell * 10, cell * (len(names) + 1)), (58, 68, 80, 255))
     rows = [reference] + [frames_for(name) for name in names]
     for r, frames in enumerate(rows):
         for c, frame in enumerate(frames):
-            crop = frame.crop((56, 56, 456, 456)).resize((cell, cell), Image.NEAREST)
+            m = frame.width * 8 // 69
+            crop = frame.crop((m, m, frame.width - m, frame.width - m)).resize((cell, cell), Image.NEAREST)
             sheet.alpha_composite(crop, (c * cell, r * cell))
     sheet.save(path)
 

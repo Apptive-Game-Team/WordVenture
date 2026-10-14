@@ -99,9 +99,13 @@ slime keeps the shared body and gets its look from color and one decoration.
   sprout, a cannon, a shield, a crack, crystals in Act Two). Draw it as text
   art where one character is one cell, stamped at 2x2 cells so its pixels are
   as thick as the body's. Keep it off the eyes.
-- Size: draw on a 128x128 grid and scale 4x to a 512x512 transparent frame.
-  A boss scales 6x and so looks 1.5 times larger; the bottom line stays where
-  the base slime's is.
+- Size: draw on a 128x128 grid. `build_slimes.py` shrinks the frames together
+  to the 4-screen-px grid of the [`pixel-art`](../pixel-art/SKILL.md) skill:
+  512 x prefab scale x 1.08 / 4 cells, so 69x69 at the usual prefab scale 0.5
+  (PPU 13.5) and 90x90 for Shield at 0.65 (PPU 17.55, `FRAME_SIZES`). The PPU
+  in the frame `.meta` is 27 x prefab scale. Do not enlarge a boss on the grid
+  with a scale factor; draw it larger or give its prefab a larger scale and
+  frame size.
 - Direction: the slime faces right, like every existing frame.
 - Frame order, as `SlimeAnimator` plays it: idle 2, move and melee 2, hit,
   death, ranged attack 2. A slime that warns before acting (`Windup()`) has 2
@@ -113,8 +117,7 @@ slime keeps the shared body and gets its look from color and one decoration.
 
 1. Add an entry to `SLIMES` in `docs/design/act-two-art/build_slimes.py`: the
    color map (`BODY`, `RIM`, `BAND` replacements), the decoration grid with its
-   palette, its anchor (`top` or `front`), and `scale` for a boss or `windup`
-   for a warning slime. A new decoration needs a new text-art grid next to
+   palette, its anchor (`top` or `front`), and `windup` for a warning slime. A new decoration needs a new text-art grid next to
    `HORN`, `FUSE`, and the others.
 2. Add the slime under `enemies` in `docs/design/act-two-art/manifest.json`
    with 8 (or 10) frame paths,
