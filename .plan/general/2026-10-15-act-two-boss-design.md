@@ -131,3 +131,5 @@
 사용자가 최종 연출을 승인하고 PR 발행을 요청했다. 기반 PR #120이 이미 develop에 병합되어 최신 develop 위에 보스 변경만 적용했다. 최신 공통 아트 복원과 충돌하지 않도록 승인된 본체 프레임은 WorldTreeCore에 별도 보관해 SurgeBoss만 참조한다. 원래 Surge 아트 및 다른 적·배경의 최신 변경은 유지한다. 새 브랜치는 codex/act-two-bosses이며 대상은 develop이다.
 
 - 최신 develop 통합 후 전체 EditMode 303 통과/1 생략, 전체 PlayMode 104 통과/9 생략, 실패 0.
+
+- PR #137 발행 완료(Draft), develop 대상. 게시 도중 추가된 e41cf04의 아군 역할·속성을 통합하고 충돌을 해결했다. 최종 EditMode 308 통과/1 생략. PlayMode 전체 실행의 111개 통과와 역할·비동기화 관련 5개 실패를 확인했고, 기대값·fixture를 고친 뒤 관련 47개 모두 통과했다. 원시 실행 수치와 생략 사유는 worldtree-revision/README.md 및 pr-integration-tests.json에 기록했다.
