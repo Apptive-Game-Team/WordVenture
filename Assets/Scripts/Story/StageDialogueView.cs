@@ -11,6 +11,9 @@ namespace Story
     public sealed class StageDialogueView : MonoBehaviour
     {
         const string DialogueResource = "Story/ActOneDialogues";
+        // 1920x1080 기준. 설정 메뉴 버튼의 오른쪽 끝은 112다. 메뉴 Canvas 는 높이에만 맞춰 커지고 대화창은 너비와 높이를
+        // 반씩 따르므로, 4:3이나 5:4 화면에서는 대화창이 더 작아진다. 그때도 겹치지 않도록 여유를 두었다.
+        const float TitleLeftInset = 160f;
 
         // 아직 보지 않은 대화만 돌려준다. 없으면 null.
         public static StageDialogueChapter FindUnseen(int stageID, StageDialogueMoment moment, int wave,
@@ -82,8 +85,10 @@ namespace Story
                 new Color(0.04f, 0.03f, 0.09f, 0.35f));
             // 대화 중 클릭이 뒤의 맵이나 전투로 전달되지 않게 막는다.
             shade.raycastTarget = true;
-            Label("ChapterTitle", transform, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f),
+            TMP_Text title = Label("ChapterTitle", transform, new Vector2(0f, 0.89f), new Vector2(0.95f, 0.97f),
                 Localization.Translate(chapter.title), data.font, 38, UiPalette.Text);
+            // 왼쪽 위의 설정 메뉴 버튼(x 24~112)을 피해 그 오른쪽에서 시작한다.
+            title.rectTransform.offsetMin = new Vector2(TitleLeftInset, 0f);
 
             var window = new GameObject("ChatWindow", typeof(RectTransform));
             window.transform.SetParent(transform, false);
