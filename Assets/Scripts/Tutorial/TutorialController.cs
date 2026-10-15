@@ -25,6 +25,9 @@ namespace Tutorial
         [SerializeField] bool waitingForAcknowledge;
         [SerializeField] bool castStarted;
         [SerializeField] bool targetSelected;
+        // 튜토리얼은 할아버지가 남긴 기록이다. 첫 기록 앞에 워드가 기록을 펼치는 나레이션을 한 번 보여 준다.
+        public const string IntroNarration = "워드는 할아버지가 숨겨 놓은 기록을 펼쳤다. 첫 장은 워드에게 남긴 글이었다.";
+        bool introPending;
 
         CombineZone battleZone;
         CombineButton combineButton;
@@ -64,7 +67,17 @@ namespace Tutorial
             overlay.Initialize(this);
             inputBlocker.transform.SetAsFirstSibling();
             BindBattle();
-            StoryTelling();
+            ShowIntroNarration();
+        }
+
+        void ShowIntroNarration()
+        {
+            introPending = true;
+            SetChatWindowVisible(true);
+            tutorialChatWindow.UpdateChatStream("", IntroNarration);
+            tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(0));
+            tutorialChatWindow.SetAnyKeyPromptVisible(false);
+            waitingForAcknowledge = true;
         }
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -192,6 +205,13 @@ namespace Tutorial
             }
             waitingForAcknowledge = false;
             tutorialChatWindow.SetAnyKeyPromptVisible(false);
+            if (introPending)
+            {
+                // 나레이션 다음에는 같은 단계의 첫 기록을 이어서 보여 준다.
+                introPending = false;
+                StoryTelling();
+                return;
+            }
             if (currentFlag == TutorialFlag.FLAG_013_END_BATTLE) FinishTutorial();
             else SetChatWindowVisible(false);
         }
