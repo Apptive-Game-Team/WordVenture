@@ -415,6 +415,15 @@
     {"ko": "이제 Spawn 카드로 아군 슬라임을 불러낼 수 있단다.", "en": "Now the Spawn card can summon ally slimes."},
     {"ko": "업그레이드 창에서 아군 슬라임도 강하게 만들 수 있게 되었구나.", "en": "You can now strengthen your ally slimes in the upgrade window."},
     {"ko": "워드가 할아버지의 기록을 넘기자, 이런 때를 위해 적어 둔 장이 나왔다.", "en": "As Word turned through her grandfather's notes, she found a page written for just this moment."},
-    {"ko": "워드는 할아버지가 숨겨 놓은 기록을 펼쳤다. 첫 장은 워드에게 남긴 글이었다.", "en": "Word opened the notes her grandfather had hidden. The first page was written to her."}
+    {"ko": "워드는 할아버지가 숨겨 놓은 기록을 펼쳤다. 첫 장은 워드에게 남긴 글이었다.", "en": "Word opened the notes her grandfather had hidden. The first page was written to her."},
+    {"ko": "할아버지의 목소리가 사라진 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다.", "en": "Even after her grandfather's voice faded away, Word could not leave that spot for a long time."},
+    {"ko": "상태", "en": "Status"},
+    {"ko": "회복", "en": "Heals"},
+    {"ko": "화상", "en": "Burn"},
+    {"ko": "냉기", "en": "Chill"},
+    {"ko": "빙결", "en": "Frozen"},
+    {"ko": "감전", "en": "Shocked"},
+    {"ko": "균열", "en": "Fractured"},
+    {"ko": "약화", "en": "Weakened"}
   ]
 }
