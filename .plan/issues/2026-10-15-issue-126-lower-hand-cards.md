@@ -2,7 +2,7 @@
 
 - Date: 2026-10-15
 - GitHub Issue: #126
-- Status: In Progress
+- Status: Complete
 
 ## Goal
 
@@ -25,12 +25,13 @@
 - [x] `CardManager` 손패 높이, hover, drag
 - [x] `TutorialGuidance` 화면 안쪽으로 자르기
 - [x] PlayMode 테스트와 캡처
-- [ ] EditMode, PlayMode 전체를 다른 복사본과 겹치지 않게 다시 실행
+- [x] EditMode, PlayMode 전체를 다른 복사본과 겹치지 않게 다시 실행
 
 ## Validation
 
-- EditMode 285개 통과
-- PlayMode: 다른 복사본과 동시에 돌려 PlayerPrefs 가 섞인 탓으로 보이는 실패 5개(도감, 튜토리얼, 설정 메뉴 저장, 영어 전환, 대화창). 혼자 다시 돌려 확인해야 한다.
+- EditMode 289개 통과
+- PlayMode 84개 중 77개 통과, 실패 0, 건너뜀 7(밸런스 시뮬레이션, 캡처)
+- 처음에 다른 복사본과 동시에 돌렸을 때 나온 실패는 PlayerPrefs 가 섞인 탓이었다.
 
 ## Risks & Rollback
 
