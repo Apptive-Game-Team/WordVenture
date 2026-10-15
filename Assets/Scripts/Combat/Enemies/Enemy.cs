@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle.Turns;
 using Cards;
+using Combat.UI;
 using TMPro;
 using UnityEngine;
 
@@ -73,6 +74,11 @@ namespace Combat.Enemies
         public ElementalStatus Status { get; private set; } = new ElementalStatus();
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
         protected int AttackDamage => Status.GetAttackDamage(Damage);
+        // 호버 정보 창이 읽는 값. 공격력은 상태 이상을 반영한 지금 실제로 주는 피해다.
+        public int CurrentHp => Hp;
+        public int MaximumHp => MaxHp;
+        public int CurrentAttackDamage => AttackDamage;
+        public string DisplayName { get; private set; } = "";
         SpriteRenderer bodyRenderer;
         ReactionBurstVfx reactionBurst;
         HitFlashVfx hitFlash;
@@ -97,6 +103,7 @@ namespace Combat.Enemies
         public void InitEnemyData(EnemyData enemyData)
         {
             id = enemyData.id;
+            DisplayName = !string.IsNullOrEmpty(enemyData.displayName) ? enemyData.displayName : enemyData.name;
             MaxHp = enemyData.maxHp;
             Hp = MaxHp;
             moveDistance = enemyData.moveDistance;
@@ -245,6 +252,7 @@ namespace Combat.Enemies
             hitFlash.Initialize(bodyRenderer);
             affinityMark = gameObject.AddComponent<AffinityMarkVfx>();
             affinityMark.Initialize(bodyRenderer);
+            EnemyHoverInfo.EnsureExists();
         }
 
         protected virtual void Start()

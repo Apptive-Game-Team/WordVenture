@@ -63,6 +63,7 @@ namespace Combat.UI
         }
 
         [SerializeField] MagicAffinityTable magicAffinityTable;
+        public MagicAffinityTable AffinityTable => magicAffinityTable;
 
         public Button activateButton;
         [FormerlySerializedAs("Shoot")] public GameObject shoot;
