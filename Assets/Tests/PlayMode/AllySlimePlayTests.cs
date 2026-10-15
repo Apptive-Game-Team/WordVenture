@@ -275,8 +275,8 @@ namespace WordVenture.Tests
             yield return RunAttacks(() => enemy);
             Type projectile = TypeOf("Combat.Allies.AllyProjectile");
             Assert.That((int)projectile.GetProperty("ActiveCount").GetValue(null), Is.EqualTo(0));
-            Assert.That(EnemyHp(enemy), Is.LessThan(100), "턴이 끝났는데 피해가 아직 들어가지 않았다");
-            Assert.That((int)StatusValue(enemy, "BurnTurns"), Is.GreaterThan(0));
+            Assert.That(EnemyHp(enemy), Is.EqualTo(91), "불 피해 6과 얼음 피해 3이 모두 도착해야 한다");
+            Assert.That((int)StatusValue(enemy, "BurnTurns"), Is.EqualTo(0), "뒤에 도착한 얼음이 앞서 걸린 화상을 지운다");
             Assert.That((int)StatusValue(enemy, "Chill"), Is.EqualTo(1));
         }
 

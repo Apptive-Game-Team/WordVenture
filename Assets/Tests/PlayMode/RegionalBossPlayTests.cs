@@ -55,6 +55,8 @@ namespace WordVenture.Tests
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
             yield return SceneManager.LoadSceneAsync("TurnBattleScene");
             yield return new WaitForSeconds(0.3f);
+            // 투사체를 기다리는 동안 새 웨이브가 끼어들지 않게 고정한다.
+            ((MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"))).StopAllCoroutines();
             // 웨이브 적이 테스트 위치와 겹치지 않게 치운다.
             foreach (Object enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy")))
                 ((Component)enemy).gameObject.SetActive(false);
