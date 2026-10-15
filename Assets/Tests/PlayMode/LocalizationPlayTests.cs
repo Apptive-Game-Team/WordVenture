@@ -85,7 +85,8 @@ namespace WordVenture.Tests
             chat = Presentation.GetComponentInParent(Runtime("Story.ChatWindowController"));
             Call(chat, "CompleteStream");
             yield return null;
-            Assert.That(Text((Component)Property(Presentation, "NameLabel")), Is.EqualTo("Grandpa"));
+            // 튜토리얼은 할아버지의 기록을 읽는 나레이션이라 이름을 숨긴다.
+            Assert.That(((Component)Property(Presentation, "NameLabel")).gameObject.activeSelf, Is.False);
             Assert.That(Text(tutorial.transform.Find("TutorialOverlay/SkipTutorial").GetComponentsInChildren<Component>(true)
                 .First(c => c.GetType().Name == "TextMeshProUGUI")), Is.EqualTo("Skip Tutorial"));
             SharedDialoguePlayTests.Capture("localization-tutorial-english.png");

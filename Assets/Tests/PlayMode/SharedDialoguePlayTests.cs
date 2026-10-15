@@ -97,7 +97,8 @@ namespace WordVenture.Tests
             Assert.That(Property((Component)Property(tutorialView, "TextLabel"), "font"), Is.SameAs(font));
             Assert.That(Property((Component)Property(tutorialView, "TextLabel"), "fontSize"), Is.EqualTo(size));
             Assert.That(tutorialView.transform.Find("DialoguePanel").GetComponent<Image>().color, Is.EqualTo(panelColor));
-            Assert.That(((Component)Property(tutorialView, "NameLabel")).gameObject.activeSelf, Is.True);
+            // 튜토리얼은 할아버지의 기록을 읽는 나레이션이다. 이름은 숨기고 마법서를 펼친 워드를 왼쪽에 보여 준다.
+            Assert.That(((Component)Property(tutorialView, "NameLabel")).gameObject.activeSelf, Is.False);
             Assert.That(((Image)Property(tutorialView, "LeftPortrait")).sprite, Is.Not.Null);
             Assert.That(((Image)Property(tutorialView, "RightPortrait")).gameObject.activeSelf, Is.False);
             Component tutorial = Object.FindObjectOfType(Runtime("Tutorial.TutorialController")) as Component;
