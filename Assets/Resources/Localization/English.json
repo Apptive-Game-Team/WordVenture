@@ -34,7 +34,7 @@
     {"ko": "어딘가에서 바람이 잎사귀 사이를 지나갔다. 워드가 아직 가 보지 못한 길은 남아 있었다.", "en": "Somewhere, the wind passed through the leaves. There were still roads Word had not yet traveled."},
     {"ko": "평원 · 돌아갈 집", "en": "Plains - No Home to Return To"},
     {"ko": "……", "en": "......"},
-    {"ko": "할아버지의 목소리가 사라진 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다.", "en": "Even after her grandfather's voice faded away, Word could not leave that spot for a long time."},
+    {"ko": "할아버지의 기록이 끝난 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다.", "en": "Even after her grandfather's record ended, Word could not leave that spot for a long time."},
     {"ko": "저기… 마법사님? 이제 나와도 되나요? 슬라임들이 길을 막아서 꼼짝도 못 하고 있었어요.", "en": "Um... Miss Mage? Is it safe to come out now? The slimes blocked the road, and we couldn't move at all."},
     {"ko": "워드는 고개를 끄덕이고, 슬라임이 사라진 길을 손으로 가리켰다.", "en": "Word nodded and pointed at the road, now clear of slimes."},
     {"ko": "정말 다 물리쳐 주셨네요. 고마워요. …그런데 왜 아무 말씀도 안 하세요?", "en": "You really drove them all off. Thank you. ...But why aren't you saying anything?"},
@@ -411,6 +411,7 @@
     {"ko": "마력 조각이 생겼구나. 오른쪽 위의 업그레이드 버튼(U)으로 쓸 수 있단다.", "en": "You have Mana Shards now. Spend them with the Upgrade button (U) at the top right."},
     {"ko": "공격력, 최대 HP, 손패 상한을 올릴 수 있지만 조각은 귀하니 신중하게 고르거라.", "en": "You can raise attack, max HP, or hand limit, but shards are scarce, so choose carefully."},
     {"ko": "이제 Spawn 카드로 아군 슬라임을 불러낼 수 있단다.", "en": "Now the Spawn card can summon ally slimes."},
-    {"ko": "업그레이드 창에서 아군 슬라임도 강하게 만들 수 있게 되었구나.", "en": "You can now strengthen your ally slimes in the upgrade window."}
+    {"ko": "업그레이드 창에서 아군 슬라임도 강하게 만들 수 있게 되었구나.", "en": "You can now strengthen your ally slimes in the upgrade window."},
+    {"ko": "워드가 할아버지의 기록을 넘기자, 이런 때를 위해 적어 둔 장이 나왔다.", "en": "As Word turned the pages of her grandfather's record, she found a page written for just this moment."}
   ]
 }

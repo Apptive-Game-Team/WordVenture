@@ -22,7 +22,8 @@ namespace Story
         public const string SeenKey = "SeenTips";
         const string DialogueResource = "Story/ActOneDialogues";
         const string Title = "할아버지의 기록";
-        const string SpeakerName = "할아버지";
+        // 할아버지는 이미 세상을 떠났으므로 직접 말하지 않는다. 워드가 남겨진 기록을 펼쳐 읽는 나레이션으로 보여 준다.
+        public const string IntroLine = "워드가 할아버지의 기록을 넘기자, 이런 때를 위해 적어 둔 장이 나왔다.";
 
         public static bool HasSeen(GameTip tip) => (PlayerPrefs.GetInt(SeenKey, 0) & Bit(tip)) != 0;
 
@@ -51,12 +52,12 @@ namespace Story
             var shown = new List<GameTip>();
             var lines = UnseenLines(tips, shown);
             if (lines.Count == 0) yield break;
+            lines.Insert(0, RecordLine(IntroLine));
 
             var chapter = new StageDialogueChapter
             {
                 stageID = -1,
                 title = Title,
-                speakerName = SpeakerName,
                 lines = lines.ToArray(),
             };
             bool completed = false;
@@ -71,13 +72,16 @@ namespace Story
             yield return new WaitUntil(() => completed);
         }
 
+        static StageDialogueLine RecordLine(string text) =>
+            new StageDialogueLine { narration = true, gesture = WordGesture.ShowBook, text = text };
+
         static List<StageDialogueLine> UnseenLines(GameTip[] tips, List<GameTip> shown = null)
         {
             var lines = new List<StageDialogueLine>();
             foreach (GameTip tip in tips)
             {
                 if (HasSeen(tip)) continue;
-                foreach (string text in TextsOf(tip)) lines.Add(new StageDialogueLine { text = text });
+                foreach (string text in TextsOf(tip)) lines.Add(RecordLine(text));
                 shown?.Add(tip);
             }
             return lines;

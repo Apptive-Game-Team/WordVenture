@@ -80,6 +80,7 @@ namespace WordVenture.Tests
                 foreach (string text in (string[])Tips.GetMethod("TextsOf").Invoke(null, new[] { tip }))
                     StringAssert.Contains("\"ko\": \"" + text + "\"", json, text);
             StringAssert.Contains("\"ko\": \"할아버지의 기록\"", json);
+            StringAssert.Contains("\"ko\": \"" + (string)Find("Story.GameTips").GetField("IntroLine").GetValue(null) + "\"", json);
         }
     }
 }
