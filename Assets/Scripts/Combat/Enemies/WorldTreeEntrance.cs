@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Combat.Enemies
 {
-    // 모여든 마력의 작은 반짝임이 전장으로 날아오는 최종 보스다. 실제 적과 카메라는 움직이지 않고
+    // 먼 세계수의 작은 반짝임에서 거대한 나무형 슬라임이 날아온다. 실제 적과 카메라는 움직이지 않고
     // 같은 스프라이트의 연출용 사본을 쓴다. 중단돼도 전투 객체의 위치와 애니메이션은 그대로다.
     public sealed class WorldTreeEntrance : MonoBehaviour
     {
@@ -140,9 +140,9 @@ namespace Combat.Enemies
             captionObject.transform.SetParent(frame, false);
             caption = captionObject.GetComponent<CanvasGroup>();
             caption.alpha = 0;
-            title = Label(captionObject.transform, "BossName", "폭주한 마력의 형상", 58, new Vector2(0, -310), new Vector2(width - 100, 80));
+            title = Label(captionObject.transform, "BossName", "세계수 슬라임", 58, new Vector2(0, -310), new Vector2(width - 100, 80));
             title.color = Gold;
-            subtitle = Label(captionObject.transform, "BossSubtitle", "죽은 슬라임에서 흘러나온 마력", 24, new Vector2(0, -366), new Vector2(width - 100, 50));
+            subtitle = Label(captionObject.transform, "BossSubtitle", "슬라임을 낳는 사악한 마력의 근원", 24, new Vector2(0, -366), new Vector2(width - 100, 50));
             subtitle.color = Green;
             Image line = Box("NameUnderline", new Vector2(0, -410), new Vector2(300, 4), Gold);
             line.transform.SetParent(captionObject.transform, false);

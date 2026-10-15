@@ -1,3 +1,5 @@
+> 현재 승인 방향은 [세계수 연출 수정](worldtree-revision/README.md)과 `worldtree-revision/worldtree-revised.gif`다. 아래는 이전 구현의 검증 기록이다.
+
 # 후반 보스 검증 자료
 
 Unity 2022.3.62f3, 별도 사본 `Logs/BossValidation`에서 검증했다.

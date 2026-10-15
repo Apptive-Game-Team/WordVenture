@@ -40,12 +40,19 @@ namespace Combat.Enemies
             foreach (GameObject enemy in activatedEnemies)
             {
                 if (enemy == null || !enemy.activeInHierarchy) continue;
-                SurgeBossEnemy boss = enemy.GetComponent<SurgeBossEnemy>();
+                TreeShellBossEnemy boss = enemy.GetComponent<TreeShellBossEnemy>();
                 if (boss != null)
                 {
                     bool wasLocked = InteractionLock.IsLocked;
                     InteractionLock.IsLocked = true;
-                    try { yield return WorldTreeEntrance.Play(boss); }
+                    try
+                    {
+                        // 첫 프레임부터 착지 위치를 확정해 거대 슬라임 자체를 날려 보낸다.
+                        Vector3 landing = boss.transform.position;
+                        landing.y = TreeShellBossEnemy.GroundY;
+                        boss.transform.position = landing;
+                        yield return WorldTreeEntrance.Play(boss);
+                    }
                     finally { InteractionLock.IsLocked = wasLocked; }
                 }
             }

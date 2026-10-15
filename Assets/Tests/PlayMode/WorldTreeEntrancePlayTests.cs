@@ -210,66 +210,51 @@ namespace WordVenture.Tests
             wave.StopAllCoroutines();
             foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy")))
                 enemy.gameObject.SetActive(false);
-            GameObject shellObject = (GameObject)waveType.GetMethod("SpawnExtraEnemy").Invoke(null, new object[] { 35, 0f });
-            Assert.That(shellObject, Is.Not.Null);
-            shellObject.transform.position = new Vector3(0, -1.1f, 0);
+            GameObject shellObject = (GameObject)waveType.GetMethod("SpawnExtraEnemy").Invoke(null, new object[] { 35, 2.5f });
             Component shell = shellObject.GetComponent(Runtime("Combat.Enemies.Enemy"));
             yield return null;
-            Capture("00-worldtree-slime-phase-one.png");
             bool record = Environment.GetEnvironmentVariable("BOSS_CAPTURE_FRAMES") == "1";
             if (record) Time.captureFramerate = 30;
             int frameNumber = 0;
             float started = Time.realtimeSinceStartup;
             const float Deadline = 120;
-            Type transition = Runtime("Combat.Enemies.WorldTreeTransition");
-            bool TransitionPlaying() => (bool)transition.GetProperty("IsPlaying").GetValue(null);
-            float FluidProgress() => (float)transition.GetProperty("FluidProgress").GetValue(null);
             void RecordFrame()
             {
                 if (record) Capture("frames/" + (++frameNumber).ToString("D3") + ".png", 960, 540);
             }
-            shell.GetType().GetMethod("Kill").Invoke(shell, null);
-            float[] liquidMoments = { .04f, .25f, .55f, .90f };
-            string[] liquidNames = { "01-fallen-shell", "02-gold-leaking", "03-gold-puddle", "04-core-congealing" };
-            for (int i = 0; i < liquidMoments.Length; i++)
-            {
-                while (FluidProgress() < liquidMoments[i] && !Playing && Time.realtimeSinceStartup - started < Deadline)
-                {
-                    RecordFrame();
-                    yield return null;
-                }
-                Assert.That(TransitionPlaying(), Is.True, "1페이즈 사망이 마력 전환을 시작해야 한다");
-                Capture(liquidNames[i] + ".png");
-            }
-            while (!Playing && TransitionPlaying() && Time.realtimeSinceStartup - started < Deadline)
-            {
-                RecordFrame();
-                yield return null;
-            }
-            Assert.That(Playing, Is.True, "모인 액체에서 2페이즈의 비행이 시작돼야 한다");
-            float[] moments = { .20f, .275f, .50f, .62f, .85f };
-            string[] names = { "05-tiny-core-pinprick", "06-core-flash", "07-core-flight", "08-core-landing", "09-core-name-and-memory" };
+            wave.StartCoroutine((IEnumerator)Entrance.GetMethod("Play").Invoke(null, new object[] { shell }));
+            float[] moments = { .18f, .275f, .50f, .62f, .85f };
+            string[] names = { "01-distant-tree-pinprick", "02-tree-flash", "03-giant-tree-flight", "04-giant-tree-landing", "05-giant-tree-name" };
             for (int i = 0; i < moments.Length; i++)
             {
                 while (Playing && Progress < moments[i] && Time.realtimeSinceStartup - started < Deadline)
-                {
-                    RecordFrame();
-                    yield return null;
-                }
-                Assert.That(Playing, Is.True, "연출은 캡처 전에 자연 종료되면 안 된다");
+                { RecordFrame(); yield return null; }
+                Assert.That(Playing, Is.True);
                 Capture(names[i] + ".png");
             }
-            while ((Playing || TransitionPlaying()) && Time.realtimeSinceStartup - started < Deadline)
+            while (Playing && Time.realtimeSinceStartup - started < Deadline) { RecordFrame(); yield return null; }
+            Capture("06-phase-one-battle.png");
+            // 첫 형태가 행동한 뒤 정상 사망 경로로 변신시킨다.
+            shell.GetType().GetMethod("PlayTurnAction").Invoke(shell, new object[] { 12f });
+            shell.GetType().GetMethod("Kill").Invoke(shell, null);
+            Type transition = Runtime("Combat.Enemies.WorldTreeTransition");
+            bool TransitionPlaying() => (bool)transition.GetProperty("IsPlaying").GetValue(null);
+            float FluidProgress() => (float)transition.GetProperty("FluidProgress").GetValue(null);
+            float[] liquidMoments = { .12f, .35f, .55f, .72f, .92f };
+            string[] liquidNames = { "07-tree-breaks", "08-gold-leaks-at-roots", "09-gold-gathers", "10-core-emerges-here", "11-core-takes-shape" };
+            for (int i = 0; i < liquidMoments.Length; i++)
             {
-                RecordFrame();
-                yield return null;
+                while (TransitionPlaying() && FluidProgress() < liquidMoments[i] && Time.realtimeSinceStartup - started < Deadline)
+                { RecordFrame(); yield return null; }
+                Assert.That(Playing, Is.False, "본체는 다시 날아오면 안 된다");
+                Capture(liquidNames[i] + ".png");
             }
-            Assert.That(Playing, Is.False);
+            while (TransitionPlaying() && Time.realtimeSinceStartup - started < Deadline) { RecordFrame(); yield return null; }
             Assert.That(TransitionPlaying(), Is.False);
-            Capture("10-core-battle-ready.png");
+            Capture("12-core-battle-here.png");
             Component core = Object.FindObjectsOfType(Runtime("Combat.Enemies.SurgeBossEnemy")).Cast<Component>().Single();
             Assert.That(core.GetComponent<SpriteRenderer>().enabled, Is.True);
-            Assert.That((bool)Runtime("Combat.Enemies.Enemy").GetProperty("IsAlive").GetValue(core), Is.True);
+            Assert.That(core.transform.position.x, Is.EqualTo(2.5f).Within(.01f));
         }
 
         [UnityTest]
@@ -359,7 +344,7 @@ namespace WordVenture.Tests
                 RenderTexture.active = target;
                 image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
                 image.Apply();
-                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-15-act-two-boss-design");
+                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-15-act-two-boss-design/worldtree-revision");
                 Directory.CreateDirectory(directory);
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(directory, filename)));
                 File.WriteAllBytes(Path.Combine(directory, filename), image.EncodeToPNG());

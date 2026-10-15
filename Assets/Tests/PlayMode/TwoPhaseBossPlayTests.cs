@@ -62,6 +62,12 @@ namespace WordVenture.Tests
             ((IList)wave.GetType().GetField("activatedEnemies", AnyInstance).GetValue(wave)).Clear();
             Call(wave, "StartWave", last);
             yield return null;
+            Assert.That((bool)Runtime("Combat.Enemies.WorldTreeEntrance").GetProperty("IsPlaying").GetValue(null), Is.True,
+                "최종 웨이브는 거대 세계수 슬라임의 비행으로 시작한다");
+            Assert.That(Shell.GetComponent<SpriteRenderer>().enabled, Is.False);
+            Runtime("Combat.Enemies.WorldTreeEntrance").GetMethod("Skip").Invoke(null, null);
+            yield return null;
+            yield return null;
         }
 
         [UnityTearDown]
@@ -125,7 +131,7 @@ namespace WordVenture.Tests
             yield return null;
             yield return null;
             Assert.That(Cores().Length, Is.EqualTo(1));
-            Assert.That(TransitionPlaying, Is.False, "건너뛰기는 액체와 비행 연출 전체를 끝낸다");
+            Assert.That(TransitionPlaying, Is.False, "건너뛰기는 사망과 응집 연출 전체를 끝낸다");
             Component core = Cores()[0];
             Assert.That(Property(core, "EnemyId"), Is.EqualTo(29));
             Component wave = (Component)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
@@ -199,16 +205,17 @@ namespace WordVenture.Tests
             Assert.That((bool)Runtime("Core.InteractionLock").GetProperty("IsLocked").GetValue(null), Is.False);
         }
         [UnityTest]
-        public IEnumerator 비행_중_웨이브가_꺼져도_본체_표시와_연출_플래그를_복구한다()
+        public IEnumerator 본체는_죽은_거대_슬라임의_자리에서_나타나고_다시_날아오지_않는다()
         {
+            float x = Shell.transform.position.x;
             Call(Shell, "Kill");
             yield return new WaitForSeconds(2f);
-            Assert.That((bool)Runtime("Combat.Enemies.WorldTreeEntrance").GetProperty("IsPlaying").GetValue(null), Is.True);
+            Assert.That((bool)Runtime("Combat.Enemies.WorldTreeEntrance").GetProperty("IsPlaying").GetValue(null), Is.False);
             Assert.That(Cores().Length, Is.EqualTo(1));
             Component core = Cores()[0];
-            Component wave = (Component)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
-            wave.gameObject.SetActive(false);
-            yield return null;
+            Assert.That(core.transform.position.x, Is.EqualTo(x).Within(.01f));
+            Assert.That(core.GetComponent<SpriteRenderer>().enabled, Is.False, "응집 중에는 연출용 본체만 보인다");
+            yield return new WaitForSeconds(1f);
             Assert.That(TransitionPlaying, Is.False);
             Assert.That(core.GetComponent<SpriteRenderer>().enabled, Is.True);
             Assert.That((bool)Runtime("Core.InteractionLock").GetProperty("IsLocked").GetValue(null), Is.False);

@@ -11,23 +11,28 @@ namespace Combat.Enemies
     // 수명과 입력 잠금은 죽은 적이 아닌 웨이브 컨트롤러에 묶는다.
     public sealed class WorldTreeTransition : MonoBehaviour
     {
-        public const float FluidDuration = 1.8f;
+        public const float FluidDuration = 2.8f;
+        const float GatherAt = 1.7f;
         static WorldTreeTransition current;
         public static bool IsPlaying => current != null && current.running || WorldTreeEntrance.IsPlaying;
         public static float FluidProgress => current != null ? Mathf.Clamp01(current.elapsed / FluidDuration) : 0;
         public static Enemy SpawnedCore => current != null ? current.core : null;
-        bool running, restored, skip, previousLock, coreSpawned, ownsEntrance;
+        bool running, restored, skip, previousLock, coreSpawned;
+        float spawnX;
+        Sprite standing, fallen;
+        Image coreProxy;
+        Vector2 coreSize;
+        readonly Dictionary<Renderer, bool> coreVisibility = new Dictionary<Renderer, bool>();
         float elapsed;
         int startFrame;
         Enemy core;
         Canvas canvas;
         RectTransform frame;
         Image corpse, puddle, waveA, waveB, puddleShine, glint;
-        readonly List<Image> streams = new List<Image>();
         readonly List<Image> drops = new List<Image>();
         readonly List<Object> assets = new List<Object>();
         Sprite pixel;
-        Vector2 corpsePoint, poolPoint, poolViewport;
+        Vector2 corpsePoint, poolPoint;
         Vector2 corpseSize;
         static readonly Color Gold = new Color32(255, 203, 68, 255);
         static readonly Color BrightGold = new Color32(255, 247, 178, 255);
@@ -51,11 +56,7 @@ namespace Combat.Enemies
                 if (transition == null || transition.restored) yield break;
                 transition.SpawnCore();
                 if (transition.canvas != null) transition.canvas.gameObject.SetActive(false);
-                if (transition.core != null && !transition.skip)
-                {
-                    transition.ownsEntrance = true;
-                    yield return WorldTreeEntrance.PlayFrom(transition.core, transition.poolViewport);
-                }
+
             }
             finally
             {
@@ -73,7 +74,7 @@ namespace Combat.Enemies
         {
             if (coreSpawned) return;
             coreSpawned = true;
-            GameObject spawned = BattleWaveController.SpawnExtraEnemy(29, 6f);
+            GameObject spawned = BattleWaveController.SpawnExtraEnemy(29, spawnX);
             if (spawned != null) core = spawned.GetComponent<Enemy>();
         }
         void Initialize(TreeShellBossEnemy shell)
@@ -85,9 +86,11 @@ namespace Combat.Enemies
             float width = 1080f * Screen.width / Mathf.Max(1, Screen.height);
             Vector3 viewport = camera.WorldToViewportPoint(shell.transform.position);
             Vector3 ground = camera.WorldToViewportPoint(new Vector3(shell.transform.position.x, -3f, 0));
+            spawnX = shell.transform.position.x;
+            standing = shell.GetComponent<SlimeAnimator>().FirstFrame;
+            fallen = shell.GetComponent<SlimeAnimator>().DeathFrame;
             corpsePoint = new Vector2((viewport.x - .5f) * width, (viewport.y - .5f) * 1080f);
             poolPoint = new Vector2((ground.x - .5f) * width, (ground.y - .5f) * 1080f);
-            poolViewport = ground;
             float pixelsPerUnit = 1080f / (camera.orthographicSize * 2);
             corpseSize = Vector2.Scale(body.sprite.bounds.size, new Vector2(Mathf.Abs(body.transform.lossyScale.x), Mathf.Abs(body.transform.lossyScale.y))) * pixelsPerUnit;
             var root = new GameObject("GoldLiquidCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -108,14 +111,13 @@ namespace Combat.Enemies
             dim.rectTransform.sizeDelta = Vector2.zero;
             dim.raycastTarget = true;
             corpse = Box("SlimeCorpse", corpsePoint, corpseSize, Color.white);
-            // 공용 사망 프레임 대신 정상 형체를 직접 무너뜨린다.
-            Sprite silhouette = shell.GetComponent<SlimeAnimator>().FirstFrame;
+            // 정상 형체로 시작한 뒤 갈라진 나무의 사망 프레임으로 바꾼다.
+            Sprite silhouette = standing;
             corpse.sprite = silhouette;
             corpse.rectTransform.pivot = silhouette.pivot / silhouette.rect.size;
             corpse.rectTransform.localScale = new Vector3(body.transform.lossyScale.x < 0 ? -1 : 1, 1, 1);
             // 전환용 시체만 남겨 일반 사망 프레임과 겹치지 않게 한다.
             body.enabled = false;
-            for (int i = 0; i < 7; i++) streams.Add(Box("GoldStream" + i, corpsePoint, new Vector2(8, 4), Gold));
             puddle = Box("GoldPuddle", poolPoint, new Vector2(4, 4), Gold);
             puddle.sprite = MakeSprite(new[] { "..xxxxxxxxxxx..", ".xxxxxxxxxxxxx.", "xxxxxxxxxxxxxxx", ".xxxxxxxxxxxxx.", "..xxxxxxxxxxx.." });
             waveA = Box("GoldRippleA", poolPoint, new Vector2(32, 4), BrightGold);
@@ -151,6 +153,11 @@ namespace Combat.Enemies
             if (!running || restored || InteractionLock.IsPaused || Time.timeScale <= 0) return;
             if (Time.frameCount > startFrame && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))) skip = true;
             elapsed += Time.deltaTime;
+            if (elapsed >= GatherAt && !coreSpawned)
+            {
+                SpawnCore();
+                RevealCore();
+            }
             Render();
         }
         void Render()
@@ -158,11 +165,17 @@ namespace Combat.Enemies
             if (corpse == null) return;
             float t = Mathf.Clamp01(elapsed / FluidDuration);
             float flow = Mathf.Clamp01(t / .6f);
-            float gather = Mathf.Clamp01((t - .72f) / .28f);
-            corpse.color = new Color(1, 1, 1, 1f - Mathf.Clamp01((t - .38f) / .42f));
-            Vector3 collapse = corpse.rectTransform.localScale;
-            collapse.y = Mathf.Lerp(1, .46f, Mathf.Clamp01(t / .38f));
-            corpse.rectTransform.localScale = collapse;
+            float gather = Mathf.Clamp01((elapsed - 1.05f) / .65f);
+            // 나무가 갈라져 무너지는 그림으로 전환한다. 축을 눌러 짜지 않는다.
+            if (elapsed > .3f && fallen != null) corpse.sprite = fallen;
+            corpse.color = WithAlpha(Color.white, 1f - Mathf.Clamp01((elapsed - .65f) / .65f));
+            corpse.rectTransform.anchoredPosition = Snap(corpsePoint - Vector2.up * Mathf.Min(24, elapsed * 18));
+            if (coreProxy != null)
+            {
+                float emerge = Mathf.SmoothStep(0, 1, Mathf.Clamp01((elapsed - GatherAt) / .8f));
+                coreProxy.rectTransform.sizeDelta = coreSize * Mathf.Lerp(.08f, 1, emerge);
+                coreProxy.color = Color.Lerp(BrightGold, Color.white, emerge);
+            }
             float spread = Mathf.Lerp(8, 210, flow) * (1 - gather) + 4 * gather;
             puddle.rectTransform.sizeDelta = new Vector2(Snap(spread), Snap(Mathf.Lerp(4, 28, flow) * (1 - gather) + 4 * gather));
             puddle.color = Color.Lerp(Gold, BrightGold, gather);
@@ -174,30 +187,45 @@ namespace Combat.Enemies
             puddleShine.rectTransform.sizeDelta = new Vector2(Mathf.Max(4, Snap(spread * .42f)), 4);
             puddleShine.rectTransform.anchoredPosition = Snap(poolPoint + new Vector2(-spread * .1f, 4 * (1 - gather)));
             puddleShine.color = WithAlpha(BrightGold, .85f * (1 - gather));
-            for (int i = 0; i < streams.Count; i++)
-            {
-                float delay = i * .025f;
-                float length = Mathf.Clamp01((t - delay) / .22f);
-                float side = (i - 3) * 12f;
-                Vector2 top = corpsePoint + new Vector2(side, -corpseSize.y * .13f);
-                Vector2 bottom = new Vector2(poolPoint.x + side * .6f, poolPoint.y);
-                Vector2 end = Vector2.Lerp(top, bottom, length);
-                streams[i].rectTransform.anchoredPosition = Snap((top + end) * .5f);
-                streams[i].rectTransform.sizeDelta = new Vector2(i % 2 == 0 ? 8 : 4, Mathf.Max(4, Snap(Mathf.Abs(top.y - end.y))));
-                streams[i].color = WithAlpha(i % 2 == 0 ? Gold : BrightGold, t < .7f ? Mathf.Clamp01((t - delay) * 12) : 1 - gather);
-            }
             for (int i = 0; i < drops.Count; i++)
             {
                 float cycle = Mathf.Repeat(t * 2.8f + i * .137f, 1);
-                float side = Mathf.Sin(i * 2.4f) * 92 * (1 - gather);
-                Vector2 top = corpsePoint + new Vector2(side * .4f, -corpseSize.y * .08f);
-                Vector2 bottom = poolPoint + new Vector2(side, 0);
-                drops[i].rectTransform.anchoredPosition = Snap(Vector2.Lerp(top, bottom, cycle * cycle));
+                float side = Mathf.Sin(i * 2.4f) * 84;
+                Vector2 top = poolPoint + new Vector2(side, 22);
+                Vector2 bottom = poolPoint + new Vector2(side * .1f, 0);
+                Vector2 point = Vector2.Lerp(top, bottom, cycle);
+                point.y += Mathf.Sin(cycle * Mathf.PI) * (12 + i % 5 * 5);
+                drops[i].rectTransform.anchoredPosition = Snap(point);
                 drops[i].rectTransform.sizeDelta = i % 3 == 0 ? new Vector2(20, 20) : new Vector2(4, 8);
                 drops[i].color = WithAlpha(i % 3 == 0 ? BrightGold : Gold, Mathf.Clamp01(t * 6) * (1 - gather) * (i % 3 == 0 ? .35f + .65f * Mathf.Abs(Mathf.Sin(elapsed * 17 + i)) : 1));
             }
             glint.rectTransform.sizeDelta = Vector2.one * Snap(Mathf.Lerp(4, 24, gather));
-            glint.color = WithAlpha(BrightGold, gather);
+            glint.color = WithAlpha(BrightGold, gather * (1 - Mathf.Clamp01((elapsed - GatherAt) / .25f)));
+            if (elapsed > GatherAt) puddle.color = WithAlpha(Gold, 1 - Mathf.Clamp01((elapsed - GatherAt) / .7f));
+        }
+        void RevealCore()
+        {
+            if (core == null) return;
+            var body = core.GetComponent<SpriteRenderer>();
+            Sprite sprite = core.GetComponent<SlimeAnimator>().FirstFrame;
+            coreSize = (Vector2)sprite.bounds.size * Mathf.Abs(core.transform.lossyScale.x) * 108f;
+            coreProxy = Box("CoreEmergingHere", poolPoint, coreSize, BrightGold);
+            coreProxy.sprite = sprite;
+            coreProxy.rectTransform.pivot = sprite.pivot / sprite.rect.size;
+            coreProxy.rectTransform.localScale = new Vector3(body.transform.lossyScale.x < 0 ? -1 : 1, 1, 1);
+            HideCore();
+        }
+        void LateUpdate()
+        {
+            if (running && core != null && coreProxy != null) HideCore();
+        }
+        void HideCore()
+        {
+            foreach (Renderer renderer in core.GetComponentsInChildren<Renderer>(true))
+            {
+                if (!coreVisibility.ContainsKey(renderer)) coreVisibility[renderer] = renderer.enabled;
+                renderer.enabled = false;
+            }
         }
         Image Box(string name, Vector2 position, Vector2 size, Color tint)
         {
@@ -234,15 +262,9 @@ namespace Combat.Enemies
             if (restored) return;
             restored = true;
             running = false;
-            if (ownsEntrance && WorldTreeEntrance.IsPlaying)
-            {
-                WorldTreeEntrance entrance = FindObjectOfType<WorldTreeEntrance>();
-                if (entrance != null)
-                {
-                    entrance.gameObject.SetActive(false);
-                    Destroy(entrance.gameObject);
-                }
-            }
+            foreach (var pair in coreVisibility)
+                if (pair.Key != null) pair.Key.enabled = pair.Value;
+            coreVisibility.Clear();
             InteractionLock.IsLocked = previousLock;
             if (current == this) current = null;
             if (canvas != null) canvas.gameObject.SetActive(false);

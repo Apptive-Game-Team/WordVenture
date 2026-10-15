@@ -7,6 +7,7 @@ namespace Combat.Enemies
     // 실제 세계수와 다른, 나무를 닮은 슬라임 외피다. 쓰러지면 안에 있던 금빛 본체가 드러난다.
     public sealed class TreeShellBossEnemy : BossEnemy
     {
+        public const float GroundY = -2.5f;
         TMP_Text tell;
         bool rootsReady;
         bool transitionStarted;
@@ -17,7 +18,7 @@ namespace Combat.Enemies
         {
             base.Start();
             Vector3 position = transform.position;
-            position.y = -1.1f;
+            position.y = GroundY;
             transform.position = position;
             RegionalBossTell.Show(ref tell, transform, HpText, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
         }
