@@ -19,7 +19,9 @@ namespace Cards
         Lightning,
         Undead,
         // 카드 데이터가 enum을 정수로 저장한다. 새 값은 맨 끝에만 추가한다.
-        Spawn
+        Spawn,
+        Water,
+        Plant
     }
 
     [Serializable]
