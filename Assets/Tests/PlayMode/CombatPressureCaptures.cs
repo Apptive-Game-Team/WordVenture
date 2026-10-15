@@ -122,6 +122,23 @@ namespace WordVenture.Tests
             SharedDialoguePlayTests.Capture("card-burn.png");
         }
 
+        // 손패가 예전에 슬라임을 가리던 자리에 슬라임을 세우고, 카드 한 장에 마우스를 올린 모습.
+        [UnityTest]
+        public IEnumerator 손패_내림()
+        {
+            yield return EnterBattle(6);
+            Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
+            object cards = battle.GetType().GetField("cardManager").GetValue(battle);
+            foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy")).Cast<Component>().Take(1))
+                enemy.transform.position = new Vector3(0f, enemy.transform.position.y, enemy.transform.position.z);
+            yield return new WaitForSeconds(0.8f);
+            Component hovered = ((System.Collections.IEnumerable)cards.GetType().GetProperty("HandCards").GetValue(cards)).Cast<Component>().ElementAt(1);
+            cards.GetType().GetField("onCardArea", Any).SetValue(cards, true);
+            Call(cards, "CardMouseOver", hovered);
+            yield return new WaitForSeconds(0.5f);
+            SharedDialoguePlayTests.Capture("hand-lowered.png");
+        }
+
         [UnityTest]
         public IEnumerator 클리어_결과()
         {

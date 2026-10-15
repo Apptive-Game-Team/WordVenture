@@ -69,6 +69,8 @@ namespace Cards
 
         public void MoveTransform(Prs prs, bool useDotween, float dotweenTime = 0)
         {
+            // 올라오거나 내려가는 tween이 남아 있으면 새 이동이나 드래그를 덮어쓴다.
+            transform.DOKill();
             if (useDotween)
             {
                 transform.DOMove(prs.pos, dotweenTime);

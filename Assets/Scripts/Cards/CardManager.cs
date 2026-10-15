@@ -66,6 +66,13 @@ namespace Cards
         bool onPushArea2;
         bool onPushArea3;
         Prs dragStartPrs;
+        Card hoveredCard;
+
+        // 손패는 카드 위쪽만 보이게 내려 둔다. 땅 위를 걷는 슬라임이 카드 뒤로 가려지지 않게 하려는 것이다.
+        // 480x270 가상 화면의 29픽셀(1픽셀 = 1/27 유닛)이다. 카드 높이 1.85 중 약 절반이 화면 아래로 내려간다.
+        // 버리기 칸과 불타는 자리는 cardLeft 기준 그대로라서 이 값을 적용하지 않는다.
+        public const float HandLowerOffset = 29f / 27f;
+        const float HoverMoveSeconds = 0.12f;
 
         public IReadOnlyList<Card> HandCards => myCards;
         public bool IsDraggingCard => isMyCardDrag;
@@ -147,6 +154,7 @@ namespace Cards
             if (InteractionLock.IsLocked)
             {
                 CancelDrag();
+                ReleaseHover(true);
                 return;
             }
 
@@ -324,6 +332,8 @@ namespace Cards
 
         public void CardAlignment()
         {
+            // 정렬이 모든 카드를 쉬는 자리로 보내므로 올라와 있던 카드도 함께 내려간다. 커서가 아직 카드 위면 다음 프레임에 다시 올라온다.
+            ReleaseHover(false);
             List<Prs> originCardPrSs = new List<Prs>();
             originCardPrSs = RoundAlignment(cardLeft, cardRight, myCards.Count, 0.5f, Vector3.one * 0.4f);
 
@@ -355,7 +365,7 @@ namespace Cards
             {
                 var targetPos = Vector3.Lerp(left.position, right.position, objLerps[i]);
                 // 손패 기준점(CardLeft, CardRight)은 화면 아래 끝보다 조금 아래에 있다. 카드 높이 1.85의 절반보다 더 올려야 카드 아래 테두리가 화면에 들어온다.
-                targetPos.y += 1.2f;
+                targetPos.y += 1.2f - HandLowerOffset;
                 var targetRot = Quaternion.identity;
 
                 // float curve = Mathf.Sqrt(Mathf.Pow(height, 2) - Mathf.Pow(objLerps[i] - 0.5f, 2));
@@ -466,6 +476,34 @@ namespace Cards
             }
         }
 
+        bool IsRestingInHand(Card card)
+        {
+            if (card == null || !myCards.Contains(card)) return false;
+            CombineZone zone = CombineZone.Instance;
+            return zone == null || (!zone.spellCards.Contains(card.gameObject) && !zone.magicTypeCards.Contains(card.gameObject));
+        }
+
+        // 올라온 카드는 한 장뿐이다. 다른 카드로 커서가 옮겨 가면 먼저 올라온 카드를 내린다.
+        void RaiseCard(Card card)
+        {
+            if (hoveredCard == card || InteractionLock.IsLocked || !IsRestingInHand(card)) return;
+            if (isMyCardDrag && selectCard != card) return;
+            ReleaseHover(true);
+            hoveredCard = card;
+            card.GetComponent<Order>().SetMostFrontOrder(true);
+            Vector3 raised = card.originPrs.pos + Vector3.up * HandLowerOffset;
+            card.MoveTransform(new Prs(raised, card.originPrs.rot, card.originPrs.scale), true, HoverMoveSeconds);
+        }
+
+        void ReleaseHover(bool moveToRest)
+        {
+            Card card = hoveredCard;
+            hoveredCard = null;
+            if (card == null) return;
+            card.GetComponent<Order>().SetMostFrontOrder(false);
+            if (moveToRest && IsRestingInHand(card)) card.MoveTransform(card.originPrs, true, HoverMoveSeconds);
+        }
+
         public void CardMouseDown()
         {
             // 씬이 바뀌는 프레임에는 조합창이 먼저 파괴되고 카드 클릭이 뒤늦게 들어올 수 있다.
@@ -488,7 +526,8 @@ namespace Cards
                 return;
             }
 
-            dragStartPrs = new Prs(selectCard.transform.position, selectCard.transform.rotation, selectCard.transform.localScale);
+            // 올라온 카드를 잡았다면 취소할 때 올라온 자리가 아니라 쉬는 자리로 돌아가야 한다.
+            dragStartPrs = selectCard == hoveredCard ? selectCard.originPrs : new Prs(selectCard.transform.position, selectCard.transform.rotation, selectCard.transform.localScale);
             isMyCardDrag = true;
         }
 
@@ -501,6 +540,8 @@ namespace Cards
             }
 
             isMyCardDrag = false;
+            // 놓은 카드는 더 이상 앞으로 그리지 않는다. 손패로 돌아가면 커서가 위에 있는 한 다음 프레임에 다시 올라온다.
+            ReleaseHover(false);
             if (onPushArea1 && CanPlaceInSlot(selectCard, "Spell", CombineZone.Instance.spellCards))
             {
                 PlaceCard(selectCard, pushArea1);
@@ -610,6 +651,7 @@ namespace Cards
             }
 
             isMyCardDrag = false;
+            ReleaseHover(false);
             if (selectCard != null)
             {
                 selectCard.MoveTransform(dragStartPrs, false);
@@ -659,15 +701,14 @@ namespace Cards
 
         void EnlargeCard(bool isEnlarge, Card card)
         {
-            // if (isEnlarge)
-            // {
-            //     Vector3 enlargePos = new Vector3(card.originPRS.pos.x, -3f, -10f);
-            //     card.MoveTransform(new PRS(enlargePos, Util.QI, new Vector3(1.896733f, 2.1f, 1) * 0.6f), false);
-            // }
-            // else
-            //     card.MoveTransform(card.originPRS, false);
-
-            // card.GetComponent<Order>().SetMostFrontOrder(isEnlarge);
+            if (isEnlarge)
+            {
+                RaiseCard(card);
+            }
+            else if (hoveredCard == card && !isMyCardDrag)
+            {
+                ReleaseHover(true);
+            }
         }
 
         #endregion
