@@ -51,6 +51,12 @@ namespace Combat.UI
             {
                 allSelectableObjects.Add(gameObject.GetComponent<SelectableObject>());
             }
+            foreach (GameObject allyObject in GameObject.FindGameObjectsWithTag("Ally"))
+            {
+                AllySlime ally = allyObject.GetComponent<AllySlime>();
+                SelectableObject selectable = allyObject.GetComponent<SelectableObject>();
+                if (ally != null && ally.IsAlive && selectable != null) allSelectableObjects.Add(selectable);
+            }
             allSelectableObjects.Add(GameObject.FindGameObjectWithTag("Me").GetComponent<SelectableObject>());
         }
 
@@ -58,6 +64,7 @@ namespace Combat.UI
         {
             foreach (SelectableObject gameObject in allSelectableObjects)
             {
+                if (gameObject == null) continue;
                 gameObject.SetSelectable(selectable);
             }
         }
@@ -242,6 +249,8 @@ namespace Combat.UI
                 || !selectableObject.GetSelectable()) return;
             Enemy selectedEnemy = selectableObject.GetComponent<Enemy>();
             if (selectedEnemy != null && !selectedEnemy.IsAlive) return;
+            AllySlime selectedAlly = selectableObject.GetComponent<AllySlime>();
+            if (selectedAlly != null && !selectedAlly.IsAlive) return;
             target = selectableObject;
             IsAwaitingTarget = false;
             TargetSelected?.Invoke(selectableObject);

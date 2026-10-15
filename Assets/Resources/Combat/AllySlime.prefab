@@ -319,9 +319,10 @@ GameObject:
   - component: {fileID: 2156683031364153623}
   - component: {fileID: 6258172168864050195}
   - component: {fileID: 6172745459961170723}
+  - component: {fileID: 7340918265510388841}
   m_Layer: 0
   m_Name: AllySlime
-  m_TagString: Untagged
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -489,3 +490,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f888e6970e5344dcc99edf9e46d404e9, type: 3}
   - {fileID: 21300000, guid: 4f63c0d003ffb4cc8b7342eaa5ab7466, type: 3}
   - {fileID: 21300000, guid: d5949dfa95ee345d5916b05475ad504d, type: 3}
+--- !u!114 &7340918265510388841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468929451589641127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e07b8e7fa7d4be783fa74aeb98163f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

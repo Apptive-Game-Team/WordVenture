@@ -21,7 +21,7 @@ namespace Combat.Allies
         const float SlotSpacing = 1.4f;
         // 적 pool이 적을 세우는 높이와 같다.
         const float GroundY = -3f;
-        const float SecondsBetweenAttacks = 0.4f;
+        const float SecondsBetweenAttacks = 0.2f;
 
         static AllyFormation current;
 
@@ -127,7 +127,8 @@ namespace Combat.Allies
         }
 
         // 앞줄부터 한 마리씩, 그 순간 가장 앞에 있는 적을 공격한다. 앞 슬라임의 공격으로 적이
-        // 쓰러지면 뒤 슬라임은 다음 적을 공격한다.
+        // 쓰러지면 뒤 슬라임은 다음 적을 공격한다. 투사체가 모두 도착한 뒤에 다음 슬라임이 움직이고,
+        // 마지막 투사체가 도착해야 이 코루틴이 끝나 적 턴이 시작된다.
         public IEnumerator AttackFrontEnemies(Func<Enemy> findFrontEnemy)
         {
             foreach (AllySlime ally in allies.ToArray())
@@ -135,9 +136,24 @@ namespace Combat.Allies
                 Enemy target = findFrontEnemy();
                 if (target == null) yield break;
                 if (ally == null || !ally.IsAlive) continue;
-                ally.Attack(target);
+                ally.Act(target, ally.Element == MagicType.Lightning ? FindEnemyBehind(target) : null, allies);
+                while (AllyProjectile.ActiveCount > 0) yield return null;
                 yield return new WaitForSeconds(SecondsBetweenAttacks);
             }
+        }
+
+        // front 바로 뒤(워드에서 그다음으로 가까운)의 살아 있는 적.
+        static Enemy FindEnemyBehind(Enemy front)
+        {
+            Enemy behind = null;
+            foreach (GameObject enemyObject in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                Enemy enemy = enemyObject.GetComponent<Enemy>();
+                if (enemy == null || enemy == front || !enemy.IsAlive) continue;
+                if (enemy.transform.position.x < front.transform.position.x) continue;
+                if (behind == null || enemy.transform.position.x < behind.transform.position.x) behind = enemy;
+            }
+            return behind;
         }
 
         void OnAllyDied(AllySlime ally)

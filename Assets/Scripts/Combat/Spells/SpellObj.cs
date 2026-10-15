@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cards;
+using Combat.Allies;
 using Combat.Enemies;
 using Core;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace Combat.Spells
         readonly HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
         string targetTag;
         bool hitPlayer;
+        bool hitAlly;
+        const string AllyTag = "Ally";
         bool initialized;
         static int activeSpells;
         public static bool HasActiveSpells => activeSpells > 0;
@@ -39,6 +42,12 @@ namespace Combat.Spells
             initialized = true;
             activeSpells++;
 
+            // 아군을 고른 주문은 대상 아군에게만 들어간다. 폭발의 범위에 다른 아군이 걸려도 맞지 않는다.
+            if (this.spellType == MagicType.Explode && targetTag == AllyTag)
+            {
+                HitAlly(target.GetComponent<AllySlime>());
+            }
+
             if (this.spellType == MagicType.Explode)
             {
                 StartCoroutine(DestoryCounter());
@@ -51,6 +60,13 @@ namespace Combat.Spells
             } else if (this.spellType == MagicType.Shoot)
             {
                 moveVector = new Vector3(speed, 0, 0);
+                // 아군은 땅에 서 있으므로 워드의 높이와 달라도 맞도록 아군을 향해 날린다.
+                if (targetTag == AllyTag)
+                {
+                    Vector3 toTarget = target.transform.position - transform.position;
+                    toTarget.z = 0;
+                    moveVector = toTarget.normalized * speed;
+                }
             }
 
             if (this.spellType == MagicType.Shoot || this.spellType == MagicType.Drop)
@@ -99,6 +115,14 @@ namespace Combat.Spells
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (initialized && targetTag == AllyTag && collision.CompareTag(AllyTag))
+            {
+                AllySlime ally = collision.GetComponentInParent<AllySlime>();
+                if (ally == null || ally.gameObject != target.gameObject) return;
+                moveVector = Vector3.zero;
+                if (HitAlly(ally)) StartCoroutine(DestoryCounter());
+                return;
+            }
             if (initialized && collision.CompareTag(targetTag))
             {
                 Enemy enemy = collision.GetComponentInParent<Enemy>();
@@ -125,6 +149,19 @@ namespace Combat.Spells
                 StartCoroutine(DestoryCounter());
             }
         }
+        // 신성은 아군을 회복하고(최대 HP까지), 나머지 속성은 아군에게 실제 피해를 준다.
+        // 아군에는 상성표가 없으므로 상성 1배를 쓴다.
+        bool HitAlly(AllySlime ally)
+        {
+            if (hitAlly || ally == null || !ally.IsAlive) return false;
+            hitAlly = true;
+            if (animator != null) animator.SetTrigger("Hit");
+            int amount = Mathf.FloorToInt(GetScaledDamage(damage, spellType));
+            if (magicType == MagicType.Holy) ally.Heal(amount);
+            else ally.TakeSpellDamage(amount);
+            return true;
+        }
+
         IEnumerator DestoryCounter()
         {
             yield return new WaitForSeconds(0.5f);
