@@ -162,6 +162,8 @@ namespace Tutorial
 
         void StoryTelling()
         {
+            // 나레이션이 떠 있는 동안 기록을 바로 보여 주면 나레이션 단계는 끝난 것으로 본다.
+            introPending = false;
             overlay.ClearGuidance();
             TutorialChatData data = tutorialScript.GetScriptData(currentFlag);
             SetChatWindowVisible(true);

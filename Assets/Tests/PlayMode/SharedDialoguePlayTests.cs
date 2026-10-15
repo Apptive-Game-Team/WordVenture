@@ -111,9 +111,13 @@ namespace WordVenture.Tests
             Assert.That(Property(prompt, "text"), Is.EqualTo("클릭 / 아무 키 · 다음"));
             Capture("shared-dialogue-tutorial.png");
 
-            Call(tutorial, "AcknowledgeDialogue");
-            yield return null;
-            yield return null;
+            // 기록을 펼치는 나레이션 다음에 첫 기록이 나오고, 그 기록을 넘기면 행동 안내 단계가 된다.
+            for (int i = 0; i < 6 && tutorialView.gameObject.activeInHierarchy; i++)
+            {
+                Call(tutorial, "AcknowledgeDialogue");
+                yield return null;
+                yield return null;
+            }
             Assert.That(tutorialView.gameObject.activeInHierarchy, Is.False, "행동 안내 단계에서는 창과 초상화를 함께 숨긴다.");
             Assert.That((bool)Runtime("Core.InteractionLock").GetProperty("IsLocked").GetValue(null), Is.False);
             // 숨겼다가 다시 켜도 타이핑 상태가 남지 않아 새 대화를 정상 재생한다.
