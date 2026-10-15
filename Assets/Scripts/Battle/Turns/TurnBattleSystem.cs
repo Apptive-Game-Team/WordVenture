@@ -120,7 +120,7 @@ namespace Battle.Turns
             // 턴을 넘길 수 없다는 것을 버튼 색으로 보여준다.
             if (turnEndButton != null)
             {
-                turnEndButton.interactable = !IsSpellInProgress() && !endingPlayerTurn;
+                turnEndButton.interactable = !InteractionLock.IsLocked && !WorldTreeTransition.IsPlaying && !IsSpellInProgress() && !endingPlayerTurn;
             }
         }
 
@@ -156,6 +156,7 @@ namespace Battle.Turns
         public void TurnEndButton()
         {
             if (InteractionLock.IsLocked) return;
+            if (WorldTreeTransition.IsPlaying) return;
             if (IsSpellInProgress()) return;
             if (currentTurn == PlayerTurn && !endingPlayerTurn)
             {
@@ -171,6 +172,7 @@ namespace Battle.Turns
             AllyFormation formation = AllyFormation.Current;
             if (formation != null && formation.Allies.Count > 0)
                 yield return formation.AttackFrontEnemies(enemyManager.FindFrontEnemy);
+            while (WorldTreeTransition.IsPlaying) yield return null;
             endingPlayerTurn = false;
             ChangeTurn(EnemyTurn);
             PlayerTurnEnded?.Invoke();
@@ -185,7 +187,10 @@ namespace Battle.Turns
         IEnumerator EnemyTurnCounter()
         {
             yield return new WaitForSecondsRealtime(1f);
+            while (WorldTreeTransition.IsPlaying) yield return null;
             enemyManager.EndTurnStatuses();
+            // 화상으로 외피가 쓰러지면 상태 처리 자체가 페이즈 전환을 시작한다.
+            while (WorldTreeTransition.IsPlaying) yield return null;
             ChangeTurn(PlayerTurn);
         }
 

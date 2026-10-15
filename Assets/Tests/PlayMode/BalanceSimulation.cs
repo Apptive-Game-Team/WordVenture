@@ -233,7 +233,8 @@ namespace WordVenture.Tests
                 yield return SkipDialogue();
                 if (!InBattle || Battle == null) yield break;
                 bool ending = (bool)Get(Battle, "IsEndingPlayerTurn");
-                if (!ending && Get(Battle, "currentTurn") == playerTurn) break;
+                    bool transforming = (bool)StaticGet("Combat.Enemies.WorldTreeTransition", "IsPlaying");
+                    if (!ending && !transforming && Get(Battle, "currentTurn") == playerTurn) break;
                 yield return null;
             }
             // 적 이동과 상태 처리가 끝나도록 잠시 기다린다.
@@ -251,6 +252,7 @@ namespace WordVenture.Tests
 
         IEnumerator CastBestAction(BattleResult result, Action<bool> done)
         {
+            while (InBattle && (bool)StaticGet("Combat.Enemies.WorldTreeTransition", "IsPlaying")) yield return null;
             Candidate? best = ChooseAction(result.useSpawn);
             if (best == null)
             {

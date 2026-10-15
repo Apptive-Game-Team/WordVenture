@@ -132,6 +132,7 @@ namespace Combat.Allies
         {
             foreach (AllySlime ally in allies.ToArray())
             {
+                while (WorldTreeTransition.IsPlaying) yield return null;
                 Enemy target = findFrontEnemy();
                 if (target == null) yield break;
                 if (ally == null || !ally.IsAlive) continue;

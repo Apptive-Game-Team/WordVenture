@@ -26,13 +26,37 @@ namespace Combat.Enemies
 
         private void StartWave(int wave)
         {
+            StartCoroutine(BeginWave(wave));
+        }
+
+        IEnumerator BeginWave(int wave)
+        {
             BattleWaveData battleWaveData = battleScript.GetBattleWaveDatas()[wave];
             for (int i = 0; i < battleWaveData.enemySpawnDatasInWave.Count; i++)
             {
                 activatedEnemies.Add(ememyPool.SpawnObject(battleWaveData.enemySpawnDatasInWave[i].spawnPositionX, i , battleWaveData.enemySpawnDatasInWave[i].enemyId));
             }
 
+            foreach (GameObject enemy in activatedEnemies)
+            {
+                if (enemy == null || !enemy.activeInHierarchy) continue;
+                SurgeBossEnemy boss = enemy.GetComponent<SurgeBossEnemy>();
+                if (boss != null)
+                {
+                    bool wasLocked = InteractionLock.IsLocked;
+                    InteractionLock.IsLocked = true;
+                    try { yield return WorldTreeEntrance.Play(boss); }
+                    finally { InteractionLock.IsLocked = wasLocked; }
+                }
+            }
             StartCoroutine(WaveEndSensor());
+        }
+
+        public static void BeginWorldTreeTransition(TreeShellBossEnemy shell)
+        {
+            BattleWaveController controller = FindObjectOfType<BattleWaveController>();
+            if (controller != null && controller.isActiveAndEnabled)
+                controller.StartCoroutine(WorldTreeTransition.Play(shell));
         }
 
         // 분열 슬라임과 최종 보스가 웨이브 도중에 부르는 적. 이 적까지 쓰러뜨려야 웨이브가 끝난다.
@@ -54,9 +78,10 @@ namespace Combat.Enemies
                 //if (activatedEnemies.Count == 0)
                 //    break;
                 yield return new WaitForSeconds(0.1f);
+                if (WorldTreeTransition.IsPlaying) continue;
                 foreach (GameObject enemy in activatedEnemies)
                 {
-                    if (enemy.activeSelf)//enemy != null)
+                    if (enemy != null && enemy.activeSelf)
                     {
                         waveEnd = false;
                     }

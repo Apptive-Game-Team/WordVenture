@@ -183,6 +183,7 @@ namespace Combat.UI
                 yield break;
             }
 
+            SurgeBossEnemy.ObservePlayerSpell(spellType);
             InitSelectableObjectList();
             SetAllSelectable(true);
             IsAwaitingTarget = true;

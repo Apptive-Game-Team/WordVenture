@@ -51,6 +51,9 @@ namespace Combat.Spells
             } else if (this.spellType == MagicType.Shoot)
             {
                 moveVector = new Vector3(speed, 0, 0);
+                // 중경에 서 있는 거대 슬라임만 몸통으로 올려 쏜다. 다른 적의 직선 탄은 유지한다.
+                if (target.GetComponent<TreeShellBossEnemy>() != null)
+                    moveVector = (target.GetComponent<Collider2D>().bounds.center - transform.position).normalized * speed;
             }
 
             if (this.spellType == MagicType.Shoot || this.spellType == MagicType.Drop)

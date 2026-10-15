@@ -557,7 +557,7 @@ MonoBehaviour:
   - stageID: 7
     moment: 0
     wave: 0
-    title: "잿빛 유적 · 세계수로 모이는 마력"
+    title: "잿빛 유적 · 뿌리 아래의 기록"
     speakerName: "유적 연구자"
     speakerPortrait: {fileID: 21300000, guid: 945557753e674c1aa53d55e878e5468c, type: 3}
     background: {fileID: 21300000, guid: 1752d590c3284f99a5dd8af780317c0f, type: 3}
@@ -565,7 +565,15 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 0
       gesture: 0
-      text: "찾았군요! 이 기록이에요. 세계수 뿌리 아래로 마력이 계속 모이고 있었어요."
+      text: "찾았군요! 오래전 사악한 마법사가 죽은 자리에 세계수가 자랐다는 기록이에요."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "땅에 남은 풍부한 양분 덕분에 나무는 크게 자랐어요. 하지만 그 아래에서는 사악한 마력이 사라지지 않고 쌓였대요."
+    - wordSpeaking: 0
+      narration: 0
+      gesture: 0
+      text: "여기 보세요. 이 마력은 살아 있는 나무의 힘과는 다르다고 쓰여 있어요."
     - wordSpeaking: 0
       narration: 1
       gesture: 3
@@ -573,7 +581,7 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 0
       gesture: 0
-      text: "맞아요. 서리 마을의 얼음도, 협곡의 번개도 세계수에서 넘친 마력 때문이었어요."
+      text: "맞아요. 서리 마을의 얼음도, 협곡의 번개도 뿌리 아래에서 넘쳐 나온 마력 때문이었어요."
     - wordSpeaking: 0
       narration: 0
       gesture: 0
@@ -653,7 +661,7 @@ MonoBehaviour:
   - stageID: 9
     moment: 1
     wave: 0
-    title: "세계수의 심장 · 뭉친 마력"
+    title: "세계수의 심장 · 나무를 닮은 슬라임"
     speakerName: ""
     speakerPortrait: {fileID: 0}
     background: {fileID: 21300000, guid: 97b69cad2d4840909b1be5936d5315fc, type: 3}
@@ -661,7 +669,7 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "세계수 뿌리 아래, 넘쳐흐른 마력이 하나로 뭉쳐 형체를 이루고 있었다."
+      text: "멀리 세계수 뿌리 사이에서 노란빛이 반짝였다. 나무를 닮은 거대한 슬라임이 그 빛 속에서 몸을 일으켰다."
     - wordSpeaking: 1
       narration: 0
       gesture: 0
@@ -669,15 +677,19 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "유적에서 본 기록과 같았다. 여러 지역의 마법을 어지럽히고, 슬라임들이 사람을 덮치게 만든 것이 바로 이 마력이었다."
+      text: "유적의 기록이 떠올랐다. 죽은 마법사가 남긴 사악한 마력은 오랜 세월 쌓여, 세계수를 닮은 슬라임이 되어 있었다."
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "마력에 물든 슬라임들이 형체 주위로 모여들었다."
+      text: "거대한 몸에서 작은 슬라임들이 끊임없이 흘러나왔다. 슬라임 마왕도, 길에서 마주친 온갖 슬라임도 이곳에서 태어난 것이었다."
+    - wordSpeaking: 0
+      narration: 1
+      gesture: 0
+      text: "그 뒤에는 진짜 세계수가 살아 숨 쉬고 있었다. 워드가 멈춰야 할 것은 나무가 아니라, 그 아래에서 자란 마력의 근원이었다."
   - stageID: 9
     moment: 2
     wave: 2
-    title: "세계수의 심장 · 폭주한 마력의 형상"
+    title: "세계수의 심장 · 남겨진 주문"
     speakerName: "폭주한 마력의 형상"
     speakerPortrait: {fileID: 21300000, guid: a1febd8ccfc54e3185110405be77874c, type: 3}
     background: {fileID: 0}
@@ -685,23 +697,23 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 0
       gesture: 0
-      text: "…돌려…줘…"
+      text: "…마법을… 더…"
     - wordSpeaking: 0
       narration: 1
       gesture: 4
-      text: "워드는 형체를 올려다보며 고개를 갸웃했다."
+      text: "나무를 닮은 슬라임의 몸속에서 목소리가 새어 나왔다. 워드가 주문을 펼칠 때마다 노란빛이 같은 모양으로 일렁였다."
     - wordSpeaking: 0
       narration: 0
       gesture: 0
-      text: "잃어버린 것을… 사라진 사람들을… 전부 돌려줘…"
+      text: "그 주문도… 그 힘도… 전부 내 것이다…"
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "워드는 그 목소리를 알 것 같았다. 할아버지가 돌아오기를 매일 바라던 자신과 닮아 있었다."
+      text: "살아 돌아온 마법사의 목소리가 아니었다. 사악한 마력에 남은 주문의 기억이, 눈앞의 마법을 탐내고 있었다."
     - wordSpeaking: 0
       narration: 1
       gesture: 2
-      text: "하지만 잃은 것을 되찾겠다고 남은 사람들까지 다치게 할 수는 없었다. 워드는 천천히 고개를 저었다."
+      text: "워드는 천천히 고개를 저었다. 마법은 빼앗기 위한 힘이 아니었다. 돌아가기를 기다리는 사람들이 아직 있었다."
   - stageID: 9
     moment: 0
     wave: 0
@@ -713,7 +725,7 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "형체가 흩어지자 세계수의 잎이 다시 초록빛으로 물들었다."
+      text: "마침내 금빛 형체가 흩어졌다. 슬라임을 낳던 사악한 마력이 사라지고, 살아 있는 세계수의 잎 사이로 바람이 돌아왔다."
     - wordSpeaking: 0
       narration: 1
       gesture: 0

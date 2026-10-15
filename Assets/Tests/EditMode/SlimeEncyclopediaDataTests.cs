@@ -43,10 +43,12 @@ namespace WordVenture.Tests
             for (int i = 0; i < enemies.arraySize; i++)
             {
                 var prefab = (GameObject)enemies.GetArrayElementAtIndex(i).FindPropertyRelative("prefab").objectReferenceValue;
-                foreach (string field in new[] { "childEnemyId", "splitEnemyId" })
+                foreach (MonoBehaviour component in prefab.GetComponents<MonoBehaviour>())
                 {
-                    SerializedObject summoner = ProjectAssets.FindComponentWithProperty(prefab, field);
-                    if (summoner != null) ids.Add(summoner.FindProperty(field).intValue);
+                    var property = component.GetType().GetProperty("SummonedEnemyId");
+                    if (property == null) continue;
+                    int summoned = (int)property.GetValue(component);
+                    if (summoned >= 0) ids.Add(summoned);
                 }
             }
             return ids;
