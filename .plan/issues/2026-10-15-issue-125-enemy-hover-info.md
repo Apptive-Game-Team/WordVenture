@@ -2,7 +2,7 @@
 
 - Date: 2026-10-15
 - GitHub Issue: #125
-- Status: In Progress
+- Status: Complete
 
 ## Goal
 
@@ -24,12 +24,13 @@
 - [x] `EnemyHoverInfo` 와 `Enemy` 의 읽기 전용 값
 - [x] 영어 번역
 - [x] PlayMode 테스트와 캡처
-- [ ] EditMode, PlayMode 전체를 다른 복사본과 겹치지 않게 다시 실행
+- [x] EditMode, PlayMode 전체를 다른 복사본과 겹치지 않게 다시 실행
 
 ## Validation
 
 - EditMode 217개 통과
-- PlayMode: 다른 복사본과 동시에 돌려 PlayerPrefs 가 섞인 탓으로 보이는 실패 3개(도감, 튜토리얼, 영어 전환). 혼자 다시 돌려 확인해야 한다.
+- PlayMode 70개 중 69개 통과, 실패 0, 건너뜀 1(밸런스 시뮬레이션)
+- 처음에 다른 복사본과 동시에 돌렸을 때 나온 실패 3개는 PlayerPrefs 가 섞인 탓이었고, 혼자 다시 돌리자 통과했다.
 
 ## Risks & Rollback
 
