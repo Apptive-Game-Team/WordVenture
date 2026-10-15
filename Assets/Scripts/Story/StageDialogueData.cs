@@ -41,6 +41,8 @@ namespace Story
         ShowCover,
         // 목을 짚어 말할 수 없다고 알린다.
         TouchThroat,
+        // 할아버지의 기록을 내려다보며 읽는다. 튜토리얼과 안내에서 쓴다.
+        ReadBook,
     }
 
     [Serializable]

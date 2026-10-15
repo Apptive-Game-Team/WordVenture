@@ -20,7 +20,7 @@ namespace WordVenture.Tests
         readonly string[] keys =
         {
             "TutorialEnded", "StagePosition", "ShowsActOneMap", "ActOneDialogueSeen", "ActTwoDialogueSeen",
-            "SeenSlimes0", "SeenSlimes1", "Language"
+            "SeenSlimes0", "SeenSlimes1", "Language", "SeenTips"
         };
         int[] values;
         bool[] existed;
@@ -56,6 +56,7 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             oldPosition = (int)StagePosition.GetValue(null);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.DeleteKey("SeenSlimes0");
             PlayerPrefs.DeleteKey("SeenSlimes1");
             SharedDialoguePlayTests.SetLanguage("Korean");

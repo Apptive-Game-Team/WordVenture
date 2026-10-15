@@ -38,6 +38,8 @@ MonoBehaviour:
     portrait: {fileID: 21300000, guid: 2893518f1c344927b7e4547cc52875f5, type: 3}
   - gesture: 12
     portrait: {fileID: 21300000, guid: ca6e1f029377475990077d7e067cf7c9, type: 3}
+  - gesture: 13
+    portrait: {fileID: 21300000, guid: fbbda2c859ba4701af1298c38aa6856c, type: 3}
   font: {fileID: 11400000, guid: 57a5956b1f2ebe84daed39db798aa561, type: 2}
   chapters:
   - stageID: 0
@@ -55,7 +57,7 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "할아버지의 목소리가 사라진 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다."
+      text: "할아버지의 기록이 끝난 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다."
     - wordSpeaking: 0
       narration: 0
       gesture: 0

@@ -1,3 +1,4 @@
+using Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,8 +18,8 @@ namespace Combat.Enemies
 
         protected TMP_Text HpText;
 
-        protected int Hp = 100;
-        protected int MaxHp = 100;
+        protected int Hp;
+        protected int MaxHp;
         protected int Damage;
 
         public int shield = 0;
@@ -30,6 +31,8 @@ namespace Combat.Enemies
 
         private void Awake()
         {
+            MaxHp = PlayerUpgrades.PlayerMaxHp;
+            Hp = MaxHp;
             InitIndicators();
             animator = GetComponent<Animator>();
             _instance = this;
@@ -50,7 +53,10 @@ namespace Combat.Enemies
 
         public void TakeHit(int damage)
         {
-            Hp -= damage;
+            // 남은 HP보다 큰 피해는 남은 HP만큼만 기록한다.
+            BattleStats.RecordDamageTaken(Mathf.Min(damage, Hp));
+            // 음수 피해는 회복이라 최대 HP를 넘지 않게 자른다.
+            Hp = Mathf.Min(Hp - damage, MaxHp);
             if (Hp <= 0)
             {
                 Death();

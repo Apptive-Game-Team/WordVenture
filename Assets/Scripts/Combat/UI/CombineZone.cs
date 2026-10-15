@@ -157,6 +157,8 @@ namespace Combat.UI
         {
             if (InteractionLock.IsLocked || isCasting || !CanCombine()) return;
             isCasting = true;
+            // 이 시점에 카드가 소모된다. 대상 선택 중에는 취소 경로가 없으므로 한 번만 센다.
+            BattleStats.RecordCardsUsed(spellCards.Count + magicTypeCards.Count);
 
             if (chargeEffect == null)
             {

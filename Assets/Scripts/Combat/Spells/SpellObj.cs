@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cards;
 using Combat.Enemies;
-using Map;
+using Core;
 using UnityEngine;
 
 namespace Combat.Spells
@@ -77,7 +77,13 @@ namespace Combat.Spells
         }
         float speed = 10;
         Vector3 moveVector;
-        int damage = 10 + 5 * (MapMove.StagePosition / 2);
+        int damage;
+
+        // PlayerPrefs 는 MonoBehaviour 생성자(필드 초기화)에서 읽을 수 없다. InitProjectileDamage 는 Awake 뒤에 불린다.
+        void Awake()
+        {
+            damage = PlayerUpgrades.SpellBaseDamage;
+        }
 
         public void InitProjectileDamage(int damage)
         {
@@ -152,7 +158,7 @@ namespace Combat.Spells
 
         public static float GetBaseDamage(int damage, MagicType spellType) => GetScaledDamage(damage, spellType);
 
-        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(10 + 5 * (MapMove.StagePosition / 2), spellType);
+        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(PlayerUpgrades.SpellBaseDamage, spellType);
 
     }
 

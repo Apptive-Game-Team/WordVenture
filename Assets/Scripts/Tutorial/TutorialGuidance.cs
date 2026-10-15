@@ -50,6 +50,17 @@ namespace Tutorial
                 // 카드 스프라이트의 투명 여백 대신 실제 조작 영역을 감싼다.
                 Bounds bounds = spriteBounds && sprite != null ? sprite.bounds
                     : collider != null ? collider.bounds : sprite != null ? sprite.bounds : new Bounds(target.position, Vector3.one);
+                // 내려 둔 손패 카드는 콜라이더가 화면 아래로 벗어난다. 보이는 부분만 감싸야 안내 틀이 화면 밖으로 나가지 않는다.
+                // 카드 그림 크기를 재는 spriteBounds는 자르지 않는다.
+                if (!spriteBounds && targetCamera.orthographic)
+                {
+                    Vector3 view = targetCamera.transform.position;
+                    float halfHeight = targetCamera.orthographicSize;
+                    float halfWidth = halfHeight * targetCamera.aspect;
+                    Vector3 viewMin = Vector3.Max(bounds.min, new Vector3(view.x - halfWidth, view.y - halfHeight, bounds.min.z));
+                    Vector3 viewMax = Vector3.Min(bounds.max, new Vector3(view.x + halfWidth, view.y + halfHeight, bounds.max.z));
+                    if (viewMax.x > viewMin.x && viewMax.y > viewMin.y) bounds.SetMinMax(viewMin, viewMax);
+                }
                 corners[0] = new Vector3(bounds.min.x, bounds.min.y, bounds.center.z);
                 corners[1] = new Vector3(bounds.min.x, bounds.max.y, bounds.center.z);
                 corners[2] = new Vector3(bounds.max.x, bounds.max.y, bounds.center.z);

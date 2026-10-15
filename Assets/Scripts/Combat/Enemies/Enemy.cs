@@ -73,8 +73,11 @@ namespace Combat.Enemies
         protected int Damage;
         public ElementalStatus Status { get; private set; } = new ElementalStatus();
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
-        protected int AttackDamage => Status.GetAttackDamage(Damage);
-        // 호버 정보 창이 읽는 값. 공격력은 상태 이상을 반영한 지금 실제로 주는 피해다.
+        protected int AttackDamage => Status.GetAttackDamage(EnemyRage.ApplyToDamage(Damage, RageLevel));
+        // 치유량처럼 분노가 붙지 않는 공격력이다.
+        protected int UnragedAttackDamage => Status.GetAttackDamage(Damage);
+        public int RageLevel { get; private set; }
+        // 호버 정보 창이 읽는 값. 공격력은 분노와 상태 이상을 반영한 지금 실제로 주는 피해다.
         public int CurrentHp => Hp;
         public int MaximumHp => MaxHp;
         public int CurrentAttackDamage => AttackDamage;
@@ -83,6 +86,9 @@ namespace Combat.Enemies
         ReactionBurstVfx reactionBurst;
         HitFlashVfx hitFlash;
         AffinityMarkVfx affinityMark;
+        RageMarkVfx rageMark;
+        bool rageShown;
+        float appliedRageScale = 1f;
         Color originalBodyColor;
         bool tookTurn;
 
@@ -113,6 +119,7 @@ namespace Combat.Enemies
             Status = new ElementalStatus(enemyType);
             tookTurn = false;
             UpdateIndicator();
+            SyncRage(false);
         }
 
         private void InitEnemyActions()
@@ -171,6 +178,7 @@ namespace Combat.Enemies
             // 원소 반응이 방패 보호보다 드물고 피해도 크므로 둘 다 일어나면 반응 효과를 보여 준다.
             if (ReactionBurstVfx.TryGetBurst(hit.Reaction, out ReactionBurstVfx.Burst burst)) reactionBurst.Play(burst);
             else if (guarded) reactionBurst.Play(ReactionBurstVfx.Burst.Guard);
+            if (!string.IsNullOrEmpty(hit.Reaction)) Core.BattleStats.RecordCombo();
             HitStrength strength = HitImpact.Classify(hit.Affinity, !string.IsNullOrEmpty(hit.Reaction));
             if (strength != HitStrength.None) PlayHitImpact(strength, hit.Affinity);
             TakeHit(damage);
@@ -252,7 +260,34 @@ namespace Combat.Enemies
             hitFlash.Initialize(bodyRenderer);
             affinityMark = gameObject.AddComponent<AffinityMarkVfx>();
             affinityMark.Initialize(bodyRenderer);
+            rageMark = gameObject.AddComponent<RageMarkVfx>();
+            rageMark.Initialize(bodyRenderer);
             EnemyHoverInfo.EnsureExists();
+        }
+
+        void OnEnable()
+        {
+            SyncRage(false);
+        }
+
+        // 구독 대신 매 프레임 단계를 확인한다. 풀에서 다시 켜진 적과 TurnBattleSystem 이 없는 씬에서도 어긋나지 않는다.
+        void Update()
+        {
+            SyncRage(true);
+        }
+
+        void SyncRage(bool announce)
+        {
+            int level = EnemyRage.CurrentLevel;
+            if (rageShown && level == RageLevel) return;
+            bool raised = announce && rageShown && level > RageLevel;
+            rageShown = true;
+            RageLevel = level;
+            // 방향을 바꾸는 FaceToDirection 이 x 부호만 건드리므로 지금 배율에 비율만 곱한다.
+            float target = EnemyRage.BodyScaleMultiplier(level);
+            transform.localScale *= target / appliedRageScale;
+            appliedRageScale = target;
+            if (rageMark != null) rageMark.Show(level, raised);
         }
 
         protected virtual void Start()
