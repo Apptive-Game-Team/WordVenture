@@ -125,3 +125,7 @@
 - 새 외형, 실제 웨이브의 첫 등장, 사망 후 비행 부재, 위치 유지와 잠금 해제, 캡처를 검증한다.
 
 - 재승인 수정 검증 완료: EditMode 299 통과/1 생략, 관련 PlayMode 33 통과, 새 실제 화면과 GIF는 `worldtree-revision/`에 기록했다.
+
+## PR 통합
+
+사용자가 최종 연출을 승인하고 PR 발행을 요청했다. 기반 PR #120이 이미 develop에 병합되어 최신 develop 위에 보스 변경만 적용했다. 최신 공통 아트 복원과 충돌하지 않도록 승인된 본체 프레임은 WorldTreeCore에 별도 보관해 SurgeBoss만 참조한다. 원래 Surge 아트 및 다른 적·배경의 최신 변경은 유지한다. 새 브랜치는 codex/act-two-bosses이며 대상은 develop이다.

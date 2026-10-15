@@ -49,7 +49,7 @@ for path in Path('Assets/ScriptableObjects/Combat').glob('*WaveData.asset'):
 
 manifest=json.loads(Path('docs/design/act-two-art/manifest.json').read_text(encoding='utf-8'))
 art=[]
-for key in ['SnowBoss','ThunderBoss','FurnaceBoss','GraftBoss','Snowball','WorldTreeShell']:
+for key in ['SnowBoss','ThunderBoss','FurnaceBoss','GraftBoss','Snowball','WorldTreeShell','WorldTreeCore']:
     for item in manifest['enemies'][key]['frames']:
         path=Path(item['path'])
         im=Image.open(path).convert('RGBA')

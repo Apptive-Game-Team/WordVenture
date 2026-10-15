@@ -387,6 +387,70 @@
         171
       ],
       "colors": 49
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_01.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 62
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_02.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 61
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_03.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 61
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_04.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 62
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_05.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 62
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_06.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 61
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_07.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 63
+    },
+    {
+      "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_08.png",
+      "size": [
+        78,
+        80
+      ],
+      "colors": 63
     }
   ]
 }

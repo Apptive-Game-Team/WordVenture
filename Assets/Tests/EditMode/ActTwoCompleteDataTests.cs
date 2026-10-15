@@ -35,7 +35,7 @@ namespace WordVenture.Tests
             ("SplitSlimeSmall", "Split"),
             ("ExplodeSlime", "Explode"),
             ("HealSlime", "Heal"),
-            ("SurgeBoss", "Surge"),
+            ("SurgeBoss", "WorldTreeCore"),
             ("SnowBoss", "SnowBoss"),
             ("ThunderBoss", "ThunderBoss"),
             ("FurnaceBoss", "FurnaceBoss"),
