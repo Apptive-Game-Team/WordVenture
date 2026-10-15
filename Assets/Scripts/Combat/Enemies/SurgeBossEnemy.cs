@@ -2,7 +2,6 @@ using System.Collections;
 using Cards;
 using Combat.Allies;
 using Core;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -13,7 +12,7 @@ namespace Combat.Enemies
         [SerializeField] Sprite markerSprite;
         [SerializeField] Sprite shellSprite;
         MortarStrike strike;
-        TMP_Text memoryLabel;
+        BossIntent tell;
         SpriteRenderer surgeGlow;
         SpriteRenderer body;
         MagicType? rememberedSpell;
@@ -44,14 +43,6 @@ namespace Combat.Enemies
         protected override void Start()
         {
             base.Start();
-            var label = new GameObject("RememberedSpell");
-            label.transform.SetParent(transform, false);
-            memoryLabel = label.AddComponent<TextMeshPro>();
-            if (HpText != null) memoryLabel.font = HpText.font;
-            memoryLabel.fontSize = 3.2f;
-            memoryLabel.alignment = TextAlignmentOptions.Center;
-            memoryLabel.rectTransform.sizeDelta = new Vector2(16, 2);
-            memoryLabel.GetComponent<MeshRenderer>().sortingOrder = 55;
             body = GetComponent<SpriteRenderer>();
             var glow = new GameObject("WorldTreeSurgeGlow");
             glow.transform.SetParent(transform, false);
@@ -64,15 +55,8 @@ namespace Combat.Enemies
 
         void LateUpdate()
         {
-            if (memoryLabel == null) return;
-            float top = Animator != null && Animator.FirstFrame != null
-                ? transform.TransformPoint(new Vector3(0, Animator.FirstFrame.bounds.max.y, 0)).y
-                : transform.position.y + 1.8f;
-            memoryLabel.transform.position = new Vector3(transform.position.x, top + .9f, transform.position.z);
-            memoryLabel.transform.rotation = Quaternion.identity;
-            Vector3 scale = transform.lossyScale;
-            memoryLabel.transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f / scale.z);
-            memoryLabel.color = IsEnraged ? new Color32(255, 221, 125, 255) : new Color32(151, 255, 204, 255);
+            if (tell == null) return;
+            tell.Tint = IsEnraged ? new Color32(255, 221, 125, 255) : new Color32(151, 255, 204, 255);
             surgeGlow.enabled = IsAlive && IsEnraged;
             if (surgeGlow.enabled)
             {
@@ -85,11 +69,14 @@ namespace Combat.Enemies
 
         void RefreshMemory()
         {
-            if (memoryLabel == null) return;
             string text = !rememberedSpell.HasValue ? "앞줄 공격"
                 : rememberedSpell == MagicType.Shoot ? "모방 Shoot: 앞줄"
                 : rememberedSpell == MagicType.Drop ? "모방 Drop: 표시한 자리" : "모방 Explode: 아군 전체";
-            memoryLabel.text = Localization.Translate(text);
+            BossIntent.ActionIcon icon = !rememberedSpell.HasValue ? BossIntent.ActionIcon.Front
+                : rememberedSpell == MagicType.Shoot ? BossIntent.ActionIcon.Shoot
+                : rememberedSpell == MagicType.Drop ? BossIntent.ActionIcon.Drop : BossIntent.ActionIcon.Explode;
+            BossIntent.Show(ref tell, transform, icon, text, new Color32(151, 255, 204, 255),
+                imminent: rememberedSpell.HasValue, copied: rememberedSpell.HasValue);
         }
 
         protected override void TakeTurnAction(float distanceToFrontLine)
@@ -167,6 +154,7 @@ namespace Combat.Enemies
         {
             strike?.Clear();
             rememberedSpell = null;
+            BossIntent.Hide(tell);
         }
 
         protected override void Death()

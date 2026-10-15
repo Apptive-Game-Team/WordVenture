@@ -1,5 +1,4 @@
 using Combat.Allies;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -8,7 +7,7 @@ namespace Combat.Enemies
     {
         public const int MaxHeat = 3;
         public const int DamagePerHeat = 3;
-        TMP_Text tell;
+        BossIntent tell;
         int shownDamage = -1;
         public int Heat { get; private set; }
         public int NextAttackDamage => Mathf.FloorToInt((EnemyRage.ApplyToDamage(Damage, RageLevel) + Heat * DamagePerHeat) * Status.AttackMultiplier);
@@ -29,9 +28,9 @@ namespace Combat.Enemies
         }
         void ShowHeat()
         {
-            RegionalBossTell.Show(ref tell, transform, HpText, "열기 방출", new Color(1f, 0.6f, 0.25f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Heat, "열기 방출", new Color(1f, 0.6f, 0.25f), Heat, imminent: Heat == MaxHeat);
             shownDamage = NextAttackDamage;
-            tell.text += " " + Heat + "/" + MaxHeat + "  " + shownDamage;
+            tell.DamagePreview = shownDamage;
         }
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
@@ -45,7 +44,7 @@ namespace Combat.Enemies
         void OnDisable()
         {
             Heat = 0;
-            RegionalBossTell.Hide(tell);
+            BossIntent.Hide(tell);
         }
     }
 }

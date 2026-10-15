@@ -1,5 +1,4 @@
 using Combat.Allies;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -8,7 +7,7 @@ namespace Combat.Enemies
     public sealed class TreeShellBossEnemy : BossEnemy
     {
         public const float GroundY = -2.5f;
-        TMP_Text tell;
+        BossIntent tell;
         bool rootsReady;
         bool transitionStarted;
         public bool RootsReady => rootsReady;
@@ -20,7 +19,7 @@ namespace Combat.Enemies
             Vector3 position = transform.position;
             position.y = GroundY;
             transform.position = position;
-            RegionalBossTell.Show(ref tell, transform, HpText, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Roots, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
         }
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
@@ -28,20 +27,20 @@ namespace Combat.Enemies
             {
                 rootsReady = true;
                 Animator.Windup();
-                RegionalBossTell.Show(ref tell, transform, HpText, "다음 턴 뿌리 공격", new Color(1f, 0.85f, 0.4f));
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Roots, "다음 턴 뿌리 공격", new Color(1f, 0.85f, 0.4f), imminent: true);
                 return;
             }
             rootsReady = false;
             Animator.EndWindup();
             Animator.RangeAttack();
             AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
-            RegionalBossTell.Show(ref tell, transform, HpText, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Roots, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
         }
         protected override void Death()
         {
             if (transitionStarted) return;
             transitionStarted = true;
-            RegionalBossTell.Hide(tell);
+            BossIntent.Hide(tell);
             base.Death();
             BattleWaveController.BeginWorldTreeTransition(this);
         }

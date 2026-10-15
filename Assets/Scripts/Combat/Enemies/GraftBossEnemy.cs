@@ -1,7 +1,6 @@
 using System.Collections;
 using Combat.Allies;
 using DG.Tweening;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -11,8 +10,8 @@ namespace Combat.Enemies
         [SerializeField] Sprite markerSprite;
         [SerializeField] Sprite shellSprite;
         Enemy markedEnemy;
-        TMP_Text tell;
-        TMP_Text targetTell;
+        BossIntent tell;
+        BossIntent targetTell;
         MortarStrike strike;
         int absorbedEnemyId = -1;
         public Enemy MarkedEnemy => markedEnemy != null && markedEnemy.IsAlive ? markedEnemy : null;
@@ -23,7 +22,7 @@ namespace Combat.Enemies
         protected override void Start()
         {
             base.Start();
-            RegionalBossTell.Show(ref tell, transform, HpText, "접목 준비", new Color(0.7f, 1f, 0.5f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Absorb, "접목 준비", new Color(0.7f, 1f, 0.5f));
         }
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
@@ -37,7 +36,7 @@ namespace Combat.Enemies
                     strike.Fire(transform.position, AttackDamage);
                 }
                 else StartCoroutine(Dash(distanceToFrontLine));
-                RegionalBossTell.Show(ref tell, transform, HpText, "접목 준비", new Color(0.7f, 1f, 0.5f));
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Absorb, "접목 준비", new Color(0.7f, 1f, 0.5f));
                 return;
             }
             // 지목된 적이 죽었다면 이번 행동은 재지목한다. 살아 있으면 흡수만 하고 공격하지 않는다.
@@ -52,12 +51,12 @@ namespace Combat.Enemies
                 {
                     if (strike == null) strike = new MortarStrike(markerSprite, shellSprite);
                     strike.Aim();
-                    RegionalBossTell.Show(ref tell, transform, HpText, "다음 턴 접목 포격", Color.yellow);
+                    BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Drop, "다음 턴 접목 포격", Color.yellow, imminent: true);
                 }
                 else
                 {
                     Animator.Windup();
-                    RegionalBossTell.Show(ref tell, transform, HpText, "다음 턴 접목 돌진", Color.yellow);
+                    BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Charge, "다음 턴 접목 돌진", Color.yellow, imminent: true);
                 }
                 return;
             }
@@ -74,16 +73,25 @@ namespace Combat.Enemies
             }
             if (markedEnemy != null)
             {
-                RegionalBossTell.Show(ref targetTell, markedEnemy.transform, markedEnemy.GetComponentInChildren<TMP_Text>(),
-                    "다음 턴 흡수", new Color(0.75f, 1f, 0.3f));
-                RegionalBossTell.Show(ref tell, transform, HpText, "흡수 예고", new Color(0.75f, 1f, 0.3f));
+                BossIntent.Show(ref targetTell, markedEnemy.transform, BossIntent.ActionIcon.Absorb,
+                    "다음 턴 흡수", new Color(0.75f, 1f, 0.3f), imminent: true);
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Absorb, "흡수 예고", new Color(0.75f, 1f, 0.3f), imminent: true);
                 Animator.RangeAttack();
             }
             else
             {
                 Animator.RangeAttack();
                 AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
-                RegionalBossTell.Show(ref tell, transform, HpText, "접목 준비", new Color(0.7f, 1f, 0.5f));
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Absorb, "접목 준비", new Color(0.7f, 1f, 0.5f));
+            }
+        }
+        void LateUpdate()
+        {
+            if (markedEnemy != null && !markedEnemy.IsAlive)
+            {
+                markedEnemy = null;
+                ClearTargetTell();
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Absorb, "접목 준비", new Color(0.7f, 1f, 0.5f));
             }
         }
         IEnumerator Dash(float distance)
@@ -117,7 +125,7 @@ namespace Combat.Enemies
             markedEnemy = null;
             absorbedEnemyId = -1;
             ClearTargetTell();
-            RegionalBossTell.Hide(tell);
+            BossIntent.Hide(tell);
         }
     }
 }

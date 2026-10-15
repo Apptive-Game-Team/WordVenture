@@ -130,8 +130,10 @@ namespace Combat.UI
         void Refresh()
         {
             ElementalStatus s = Target.Status;
+            BossIntent intent = Target.GetComponentInChildren<BossIntent>();
             string key = Target.CurrentHp + "/" + Target.MaximumHp + "/" + Target.CurrentAttackDamage + "/" + s.BurnTurns + "/"
-                + s.Chill + "/" + s.Frozen + "/" + s.ShockTurns + "/" + s.FractureTurns + "/" + s.WeakenTurns;
+                + s.Chill + "/" + s.Frozen + "/" + s.ShockTurns + "/" + s.FractureTurns + "/" + s.WeakenTurns
+                + "/" + Localization.Current + "/" + (intent != null ? intent.Description : "");
             if (key == shownKey) return;
             shownKey = key;
             label.text = Describe(Target, CombineZone.Instance != null ? CombineZone.Instance.AffinityTable : null);
@@ -144,6 +146,9 @@ namespace Combat.UI
             lines.Clear();
             lines.Add("<color=#F5D58C>" + T(enemy.DisplayName) + "</color>  " + SlimeEncyclopediaView.ElementName(enemy.enemyType));
             lines.Add(T("체력") + " " + enemy.CurrentHp + " / " + enemy.MaximumHp + "   " + T("공격력") + " " + enemy.CurrentAttackDamage);
+
+            BossIntent intent = enemy.GetComponentInChildren<BossIntent>();
+            if (intent != null) lines.Add(T("다음 행동") + ": " + intent.Description);
 
             ElementalStatus s = enemy.Status;
             items.Clear();

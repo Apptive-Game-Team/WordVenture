@@ -295,7 +295,7 @@ namespace WordVenture.Tests
             boss = Spawn(32, 6);
             yield return null;
             for (int i = 0; i < 3; i++) Call(boss, "TakeSpellHit", Spell("Rock"), Spell("Shoot"), 1f, 1f);
-            yield return null;
+            yield return new WaitForSeconds(.4f);
             Capture("10-furnace-heat.png");
             Clear("TwistedForest");
             boss = Spawn(33, 7);
@@ -316,6 +316,28 @@ namespace WordVenture.Tests
                 yield return null;
                 Capture("13-worldtree-echo-" + spell.ToLowerInvariant() + ".png");
             }
+        }
+
+        [UnityTest]
+        public IEnumerator 아이콘의_다음_행동_설명은_마우스_정보창에서만_보인다()
+        {
+            var wave = (MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
+            wave.StopAllCoroutines();
+            foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy"))) enemy.gameObject.SetActive(false);
+            Component boss = ((GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy")
+                .Invoke(null, new object[] { 32, 6f })).GetComponent(Runtime("Combat.Enemies.Enemy"));
+            yield return null;
+            object Magic(string name) => Enum.Parse(Runtime("Cards.MagicType"), name);
+            for (int i = 0; i < 3; i++) boss.GetType().GetMethod("TakeSpellHit").Invoke(boss,
+                new[] { Magic("Rock"), Magic("Shoot"), (object)1f, 1f });
+            yield return new WaitForSeconds(.4f);
+            Component hover = (Component)Runtime("Combat.UI.EnemyHoverInfo").GetMethod("EnsureExists").Invoke(null, null);
+            hover.GetType().GetMethod("Show").Invoke(hover, new object[] { boss });
+            yield return null;
+            Capture("14-intent-hover-korean.png");
+            Runtime("Core.Localization").GetMethod("SetLanguage").Invoke(null, new[] { Enum.Parse(Runtime("Core.Language"), "English") });
+            yield return null;
+            Capture("15-intent-hover-english.png");
         }
 
         static void Capture(string filename, int width = 1920, int height = 1080)
@@ -344,7 +366,7 @@ namespace WordVenture.Tests
                 RenderTexture.active = target;
                 image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
                 image.Apply();
-                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-15-act-two-boss-design/worldtree-revision");
+                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-15-act-two-boss-design/boss-intent-icons");
                 Directory.CreateDirectory(directory);
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(directory, filename)));
                 File.WriteAllBytes(Path.Combine(directory, filename), image.EncodeToPNG());

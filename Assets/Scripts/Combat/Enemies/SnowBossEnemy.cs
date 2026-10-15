@@ -1,5 +1,3 @@
-using Core;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -7,7 +5,7 @@ namespace Combat.Enemies
     public class SnowBossEnemy : BossEnemy
     {
         SnowballEnemy snowball;
-        TMP_Text tell;
+        BossIntent tell;
         public SnowballEnemy Snowball => snowball != null && snowball.IsAlive ? snowball : null;
         public override int SummonedEnemyId => 34;
         // 수치를 바꾸면 English.json 도 고친다.
@@ -16,7 +14,7 @@ namespace Combat.Enemies
         protected override void Start()
         {
             base.Start();
-            RegionalBossTell.Show(ref tell, transform, HpText, "눈덩이 준비", new Color(0.65f, 0.9f, 1f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Snowball, "눈덩이 준비", new Color(0.65f, 0.9f, 1f));
         }
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
@@ -42,10 +40,16 @@ namespace Combat.Enemies
                 Animator.RangeAttack();
 
             }
-            RegionalBossTell.Show(ref tell, transform, HpText,
-                Snowball == null ? "눈덩이 준비" : snowball.Growth == 3 ? "다음 턴 눈덩이 투척" : "눈덩이 성장", new Color(0.65f, 0.9f, 1f));
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Snowball,
+                Snowball == null ? "눈덩이 준비" : snowball.Growth == 3 ? "다음 턴 눈덩이 투척" : "눈덩이 성장", new Color(0.65f, 0.9f, 1f),
+                Snowball != null ? snowball.Growth : 0, imminent: Snowball != null && snowball.Growth == 3);
         }
 
+        void LateUpdate()
+        {
+            if (tell != null && tell.Level > 0 && Snowball == null)
+                BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Snowball, "눈덩이 준비", new Color(0.65f, 0.9f, 1f));
+        }
         protected override void Death()
         {
             if (snowball != null && snowball.IsAlive) snowball.Dismiss();
@@ -56,58 +60,9 @@ namespace Combat.Enemies
         {
             if (snowball != null && snowball.IsAlive) snowball.Dismiss();
             snowball = null;
-            RegionalBossTell.Hide(tell);
+            BossIntent.Hide(tell);
         }
         protected override void StopMove() => Animator.MoveEnd();
     }
 
-    // 보스의 다음 행동만 짧게 표시한다. HP와 같은 폰트와 월드 좌표계를 쓴다.
-    internal static class RegionalBossTell
-    {
-        public static void Show(ref TMP_Text label, Transform owner, TMP_Text hp, string message, Color color)
-        {
-            if (label == null)
-            {
-                GameObject go = new GameObject("BossIntent");
-                go.transform.SetParent(owner, false);
-                go.transform.localPosition = new Vector3(0, 3.1f, 0);
-                var text = go.AddComponent<TextMeshPro>();
-                if (hp != null) text.font = hp.font;
-                text.fontSize = 3.5f;
-                text.alignment = TextAlignmentOptions.Center;
-                text.rectTransform.sizeDelta = new Vector2(12, 1.5f);
-                text.GetComponent<MeshRenderer>().sortingOrder = 55;
-                go.AddComponent<RegionalBossIntentAnchor>().Refresh();
-                label = text;
-            }
-
-            label.color = color;
-            label.text = Localization.Translate(message);
-            label.gameObject.SetActive(true);
-        }
-        public static void Hide(TMP_Text label)
-        {
-            if (label != null) label.gameObject.SetActive(false);
-        }
-    }
-    // 보스의 방향 전환과 분노 확대 후에도 예고는 읽을 수 있는 크기와 방향을 유지한다.
-    internal sealed class RegionalBossIntentAnchor : MonoBehaviour
-    {
-        void LateUpdate() => Refresh();
-        public void Refresh()
-        {
-            Transform owner = transform.parent;
-            if (owner == null) return;
-            var animator = owner.GetComponent<SlimeAnimator>();
-            float top = animator != null && animator.FirstFrame != null
-                ? owner.TransformPoint(new Vector3(0, animator.FirstFrame.bounds.max.y, 0)).y
-                : owner.position.y + 1.8f;
-            transform.position = new Vector3(owner.position.x, top + .9f, owner.position.z);
-            transform.rotation = Quaternion.identity;
-            Vector3 scale = owner.lossyScale;
-            transform.localScale = new Vector3(
-                Mathf.Abs(scale.x) > 0.001f ? 0.8f / scale.x : 1f,
-                Mathf.Abs(scale.y) > 0.001f ? 0.8f / scale.y : 1f, 1);
-        }
-    }
 }

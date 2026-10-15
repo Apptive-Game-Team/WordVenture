@@ -1,6 +1,5 @@
 using System.Collections;
 using Combat.Allies;
-using TMPro;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -8,7 +7,7 @@ namespace Combat.Enemies
     public class SnowballEnemy : Enemy
     {
         SnowBossEnemy owner;
-        TMP_Text tell;
+        BossIntent tell;
         Vector3 initialScale;
         bool dismissed;
         public SnowBossEnemy Owner => owner;
@@ -32,8 +31,8 @@ namespace Combat.Enemies
         }
         void ShowGrowth()
         {
-            RegionalBossTell.Show(ref tell, transform, HpText,
-                Growth == 1 ? "눈덩이 1/3" : Growth == 2 ? "눈덩이 2/3" : "눈덩이 3/3", Color.cyan);
+            BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Snowball,
+                Growth == 3 ? "다음 턴 눈덩이 투척" : "눈덩이 성장", Color.cyan, Growth, imminent: Growth == 3);
         }
         public void Throw(int damage)
         {
@@ -53,7 +52,7 @@ namespace Combat.Enemies
             owner = null;
             base.Death();
         }
-        void OnDisable() => RegionalBossTell.Hide(tell);
+        void OnDisable() => BossIntent.Hide(tell);
     }
     internal sealed class SnowballFlight : MonoBehaviour
     {

@@ -289,6 +289,140 @@ namespace WordVenture.Tests
             while (EnemyHp(boss) == afterFirstAttack && Time.time < resumeDeadline) yield return null;
             Assert.That(EnemyHp(boss), Is.LessThan(afterFirstAttack), "등장이 끝나면 남은 아군 공격을 이어간다");
         }
+
+        static Component Intent(Component enemy) => enemy.GetComponentInChildren(Runtime("Combat.Enemies.BossIntent"));
+
+        [UnityTest]
+        public IEnumerator 눈덩이_예고는_글자_없이_성장과_투척_단계를_표시하고_파괴하면_초기화된다()
+        {
+            Component boss = CreateEnemy("SnowBoss", 6, 160, 24, "Ice");
+            yield return null;
+            Component icon = Intent(boss);
+            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Snowball"));
+            Assert.That(icon.GetComponentInChildren(Runtime("TMPro.TMP_Text")), Is.Null);
+            Assert.That(Property(icon, "Level"), Is.EqualTo(0));
+            for (int i = 0; i < 3; i++) Call(boss, "PlayTurnAction", 10f);
+            Assert.That(Property(icon, "Level"), Is.EqualTo(3));
+            Assert.That(Property(icon, "IsImminent"), Is.True);
+            Component ball = (Component)Property(boss, "Snowball");
+            Call(ball, "Kill");
+            yield return null;
+            yield return null;
+            Assert.That(Property(icon, "Level"), Is.EqualTo(0));
+            Assert.That(Property(icon, "IsImminent"), Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator 돌진_탈진과_과열의_아이콘은_행동_단계와_함께_바뀐다()
+        {
+            Component boss = CreateEnemy("ThunderBoss", 6, 180, 20, "Lightning");
+            yield return null;
+            Component icon = Intent(boss);
+            Call(boss, "PlayTurnAction", 10f);
+            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Charge"));
+            Assert.That(Property(icon, "IsImminent"), Is.True);
+            Call(boss, "PlayTurnAction", 10f);
+            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Exhaust"));
+            yield return new WaitForSeconds(.35f);
+            Call(boss, "PlayTurnAction", 10f);
+            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Charge"));
+            Assert.That(Property(icon, "IsImminent"), Is.False);
+            Component furnace = CreateEnemy("FurnaceBoss", 7, 200, 10, "Fire");
+            yield return null;
+            Component heat = Intent(furnace);
+            for (int i = 0; i < 3; i++) Call(furnace, "TakeSpellHit", Magic("Rock"), Magic("Shoot"), 1f, 1f);
+            Assert.That(Property(heat, "Icon").ToString(), Is.EqualTo("Heat"));
+            Assert.That(Property(heat, "Level"), Is.EqualTo(3));
+            Assert.That(Property(heat, "DamagePreview"), Is.EqualTo(19));
+            Call(furnace, "PlayTurnAction", 10f);
+            Assert.That(Property(heat, "Level"), Is.EqualTo(0));
+        }
+
+        [UnityTest]
+        public IEnumerator 흡수_대상과_보스는_같은_문양이고_흡수하면_가져온_기술로_바뀐다()
+        {
+            Component boss = CreateEnemy("GraftBoss", 7, 180, 10, "Undead");
+            Component target = CreateEnemy("ChargeSlime", 5, 30, 10, "Fire");
+            Runtime("Combat.Enemies.Enemy").GetField("id", AnyInstance).SetValue(target, 21);
+            yield return null;
+            Call(boss, "PlayTurnAction", 12f);
+            Component own = Intent(boss), marked = Intent(target);
+            Assert.That(Property(own, "Glyph"), Is.SameAs(Property(marked, "Glyph")));
+            Assert.That(Property(own, "IsImminent"), Is.True);
+            Call(target, "Kill");
+            yield return null;
+            yield return null;
+            Assert.That(marked == null || !marked.gameObject.activeInHierarchy, Is.True);
+            Assert.That(Property(own, "IsImminent"), Is.False);
+            Component mortar = CreateEnemy("MortarSlime", 5, 30, 10, "Rock");
+            Runtime("Combat.Enemies.Enemy").GetField("id", AnyInstance).SetValue(mortar, 20);
+            yield return null;
+            Call(boss, "PlayTurnAction", 12f);
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(Property(own, "Icon").ToString(), Is.EqualTo("Drop"));
+        }
+
+        [UnityTest]
+        public IEnumerator 모방_예고는_카드_중앙_문양과_겹친_테두리를_쓰고_확대와_반전에도_크기가_같다()
+        {
+            Component boss = CreateEnemy("SurgeBoss", 6, 100, 12, "Undead");
+            yield return null;
+            Component icon = Intent(boss);
+            Object catalog = Resources.Load("Combat/BossIntentArt");
+            foreach (string spell in new[] { "Shoot", "Drop", "Explode" })
+            {
+                Call(boss, "Remember", Magic(spell));
+                Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo(spell));
+                Assert.That(Property(icon, "IsCopied"), Is.True);
+                Sprite glyph = (Sprite)Property(icon, "Glyph");
+                Sprite card = (Sprite)catalog.GetType().GetField(spell.ToLowerInvariant()).GetValue(catalog);
+                Assert.That(glyph.texture, Is.SameAs(card.texture));
+                Assert.That(glyph.rect.height, Is.LessThan(card.rect.height));
+                Assert.That(icon.GetComponentInChildren(Runtime("TMPro.TMP_Text")), Is.Null);
+            }
+            float width = icon.transform.Find("Glyph").GetComponent<SpriteRenderer>().bounds.size.x;
+            Vector3 scale = boss.transform.localScale;
+            boss.transform.localScale = new Vector3(-scale.x * 1.4f, scale.y * 1.4f, scale.z);
+            yield return null;
+            yield return null;
+            Assert.That(icon.transform.Find("Glyph").GetComponent<SpriteRenderer>().bounds.size.x, Is.EqualTo(width).Within(.01f));
+            Assert.That(Physics2D.OverlapPointAll(icon.transform.position).Any(h => h.gameObject == icon.gameObject), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator 마우스_정보는_체력이_같아도_다음_행동과_언어_변경을_따라간다()
+        {
+            Type localization = Runtime("Core.Localization");
+            object previousLanguage = localization.GetProperty("Current").GetValue(null);
+            bool hadLanguage = PlayerPrefs.HasKey("Language");
+            int oldPreference = PlayerPrefs.GetInt("Language");
+            try
+            {
+                object Lang(string name) => Enum.Parse(Runtime("Core.Language"), name);
+                localization.GetMethod("SetLanguage").Invoke(null, new[] { Lang("Korean") });
+                Component boss = CreateEnemy("TreeShellBoss", 2.5f, 130, 14, "Rock");
+                yield return null;
+                Component hover = (Component)Runtime("Combat.UI.EnemyHoverInfo").GetMethod("EnsureExists").Invoke(null, null);
+                Call(hover, "Show", boss);
+                yield return null;
+                Assert.That(Property(hover, "Text").ToString(), Does.Contain("다음 행동").And.Contain("뿌리 공격 준비"));
+                int hp = EnemyHp(boss);
+                Call(boss, "PlayTurnAction", 10f);
+                yield return null;
+                Assert.That(EnemyHp(boss), Is.EqualTo(hp));
+                Assert.That(Property(hover, "Text").ToString(), Does.Contain("다음 턴 뿌리 공격"));
+                Assert.That(Property(Intent(boss), "IsImminent"), Is.True);
+                localization.GetMethod("SetLanguage").Invoke(null, new[] { Lang("English") });
+                yield return null;
+                Assert.That(Property(hover, "Text").ToString(), Does.Contain("Next action").And.Not.Contain("뿌리"));
+            }
+            finally
+            {
+                localization.GetMethod("SetLanguage").Invoke(null, new[] { previousLanguage });
+                if (hadLanguage) PlayerPrefs.SetInt("Language", oldPreference); else PlayerPrefs.DeleteKey("Language");
+                PlayerPrefs.Save();
+            }
+        }
     }
 }
 #endif
