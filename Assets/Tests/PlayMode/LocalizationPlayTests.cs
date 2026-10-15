@@ -14,7 +14,7 @@ namespace WordVenture.Tests
 {
     public sealed class LocalizationPlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -36,6 +36,7 @@ namespace WordVenture.Tests
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
             PlayerPrefs.DeleteKey("TutorialEnded");
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("StagePosition", 0);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
         }
@@ -84,7 +85,8 @@ namespace WordVenture.Tests
             chat = Presentation.GetComponentInParent(Runtime("Story.ChatWindowController"));
             Call(chat, "CompleteStream");
             yield return null;
-            Assert.That(Text((Component)Property(Presentation, "NameLabel")), Is.EqualTo("Grandpa"));
+            // 튜토리얼은 할아버지의 기록을 읽는 나레이션이라 이름을 숨긴다.
+            Assert.That(((Component)Property(Presentation, "NameLabel")).gameObject.activeSelf, Is.False);
             Assert.That(Text(tutorial.transform.Find("TutorialOverlay/SkipTutorial").GetComponentsInChildren<Component>(true)
                 .First(c => c.GetType().Name == "TextMeshProUGUI")), Is.EqualTo("Skip Tutorial"));
             SharedDialoguePlayTests.Capture("localization-tutorial-english.png");

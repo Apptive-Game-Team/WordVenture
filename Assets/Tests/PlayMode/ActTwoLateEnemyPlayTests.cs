@@ -19,7 +19,7 @@ namespace WordVenture.Tests
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         const string SlimeFolder = "Assets/Prefabs/Combat/Enemies/Slime/";
         const string AffinityTablePath = "Assets/ScriptableObjects/Combat/Magic Affinity Table.asset";
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         readonly List<GameObject> spawned = new List<GameObject>();
         int[] values;
         bool[] existed;
@@ -95,6 +95,7 @@ namespace WordVenture.Tests
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             else singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, 1);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
             yield return SceneManager.LoadSceneAsync("TurnBattleScene");

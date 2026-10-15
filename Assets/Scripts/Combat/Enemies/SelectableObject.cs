@@ -7,13 +7,14 @@ namespace Combat.Enemies
 
     public class SelectableObject : MonoBehaviour
     {
-        private Vector3 scale;
+        // 적은 시간이 지나 분노하면 몸이 커지므로, 처음 크기가 아니라 커지기 직전 크기로 되돌린다.
+        private Vector3 scaleBeforeHover;
+        private bool enlarged;
         private bool selectable = false;
         CombineZone combineZone;
 
         private void Start()
         {
-            scale = transform.localScale;
             combineZone = CombineZone.Instance;
         }
 
@@ -52,10 +53,15 @@ namespace Combat.Enemies
 
         private void ChangeSize(bool bigSide)
         {
+            if (bigSide == enlarged) return;
+            enlarged = bigSide;
             if (bigSide)
-                transform.localScale = scale * 1.2f;
+            {
+                scaleBeforeHover = transform.localScale;
+                transform.localScale = scaleBeforeHover * 1.2f;
+            }
             else
-                transform.localScale = scale;
+                transform.localScale = scaleBeforeHover;
         }
     }
 

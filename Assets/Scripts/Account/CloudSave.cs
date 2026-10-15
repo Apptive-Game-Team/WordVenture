@@ -19,6 +19,8 @@ namespace Account
         public int ActOneDialogueSeen;
         public int ActTwoDialogueSeen;
         public bool ShowsActOneMap;
+        // 별도 서버 키("upgrade")에서 받은 값이라 Serialize 형식에 들어가지 않는다. 서버에 없으면 null이고, 그때는 이 기기의 업그레이드를 그대로 둔다.
+        [NonSerialized] public UpgradeCloudSave Upgrades;
 
         public static CloudSave FromLocal() => new CloudSave
         {
@@ -38,6 +40,7 @@ namespace Account
             PlayerPrefs.SetInt(SaveLoadController.ShowsActOneMapKey, ShowsActOneMap ? 1 : 0);
             MapMove.StagePosition = StagePosition;
             PlayerPrefs.Save();
+            Upgrades?.ApplyToLocal();
         }
 
         // 서버 value 칸이 31자라서 비트마스크는 16진수로 쓴다. 최대 28자이다(버전 1, stage 4, 마스크 8 + 8, 플래그 2, 구분자 5).

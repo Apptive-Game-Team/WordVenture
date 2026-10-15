@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class AllySlimeBattleScenePlayTests
     {
         const int Stage = 1;
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -43,6 +43,7 @@ namespace WordVenture.Tests
             hadSingleton = singleton != null;
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, false);
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
@@ -99,6 +100,8 @@ namespace WordVenture.Tests
                 "Resources/Combat/AllySlime prefab을 불러오지 못했다");
             Call(formation, "Spawn", Enum.Parse(Runtime("Cards.MagicType"), "Holy"), affinity);
             FieldInfo playerHp = Runtime("Combat.Enemies.Player").GetField("Hp", BindingFlags.Instance | BindingFlags.NonPublic);
+            // 회복은 최대 HP를 넘지 않으므로 먼저 다치게 해 둔다.
+            Call(player, "TakeHit", 10);
             int playerHpBefore = (int)playerHp.GetValue(player);
 
             Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
