@@ -111,6 +111,30 @@ namespace WordVenture.Tests
             Assert.That(Locked, Is.False);
         }
 
+        static Rect ScreenRect(RectTransform rect)
+        {
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
+        }
+
+        [UnityTest]
+        public IEnumerator 지역_대화_제목은_설정_메뉴_버튼에_가려지지_않는다()
+        {
+            yield return ClearStage(1);
+            yield return null;
+            Assert.That(View, Is.Not.Null);
+            var title = (RectTransform)View.transform.Find("ChapterTitle");
+            GameObject menuButton = GameObject.Find("MenuButton");
+            Assert.That(menuButton, Is.Not.Null, "클리어 화면에 설정 메뉴 버튼이 없다");
+            Rect titleRect = ScreenRect(title);
+            Rect buttonRect = ScreenRect((RectTransform)menuButton.transform);
+            Assert.That(titleRect.Overlaps(buttonRect), Is.False, $"제목 {titleRect} 이 메뉴 버튼 {buttonRect} 과 겹친다");
+            Call(View, "Advance");
+            SharedDialoguePlayTests.Capture("dialogue-title-menu.png");
+            yield return FinishDialogue();
+        }
+
         [UnityTest]
         public IEnumerator ClearScreenShowsPortraitDialogueBeforeNewCard()
         {
