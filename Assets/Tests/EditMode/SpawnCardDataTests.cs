@@ -29,6 +29,8 @@ namespace WordVenture.Tests
         [TestCase("Lightning", 7)]
         [TestCase("Undead", 8)]
         [TestCase("Spawn", 9)]
+        [TestCase("Water", 10)]
+        [TestCase("Plant", 11)]
         public void MagicType_값이_저장된_정수와_같다(string name, int value)
         {
             Assert.That((int)Enum.Parse(TypeOf("Cards.MagicType"), name), Is.EqualTo(value));

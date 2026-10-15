@@ -162,6 +162,24 @@ namespace WordVenture.Tests
             SharedDialoguePlayTests.Capture("clear-result.png");
         }
 
+        // 아군 슬라임이 속성마다 다른 투사체를 쏘는 장면.
+        [UnityTest]
+        public IEnumerator 아군_투사체()
+        {
+            yield return EnterBattle(6);
+            Component player = (Component)Runtime("Combat.Enemies.Player").GetMethod("PlayerInt").Invoke(null, null);
+            Object affinity = UnityEditor.AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/Combat/Magic Affinity Table.asset");
+            Type formationType = Runtime("Combat.Allies.AllyFormation");
+            object formation = formationType.GetMethod("GetOrCreate").Invoke(null, new object[] { player.transform });
+            foreach (string element in new[] { "Rock", "Fire", "Lightning" })
+                Call(formation, "Spawn", Enum.Parse(Runtime("Cards.MagicType"), element), affinity);
+            yield return new WaitForSeconds(0.5f);
+            Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
+            Call(battle, "TurnEndButton");
+            yield return new WaitForSeconds(0.12f);
+            SharedDialoguePlayTests.Capture("ally-projectile.png");
+        }
+
         IEnumerator EnterBattle(int stage)
         {
             Type stageType = Runtime("Combat.Stage.StageDataSingleton");

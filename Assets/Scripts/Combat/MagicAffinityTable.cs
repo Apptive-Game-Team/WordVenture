@@ -42,6 +42,10 @@ namespace Combat
                     return 4;
                 case MagicType.Undead:
                     return 5;
+                case MagicType.Water:
+                    return 6;
+                case MagicType.Plant:
+                    return 7;
             }
             return -1;
         }
