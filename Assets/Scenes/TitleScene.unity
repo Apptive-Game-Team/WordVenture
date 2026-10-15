@@ -543,7 +543,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1927760946}
         m_TargetAssemblyTypeName: TitleSceneManager, Assembly-CSharp
-        m_MethodName: InitPlayerData
+        m_MethodName: RequestNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
