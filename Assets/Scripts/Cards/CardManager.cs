@@ -5,6 +5,7 @@ using Combat.UI;
 using Core;
 using DG.Tweening;
 using Map;
+using Story;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
@@ -188,6 +189,7 @@ namespace Cards
             if (CountInHand(word.tag) >= PlayerUpgrades.HandLimitPerKind)
             {
                 BurnCard(card);
+                if (!GameTips.HasSeen(GameTip.HandLimit)) StartCoroutine(ShowHandLimitTip());
                 return;
             }
 
@@ -213,6 +215,13 @@ namespace Cards
             activeBurns++;
             CardBurnVfx.Play(card, burnPosition, delay);
             StartCoroutine(ReleaseBurnSlot());
+        }
+
+        // 카드가 타는 모습을 먼저 보여 준 뒤 설명한다. 턴 시작 뒤 적 턴이 아니라 플레이어 턴에 뜬다.
+        System.Collections.IEnumerator ShowHandLimitTip()
+        {
+            yield return new WaitForSeconds(0.8f);
+            yield return GameTips.ShowOnce(GameTip.HandLimit);
         }
 
         System.Collections.IEnumerator ReleaseBurnSlot()

@@ -400,6 +400,17 @@
     {"ko": "잠김", "en": "Locked"},
     {"ko": "스테이지를 깨면 마력 조각을 얻습니다. 결과 등급이 높을수록 더 받습니다.", "en": "Clear stages to earn Mana Shards. Higher result grades give more."},
     {"ko": "버리기", "en": "Discard"},
-    {"ko": "턴마다 1장", "en": "1 per turn"}
+    {"ko": "턴마다 1장", "en": "1 per turn"},
+    {"ko": "할아버지의 기록", "en": "Grandpa's Notes"},
+    {"ko": "손패에는 주문 카드와 속성 카드를 같은 수만큼, 처음에는 2장씩만 들 수 있단다. 더 뽑은 카드는 불타서 사라진단다.", "en": "Your hand holds the same number of spell and element cards, 2 of each at first. Any extra card you draw burns away."},
+    {"ko": "쓸 수 없는 카드는 손패 왼쪽의 버리기 자리로 끌어다 놓거라. 한 턴에 한 장만 버릴 수 있단다.", "en": "Drag a card you can't use onto the discard spot to the left of your hand. You can discard only one card per turn."},
+    {"ko": "슬라임 머리 위에 빨간 화살표가 떴구나. 싸움이 길어질수록 슬라임들은 점점 더 화가 난단다.", "en": "A red arrow has appeared over the slimes. The longer the fight drags on, the angrier they get."},
+    {"ko": "3턴마다 슬라임의 공격이 더 세지니, 오래 끌지 말고 서둘러 끝내거라.", "en": "Their attack grows stronger every 3 turns, so don't drag it out. Finish the fight quickly."},
+    {"ko": "싸움이 끝나면 걸린 턴, 쓴 카드, 깎인 HP, 원소 연계로 등급을 매긴단다.", "en": "When a fight ends, I grade it by turns taken, cards used, HP lost, and elemental combos."},
+    {"ko": "등급이 높을수록 마력 조각을 더 많이 얻는단다.", "en": "The higher the grade, the more Mana Shards you earn."},
+    {"ko": "마력 조각이 생겼구나. 오른쪽 위의 업그레이드 버튼(U)으로 쓸 수 있단다.", "en": "You have Mana Shards now. Spend them with the Upgrade button (U) at the top right."},
+    {"ko": "공격력, 최대 HP, 손패 상한을 올릴 수 있지만 조각은 귀하니 신중하게 고르거라.", "en": "You can raise attack, max HP, or hand limit, but shards are scarce, so choose carefully."},
+    {"ko": "이제 Spawn 카드로 아군 슬라임을 불러낼 수 있단다.", "en": "Now the Spawn card can summon ally slimes."},
+    {"ko": "업그레이드 창에서 아군 슬라임도 강하게 만들 수 있게 되었구나.", "en": "You can now strengthen your ally slimes in the upgrade window."}
   ]
 }

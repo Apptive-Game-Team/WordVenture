@@ -120,7 +120,11 @@ namespace Scenes
             // 다시 깬 마지막 지역은 엔딩 없이 맵으로 돌아간다.
             bool endsChapter = IsFirstClear && (stageID == ActOneFinalStageID || stageID == ActTwoFinalStageID);
             // 엔딩으로 이어지는 대화창은 닫지 않으므로, 마지막 지역은 대화 앞에 결과 화면을 보여 준다.
-            if (endsChapter) yield return ShowResultUntilKey();
+            if (endsChapter)
+            {
+                if (HasResult) yield return GameTips.ShowOnce(GameTip.Result);
+                yield return ShowResultUntilKey();
+            }
             if (chapter != null) yield return StageDialogueView.Play(data, chapter, !endsChapter);
             if (endsChapter)
             {
@@ -128,6 +132,8 @@ namespace Scenes
                 SceneManager.LoadScene("EndingScene");
                 yield break;
             }
+            // 결과 화면이 나오기 직전에 처음 한 번만 점수와 보상을 설명한다. talking 이 켜져 있어 Update 가 키를 받지 않는다.
+            if (HasResult) yield return GameTips.ShowOnce(GameTip.Result);
             talking = false;
             // 새 카드 단계 앞에 결과 화면을 보여 준다. 키 입력은 Update 가 처리한다.
             resultView = StageResultView.Show(StageDataSingleton.Instance);
@@ -153,6 +159,8 @@ namespace Scenes
             // 결과 화면을 닫은 키가 바로 대사를 넘기지 않게 한 프레임 기다린다.
             yield return null;
         }
+
+        static bool HasResult => StageDataSingleton.Instance != null && StageDataSingleton.Instance.hasResult;
 
         bool IsFirstClear => StageDataSingleton.Instance.isFirstClear;
 

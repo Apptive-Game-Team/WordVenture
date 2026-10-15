@@ -5,6 +5,7 @@ using Combat.Enemies;
 using Core;
 using Combat.UI;
 using Combat.Spells;
+using Story;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,6 +135,15 @@ namespace Battle.Turns
         {
             TurnNumber++;
             PlayerTurnStarted?.Invoke(TurnNumber);
+            // 분노 1단계가 되는 첫 턴에 한 번만 설명한다. 카드 뽑기가 끝난 뒤에 뜨도록 한 프레임 미룬다.
+            if (EnemyRage.LevelFromTurn(TurnNumber) >= 1 && !GameTips.HasSeen(GameTip.EnemyRage))
+                StartCoroutine(ShowEnemyRageTip());
+        }
+
+        IEnumerator ShowEnemyRageTip()
+        {
+            yield return null;
+            yield return GameTips.ShowOnce(GameTip.EnemyRage);
         }
 
         public void ChangeTurn(Turn turn)
