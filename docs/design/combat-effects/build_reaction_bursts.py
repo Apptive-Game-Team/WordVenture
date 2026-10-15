@@ -5,7 +5,7 @@
 
 결과는 Assets/Resources/Combat/ReactionBurst.png 한 장이다. 행이 효과, 열이 프레임이다.
 행 순서는 ReactionBurstVfx.Row와 같다: 불꽃 방전, 쇄빙, 신경 마비, 용암 균열, 방패 보호, 회복.
-48x40칸에 그리고 1칸 = 1텍셀로 저장한다(#116, 미리보기만 4배로 키운다).
+상태 효과 그림(ElementalStatusOverlay.png)처럼 큰 픽셀 덩어리로 그리도록 48x40칸에 그리고 4배로 키운다.
 몸은 가운데 28칸 폭이고 바닥선은 아래에서 6번째 칸이다. ReactionBurstVfx가 이 기준으로 몸에 맞춘다.
 """
 import math
@@ -228,19 +228,18 @@ def build_atlas():
         for frame in range(FRAMES):
             # 프레임마다 같은 씨앗을 쓰지 않으면 다시 만들 때마다 그림이 바뀐다.
             atlas.alpha_composite(draw(frame, random.Random(row * 100 + frame)), (frame * WIDTH, row * HEIGHT))
-    # 1칸 = 1텍셀로 저장한다(#116). PPU 는 코드가 칸 폭으로 정하므로 화면 크기는 같다.
-    return atlas
+    return atlas.resize((atlas.width * SCALE, atlas.height * SCALE), Image.NEAREST)
 
 
 def preview(path):
     """기준 슬라임 첫 프레임 위에 효과를 겹쳐 본다."""
     slime = Image.open(ROOT / "Assets/ThirdParty/ArtResource/JinWook/Slime Resource/Ranged_Purple/"
-                       "Ranged_Purple_01.png").convert("RGBA")
+                       "KakaoTalk_20240702_171522097_01.png").convert("RGBA")
     body = slime.crop(slime.getbbox())
     cell_w, cell_h = WIDTH * SCALE, HEIGHT * SCALE
     body = body.resize((BODY_HALF_WIDTH * 2 * SCALE, round(body.height * BODY_HALF_WIDTH * 2 * SCALE / body.width)),
                        Image.NEAREST)
-    atlas = build_atlas().resize((WIDTH * SCALE * FRAMES, HEIGHT * SCALE * len(ROWS)), Image.NEAREST)
+    atlas = build_atlas()
     sheet = Image.new("RGBA", (cell_w * FRAMES, cell_h * len(ROWS)), (58, 68, 80, 255))
     for row in range(len(ROWS)):
         for frame in range(FRAMES):
