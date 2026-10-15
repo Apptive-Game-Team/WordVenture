@@ -6,7 +6,7 @@
 결과는 Assets/Resources/Combat/AffinityMark.png 한 장이다. 행이 표시, 열이 프레임이다.
 행 순서는 AffinityMarkVfx.Mark와 같다: 약점(위쪽 겹쳐진 화살표와 반짝임), 저항(아래쪽 겹쳐진 화살표).
 글자는 쓰지 않는다. 방패 모양은 ReactionBurstVfx.Burst.Guard가 쓰므로 피한다.
-16x16칸에 그리고 1칸 = 1텍셀로 저장한다(#116, 미리보기만 4배로 키운다). 그림 아래 가장자리는 아래에서 2번째 칸이고 가운데 가로 기준은 x=7.5다.
+16x16칸에 그리고 4배로 키운다. 그림 아래 가장자리는 아래에서 2번째 칸이고 가운데 가로 기준은 x=7.5다.
 AffinityMarkVfx가 이 기준으로 적 머리 위에 맞춘다. 배경이 밝아도 보이도록 1칸 어두운 테두리를 두른다.
 """
 import sys
@@ -122,14 +122,12 @@ def build_atlas():
         for frame in range(FRAMES):
             atlas.alpha_composite(draw(frame), (frame * CELL, row * CELL))
     check_margins(atlas)
-    # 1칸 = 1텍셀로 저장한다(#116). PPU 는 코드가 칸 폭으로 정하므로 화면 크기는 같다.
-    return atlas
+    return atlas.resize((atlas.width * SCALE, atlas.height * SCALE), Image.NEAREST)
 
 
 def preview(path):
     """하늘색, 풀색, 어두운 배경 위에 표시를 올려 본다."""
     atlas = build_atlas()
-    atlas = atlas.resize((atlas.width * SCALE, atlas.height * SCALE), Image.NEAREST)
     cell = CELL * SCALE
     backgrounds = [(126, 196, 238), (92, 160, 76), (58, 68, 80)]
     sheet = Image.new("RGBA", (cell * FRAMES, cell * len(ROWS) * len(backgrounds)))
