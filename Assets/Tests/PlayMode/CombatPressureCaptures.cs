@@ -82,7 +82,12 @@ namespace WordVenture.Tests
             Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
             object cards = battle.GetType().GetField("cardManager").GetValue(battle);
             for (int i = 0; i < 3; i++) Call(cards, "AddCard", "Spell");
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(4f);
+            // 캡처는 Overlay Canvas 를 카메라 공간으로 바꿔 찍어서, 정렬 순서가 높은 카드가 대화창 위로 올라온다.
+            // 실제 게임에서는 대화창이 카드를 덮으므로 캡처할 때만 카드와 버리기 칸을 숨긴다.
+            foreach (Component card in Object.FindObjectsOfType(Runtime("Cards.Card")).Cast<Component>()) card.gameObject.SetActive(false);
+            GameObject spot = GameObject.Find("DiscardSpot");
+            if (spot != null) spot.SetActive(false);
             SharedDialoguePlayTests.Capture("tip-hand-limit.png");
         }
 

@@ -37,6 +37,7 @@
 - 새 게임(`SaveLoadController.InitPlayData`)은 재화와 업그레이드를 초기화한다. 이어하기는 유지한다.
 - 업그레이드 창과 결과 정산 화면은 `SlimeEncyclopediaView` 처럼 Canvas를 코드로 만든다.
 - 폰트 atlas 에 `→` 가 없어서 수치 변화는 `>` 로 표시한다.
+- 새 규칙 안내는 1-1 튜토리얼을 늘리지 않고, 처음 겪는 순간 지역 대화창으로 한 번만 보여 준다. 다 읽고 닫으면 `SeenTips` 에 기록하고, 새 게임은 기록을 지운다. 할아버지 초상화는 튜토리얼 에셋에만 있어 이름만 보인다.
 - 신성 주문과 신성 슬라임의 회복은 최대 HP를 넘지 않는다. 최대 HP 업그레이드가 의미를 갖게 하기 위해서다.
 
 ## Approach (Checklist)
@@ -51,7 +52,8 @@
 - [x] 결과 점수, 등급 보상, 결과 정산 화면
 - [x] 아군 슬라임 업그레이드 잠금
 - [x] 버리기 칸
-- [x] EditMode, PlayMode 전체 실행: EditMode 280개 통과, PlayMode 76개 중 71개 통과, 실패 0, 건너뜀 5(밸런스 시뮬레이션, 캡처)
+- [x] 새 규칙을 처음 겪을 때 한 번만 보여 주는 할아버지의 기록 안내(손패, 적 강화, 결과, 업그레이드, 아군 업그레이드)
+- [x] EditMode, PlayMode 전체 실행: EditMode 285개 통과, PlayMode 78개 중 72개 통과, 실패 0, 건너뜀 6(밸런스 시뮬레이션, 캡처)
 - [x] `BalanceSimulation` 조정 전후 비교: `docs/design/act-two-balance/README.md`, 24판 중 21판 승리
 - [x] 화면 캡처: `.plan/assets/2026-10-14-issue-119-hand-limit-enemy-rage-upgrades/`
 
