@@ -73,7 +73,7 @@ namespace Story
         }
 
         static StageDialogueLine RecordLine(string text) =>
-            new StageDialogueLine { narration = true, gesture = WordGesture.ShowBook, text = text };
+            new StageDialogueLine { narration = true, gesture = WordGesture.ReadBook, text = text };
 
         static List<StageDialogueLine> UnseenLines(GameTip[] tips, List<GameTip> shown = null)
         {
