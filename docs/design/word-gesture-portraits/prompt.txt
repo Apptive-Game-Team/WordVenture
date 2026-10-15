@@ -46,3 +46,15 @@ Keep EVERYTHING in `base-readbook.png` exactly the same — the same face shape,
 Mouth stays closed. No text, no other changes.
 
 When done, reply with the file name.
+
+=== WordReadBook 눈 다시 그리기 (최종) ===
+Use your built-in image generation tool in EDIT mode. The base image is `base-v1.png` in this directory (Word holding an open book toward herself). `reference-word.png` is her original portrait: her eyes must keep exactly that eye shape, size, color, highlight and lash line. Create exactly one file, `WordReadBook3.png`, in this directory. Do not create, edit, or delete anything else.
+
+Keep EVERYTHING in `base-v1.png` exactly the same — face shape, hair, ribbon, cloak, hands, the open book held toward herself, pixel size, colors, outlines, canvas size and position, and the solid magenta (#FF00FF) background — and change ONLY her eyes and a slight head tilt so she is gently READING:
+- tilt her head down very slightly toward the book,
+- keep her eyes OPEN and natural, the same size and shape as in `reference-word.png`; only move the irises down so they look at the pages below,
+- do NOT narrow the eyes, do NOT make them half-lidded, sleepy, squinting, smug or glaring; no heavy upper lids,
+- eyebrows relaxed and soft, a calm, gentle, slightly wistful expression,
+- mouth closed and neutral.
+
+When done, reply with the file name.
