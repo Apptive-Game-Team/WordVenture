@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyDatas:
   - id: 0
     name: S0_Ranged_Slime
-    displayName: "\uBD88\uAF43 \uACE0\uC591\uC774 \uC2AC\uB77C\uC784"
+    displayName: "\uD558\uC580 \uACE0\uC591\uC774 \uC2AC\uB77C\uC784"
     prefab: {fileID: 5152970759226599136, guid: 8855fa8e7f0f243ebba164ee1a4397ca, type: 3}
     maxHp: 10
     moveDistance: 5
