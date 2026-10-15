@@ -310,7 +310,7 @@ namespace Combat.UI
         static string Join(List<string> items) => items.Count > 0 ? string.Join(", ", items) : T("없음");
         static string Number(float value) => value.ToString("0.#", CultureInfo.InvariantCulture);
 
-        static string Multiplier(float value) => Localization.Current == Language.Korean
+        public static string Multiplier(float value) => Localization.Current == Language.Korean
             ? Number(value) + "배"
             : "x" + Number(value);
 

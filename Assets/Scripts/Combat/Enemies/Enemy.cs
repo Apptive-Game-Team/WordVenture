@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Battle.Turns;
 using Cards;
+using Combat.UI;
 using TMPro;
 using UnityEngine;
 
@@ -76,6 +77,11 @@ namespace Combat.Enemies
         // 치유량처럼 분노가 붙지 않는 공격력이다.
         protected int UnragedAttackDamage => Status.GetAttackDamage(Damage);
         public int RageLevel { get; private set; }
+        // 호버 정보 창이 읽는 값. 공격력은 분노와 상태 이상을 반영한 지금 실제로 주는 피해다.
+        public int CurrentHp => Hp;
+        public int MaximumHp => MaxHp;
+        public int CurrentAttackDamage => AttackDamage;
+        public string DisplayName { get; private set; } = "";
         SpriteRenderer bodyRenderer;
         ReactionBurstVfx reactionBurst;
         HitFlashVfx hitFlash;
@@ -103,6 +109,7 @@ namespace Combat.Enemies
         public void InitEnemyData(EnemyData enemyData)
         {
             id = enemyData.id;
+            DisplayName = !string.IsNullOrEmpty(enemyData.displayName) ? enemyData.displayName : enemyData.name;
             MaxHp = enemyData.maxHp;
             Hp = MaxHp;
             moveDistance = enemyData.moveDistance;
@@ -255,6 +262,7 @@ namespace Combat.Enemies
             affinityMark.Initialize(bodyRenderer);
             rageMark = gameObject.AddComponent<RageMarkVfx>();
             rageMark.Initialize(bodyRenderer);
+            EnemyHoverInfo.EnsureExists();
         }
 
         void OnEnable()
