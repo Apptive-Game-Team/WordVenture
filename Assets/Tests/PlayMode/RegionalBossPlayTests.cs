@@ -273,6 +273,8 @@ namespace WordVenture.Tests
             Delegate findFront = Delegate.CreateDelegate(finderType, manager, manager.GetType().GetMethod("FindFrontEnemy"));
             var sequence = (IEnumerator)Call(formation, "AttackFrontEnemies", findFront);
             ((MonoBehaviour)battle).StartCoroutine(sequence);
+            float attackDeadline = Time.time + 3f;
+            while (EnemyHp(boss) == 260 && Time.time < attackDeadline) yield return null;
             int afterFirstAttack = EnemyHp(boss);
             Assert.That(afterFirstAttack, Is.LessThan(260));
             var entranceType = Runtime("Combat.Enemies.WorldTreeEntrance");
@@ -281,7 +283,8 @@ namespace WordVenture.Tests
             yield return new WaitForSeconds(0.6f);
             Assert.That(EnemyHp(boss), Is.EqualTo(afterFirstAttack), "다음 아군은 등장 중인 보스를 때리지 않는다");
             entranceType.GetMethod("Skip").Invoke(null, null);
-            yield return new WaitForSeconds(0.2f);
+            float resumeDeadline = Time.time + 3f;
+            while (EnemyHp(boss) == afterFirstAttack && Time.time < resumeDeadline) yield return null;
             Assert.That(EnemyHp(boss), Is.LessThan(afterFirstAttack), "등장이 끝나면 남은 아군 공격을 이어간다");
         }
     }

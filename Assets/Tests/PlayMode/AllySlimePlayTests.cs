@@ -59,7 +59,7 @@ namespace WordVenture.Tests
 
         Component Spawn(string element) => (Component)Call(formation, "Spawn", Magic(element), affinityTable);
 
-        Component CreateEnemy(float x)
+        Component CreateEnemy(float x, string defense = "Fire")
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Combat/Enemies/Slime/MeleeNeon.prefab");
             GameObject slime = Object.Instantiate(prefab, new Vector3(x, -3f, 0f), Quaternion.identity);
@@ -70,7 +70,7 @@ namespace WordVenture.Tests
             data.GetType().GetField("moveDistance").SetValue(data, 4f);
             data.GetType().GetField("attackRange").SetValue(data, 3f);
             data.GetType().GetField("damage").SetValue(data, 10);
-            data.GetType().GetField("type").SetValue(data, Magic("Fire"));
+            data.GetType().GetField("type").SetValue(data, Magic(defense));
             Call(enemy, "InitEnemyData", data);
             return enemy;
         }
@@ -269,7 +269,7 @@ namespace WordVenture.Tests
         {
             Spawn("Fire");
             Spawn("Ice");
-            Component enemy = CreateEnemy(6f);
+            Component enemy = CreateEnemy(6f, "Holy");
             yield return null;
 
             yield return RunAttacks(() => enemy);

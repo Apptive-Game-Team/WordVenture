@@ -112,11 +112,13 @@ namespace WordVenture.Tests
 
             Call(battle, "TurnEndButton");
             // 투사체가 날아가는 시간이 있으므로 도착할 때까지 기다린다.
-            for (int i = 0; i < 120 && EnemyHp(front) >= hpBefore; i++) yield return null;
+            float attackDeadline = Time.time + 3f;
+            while (EnemyHp(front) >= hpBefore && Time.time < attackDeadline) yield return null;
             Assert.That(EnemyHp(front), Is.LessThan(hpBefore), "아군 슬라임이 턴 종료 때 공격하지 않았다");
 
             // 신성 슬라임은 두 번째로 움직이고, 회복 투사체가 워드에 닿아야 한다.
-            for (int i = 0; i < 180 && (int)playerHp.GetValue(player) == playerHpBefore; i++) yield return null;
+            float healDeadline = Time.time + 3f;
+            while ((int)playerHp.GetValue(player) == playerHpBefore && Time.time < healDeadline) yield return null;
             Assert.That((int)playerHp.GetValue(player), Is.EqualTo(playerHpBefore + 4),
                 "신성 슬라임이 워드를 회복하지 않았다");
         }

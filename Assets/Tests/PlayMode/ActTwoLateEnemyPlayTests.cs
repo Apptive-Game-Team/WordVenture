@@ -292,8 +292,9 @@ namespace WordVenture.Tests
             Call(boss, "Remember", Magic("Explode"));
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
             yield return new WaitForSeconds(0.5f);
-            foreach (Component ally in new[] { front, middle, rear })
-                Assert.That(AllyHp(ally), Is.EqualTo(4), "공격 약화 후 단일 피해 8의 절반인 4를 받는다");
+            Assert.That(AllyHp(front), Is.EqualTo(4));
+            Assert.That(AllyHp(rear), Is.EqualTo(4), "공격 약화 후 단일 피해 8의 절반인 4를 받는다");
+            Assert.That(AllyHp(middle), Is.EqualTo(13), "바위 아군은 HP 16에서 피해 4를 30% 줄인 3을 받는다");
             Assert.That(PlayerHp, Is.EqualTo(hp));
         }
 

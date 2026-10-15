@@ -182,7 +182,7 @@ namespace WordVenture.Tests
             Call(charger, "PlayTurnAction", FrontLineDistance(charger));
             yield return new WaitForSeconds(0.5f);
             Assert.That(charger.transform.position.x, Is.EqualTo(frontX + 1.2f).Within(0.05f));
-            Assert.That(AllyHp(ally), Is.EqualTo(0), "공격력 10의 두 배가 HP 8을 넘는다");
+            Assert.That(AllyHp(ally), Is.EqualTo(2), "바위 아군은 HP 16에서 돌진 피해 20을 30% 줄인 14를 받는다");
             Assert.That(Property(charger, "IsCharging"), Is.False);
         }
 
