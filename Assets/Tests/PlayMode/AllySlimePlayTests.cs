@@ -313,14 +313,36 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 폭발_주문은_고른_아군에게만_들어가고_다른_아군은_맞지_않는다()
+        public IEnumerator 폭발_주문은_범위에_닿은_적과_아군을_모두_한_번씩_맞힌다()
         {
             Component target = Spawn("Rock");
             Component other = Spawn("Ice");
+            Component enemy = CreateEnemy(6f);
             yield return null;
-            SpellOnAlly("Explode", "Fire", target);
-            Assert.That(AllyHp(target), Is.LessThan(16));
-            Assert.That(AllyHp(other), Is.EqualTo(8));
+            Component spell = SpellOnAlly("Explode", "Fire", target);
+            foreach (Component unit in new[] { target, other, enemy, target })
+                Call(spell, "OnTriggerEnter2D", unit.GetComponentInChildren<Collider2D>());
+            int targetHp = AllyHp(target);
+            Assert.That(targetHp, Is.LessThan(16), "고른 아군이 맞지 않았다");
+            Assert.That(AllyHp(other), Is.LessThan(8), "범위 안의 다른 아군이 맞지 않았다");
+            Assert.That(EnemyHp(enemy), Is.LessThan(100), "범위 안의 적이 맞지 않았다");
+            Call(spell, "OnTriggerEnter2D", target.GetComponentInChildren<Collider2D>());
+            Assert.That(AllyHp(target), Is.EqualTo(targetHp), "같은 아군이 두 번 맞았다");
+        }
+
+        [UnityTest]
+        public IEnumerator 신성_폭발은_범위에_닿은_적과_아군을_모두_회복한다()
+        {
+            Component ally = Spawn("Fire");
+            Component enemy = CreateEnemy(6f);
+            yield return null;
+            Call(ally, "TakeSpellDamage", 5);
+            Call(enemy, "TakeHit", 30);
+            Component spell = SpellOnAlly("Explode", "Holy", ally);
+            Call(spell, "OnTriggerEnter2D", ally.GetComponentInChildren<Collider2D>());
+            Call(spell, "OnTriggerEnter2D", enemy.GetComponentInChildren<Collider2D>());
+            Assert.That(AllyHp(ally), Is.GreaterThan(3), "아군이 회복되지 않았다");
+            Assert.That(EnemyHp(enemy), Is.GreaterThan(70), "적이 회복되지 않았다");
         }
 
         [UnityTest]

@@ -20,7 +20,7 @@ namespace Combat.Spells
         readonly HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
         string targetTag;
         bool hitPlayer;
-        bool hitAlly;
+        readonly HashSet<AllySlime> hitAllies = new HashSet<AllySlime>();
         const string AllyTag = "Ally";
         bool initialized;
         static int activeSpells;
@@ -41,12 +41,6 @@ namespace Combat.Spells
             targetTag = target.gameObject.tag;
             initialized = true;
             activeSpells++;
-
-            // 아군을 고른 주문은 대상 아군에게만 들어간다. 폭발의 범위에 다른 아군이 걸려도 맞지 않는다.
-            if (this.spellType == MagicType.Explode && targetTag == AllyTag)
-            {
-                HitAlly(target.GetComponent<AllySlime>());
-            }
 
             if (this.spellType == MagicType.Explode)
             {
@@ -115,6 +109,13 @@ namespace Combat.Spells
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // 폭발은 누구를 골랐든 범위에 닿은 적과 아군을 모두 맞힌다. 신성 폭발은 양쪽을 모두 회복한다.
+            if (initialized && spellType == MagicType.Explode)
+            {
+                if (collision.CompareTag("Enemy")) HitEnemy(collision.GetComponentInParent<Enemy>());
+                else if (collision.CompareTag(AllyTag)) HitAlly(collision.GetComponentInParent<AllySlime>());
+                return;
+            }
             if (initialized && targetTag == AllyTag && collision.CompareTag(AllyTag))
             {
                 AllySlime ally = collision.GetComponentInParent<AllySlime>();
@@ -139,8 +140,7 @@ namespace Combat.Spells
                 if (animator != null) animator.SetTrigger("Hit");
                 if (collision.CompareTag("Enemy"))
                 {
-                    enemy.TakeSpellHit(magicType, spellType, GetBaseDamage(damage, spellType),
-                        magicAffinityTable.GetAffinity(magicType, enemy.enemyType));
+                    ApplyToEnemy(enemy);
                 } else
                 {
                     collision.GetComponent<Player>().TakeHit(CalculateDamage(damage, MagicType.Holy));
@@ -149,12 +149,24 @@ namespace Combat.Spells
                 StartCoroutine(DestoryCounter());
             }
         }
+        void HitEnemy(Enemy enemy)
+        {
+            if (enemy == null || !enemy.IsAlive || !hitEnemies.Add(enemy)) return;
+            if (animator != null) animator.SetTrigger("Hit");
+            ApplyToEnemy(enemy);
+        }
+
+        void ApplyToEnemy(Enemy enemy)
+        {
+            enemy.TakeSpellHit(magicType, spellType, GetBaseDamage(damage, spellType),
+                magicAffinityTable.GetAffinity(magicType, enemy.enemyType));
+        }
+
         // 신성은 아군을 회복하고(최대 HP까지), 나머지 속성은 아군에게 실제 피해를 준다.
-        // 아군에는 상성표가 없으므로 상성 1배를 쓴다.
+        // 아군에는 상성표가 없으므로 상성 1배를 쓴다. 한 주문은 같은 아군에게 한 번만 들어간다.
         bool HitAlly(AllySlime ally)
         {
-            if (hitAlly || ally == null || !ally.IsAlive) return false;
-            hitAlly = true;
+            if (ally == null || !ally.IsAlive || !hitAllies.Add(ally)) return false;
             if (animator != null) animator.SetTrigger("Hit");
             int amount = Mathf.FloorToInt(GetScaledDamage(damage, spellType));
             if (magicType == MagicType.Holy) ally.Heal(amount);
