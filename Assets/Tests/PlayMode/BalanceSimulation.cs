@@ -34,7 +34,7 @@ namespace WordVenture.Tests
         static readonly int RunsPerCase = ReadRuns();
 
         readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1",
-            "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly" };
+            "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -157,6 +157,7 @@ namespace WordVenture.Tests
         {
             UnityEngine.Random.InitState(result.seed);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             // 지역 대화는 자동 전투에서 넘기므로 이미 본 것으로 둔다.
             PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
             PlayerPrefs.SetInt("ActTwoDialogueSeen", int.MaxValue);

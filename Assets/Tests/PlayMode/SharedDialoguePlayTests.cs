@@ -15,7 +15,7 @@ namespace WordVenture.Tests
 {
     public sealed class SharedDialoguePlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "Language", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "Language", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -37,6 +37,7 @@ namespace WordVenture.Tests
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
             PlayerPrefs.DeleteKey("TutorialEnded");
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("StagePosition", 0);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
         }

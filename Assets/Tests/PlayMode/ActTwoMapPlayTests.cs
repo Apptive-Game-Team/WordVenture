@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class ActTwoMapPlayTests
     {
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ShowsActOneMap", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ShowsActOneMap", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -32,6 +32,7 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             oldPosition = (int)StagePosition.GetValue(null);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.DeleteKey("ShowsActOneMap");
             yield return null;
         }

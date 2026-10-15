@@ -14,7 +14,7 @@ namespace WordVenture.Tests
     public sealed class UpgradeViewPlayTests
     {
         static readonly string[] Kinds = { "Attack", "MaxHp", "HandLimit", "Ally" };
-        readonly string[] keys = new[] { "TutorialEnded", "StagePosition", "UpgradeShards", "Language" }
+        readonly string[] keys = new[] { "TutorialEnded", "StagePosition", "UpgradeShards", "Language", "SeenTips" }
             .Concat(Kinds.Select(k => "UpgradeLevel" + k)).ToArray();
         int[] values;
         bool[] existed;
@@ -30,6 +30,7 @@ namespace WordVenture.Tests
             existed = keys.Select(PlayerPrefs.HasKey).ToArray();
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("StagePosition", 0);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
             SharedDialoguePlayTests.SetLanguage("Korean");

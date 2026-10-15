@@ -15,7 +15,7 @@ namespace WordVenture.Tests
     public sealed class DiscardPlayTests
     {
         const int Stage = 1;
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -46,6 +46,7 @@ namespace WordVenture.Tests
             hadSingleton = singleton != null;
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, false);
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;

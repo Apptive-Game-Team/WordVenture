@@ -17,7 +17,7 @@ namespace WordVenture.Tests
     {
         const BindingFlags Any = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
         readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen",
-            "UpgradeShards", "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly" };
+            "UpgradeShards", "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly", "SeenTips" };
         bool[] existed;
         int[] values;
         int oldPosition;
@@ -36,6 +36,7 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             oldPosition = (int)Runtime("Map.MapMove").GetField("StagePosition").GetValue(null);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
             PlayerPrefs.SetInt("ActTwoDialogueSeen", int.MaxValue);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 6);
@@ -70,6 +71,19 @@ namespace WordVenture.Tests
                 while (Time.time - start < moments[i]) yield return null;
                 SharedDialoguePlayTests.Capture("card-burn-" + i + ".png");
             }
+        }
+
+        // 손패가 처음 넘칠 때 뜨는 할아버지의 기록 안내.
+        [UnityTest]
+        public IEnumerator 손패_안내()
+        {
+            yield return EnterBattle(6);
+            PlayerPrefs.SetInt("SeenTips", 0);
+            Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
+            object cards = battle.GetType().GetField("cardManager").GetValue(battle);
+            for (int i = 0; i < 3; i++) Call(cards, "AddCard", "Spell");
+            yield return new WaitForSeconds(2.5f);
+            SharedDialoguePlayTests.Capture("tip-hand-limit.png");
         }
 
         [UnityTest]

@@ -14,7 +14,7 @@ namespace WordVenture.Tests
 {
     public sealed class SettingsMenuPlayTests
     {
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "Language", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -39,6 +39,7 @@ namespace WordVenture.Tests
             oldPosition = (int)Runtime("Map.MapMove").GetField("StagePosition").GetValue(null);
             SharedDialoguePlayTests.SetLanguage("Korean");
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("StagePosition", 2);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 2);
             yield return SceneManager.LoadSceneAsync("TitleScene");

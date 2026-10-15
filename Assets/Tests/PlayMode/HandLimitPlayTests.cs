@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     {
         const int Stage = 1;
         const string HandLimitKey = "UpgradeLevelHandLimit";
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", HandLimitKey };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", HandLimitKey, "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -45,6 +45,7 @@ namespace WordVenture.Tests
             hadSingleton = singleton != null;
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.DeleteKey(HandLimitKey);
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, false);
             yield return SceneManager.LoadSceneAsync("TitleScene");
@@ -121,6 +122,30 @@ namespace WordVenture.Tests
             addCard.Invoke(Manager, new object[] { "MagicType" });
             hand = ((System.Collections.IEnumerable)Manager.GetType().GetProperty("HandCards").GetValue(Manager)).Cast<Component>().ToList();
             Assert.That(hand.Count(card => card.CompareTag("MagicType")), Is.GreaterThanOrEqualTo(1), "주문 카드가 속성 카드 자리를 막았다");
+        }
+
+        // 손패가 처음 넘칠 때만 설명이 뜨고, 읽음으로 기록한 뒤에는 다시 뜨지 않는다.
+        [UnityTest]
+        public IEnumerator 손패가_처음_넘칠_때만_버리기_안내가_뜬다()
+        {
+            yield return LoadBattle();
+            var addCard = Manager.GetType().GetMethod("AddCard", new[] { typeof(string) });
+            PlayerPrefs.SetInt("SeenTips", 0);
+            for (int i = 0; i < 3; i++) addCard.Invoke(Manager, new object[] { "Spell" });
+            yield return new WaitForSeconds(1.2f);
+            Assert.That(View, Is.Not.Null, "처음 넘친 카드가 불타면 안내가 뜬다.");
+            Assert.That(PlayerPrefs.GetInt("SeenTips") & 1, Is.EqualTo(0), "안내를 닫기 전에는 읽음으로 기록하지 않는다.");
+            for (int i = 0; i < 60 && View != null; i++)
+            {
+                Call(View, "Advance");
+                yield return null;
+            }
+            Assert.That(View, Is.Null);
+            Assert.That(PlayerPrefs.GetInt("SeenTips") & 1, Is.EqualTo(1), "다 읽은 안내는 읽음으로 기록한다.");
+
+            addCard.Invoke(Manager, new object[] { "Spell" });
+            yield return new WaitForSeconds(1.2f);
+            Assert.That(View, Is.Null, "읽은 안내는 다시 뜨지 않는다.");
         }
 
         [UnityTest]
