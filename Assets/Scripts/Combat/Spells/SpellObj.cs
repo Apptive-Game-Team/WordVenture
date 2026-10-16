@@ -40,6 +40,7 @@ namespace Combat.Spells
             this.target = target;
             targetTag = target.gameObject.tag;
             initialized = true;
+            FriendlyElementalStatus.ConsumeAttack(Player.PlayerInt());
             activeSpells++;
 
             if (this.spellType == MagicType.Explode)
@@ -93,7 +94,7 @@ namespace Combat.Spells
         // PlayerPrefs 는 MonoBehaviour 생성자(필드 초기화)에서 읽을 수 없다. InitProjectileDamage 는 Awake 뒤에 불린다.
         void Awake()
         {
-            damage = PlayerUpgrades.SpellBaseDamage;
+            damage = CurrentPlayerDamage;
         }
 
         public void InitProjectileDamage(int damage)
@@ -208,7 +209,9 @@ namespace Combat.Spells
 
         public static float GetBaseDamage(int damage, MagicType spellType) => GetScaledDamage(damage, spellType);
 
-        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(PlayerUpgrades.SpellBaseDamage, spellType);
+        static int CurrentPlayerDamage => Mathf.FloorToInt(PlayerUpgrades.SpellBaseDamage
+            * (Player.PlayerInt() != null ? FriendlyElementalStatus.AttackMultiplier(Player.PlayerInt()) : 1f));
+        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(CurrentPlayerDamage, spellType);
 
     }
 

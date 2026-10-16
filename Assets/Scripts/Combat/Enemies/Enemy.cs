@@ -172,6 +172,7 @@ namespace Combat.Enemies
         public void TakeSpellHit(MagicType element, MagicType spell, float baseDamage, float affinity)
         {
             if (!IsAlive) return;
+            OnIncomingSpell(element, spell);
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
             int damage = hit.Damage + hit.ExtraDamage;
             bool guarded = damage > 0 && ShieldEnemy.IsGuarding(this);
@@ -190,6 +191,7 @@ namespace Combat.Enemies
 
         // 지속 피해와 Kill은 제외하고 주문 및 아군의 직접 타격만 보스 기믹에 알린다.
         protected virtual void OnDirectDamage(int damage) { }
+        protected virtual void OnIncomingSpell(MagicType element, MagicType spell) { }
 
         // 주문과 아군 슬라임의 직접 타격에만 쓴다. 화상, Kill(), Heal()은 타격 효과를 내지 않는다.
         void PlayHitImpact(HitStrength strength, float affinity)

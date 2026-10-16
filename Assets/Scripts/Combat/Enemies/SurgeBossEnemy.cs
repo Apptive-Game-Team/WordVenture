@@ -1,167 +1,195 @@
 using System.Collections;
+using System.Collections.Generic;
 using Cards;
 using Combat.Allies;
-using Core;
 using UnityEngine;
 
 namespace Combat.Enemies
 {
-    // 주문 확정 경로만 기억을 바꾼다. 아군 자동 공격과 Spawn은 기억을 덮어쓰지 않는다.
     public class SurgeBossEnemy : BossEnemy
     {
         [SerializeField] Sprite markerSprite;
         [SerializeField] Sprite shellSprite;
+        public struct StoredMagic
+        {
+            public MagicType Spell, Element;
+            public StoredMagic(MagicType spell, MagicType element) { Spell = spell; Element = element; }
+        }
+        readonly List<StoredMagic> stored = new List<StoredMagic>();
+        readonly BossIntent[] memories = new BossIntent[3];
+        readonly List<GameObject> visuals = new List<GameObject>();
+        StoredMagic? pending;
         MortarStrike strike;
-        BossIntent tell;
-        SpriteRenderer surgeGlow;
-        SpriteRenderer body;
-        MagicType? rememberedSpell;
-
-        MortarStrike Strike => strike ??= new MortarStrike(markerSprite, shellSprite);
-        // 문장을 바꾸면 English.json도 함께 고친다.
-        public override string AttackDescription => "마지막으로 사용한 Shoot, Drop, Explode를 다음 턴에 따라 한다. Spawn은 기억하지 않고, 공격 주문을 쓰지 않은 턴에는 앞줄을 공격한다.";
-        public MagicType? RememberedSpell => rememberedSpell;
+        int chargeTurns;
+        bool casting;
+        int castingIndex;
+        public MagicType? RememberedSpell => pending?.Spell;
+        public MagicType? RememberedElement => pending?.Element;
+        public IReadOnlyList<StoredMagic> StoredSpells => stored;
+        public int ChargeTurns => chargeTurns;
+        public bool IsCasting => casting;
         public bool HasMarker => strike != null && strike.IsAimed;
         public bool IsEnraged => Hp * 2 <= MaxHp;
-
-        public static void ObservePlayerSpell(MagicType spell)
+        public static bool IsCastingAny
         {
-            if (spell != MagicType.Shoot && spell != MagicType.Drop && spell != MagicType.Explode) return;
-            foreach (SurgeBossEnemy boss in FindObjectsOfType<SurgeBossEnemy>())
-                if (boss.IsAlive) boss.Remember(spell);
+            get { foreach (var boss in FindObjectsOfType<SurgeBossEnemy>()) if (boss.casting) return true; return false; }
         }
+        // 숫자와 규칙을 바꾸면 English.json도 함께 고친다.
+        public override string AttackDescription => "턴마다 마지막으로 맞은 속성과 주문 형태를 하나 저장하고 3번째 턴에 순서대로 연속 시전한다. 각 마법은 공격력의 절반에 형태 배율을 적용하며 같은 원소 효과를 낸다. Spawn과 아군 공격은 저장하지 않는다. 주문이 없는 턴에도 저장분은 유지된다.";
 
-        public void Remember(MagicType spell)
+        protected override void OnIncomingSpell(MagicType element, MagicType spell) => RememberElement(spell, element);
+        public void Remember(MagicType spell) => RememberElement(spell, MagicType.Holy);
+        public void RememberElement(MagicType spell, MagicType element)
         {
-            if (spell != MagicType.Shoot && spell != MagicType.Drop && spell != MagicType.Explode) return;
-            rememberedSpell = spell;
-            Strike.Clear();
-            if (spell == MagicType.Drop) Strike.Aim();
+            if (casting || !IsAlive || (spell != MagicType.Shoot && spell != MagicType.Drop && spell != MagicType.Explode)) return;
+            pending = new StoredMagic(spell, element);
+            if (strike == null) strike = new MortarStrike(markerSprite, shellSprite);
+            strike.Clear();
+            if (spell == MagicType.Drop) strike.Aim();
             RefreshMemory();
         }
-
-        protected override void Start()
-        {
-            base.Start();
-            body = GetComponent<SpriteRenderer>();
-            var glow = new GameObject("WorldTreeSurgeGlow");
-            glow.transform.SetParent(transform, false);
-            surgeGlow = glow.AddComponent<SpriteRenderer>();
-            surgeGlow.sortingLayerID = body.sortingLayerID;
-            surgeGlow.sortingOrder = body.sortingOrder + 1;
-            surgeGlow.enabled = false;
-            RefreshMemory();
-        }
-
-        void LateUpdate()
-        {
-            if (tell == null) return;
-            tell.Tint = IsEnraged ? new Color32(255, 221, 125, 255) : new Color32(151, 255, 204, 255);
-            surgeGlow.enabled = IsAlive && IsEnraged;
-            if (surgeGlow.enabled)
-            {
-                surgeGlow.sprite = body.sprite;
-                surgeGlow.flipX = body.flipX;
-                surgeGlow.flipY = body.flipY;
-                surgeGlow.color = new Color(1f, .85f, .35f, .13f + .07f * Mathf.Sin(Time.time * 8));
-            }
-        }
-
+        protected override void Start() { base.Start(); RefreshMemory(); }
         void RefreshMemory()
         {
-            string text = !rememberedSpell.HasValue ? "앞줄 공격"
-                : rememberedSpell == MagicType.Shoot ? "모방 Shoot: 앞줄"
-                : rememberedSpell == MagicType.Drop ? "모방 Drop: 표시한 자리" : "모방 Explode: 아군 전체";
-            BossIntent.ActionIcon icon = !rememberedSpell.HasValue ? BossIntent.ActionIcon.Front
-                : rememberedSpell == MagicType.Shoot ? BossIntent.ActionIcon.Shoot
-                : rememberedSpell == MagicType.Drop ? BossIntent.ActionIcon.Drop : BossIntent.ActionIcon.Explode;
-            BossIntent.Show(ref tell, transform, icon, text, new Color32(151, 255, 204, 255),
-                imminent: rememberedSpell.HasValue, copied: rememberedSpell.HasValue);
+            int count = stored.Count + (pending.HasValue ? 1 : 0);
+            for (int i = 0; i < 3; i++)
+            {
+                if (i >= Mathf.Max(1, count) || (casting && i < castingIndex)) { BossIntent.Hide(memories[i]); continue; }
+                StoredMagic? magic = i < stored.Count ? stored[i] : pending;
+                BossIntent.ActionIcon icon = !magic.HasValue ? BossIntent.ActionIcon.Front
+                    : magic.Value.Spell == MagicType.Shoot ? BossIntent.ActionIcon.Shoot
+                    : magic.Value.Spell == MagicType.Drop ? BossIntent.ActionIcon.Drop : BossIntent.ActionIcon.Explode;
+                string message = !magic.HasValue ? "마법 축적 중" : magic.Value.Spell == MagicType.Shoot ? "모방 Shoot: 앞줄"
+                    : magic.Value.Spell == MagicType.Drop ? "모방 Drop: 표시한 자리" : "모방 Explode: 아군 전체";
+                BossIntent.Show(ref memories[i], transform, icon, message, new Color32(151, 255, 204, 255),
+                    imminent: casting ? i == castingIndex : chargeTurns == 2, copied: magic.HasValue);
+                memories[i].HorizontalOffset = (i - (Mathf.Max(1, count) - 1) * .5f) * 1.05f;
+                memories[i].Element = magic?.Element;
+                memories[i].Detail = Core.Localization.Translate("축적") + " " + chargeTurns + "/3";
+            }
         }
-
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
-            MagicType? spell = rememberedSpell;
-            rememberedSpell = null;
-            Animator.RangeAttack();
-            if (spell == MagicType.Drop)
-                Strike.Fire(transform.position, AttackDamage);
-            else if (spell == MagicType.Explode)
-            {
-                Strike.Clear();
-                StartCoroutine(ExplodeEcho());
-            }
-            else
-            {
-                Strike.Clear();
-                StartCoroutine(ShootEcho());
-            }
+            if (casting) return;
+            if (pending.HasValue) { stored.Add(pending.Value); pending = null; }
+            strike?.Clear();
+            chargeTurns++;
+            if (chargeTurns < 3) { Animator.Windup(); RefreshMemory(); return; }
+            StartCoroutine(Release());
+        }
+        IEnumerator Release()
+        {
+            casting = true;
+            castingIndex = 0;
             RefreshMemory();
-        }
-
-        IEnumerator ShootEcho()
-        {
-            var echo = CreateEcho(transform.position, shellSprite, new Color32(171, 255, 199, 255));
-            echo.transform.localScale = Vector3.one * 0.25f;
-            Vector3 from = transform.position;
-            float playerX = Player.PlayerInt().transform.position.x;
-            Vector3 to = new Vector3(AllyFormation.FrontLineX(playerX), from.y, 0);
-            float elapsed = 0;
-            while (elapsed < 0.4f && IsAlive)
+            StoredMagic[] sequence = stored.ToArray();
+            try
             {
-                elapsed += Time.deltaTime;
-                echo.transform.position = Vector3.Lerp(from, to, Mathf.Clamp01(elapsed / 0.4f));
-                yield return null;
+                if (sequence.Length == 0)
+                {
+                    Animator.RangeAttack();
+                    yield return Cast(new StoredMagic(MagicType.Shoot, MagicType.Holy), AttackDamage);
+                }
+                else foreach (StoredMagic magic in sequence)
+                {
+                    if (!IsAlive) yield break;
+                    RefreshMemory();
+                    Animator.RangeAttack();
+                    yield return Cast(magic, Mathf.Max(1, AttackDamage / 2));
+                    castingIndex++;
+                    RefreshMemory();
+                    yield return new WaitForSeconds(.18f);
+                }
             }
-            Destroy(echo);
-            if (IsAlive) AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
+            finally
+            {
+                casting = false;
+                stored.Clear(); chargeTurns = 0;
+                ClearVisuals();
+                if (IsAlive) { Animator.EndWindup(); RefreshMemory(); }
+            }
         }
-
-        IEnumerator ExplodeEcho()
+        IEnumerator Cast(StoredMagic magic, int damage)
         {
-            var echoes = new System.Collections.Generic.List<GameObject>();
-            float playerX = Player.PlayerInt().transform.position.x;
+            Vector3 from = EnemyMagicVisual.Center(this);
+            var charge = EnemyMagicVisual.Spawn(MagicType.Explode, magic.Element, from, .35f);
+            if (charge != null) visuals.Add(charge.gameObject);
+            yield return new WaitForSeconds(.25f);
+            if (!IsAlive) yield break;
+            if (charge != null) Destroy(charge.gameObject);
+            Player player = Player.PlayerInt();
+            if (player == null) yield break;
+            var targets = new List<Component>();
             var formation = AllyFormation.Current;
-            if (formation != null && formation.Allies.Count > 0)
-                foreach (var ally in formation.Allies) echoes.Add(CreateEcho(ally.transform.position, markerSprite, new Color32(255, 225, 138, 255)));
-            else echoes.Add(CreateEcho(new Vector3(playerX, -3f, 0), markerSprite, new Color32(255, 225, 138, 255)));
-            float elapsed = 0;
-            while (elapsed < 0.35f && IsAlive)
+            if (magic.Spell == MagicType.Explode)
             {
-                elapsed += Time.deltaTime;
-                foreach (GameObject echo in echoes)
-                    echo.transform.localScale = Vector3.one * Mathf.Lerp(0.1f, 0.45f, elapsed / 0.35f);
+                if (formation != null) foreach (var ally in formation.Allies) if (ally.IsAlive) targets.Add(ally);
+                if (targets.Count == 0) targets.Add(player);
+            }
+            else if (magic.Spell == MagicType.Drop)
+            {
+                Component target = formation != null && formation.Allies.Count > 0 ? (Component)formation.Allies[formation.Allies.Count - 1] : player;
+                targets.Add(target);
+            }
+            else targets.Add(formation != null && formation.Front != null && formation.Front.transform.position.x <= transform.position.x ? (Component)formation.Front : player);
+
+            float duration = magic.Spell == MagicType.Shoot ? .48f : .55f;
+            var effects = new List<EnemyMagicVisual>();
+            var destinations = new List<Vector3>();
+            var markers = new List<GameObject>();
+            foreach (Component target in targets)
+            {
+                Vector3 destination = EnemyMagicVisual.Center(target);
+                if (magic.Spell == MagicType.Drop)
+                {
+                    var marker = new GameObject("MimicDropMarker");
+                    marker.transform.position = new Vector3(destination.x, -3.4f, 0);
+                    var renderer = marker.AddComponent<SpriteRenderer>();
+                    renderer.sprite = markerSprite; renderer.sortingOrder = 2;
+                    visuals.Add(marker);
+                    markers.Add(marker);
+                }
+                Vector3 start = magic.Spell == MagicType.Drop ? destination + Vector3.up * 6 : magic.Spell == MagicType.Explode ? destination : from;
+                var effect = magic.Spell == MagicType.Explode ? null : EnemyMagicVisual.Spawn(magic.Spell, magic.Element, start);
+                if (effect != null) { visuals.Add(effect.gameObject); if (magic.Spell == MagicType.Shoot) effect.transform.localScale = new Vector3(-1, 1, 1); }
+                effects.Add(effect); destinations.Add(destination);
+            }
+            for (float time = 0; time < duration && IsAlive; time += Time.deltaTime)
+            {
+                for (int i = 0; i < effects.Count; i++) if (effects[i] != null)
+                {
+                    Vector3 start = magic.Spell == MagicType.Drop ? destinations[i] + Vector3.up * 6 : magic.Spell == MagicType.Explode ? destinations[i] : from;
+                    effects[i].transform.position = Vector3.Lerp(start, destinations[i], Mathf.Clamp01(time / duration));
+                }
                 yield return null;
             }
-            foreach (GameObject echo in echoes) Destroy(echo);
-            // 전체 공격은 단일 공격의 절반. 공격 약화와 분노를 적용한 뒤 나눈다.
-            if (IsAlive) AllyFormation.HitAllAllies(Mathf.Max(1, AttackDamage / 2));
+            if (!IsAlive) yield break;
+            foreach (var marker in markers) if (marker != null) Destroy(marker);
+            int scaled = Mathf.Max(1, Mathf.FloorToInt(Combat.Spells.SpellObj.GetBaseDamage(damage, magic.Spell)));
+            for (int i = 0; i < targets.Count; i++)
+            {
+                Component target = targets[i];
+                if (target == null || (target is AllySlime ally && !ally.IsAlive)) continue;
+                if (magic.Spell == MagicType.Drop && Mathf.Abs(EnemyMagicVisual.Center(target).x - destinations[i].x) > .7f) continue;
+                if (magic.Spell == MagicType.Explode)
+                {
+                    effects[i] = EnemyMagicVisual.Spawn(magic.Spell, magic.Element, destinations[i]);
+                    if (effects[i] != null) visuals.Add(effects[i].gameObject);
+                }
+                if (effects[i] != null) { effects[i].transform.position = destinations[i]; effects[i].Impact(); }
+                FriendlyElementalStatus.Hit(target, magic.Element, magic.Spell, scaled);
+            }
+            HitImpact.Play(HitStrength.Weak);
+            EnemyMagicVisual.PlayImpactSound(destinations[0]);
+            yield return new WaitForSeconds(.3f);
         }
-
-        GameObject CreateEcho(Vector3 position, Sprite sprite, Color tint)
-        {
-            var echo = new GameObject("WorldTreeEcho");
-            echo.transform.SetParent(transform, true);
-            echo.transform.position = position;
-            SpriteRenderer renderer = echo.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            renderer.color = tint;
-            renderer.sortingOrder = 30;
-            return echo;
-        }
-
+        void ClearVisuals() { foreach (var visual in visuals) if (visual != null) Destroy(visual); visuals.Clear(); }
         void OnDisable()
         {
-            strike?.Clear();
-            rememberedSpell = null;
-            BossIntent.Hide(tell);
+            StopAllCoroutines(); casting = false; pending = null; stored.Clear(); chargeTurns = 0;
+            strike?.Clear(); ClearVisuals();
+            foreach (var memory in memories) BossIntent.Hide(memory);
         }
-
-        protected override void Death()
-        {
-            strike?.Clear();
-            if (surgeGlow != null) surgeGlow.enabled = false;
-            base.Death();
-        }
+        protected override void Death() { OnDisable(); base.Death(); }
     }
 }

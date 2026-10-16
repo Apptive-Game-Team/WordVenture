@@ -250,65 +250,69 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 세계수는_마지막_주문을_모방하고_Spawn은_기억을_덮어쓰지_않는다()
+        public IEnumerator 세계수는_턴별_마지막_속성_마법을_저장하고_3턴에_연속_시전한다()
         {
             Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
             yield return null;
             int hp = PlayerHp;
-
-            Call(boss, "Remember", Magic("Shoot"));
-            Call(boss, "Remember", Magic("Drop"));
-            Assert.That(Property(boss, "HasMarker"), Is.True);
-            Call(boss, "Remember", Magic("Spawn"));
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 1f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Ice"), Magic("Drop"), 1f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Spawn"), 1f, 1f);
             Assert.That(Property(boss, "RememberedSpell"), Is.EqualTo(Magic("Drop")));
+            Assert.That(Property(boss, "RememberedElement"), Is.EqualTo(Magic("Ice")));
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            yield return new WaitForSeconds(0.8f);
-            Assert.That(PlayerHp, Is.EqualTo(hp - 12), "아군이 없으면 포격은 워드에게 떨어진다");
-
-            Assert.That(Property(boss, "RememberedSpell"), Is.Null);
-            Assert.That(Property(boss, "HasMarker"), Is.False);
-            Call(boss, "Remember", Magic("Explode"));
+            var stored = (IList)Property(boss, "StoredSpells");
+            Assert.That(stored.Count, Is.EqualTo(1));
+            Assert.That(stored[0].GetType().GetField("Element").GetValue(stored[0]), Is.EqualTo(Magic("Ice")));
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            yield return new WaitForSeconds(0.5f);
-            Assert.That(PlayerHp, Is.EqualTo(hp - 18), "전체 모방은 단일 피해의 절반이다");
-            Call(boss, "TakeHit", 60);
+            Assert.That(stored.Count, Is.EqualTo(1), "무주문 턴에도 저장분을 보존한다");
+            Assert.That(PlayerHp, Is.EqualTo(hp), "첫 두 턴에는 축적한다");
+            Call(boss, "TakeSpellHit", Magic("Lightning"), Magic("Explode"), 1f, 1f);
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            yield return new WaitForSeconds(0.5f);
-            Assert.That(PlayerHp, Is.EqualTo(hp - 30), "공격 주문이 없으면 앞줄 기본 공격이다");
+            Assert.That(Property(boss, "IsCasting"), Is.True);
+            float deadline = Time.realtimeSinceStartup + 6;
+            while ((bool)Property(boss, "IsCasting") && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(Property(boss, "IsCasting"), Is.False);
+            Assert.That(PlayerHp, Is.LessThan(hp));
+            Assert.That(stored.Count, Is.Zero);
+            Assert.That(Property(boss, "ChargeTurns"), Is.EqualTo(0));
+            Component status = Player.GetComponent(Runtime("Combat.Allies.FriendlyElementalStatus"));
+            object elemental = Property(status, "Status");
+            Assert.That(elemental.GetType().GetProperty("ShockTurns").GetValue(elemental), Is.EqualTo(2));
             Assert.That(AliveEnemiesNamed("SplitSlimeSmall").Length, Is.Zero);
         }
 
         [UnityTest]
-        public IEnumerator 세계수의_전체_모방은_약화를_적용하고_아군이_있으면_워드를_때리지_않는다()
+        public IEnumerator 세계수_연속_폭발은_약화를_적용하고_아군이_있으면_워드를_때리지_않는다()
         {
-            Component front = SpawnAlly("Fire");
-            Component middle = SpawnAlly("Rock");
-            Component rear = SpawnAlly("Ice");
+            Component front = SpawnAlly("Fire"), middle = SpawnAlly("Rock"), rear = SpawnAlly("Ice");
             Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
             yield return null;
             int hp = PlayerHp;
             Call(boss, "TakeSpellHit", Magic("Lightning"), Magic("Shoot"), 1f, 1f);
             Call(boss, "TakeSpellHit", Magic("Ice"), Magic("Shoot"), 1f, 1f);
             Call(boss, "Remember", Magic("Explode"));
-            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            yield return new WaitForSeconds(0.5f);
-            Assert.That(AllyHp(front), Is.EqualTo(4));
-            Assert.That(AllyHp(rear), Is.EqualTo(4), "공격 약화 후 단일 피해 8의 절반인 4를 받는다");
-            Assert.That(AllyHp(middle), Is.EqualTo(13), "바위 아군은 HP 16에서 피해 4를 30% 줄인 3을 받는다");
+            for (int i = 0; i < 3; i++) Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            float deadline = Time.realtimeSinceStartup + 4;
+            while ((bool)Property(boss, "IsCasting") && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(AllyHp(front), Is.EqualTo(6));
+            Assert.That(AllyHp(rear), Is.EqualTo(6), "약화된 공격력 8의 절반에 폭발 배율을 적용해 2 피해");
+            Assert.That(AllyHp(middle), Is.EqualTo(15), "바위는 2 피해를 30% 줄인 1을 받는다");
             Assert.That(PlayerHp, Is.EqualTo(hp));
         }
 
         [UnityTest]
-        public IEnumerator 세계수의_새_주문은_낙하_예고를_취소하고_아군_공격은_기억을_바꾸지_않는다()
+        public IEnumerator 세계수는_같은턴의_새_주문만_덮어쓰고_아군_공격은_기억하지_않는다()
         {
             Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
             yield return null;
-            Call(boss, "Remember", Magic("Drop"));
+            Call(boss, "RememberElement", Magic("Drop"), Magic("Fire"));
             Assert.That(Property(boss, "HasMarker"), Is.True);
-            Call(boss, "Remember", Magic("Shoot"));
+            Call(boss, "RememberElement", Magic("Shoot"), Magic("Ice"));
             Assert.That(Property(boss, "HasMarker"), Is.False);
-            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 4f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Spawn"), 4f, 1f);
             Assert.That(Property(boss, "RememberedSpell"), Is.EqualTo(Magic("Shoot")));
+            Assert.That(Property(boss, "RememberedElement"), Is.EqualTo(Magic("Ice")));
         }
 
         [UnityTest]

@@ -188,6 +188,7 @@ namespace Battle.Turns
         {
             yield return new WaitForSecondsRealtime(1f);
             while (WorldTreeTransition.IsPlaying) yield return null;
+            while (SurgeBossEnemy.IsCastingAny || FurnaceBossEnemy.IsReleasingAny) yield return null;
             enemyManager.EndTurnStatuses();
             // 화상으로 외피가 쓰러지면 상태 처리 자체가 페이즈 전환을 시작한다.
             while (WorldTreeTransition.IsPlaying) yield return null;

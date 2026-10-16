@@ -174,7 +174,7 @@ namespace WordVenture.Tests
             Assert.That(Property(boss, "IsExhausted"), Is.True);
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
             Assert.That(PlayerHp, Is.EqualTo(before));
-            Assert.That(Property(boss, "IsExhausted"), Is.False);
+            Assert.That(Property(boss, "IsExhausted"), Is.True);
         }
 
         [UnityTest]
@@ -188,6 +188,8 @@ namespace WordVenture.Tests
             Assert.That(Property(boss, "Heat"), Is.EqualTo(3), "지속 피해는 직접 타격이 아니다");
             int before = PlayerHp;
             Call(boss, "PlayTurnAction", 10f);
+            Assert.That(PlayerHp, Is.EqualTo(before), "파동이 도착하기 전에는 피해를 주지 않는다");
+            yield return new WaitForSeconds(1.1f);
             Assert.That(PlayerHp, Is.EqualTo(before - 19));
             Assert.That(Property(boss, "Heat"), Is.EqualTo(0));
             Call(boss, "EndTurnStatuses");
@@ -205,6 +207,7 @@ namespace WordVenture.Tests
             Assert.That(Property(boss, "NextAttackDamage"), Is.EqualTo(11));
             int before = PlayerHp;
             Call(boss, "PlayTurnAction", 10f);
+            yield return new WaitForSeconds(1.1f);
             Assert.That(PlayerHp, Is.EqualTo(before - 11));
         }
 
@@ -325,7 +328,7 @@ namespace WordVenture.Tests
             Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Exhaust"));
             yield return new WaitForSeconds(.35f);
             Call(boss, "PlayTurnAction", 10f);
-            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Charge"));
+            Assert.That(Property(icon, "Icon").ToString(), Is.EqualTo("Exhaust"));
             Assert.That(Property(icon, "IsImminent"), Is.False);
             Component furnace = CreateEnemy("FurnaceBoss", 7, 200, 10, "Fire");
             yield return null;
@@ -387,6 +390,77 @@ namespace WordVenture.Tests
             yield return null;
             Assert.That(icon.transform.Find("Glyph").GetComponent<SpriteRenderer>().bounds.size.x, Is.EqualTo(width).Within(.01f));
             Assert.That(Physics2D.OverlapPointAll(icon.transform.position).Any(h => h.gameObject == icon.gameObject), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator 세계수_연속시전_중에는_턴을_넘기지_않고_죽으면_남은_마법을_취소한다()
+        {
+            Component boss = CreateEnemy("SurgeBoss", 6, 300, 12, "Undead");
+            yield return null;
+            foreach (string element in new[] { "Fire", "Ice", "Lightning" })
+            {
+                Call(boss, "RememberElement", Magic("Shoot"), Magic(element));
+                Call(boss, "PlayTurnAction", 10f);
+            }
+            Component battle = (Component)Object.FindObjectOfType(Runtime("Battle.Turns.TurnBattleSystem"));
+            int turn = (int)Property(battle, "TurnNumber");
+            Call(battle, "StartEnemyTurnCounter");
+            yield return new WaitForSecondsRealtime(1.2f);
+            Assert.That(Property(boss, "IsCasting"), Is.True);
+            Assert.That(Property(battle, "TurnNumber"), Is.EqualTo(turn));
+            Call(boss, "Kill");
+            int hp = PlayerHp;
+            yield return new WaitForSeconds(1.2f);
+            Assert.That(PlayerHp, Is.EqualTo(hp), "사망 후에는 남은 주문이 피해를 주지 않는다");
+            Assert.That(Runtime("Combat.Enemies.SurgeBossEnemy").GetProperty("IsCastingAny").GetValue(null), Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator 모방_원소는_화상과_냉기_감전을_실제_대상에_적용하고_원본_그림을_쓴다()
+        {
+            var statusType = Runtime("Combat.Allies.FriendlyElementalStatus");
+            var hit = statusType.GetMethod("Hit");
+            hit.Invoke(null, new object[] { Player, Magic("Fire"), Magic("Shoot"), 5 });
+            Component receiver = Player.GetComponent(statusType);
+            object status = Property(receiver, "Status");
+            int Value(string name) => (int)status.GetType().GetProperty(name).GetValue(status);
+            Assert.That(Value("BurnTurns"), Is.EqualTo(2));
+            hit.Invoke(null, new object[] { Player, Magic("Ice"), Magic("Shoot"), 5 });
+            Assert.That(Value("BurnTurns"), Is.Zero);
+            Assert.That(Value("Chill"), Is.EqualTo(2));
+            hit.Invoke(null, new object[] { Player, Magic("Lightning"), Magic("Shoot"), 5 });
+            Assert.That(Value("ShockTurns"), Is.EqualTo(2));
+            Object catalog = Resources.Load("Combat/EnemyMagicCatalog");
+            foreach (string spell in new[] { "Shoot", "Drop", "Explode" })
+                foreach (string element in new[] { "Holy", "Fire", "Ice", "Rock", "Lightning" })
+                {
+                    GameObject prefab = (GameObject)catalog.GetType().GetMethod("Prefab").Invoke(catalog, new[] { Magic(spell), Magic(element) });
+                    Assert.That(prefab, Is.Not.Null, element + spell);
+                    Assert.That(prefab.GetComponent<Animator>(), Is.Not.Null);
+                    Assert.That(catalog.GetType().GetMethod("Element").Invoke(catalog, new[] { Magic(element) }), Is.Not.Null);
+                }
+            yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator 각_마법_아이콘은_해당_속성과_행동만_짧게_설명한다()
+        {
+            Component boss = CreateEnemy("SurgeBoss", 6, 100, 12, "Undead");
+            yield return null;
+            Call(boss, "RememberElement", Magic("Drop"), Magic("Fire"));
+            Call(boss, "PlayTurnAction", 10f);
+            Call(boss, "RememberElement", Magic("Shoot"), Magic("Ice"));
+            Component[] icons = boss.GetComponentsInChildren(Runtime("Combat.Enemies.BossIntent"));
+            Component hover = (Component)Runtime("Combat.UI.EnemyHoverInfo").GetMethod("EnsureExists").Invoke(null, null);
+            Call(hover, "ShowIntent", icons[0]);
+            yield return null;
+            Assert.That(Property(hover, "Text").ToString(), Does.Contain("Drop").And.Not.Contain("Shoot").And.Not.Contain("체력"));
+            Call(hover, "ShowIntent", icons[1]);
+            yield return null;
+            Assert.That(Property(hover, "Text").ToString(), Does.Contain("Shoot").And.Not.Contain("Drop"));
+            Call(boss, "RememberElement", Magic("Explode"), Magic("Lightning"));
+            yield return null;
+            Assert.That(Property(hover, "Text").ToString(), Does.Contain("Explode").And.Not.Contain("Shoot"));
         }
 
         [UnityTest]

@@ -54,7 +54,7 @@ namespace Combat.Allies
         public int CurrentHealth => hp;
         public int MissingHealth => MaxHealth - hp;
         // 신성은 공격하지 않으므로 이 값이 회복량이다.
-        public int AttackValue => Mathf.Max(1, Mathf.FloorToInt(AttackDamage * AttackMultiplierOf(Element) + 0.5f));
+        public int AttackValue => Mathf.Max(1, Mathf.FloorToInt(AttackDamage * AttackMultiplierOf(Element) * FriendlyElementalStatus.AttackMultiplier(this) + 0.5f));
 
         static float AttackMultiplierOf(MagicType element)
         {
@@ -72,6 +72,9 @@ namespace Combat.Allies
         public void Act(Enemy front, Enemy behind, IReadOnlyList<AllySlime> allies)
         {
             if (!IsAlive) return;
+            var status = GetComponent<FriendlyElementalStatus>();
+            if (status != null && status.BeginAction()) return;
+            FriendlyElementalStatus.ConsumeAttack(this);
             slimeAnimator.Attack();
             switch (Element)
             {

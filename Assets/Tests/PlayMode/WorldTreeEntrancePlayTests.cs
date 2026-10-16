@@ -340,6 +340,103 @@ namespace WordVenture.Tests
             Capture("15-intent-hover-english.png");
         }
 
+        [UnityTest]
+        public IEnumerator 개선된_열기_방출과_3턴_모방과_후퇴_도약_폭발_캡처()
+        {
+            var wave = (MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
+            wave.StopAllCoroutines();
+            Component Spawn(int id, float x) => ((GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy")
+                .Invoke(null, new object[] { id, x })).GetComponent(Runtime("Combat.Enemies.Enemy"));
+            object Magic(string name) => Enum.Parse(Runtime("Cards.MagicType"), name);
+            void Call(object target, string name, params object[] args) => target.GetType().GetMethod(name,
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Invoke(target, args);
+            void Clear()
+            {
+                foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy"))) enemy.gameObject.SetActive(false);
+            }
+            int effectFrame = 0;
+            void EffectFrame() => Capture("effect-frames/" + (++effectFrame).ToString("D3") + ".png", 960, 540);
+            Time.captureFramerate = 30;
+            Clear();
+            Component furnace = Spawn(32, 6);
+            yield return null;
+            for (int i = 0; i < 3; i++) Call(furnace, "TakeSpellHit", Magic("Rock"), Magic("Shoot"), 1f, 1f);
+            yield return new WaitForSeconds(.4f);
+            Call(furnace, "PlayTurnAction", 12f);
+            for (int frame = 0; frame < 40; frame++)
+            {
+                EffectFrame();
+                if (frame == 5) Capture("16-furnace-gather.png");
+                if (frame == 17) Capture("17-furnace-wave.png");
+                if (frame == 27) Capture("18-furnace-impact.png");
+                yield return null;
+            }
+            Clear();
+            Component core = Spawn(29, 6);
+            yield return null;
+            Call(core, "RememberElement", Magic("Drop"), Magic("Fire")); Call(core, "PlayTurnAction", 12f);
+            Call(core, "RememberElement", Magic("Shoot"), Magic("Ice")); Call(core, "PlayTurnAction", 12f);
+            Call(core, "RememberElement", Magic("Explode"), Magic("Lightning"));
+            yield return null; yield return null;
+            Capture("19-three-stored-spells.png");
+            Component hover = (Component)Runtime("Combat.UI.EnemyHoverInfo").GetMethod("EnsureExists").Invoke(null, null);
+            Component[] icons = core.GetComponentsInChildren(Runtime("Combat.Enemies.BossIntent"));
+            Call(hover, "ShowIntent", icons[1]);
+            yield return null;
+            Capture("26-single-spell-tooltip.png");
+            Call(hover, "Hide");
+            yield return null;
+            int oldRate = Time.captureFramerate;
+            Time.captureFramerate = 30;
+            try
+            {
+                Call(core, "PlayTurnAction", 12f);
+                for (int frame = 0; frame < 140; frame++)
+                {
+                    Capture("spell-frames/" + frame.ToString("D3") + ".png", 960, 540);
+                    EffectFrame();
+                    if (frame == 20) Capture("20-mimic-fire-drop.png");
+                    if (frame == 58) Capture("21-mimic-ice-shoot.png");
+                    if (frame == 124) Capture("22-mimic-lightning-explode.png");
+                    yield return null;
+                }
+            }
+            finally { Time.captureFramerate = oldRate; }
+            Clear();
+            Component thunder = Spawn(31, 6);
+            yield return null;
+            Call(thunder, "PlayTurnAction", 10f); Call(thunder, "PlayTurnAction", 10f);
+            yield return new WaitForSeconds(.4f);
+            Call(thunder, "PlayTurnAction", 10f);
+            Call(thunder, "PlayTurnAction", 10f);
+            for (int frame = 0; frame < 23; frame++)
+            {
+                EffectFrame();
+                if (frame == 6) Capture("23-thunder-back-jump.png");
+                if (frame == 15) Capture("24-thunder-landing-windup.png");
+                yield return null;
+            }
+            Clear();
+            Component bomb;
+            GameObject bombObject = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Combat/Enemies/Slime/ExplodeSlime.prefab"), new Vector3(3, -3, 0), Quaternion.identity);
+            bomb = bombObject.GetComponent(Runtime("Combat.Enemies.Enemy"));
+            object data = Activator.CreateInstance(Runtime("Combat.Enemies.EnemyData"));
+            data.GetType().GetField("maxHp").SetValue(data, 25);
+            data.GetType().GetField("damage").SetValue(data, 1);
+            data.GetType().GetField("attackRange").SetValue(data, 3f);
+            Call(bomb, "InitEnemyData", data);
+            yield return null;
+            Call(bomb, "PlayTurnAction", 2f);
+            yield return new WaitForSeconds(.2f);
+            Call(bomb, "PlayTurnAction", 2f);
+            for (int frame = 0; frame < 22; frame++)
+            {
+                EffectFrame();
+                if (frame == 4) Capture("25-bomb-body-centered.png");
+                yield return null;
+            }
+        }
+
         static void Capture(string filename, int width = 1920, int height = 1080)
         {
             Camera camera = Camera.main;
@@ -366,7 +463,7 @@ namespace WordVenture.Tests
                 RenderTexture.active = target;
                 image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
                 image.Apply();
-                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-15-act-two-boss-design/boss-intent-icons");
+                string directory = Path.Combine(Directory.GetCurrentDirectory(), ".plan/assets/2026-10-16-boss-combat-feedback");
                 Directory.CreateDirectory(directory);
                 Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(directory, filename)));
                 File.WriteAllBytes(Path.Combine(directory, filename), image.EncodeToPNG());

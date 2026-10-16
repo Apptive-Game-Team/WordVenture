@@ -15,6 +15,9 @@ namespace Combat.Enemies
         public Color Tint { get; set; }
         public int DamagePreview { get; set; } = -1;
         public Sprite Glyph => glyph != null ? glyph.sprite : null;
+        public float HorizontalOffset { get; set; }
+        public Cards.MagicType? Element { get; set; }
+        public string Detail { get; set; }
         public string Description
         {
             get
@@ -22,6 +25,8 @@ namespace Combat.Enemies
                 string text = Localization.Translate(message);
                 if (Icon == ActionIcon.Snowball || Icon == ActionIcon.Heat) text += " " + Level + "/3";
                 if (DamagePreview >= 0) text += "  " + Localization.Translate("피해") + " " + DamagePreview;
+                if (Element.HasValue) text = Combat.UI.SlimeEncyclopediaView.ElementName(Element.Value) + " " + text;
+                if (!string.IsNullOrEmpty(Detail)) text += "  " + Detail;
                 return text;
             }
         }
@@ -30,7 +35,7 @@ namespace Combat.Enemies
         static BossIntentArt art;
         Enemy owner;
         string message;
-        SpriteRenderer glyph, border, copiedBorder;
+        SpriteRenderer glyph, border, copiedBorder, elementGlyph;
         readonly SpriteRenderer[] pips = new SpriteRenderer[3];
 
         public static void Show(ref BossIntent view, Transform owner, ActionIcon icon, string description,
@@ -74,6 +79,9 @@ namespace Combat.Enemies
             border = Part("Border", frame, 55);
             glyph = Part("Glyph", null, 56);
             glyph.transform.localPosition = new Vector3(0, 2f / 27, 0);
+            elementGlyph = Part("Element", null, 57);
+            elementGlyph.transform.localPosition = new Vector3(0, -7f / 27, 0);
+            elementGlyph.transform.localScale = Vector3.one * .45f;
             for (int i = 0; i < 3; i++)
             {
                 pips[i] = Part("Stage" + (i + 1), null, 56);
@@ -107,7 +115,7 @@ namespace Combat.Enemies
             float y = top + 1.32f;
             Camera camera = Camera.main;
             if (camera != null) y = Mathf.Min(y, camera.transform.position.y + camera.orthographicSize - .58f);
-            transform.position = new Vector3(parent.position.x, y, parent.position.z);
+            transform.position = new Vector3(parent.position.x + HorizontalOffset, y, parent.position.z);
             transform.rotation = Quaternion.identity;
             Vector3 scale = parent.lossyScale;
             transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f / scale.z);
@@ -117,6 +125,12 @@ namespace Combat.Enemies
             Color symbol = card ? Color.white : Tint;
             symbol.a = pulse;
             glyph.color = symbol;
+            elementGlyph.enabled = Element.HasValue;
+            if (Element.HasValue)
+            {
+                elementGlyph.sprite = CardGlyph(EnemyMagicVisual.Catalog.Element(Element.Value));
+                elementGlyph.color = new Color(1, 1, 1, pulse);
+            }
             glyph.transform.localRotation = Quaternion.Euler(0, 0, Icon == ActionIcon.Exhaust ? Mathf.Floor(Time.time * 5) * 45 : 0);
             for (int i = 0; i < 3; i++) pips[i].color = i < Level ? Tint : new Color32(83, 78, 89, 255);
         }
@@ -129,12 +143,7 @@ namespace Combat.Enemies
             {
                 if (art == null) art = Resources.Load<BossIntentArt>("Combat/BossIntentArt");
                 Sprite card = icon == ActionIcon.Shoot ? art.shoot : icon == ActionIcon.Drop ? art.drop : art.explode;
-                Rect r = card.rect;
-                // 34x50 카드의 이름·종류 칸을 제외한 중앙 20x20 texel만 재사용한다.
-                float side = Mathf.Round(r.width * 20f / 34);
-                var rect = new Rect(r.x + Mathf.Round((r.width - side) / 2), r.y + Mathf.Round((r.height - side) / 2), side, side);
-                Sprite crop = Sprite.Create(card.texture, rect, Vector2.one * .5f, 27);
-                crop.name = "BossIntent." + icon;
+                Sprite crop = CardGlyph(card);
                 Sprites[key] = crop;
                 return crop;
             }
@@ -160,6 +169,18 @@ namespace Combat.Enemies
                 default: pattern = new[] {"................", "......xx........", ".....xxx........", "....xxxx........", "...xxxx.........", "..xxxxxxxxxxxx..", ".xxxxxxxxxxxxx..", "xxxxxxxxxxxxxx..", ".xxxxxxxxxxxxx..", "..xxxxxxxxxxxx..", "...xxxx.........", "....xxxx........", ".....xxx........", "......xx........", "................", "................"}; break;
             }
             return Pattern(key, pattern);
+        }
+        public static Sprite CardGlyph(Sprite card)
+        {
+            if (card == null) return null;
+            string key = "card/" + card.GetInstanceID();
+            if (Sprites.TryGetValue(key, out Sprite cached) && cached != null) return cached;
+            Rect r = card.rect;
+            float side = Mathf.Round(r.width * 20f / 34);
+            var rect = new Rect(r.x + Mathf.Round((r.width - side) / 2), r.y + Mathf.Round((r.height - side) / 2), side, side);
+            Sprite crop = Sprite.Create(card.texture, rect, Vector2.one * .5f, 27);
+            crop.name = "BossIntent." + card.name;
+            return Sprites[key] = crop;
         }
         static Sprite Frame()
         {

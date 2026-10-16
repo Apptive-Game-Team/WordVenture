@@ -25,6 +25,7 @@ namespace Combat.UI
         public static EnemyHoverInfo Current { get; private set; }
 
         public Enemy Target { get; private set; }
+        public BossIntent IntentTarget { get; private set; }
         public bool IsVisible => panel != null && panel.gameObject.activeSelf;
         public string Text => label != null ? label.text : "";
 
@@ -32,6 +33,7 @@ namespace Combat.UI
         RectTransform panel;
         TMP_Text label;
         Enemy underMouse;
+        BossIntent underIntent;
         string shownKey = "";
         readonly List<string> lines = new List<string>();
         readonly List<string> items = new List<string>();
@@ -51,10 +53,16 @@ namespace Combat.UI
         public void Show(Enemy enemy)
         {
             Target = enemy;
+            IntentTarget = null;
             shownKey = "";
         }
 
-        public void Hide() => Target = null;
+        public void ShowIntent(BossIntent intent)
+        {
+            Show(intent != null ? intent.GetComponentInParent<Enemy>() : null);
+            IntentTarget = intent;
+        }
+        public void Hide() { Target = null; IntentTarget = null; }
 
         void Build()
         {
@@ -98,27 +106,39 @@ namespace Combat.UI
         void Update()
         {
             // 카드를 끌거나 대상을 누르는 동안에는 마우스 아래에 적이 없는 것으로 본다.
-            Enemy found = Input.GetMouseButton(0) ? null : FindEnemyUnderMouse();
+            BossIntent foundIntent = null;
+            Enemy found = Input.GetMouseButton(0) ? null : FindEnemyUnderMouse(out foundIntent);
             // 마우스 아래 대상이 바뀐 프레임에만 Show/Hide 를 부른다. 직접 Show 를 부른 경우를 덮어쓰지 않기 위해서다.
-            if (found != underMouse)
+            if (found != underMouse || foundIntent != underIntent)
             {
                 underMouse = found;
-                if (found != null) Show(found); else Hide();
+                underIntent = foundIntent;
+                if (foundIntent != null) ShowIntent(foundIntent);
+                else if (found != null) Show(found); else Hide();
             }
 
-            bool visible = Target != null && Target.IsAlive && !InteractionLock.IsLocked;
+            bool visible = Target != null && Target.IsAlive && !InteractionLock.IsLocked
+                && (IntentTarget == null || IntentTarget.gameObject.activeInHierarchy);
             if (panel.gameObject.activeSelf != visible) panel.gameObject.SetActive(visible);
             if (!visible) return;
             Refresh();
             Place();
         }
 
-        static Enemy FindEnemyUnderMouse()
+        static Enemy FindEnemyUnderMouse(out BossIntent intent)
         {
+            intent = null;
             Camera camera = Camera.main;
             if (camera == null) return null;
             Vector2 point = camera.ScreenToWorldPoint(Input.mousePosition);
-            foreach (Collider2D hit in Physics2D.OverlapPointAll(point))
+            Collider2D[] hits = Physics2D.OverlapPointAll(point);
+            foreach (Collider2D hit in hits)
+            {
+                var icon = hit.GetComponent<BossIntent>();
+                var enemy = hit.GetComponentInParent<Enemy>();
+                if (icon != null && enemy != null && enemy.IsAlive) { intent = icon; return enemy; }
+            }
+            foreach (Collider2D hit in hits)
             {
                 var enemy = hit.GetComponentInParent<Enemy>();
                 if (enemy != null && enemy.IsAlive) return enemy;
@@ -130,13 +150,15 @@ namespace Combat.UI
         void Refresh()
         {
             ElementalStatus s = Target.Status;
-            BossIntent intent = Target.GetComponentInChildren<BossIntent>();
+            string intents = "";
+            foreach (BossIntent intent in Target.GetComponentsInChildren<BossIntent>()) intents += intent.Description + "/";
             string key = Target.CurrentHp + "/" + Target.MaximumHp + "/" + Target.CurrentAttackDamage + "/" + s.BurnTurns + "/"
                 + s.Chill + "/" + s.Frozen + "/" + s.ShockTurns + "/" + s.FractureTurns + "/" + s.WeakenTurns
-                + "/" + Localization.Current + "/" + (intent != null ? intent.Description : "");
+                + "/" + Localization.Current + "/" + intents + "/" + (IntentTarget != null ? IntentTarget.GetInstanceID() : 0);
             if (key == shownKey) return;
             shownKey = key;
-            label.text = Describe(Target, CombineZone.Instance != null ? CombineZone.Instance.AffinityTable : null);
+            label.text = IntentTarget != null ? IntentTarget.Description
+                : Describe(Target, CombineZone.Instance != null ? CombineZone.Instance.AffinityTable : null);
             Vector2 size = label.GetPreferredValues(label.text);
             panel.sizeDelta = new Vector2(size.x + Padding * 2, size.y + Padding * 2);
         }
@@ -147,8 +169,8 @@ namespace Combat.UI
             lines.Add("<color=#F5D58C>" + T(enemy.DisplayName) + "</color>  " + SlimeEncyclopediaView.ElementName(enemy.enemyType));
             lines.Add(T("체력") + " " + enemy.CurrentHp + " / " + enemy.MaximumHp + "   " + T("공격력") + " " + enemy.CurrentAttackDamage);
 
-            BossIntent intent = enemy.GetComponentInChildren<BossIntent>();
-            if (intent != null) lines.Add(T("다음 행동") + ": " + intent.Description);
+            foreach (BossIntent intent in enemy.GetComponentsInChildren<BossIntent>())
+                lines.Add(T("다음 행동") + ": " + intent.Description);
 
             ElementalStatus s = enemy.Status;
             items.Clear();
@@ -198,7 +220,8 @@ namespace Combat.UI
             if (camera == null) return;
             float scale = canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
             Vector2 size = panel.sizeDelta;
-            Bounds bounds = Target.TryGetComponent(out Collider2D collider)
+            Component anchor = IntentTarget != null ? (Component)IntentTarget : Target;
+            Bounds bounds = anchor.TryGetComponent(out Collider2D collider)
                 ? collider.bounds : new Bounds(Target.transform.position, Vector3.zero);
             Vector2 left = camera.WorldToScreenPoint(new Vector3(bounds.min.x, bounds.max.y, bounds.center.z)) / scale;
             Vector2 right = camera.WorldToScreenPoint(new Vector3(bounds.max.x, bounds.max.y, bounds.center.z)) / scale;
