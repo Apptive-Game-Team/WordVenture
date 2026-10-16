@@ -73,6 +73,7 @@ namespace Combat.Enemies
         protected int Damage;
         public ElementalStatus Status { get; private set; } = new ElementalStatus();
         public bool IsAlive => Hp > 0 && gameObject.activeInHierarchy;
+        public int EnemyId => id;
         protected int AttackDamage => Status.GetAttackDamage(EnemyRage.ApplyToDamage(Damage, RageLevel));
         // 치유량처럼 분노가 붙지 않는 공격력이다.
         protected int UnragedAttackDamage => Status.GetAttackDamage(Damage);
@@ -108,6 +109,7 @@ namespace Combat.Enemies
 
         public void InitEnemyData(EnemyData enemyData)
         {
+            Animator = GetComponent<SlimeAnimator>();
             id = enemyData.id;
             DisplayName = !string.IsNullOrEmpty(enemyData.displayName) ? enemyData.displayName : enemyData.name;
             MaxHp = enemyData.maxHp;
@@ -170,6 +172,7 @@ namespace Combat.Enemies
         public void TakeSpellHit(MagicType element, MagicType spell, float baseDamage, float affinity)
         {
             if (!IsAlive) return;
+            OnIncomingSpell(element, spell);
             ElementalStatus.HitResult hit = Status.Hit(element, spell, baseDamage, affinity, this is BossEnemy);
             int damage = hit.Damage + hit.ExtraDamage;
             bool guarded = damage > 0 && ShieldEnemy.IsGuarding(this);
@@ -182,8 +185,13 @@ namespace Combat.Enemies
             HitStrength strength = HitImpact.Classify(hit.Affinity, !string.IsNullOrEmpty(hit.Reaction));
             if (strength != HitStrength.None) PlayHitImpact(strength, hit.Affinity);
             TakeHit(damage);
+            if (damage > 0 && IsAlive) OnDirectDamage(damage);
             UpdateStatusIndicator();
         }
+
+        // 지속 피해와 Kill은 제외하고 주문 및 아군의 직접 타격만 보스 기믹에 알린다.
+        protected virtual void OnDirectDamage(int damage) { }
+        protected virtual void OnIncomingSpell(MagicType element, MagicType spell) { }
 
         // 주문과 아군 슬라임의 직접 타격에만 쓴다. 화상, Kill(), Heal()은 타격 효과를 내지 않는다.
         void PlayHitImpact(HitStrength strength, float affinity)

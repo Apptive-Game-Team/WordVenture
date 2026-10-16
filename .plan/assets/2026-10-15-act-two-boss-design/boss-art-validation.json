@@ -1,0 +1,537 @@
+{
+  "SnowBoss": [
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_01.png",
+      "guid": "27de297d9ddf4510b6430ac946c749f9",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 54,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_02.png",
+      "guid": "326da68ccc824a4fbeda7d8f749b5134",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 56,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_03.png",
+      "guid": "dca7ace5188a470faa068d2ae6b2e943",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 54,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_04.png",
+      "guid": "b79045bd0e334bdbba7cf3e078cc5d2e",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 57,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_05.png",
+      "guid": "0dfd86f9e950421e9c772e2a10b118de",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 56,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_06.png",
+      "guid": "090c502a1e09453392e11f7c7e023f97",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 59,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_07.png",
+      "guid": "38737fb394234dadbeb83190c7e786c1",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 55,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_08.png",
+      "guid": "cd9c8f9fc8c94587af54d81d3b47d5c0",
+      "size": [
+        97,
+        94
+      ],
+      "colors": 55,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13829787234042554,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    }
+  ],
+  "ThunderBoss": [
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_01.png",
+      "guid": "6a37ec069c3b411483a70b087e9541a5",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 58,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_02.png",
+      "guid": "de18554720f2449b9c8032715c94a1a9",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 57,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_03.png",
+      "guid": "b5c9b1fda5c54b708bdd23655e57a36f",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 57,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_04.png",
+      "guid": "d4abbeaa19384b25aab03e32c88d763e",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 58,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_05.png",
+      "guid": "ae78d2a4a70b4795b9a98d45a3084c27",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 59,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_06.png",
+      "guid": "4e27ac59687f4cd3824824c12b610568",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 57,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_07.png",
+      "guid": "50bcebd5bda8495084949237d34bd668",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 61,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_08.png",
+      "guid": "6c97086923344ccea2128c7418cd8fb4",
+      "size": [
+        97,
+        83
+      ],
+      "colors": 59,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.1566265060240964,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    }
+  ],
+  "FurnaceBoss": [
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_01.png",
+      "guid": "8a87a25d2b9641bb8fed12609c2ebd3e",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 62,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_02.png",
+      "guid": "c3d31f74e4544b45900a4d70b6cd2a6a",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 62,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_03.png",
+      "guid": "7c2c6b91be54452bb34d81d284abda2d",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_04.png",
+      "guid": "b21ba1ce14be48989873776b60f55a80",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_05.png",
+      "guid": "b9fe0824c05e46718dec85e84c8b1b86",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 63,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_06.png",
+      "guid": "1317adaca3c44f7790cc343e6774888b",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_07.png",
+      "guid": "de84ab9eaf3446729a0a5b247d287754",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_08.png",
+      "guid": "78e3415bf135456a8437960350c0632d",
+      "size": [
+        97,
+        93
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.13978494623655913,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    }
+  ],
+  "GraftBoss": [
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_01.png",
+      "guid": "313482ed95cf402f95c669851459b59c",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 63,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_02.png",
+      "guid": "d8ee3eef5b1546e2bb367412404a71ea",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 61,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_03.png",
+      "guid": "de9890317bc548ce8eef9f30d253292e",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 62,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_04.png",
+      "guid": "404d45e61b2043cc8ec593dcb411ef4d",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 62,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_05.png",
+      "guid": "86863c041d0b45c29970acebdf3e11a0",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 62,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_06.png",
+      "guid": "5a529a06f9a44324b5f737494543279d",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 64,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_07.png",
+      "guid": "bc0428be7d344251a2f638196057e6d9",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 63,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    },
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_08.png",
+      "guid": "394d5953bd6949389fc8ea05f68b06b3",
+      "size": [
+        97,
+        92
+      ],
+      "colors": 63,
+      "alpha": [
+        0,
+        255
+      ],
+      "ppu": 18.9,
+      "pivotY": 0.14130434782608695,
+      "pivotRule": "13 art pixels above shared trimmed union floor"
+    }
+  ],
+  "Snowball": [
+    {
+      "path": "Assets\\Art\\Combat\\Enemies\\ActTwo\\Snowball\\Snowball_01.png",
+      "guid": "c8548a4c337e4b23acc7bfb8eac33777",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 18,
+      "alpha": [
+        0,
+        255
+      ]
+    }
+  ]
+}

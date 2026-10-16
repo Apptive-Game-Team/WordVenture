@@ -344,7 +344,7 @@ namespace WordVenture.Tests
                 Object.Destroy(view.gameObject);
                 yield return null;
             }
-            Assert.That(narrationLines, Is.EqualTo(66));
+            Assert.That(narrationLines, Is.EqualTo(67));
             Assert.That(gestureLines, Is.EqualTo(33));
             Assert.That(Locked, Is.False);
         }

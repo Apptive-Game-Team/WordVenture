@@ -1,0 +1,10 @@
+{"stage":5,"useSpawn":true,"seed":5000,"outcome":"win","turns":19,"damageTaken":121,"healed":72,"finalHp":51,"spawnsCast":0,"spellsCast":16,"discards":1,"upgrades":"2,0,0,0"}
+{"stage":5,"useSpawn":false,"seed":5000,"outcome":"win","turns":20,"damageTaken":121,"healed":72,"finalHp":51,"spawnsCast":0,"spellsCast":17,"discards":1,"upgrades":"2,0,0,0"}
+{"stage":6,"useSpawn":true,"seed":6000,"outcome":"lose","turns":17,"damageTaken":80,"healed":0,"finalHp":0,"spawnsCast":1,"spellsCast":11,"discards":3,"upgrades":"3,0,0,0"}
+{"stage":6,"useSpawn":false,"seed":6000,"outcome":"win","turns":26,"damageTaken":218,"healed":180,"finalHp":62,"spawnsCast":0,"spellsCast":20,"discards":4,"upgrades":"3,0,0,0"}
+{"stage":7,"useSpawn":true,"seed":7000,"outcome":"win","turns":25,"damageTaken":134,"healed":90,"finalHp":56,"spawnsCast":4,"spellsCast":18,"discards":2,"upgrades":"3,0,0,0"}
+{"stage":7,"useSpawn":false,"seed":7000,"outcome":"lose","turns":21,"damageTaken":189,"healed":90,"finalHp":0,"spawnsCast":0,"spellsCast":16,"discards":3,"upgrades":"3,0,0,0"}
+{"stage":8,"useSpawn":true,"seed":8000,"outcome":"win","turns":20,"damageTaken":42,"healed":0,"finalHp":58,"spawnsCast":2,"spellsCast":14,"discards":2,"upgrades":"4,0,0,0"}
+{"stage":8,"useSpawn":false,"seed":8000,"outcome":"win","turns":23,"damageTaken":115,"healed":96,"finalHp":81,"spawnsCast":0,"spellsCast":18,"discards":4,"upgrades":"4,0,0,0"}
+{"stage":9,"useSpawn":true,"seed":9000,"outcome":"lose","turns":23,"damageTaken":147,"healed":60,"finalHp":0,"spawnsCast":2,"spellsCast":14,"discards":5,"upgrades":"4,0,0,0"}
+{"stage":9,"useSpawn":false,"seed":9000,"outcome":"lose","turns":25,"damageTaken":211,"healed":120,"finalHp":0,"spawnsCast":0,"spellsCast":18,"discards":5,"upgrades":"4,0,0,0"}

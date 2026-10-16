@@ -27,8 +27,4 @@ MonoBehaviour:
       enemyId: 16
   - enemySpawnDatasInWave:
     - spawnPositionX: 6
-      enemyId: 18
-    - spawnPositionX: 5
-      enemyId: 17
-    - spawnPositionX: 8
-      enemyId: 16
+      enemyId: 30

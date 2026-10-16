@@ -1,0 +1,58 @@
+[
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_01.png",
+    "width": 176,
+    "height": 171,
+    "removed": 417,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_02.png",
+    "width": 176,
+    "height": 171,
+    "removed": 177,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_03.png",
+    "width": 176,
+    "height": 171,
+    "removed": 252,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_04.png",
+    "width": 176,
+    "height": 171,
+    "removed": 221,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_05.png",
+    "width": 176,
+    "height": 171,
+    "removed": 316,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_06.png",
+    "width": 176,
+    "height": 171,
+    "removed": 208,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_07.png",
+    "width": 176,
+    "height": 171,
+    "removed": 368,
+    "remainingRgbChanged": 0
+  },
+  {
+    "file": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_08.png",
+    "width": 176,
+    "height": 171,
+    "removed": 400,
+    "remainingRgbChanged": 0
+  }
+]

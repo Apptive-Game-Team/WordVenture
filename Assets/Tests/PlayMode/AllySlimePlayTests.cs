@@ -59,7 +59,7 @@ namespace WordVenture.Tests
 
         Component Spawn(string element) => (Component)Call(formation, "Spawn", Magic(element), affinityTable);
 
-        Component CreateEnemy(float x)
+        Component CreateEnemy(float x, string defense = "Fire")
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Combat/Enemies/Slime/MeleeNeon.prefab");
             GameObject slime = Object.Instantiate(prefab, new Vector3(x, -3f, 0f), Quaternion.identity);
@@ -70,7 +70,7 @@ namespace WordVenture.Tests
             data.GetType().GetField("moveDistance").SetValue(data, 4f);
             data.GetType().GetField("attackRange").SetValue(data, 3f);
             data.GetType().GetField("damage").SetValue(data, 10);
-            data.GetType().GetField("type").SetValue(data, Magic("Fire"));
+            data.GetType().GetField("type").SetValue(data, Magic(defense));
             Call(enemy, "InitEnemyData", data);
             return enemy;
         }
@@ -269,14 +269,14 @@ namespace WordVenture.Tests
         {
             Spawn("Fire");
             Spawn("Ice");
-            Component enemy = CreateEnemy(6f);
+            Component enemy = CreateEnemy(6f, "Holy");
             yield return null;
 
             yield return RunAttacks(() => enemy);
             Type projectile = TypeOf("Combat.Allies.AllyProjectile");
             Assert.That((int)projectile.GetProperty("ActiveCount").GetValue(null), Is.EqualTo(0));
-            Assert.That(EnemyHp(enemy), Is.LessThan(100), "턴이 끝났는데 피해가 아직 들어가지 않았다");
-            Assert.That((int)StatusValue(enemy, "BurnTurns"), Is.GreaterThan(0));
+            Assert.That(EnemyHp(enemy), Is.EqualTo(91), "불 피해 6과 얼음 피해 3이 모두 도착해야 한다");
+            Assert.That((int)StatusValue(enemy, "BurnTurns"), Is.EqualTo(0), "뒤에 도착한 얼음이 앞서 걸린 화상을 지운다");
             Assert.That((int)StatusValue(enemy, "Chill"), Is.EqualTo(1));
         }
 

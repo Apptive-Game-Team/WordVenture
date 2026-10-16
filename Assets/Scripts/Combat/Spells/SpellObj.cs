@@ -40,6 +40,7 @@ namespace Combat.Spells
             this.target = target;
             targetTag = target.gameObject.tag;
             initialized = true;
+            FriendlyElementalStatus.ConsumeAttack(Player.PlayerInt());
             activeSpells++;
 
             if (this.spellType == MagicType.Explode)
@@ -54,10 +55,11 @@ namespace Combat.Spells
             } else if (this.spellType == MagicType.Shoot)
             {
                 moveVector = new Vector3(speed, 0, 0);
-                // 아군은 땅에 서 있으므로 워드의 높이와 달라도 맞도록 아군을 향해 날린다.
-                if (targetTag == AllyTag)
+                // 아군은 몸 위치로, 거대 나무형 보스는 큰 충돌체의 중심으로 조준한다.
+                if (targetTag == AllyTag || target.GetComponent<TreeShellBossEnemy>() != null)
                 {
-                    Vector3 toTarget = target.transform.position - transform.position;
+                    Vector3 toTarget = targetTag == AllyTag ? target.transform.position : target.GetComponent<Collider2D>().bounds.center;
+                    toTarget -= transform.position;
                     toTarget.z = 0;
                     moveVector = toTarget.normalized * speed;
                 }
@@ -92,7 +94,7 @@ namespace Combat.Spells
         // PlayerPrefs 는 MonoBehaviour 생성자(필드 초기화)에서 읽을 수 없다. InitProjectileDamage 는 Awake 뒤에 불린다.
         void Awake()
         {
-            damage = PlayerUpgrades.SpellBaseDamage;
+            damage = CurrentPlayerDamage;
         }
 
         public void InitProjectileDamage(int damage)
@@ -207,7 +209,9 @@ namespace Combat.Spells
 
         public static float GetBaseDamage(int damage, MagicType spellType) => GetScaledDamage(damage, spellType);
 
-        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(PlayerUpgrades.SpellBaseDamage, spellType);
+        static int CurrentPlayerDamage => Mathf.FloorToInt(PlayerUpgrades.SpellBaseDamage
+            * (Player.PlayerInt() != null ? FriendlyElementalStatus.AttackMultiplier(Player.PlayerInt()) : 1f));
+        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(CurrentPlayerDamage, spellType);
 
     }
 

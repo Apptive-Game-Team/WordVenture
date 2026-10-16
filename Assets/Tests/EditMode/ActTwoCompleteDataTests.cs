@@ -35,7 +35,12 @@ namespace WordVenture.Tests
             ("SplitSlimeSmall", "Split"),
             ("ExplodeSlime", "Explode"),
             ("HealSlime", "Heal"),
-            ("SurgeBoss", "Surge"),
+            ("SurgeBoss", "WorldTreeCore"),
+            ("SnowBoss", "SnowBoss"),
+            ("ThunderBoss", "ThunderBoss"),
+            ("FurnaceBoss", "FurnaceBoss"),
+            ("GraftBoss", "GraftBoss"),
+            ("TreeShellBoss", "WorldTreeShell"),
         };
 
         static string Manifest => File.ReadAllText(ManifestPath);
@@ -81,6 +86,40 @@ namespace WordVenture.Tests
             }
 
             return ids;
+        }
+
+        [TestCase("SnowBoss")]
+        [TestCase("ThunderBoss")]
+        [TestCase("FurnaceBoss")]
+        [TestCase("GraftBoss")]
+        [TestCase("SurgeBoss")]
+        [TestCase("TreeShellBoss")]
+        public void 보스_선택_충돌체가_발_피벗이_아닌_몸통_중앙에_있다(string name)
+        {
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(SlimePrefabFolder + name + ".prefab");
+            SerializedObject animator = ProjectAssets.FindComponentWithProperty(prefab, "sprites");
+            Sprite idle = (Sprite)animator.FindProperty("sprites").GetArrayElementAtIndex(0).objectReferenceValue;
+            CircleCollider2D collider = prefab.GetComponent<CircleCollider2D>();
+            Assert.That(Vector2.Distance(collider.offset, idle.bounds.center), Is.LessThan(.01f));
+            float bodySize = Mathf.Min(idle.bounds.size.x, idle.bounds.size.y);
+            Assert.That(collider.radius, Is.InRange(bodySize * .35f, bodySize * .5f));
+        }
+
+        [TestCase(5, 30)]
+        [TestCase(6, 31)]
+        [TestCase(7, 32)]
+        [TestCase(8, 33)]
+        [TestCase(9, 35)]
+        public void 둘째_부_마지막_웨이브에는_지역_보스가_한_마리_나온다(int stageId, int bossId)
+        {
+            SerializedProperty waveAsset = ProjectAssets.Load(StagePath(stageId)).FindProperty("waveData")
+                .FindPropertyRelative("enemyWaves").GetArrayElementAtIndex(0);
+            var waves = ProjectAssets.Load(AssetDatabase.GetAssetPath(waveAsset.objectReferenceValue)).FindProperty("battleWaveDatas");
+            var spawns = waves.GetArrayElementAtIndex(waves.arraySize - 1).FindPropertyRelative("enemySpawnDatasInWave");
+            int count = 0;
+            for (int i = 0; i < spawns.arraySize; i++)
+                if (spawns.GetArrayElementAtIndex(i).FindPropertyRelative("enemyId").intValue == bossId) count++;
+            Assert.That(count, Is.EqualTo(1));
         }
 
         [TestCase(7)]
@@ -161,7 +200,7 @@ namespace WordVenture.Tests
         }
 
         [Test]
-        public void 분열_슬라임과_폭주_보스가_작은_분열_슬라임_id를_가리킨다()
+        public void 분열_소환과_세계수_모방의_필수_참조가_연결된다()
         {
             Assert.That(KnownEnemyIds(), Contains.Item(SplitSmallEnemyId));
 
@@ -171,9 +210,9 @@ namespace WordVenture.Tests
             Assert.That(splitSerialized.FindProperty("childEnemyId").intValue, Is.EqualTo(SplitSmallEnemyId));
 
             GameObject boss = AssetDatabase.LoadAssetAtPath<GameObject>(SlimePrefabFolder + "SurgeBoss.prefab");
-            SerializedObject bossSerialized = ProjectAssets.FindComponentWithProperty(boss, "splitEnemyId");
-            Assert.That(bossSerialized, Is.Not.Null, "SurgeBoss 에 splitEnemyId 필드가 없다");
-            Assert.That(bossSerialized.FindProperty("splitEnemyId").intValue, Is.EqualTo(SplitSmallEnemyId));
+            SerializedObject bossSerialized = ProjectAssets.FindComponentWithProperty(boss, "markerSprite");
+            Assert.That(bossSerialized, Is.Not.Null);
+            Assert.That(bossSerialized.FindProperty("splitEnemyId"), Is.Null, "세계수는 분열 소환 대신 주문을 모방한다");
             Assert.That(bossSerialized.FindProperty("markerSprite").objectReferenceValue, Is.Not.Null,
                 "SurgeBoss 의 markerSprite 가 비어 있다");
         }

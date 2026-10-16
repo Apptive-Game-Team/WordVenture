@@ -1,0 +1,722 @@
+[
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_01.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 4128,
+    "removed": 120,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9639162857830166,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_02.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 3769,
+    "removed": 121,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9650701243715268,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_03.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 3098,
+    "removed": 77,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9691912708600771,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_04.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 4387,
+    "removed": 281,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9245582238332578,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_05.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 3867,
+    "removed": 102,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9540933435348126,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_06.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 2719,
+    "removed": 147,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9252167630057804,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_07.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 5208,
+    "removed": 224,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9521805661820965,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\SnowBoss\\SnowBossSlime_08.png",
+    "width": 97,
+    "height": 94,
+    "opaqueBefore": 4208,
+    "removed": 188,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9278422273781902,
+      "scale": 1,
+      "dx": 1,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_01.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 3940,
+    "removed": 32,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9765117441279361,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_02.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 3308,
+    "removed": 17,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9645369284876905,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_03.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 2733,
+    "removed": 12,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9625044216483906,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_04.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 3540,
+    "removed": 149,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9519932622122403,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_05.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 3342,
+    "removed": 83,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.948471615720524,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_06.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 2622,
+    "removed": 89,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9522556390977444,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_07.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 4342,
+    "removed": 268,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9246403288422014,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\ThunderBoss\\ThunderBossSlime_08.png",
+    "width": 97,
+    "height": 83,
+    "opaqueBefore": 4164,
+    "removed": 311,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9181384248210024,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_01.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 4142,
+    "removed": 55,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9803262955854126,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_02.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 3395,
+    "removed": 32,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9790393013100437,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_03.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 2670,
+    "removed": 28,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9785185185185186,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_04.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 3900,
+    "removed": 256,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9220580743759552,
+      "scale": 1,
+      "dx": 0,
+      "dy": 0
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_05.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 3301,
+    "removed": 123,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9239386792452831,
+      "scale": 1,
+      "dx": 0,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_06.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 2296,
+    "removed": 139,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9157038938810441,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_07.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 4746,
+    "removed": 176,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9472582670573462,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\FurnaceBoss\\FurnaceBossSlime_08.png",
+    "width": 97,
+    "height": 93,
+    "opaqueBefore": 4346,
+    "removed": 220,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9306187443130118,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_01.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 4122,
+    "removed": 22,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9782764382907615,
+      "scale": 1,
+      "dx": 1,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_02.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 3217,
+    "removed": 26,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9788343558282209,
+      "scale": 1,
+      "dx": 5,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_03.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 2720,
+    "removed": 3,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9851341551849166,
+      "scale": 1,
+      "dx": 8,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_04.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 4034,
+    "removed": 140,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9356161080299011,
+      "scale": 1,
+      "dx": 12,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_05.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 4007,
+    "removed": 42,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.966577213954623,
+      "scale": 1,
+      "dx": 1,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_06.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 2569,
+    "removed": 111,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9654236967813632,
+      "scale": 0.97,
+      "dx": 5,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_07.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 4838,
+    "removed": 226,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9502074322706932,
+      "scale": 0.97,
+      "dx": 9,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\GraftBoss\\GraftBossSlime_08.png",
+    "width": 97,
+    "height": 92,
+    "opaqueBefore": 4184,
+    "removed": 236,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9339708868676375,
+      "scale": 0.97,
+      "dx": 13,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_01.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 19469,
+    "removed": 173,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.956215599742153,
+      "scale": 1,
+      "dx": 2,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_02.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 19018,
+    "removed": 556,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.971613548658096,
+      "scale": 0.97,
+      "dx": 6,
+      "dy": 2
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_03.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 17185,
+    "removed": 750,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.8456504708428157,
+      "scale": 0.97,
+      "dx": 4,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_04.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 16490,
+    "removed": 756,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.8039216092774565,
+      "scale": 0.97,
+      "dx": 5,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_05.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 18419,
+    "removed": 568,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9670087343174241,
+      "scale": 0.97,
+      "dx": 1,
+      "dy": 3
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_06.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 13817,
+    "removed": 671,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9431473629384891,
+      "scale": 0.97,
+      "dx": 5,
+      "dy": 4
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_07.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 17773,
+    "removed": 786,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9498600013830013,
+      "scale": 0.97,
+      "dx": 9,
+      "dy": 4
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_08.png",
+    "width": 176,
+    "height": 171,
+    "opaqueBefore": 15900,
+    "removed": 1284,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.8909807556783741,
+      "scale": 0.97,
+      "dx": 12,
+      "dy": 4
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_01.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 2674,
+    "removed": 29,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9851024208566108,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_02.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 2508,
+    "removed": 22,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.977970102281668,
+      "scale": 1,
+      "dx": 0,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_03.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 1954,
+    "removed": 25,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9831804281345565,
+      "scale": 1,
+      "dx": 2,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_04.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 2740,
+    "removed": 168,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.8928067700987306,
+      "scale": 1,
+      "dx": 3,
+      "dy": 1
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_05.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 2446,
+    "removed": 90,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9491919408846164,
+      "scale": 0.97,
+      "dx": 1,
+      "dy": 3
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_06.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 1719,
+    "removed": 112,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9066768436905118,
+      "scale": 0.97,
+      "dx": 3,
+      "dy": 4
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_07.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 3207,
+    "removed": 157,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9180012756189269,
+      "scale": 0.97,
+      "dx": 5,
+      "dy": 3
+    }
+  },
+  {
+    "file": "Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeCore\\WorldTreeCoreSlime_08.png",
+    "width": 78,
+    "height": 80,
+    "opaqueBefore": 2842,
+    "removed": 126,
+    "opaqueRgbChanged": 0,
+    "binaryAlpha": true,
+    "registration": {
+      "score": 0.9308447825335536,
+      "scale": 0.97,
+      "dx": 4,
+      "dy": 3
+    }
+  }
+]
