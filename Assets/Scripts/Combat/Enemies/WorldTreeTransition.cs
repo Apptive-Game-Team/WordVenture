@@ -12,7 +12,9 @@ namespace Combat.Enemies
     public sealed class WorldTreeTransition : MonoBehaviour
     {
         public const float FluidDuration = 2.8f;
-        const float GatherAt = 1.7f;
+        internal const float GatherAt = 1.7f;
+        internal const float GatherStartAt = 1.05f;
+        internal const float CrackAt = .3f;
         static WorldTreeTransition current;
         public static bool IsPlaying => current != null && current.running || WorldTreeEntrance.IsPlaying;
         public static float FluidProgress => current != null ? Mathf.Clamp01(current.elapsed / FluidDuration) : 0;
@@ -24,6 +26,7 @@ namespace Combat.Enemies
         Vector2 coreSize;
         readonly Dictionary<Renderer, bool> coreVisibility = new Dictionary<Renderer, bool>();
         float elapsed;
+        WorldTreeCinematicAudio sounds;
         int startFrame;
         Enemy core;
         Canvas canvas;
@@ -146,13 +149,18 @@ namespace Combat.Enemies
             label.alignment = TextAlignmentOptions.Center;
             label.raycastTarget = false;
             label.rectTransform.sizeDelta = new Vector2(250, 54);
+            sounds = new WorldTreeCinematicAudio(transform);
             Render();
         }
         void Update()
         {
-            if (!running || restored || InteractionLock.IsPaused || Time.timeScale <= 0) return;
+            if (!running || restored) return;
+            bool paused = InteractionLock.IsPaused || Time.timeScale <= 0;
+            sounds?.SetPaused(paused);
+            if (paused) return;
             if (Time.frameCount > startFrame && (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))) skip = true;
             elapsed += Time.deltaTime;
+            if (!skip) sounds?.Transition(elapsed, Mathf.Clamp(poolPoint.x / 960f, -.65f, .65f));
             if (elapsed >= GatherAt && !coreSpawned)
             {
                 SpawnCore();
@@ -165,9 +173,9 @@ namespace Combat.Enemies
             if (corpse == null) return;
             float t = Mathf.Clamp01(elapsed / FluidDuration);
             float flow = Mathf.Clamp01(t / .6f);
-            float gather = Mathf.Clamp01((elapsed - 1.05f) / .65f);
+            float gather = Mathf.Clamp01((elapsed - GatherStartAt) / (GatherAt - GatherStartAt));
             // 나무가 갈라져 무너지는 그림으로 전환한다. 축을 눌러 짜지 않는다.
-            if (elapsed > .3f && fallen != null) corpse.sprite = fallen;
+            if (elapsed > CrackAt && fallen != null) corpse.sprite = fallen;
             corpse.color = WithAlpha(Color.white, 1f - Mathf.Clamp01((elapsed - .65f) / .65f));
             corpse.rectTransform.anchoredPosition = Snap(corpsePoint - Vector2.up * Mathf.Min(24, elapsed * 18));
             if (coreProxy != null)
@@ -262,6 +270,7 @@ namespace Combat.Enemies
             if (restored) return;
             restored = true;
             running = false;
+            sounds?.Stop();
             foreach (var pair in coreVisibility)
                 if (pair.Key != null) pair.Key.enabled = pair.Value;
             coreVisibility.Clear();

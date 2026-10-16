@@ -12,9 +12,9 @@ namespace Combat.Enemies
     public sealed class WorldTreeEntrance : MonoBehaviour
     {
         public const float Duration = 3.5f;
-        const float FlashAt = 0.85f;
-        const float FlightAt = 1.05f;
-        const float LandAt = 2.15f;
+        internal const float FlashAt = 0.85f;
+        internal const float FlightAt = 1.05f;
+        internal const float LandAt = 2.15f;
         const float TitleAt = 2.65f;
         static WorldTreeEntrance current;
         public static bool IsPlaying => current != null && current.running;
@@ -37,6 +37,7 @@ namespace Combat.Enemies
         float elapsed;
         int startFrame;
         bool running, skip, restored;
+        WorldTreeCinematicAudio sounds;
         static readonly Color Gold = new Color32(255, 239, 166, 255);
         static readonly Color Green = new Color32(166, 227, 140, 255);
 
@@ -157,6 +158,7 @@ namespace Combat.Enemies
             running = true;
             startFrame = Time.frameCount;
             CaptureAndHide();
+            sounds = new WorldTreeCinematicAudio(transform);
             Render(0);
             return true;
         }
@@ -165,11 +167,14 @@ namespace Combat.Enemies
         {
             if (!running) return;
             if (boss == null || !boss.gameObject.activeInHierarchy) { Finish(); return; }
-            if (InteractionLock.IsPaused || Time.timeScale <= 0) return;
+            bool paused = InteractionLock.IsPaused || Time.timeScale <= 0;
+            sounds?.SetPaused(paused);
+            if (paused) return;
             // Esc는 설정 메뉴가 먼저 받는다. 메뉴가 없는 씬에서는 Esc도 건너뛰기다.
             if (skip || Time.frameCount > startFrame && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(0)))
             { Finish(); return; }
             elapsed += Time.deltaTime;
+            sounds?.Entrance(elapsed, Mathf.Clamp(destination.x / 960f, -.65f, .65f));
             Render(elapsed);
             if (elapsed >= Duration) Finish();
         }
@@ -333,6 +338,7 @@ namespace Combat.Enemies
             if (restored) return;
             restored = true;
             running = false;
+            sounds?.Stop();
             foreach (var pair in visibility)
                 if (pair.Key != null) pair.Key.enabled = pair.Value;
             if (current == this) current = null;

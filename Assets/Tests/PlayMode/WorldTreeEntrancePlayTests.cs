@@ -32,6 +32,7 @@ namespace WordVenture.Tests
             camera.orthographic = true;
             camera.orthographicSize = 5;
             camera.transform.position = new Vector3(0, 0, -10);
+            if (Object.FindObjectOfType<AudioListener>() == null) cameraObject.AddComponent<AudioListener>();
             GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Combat/Enemies/Slime/SurgeBoss.prefab");
             GameObject instance = Object.Instantiate(prefab);
             objects.Add(instance);
@@ -114,6 +115,80 @@ namespace WordVenture.Tests
             Assert.That(Vector2.Distance(At(0), start), Is.LessThan(.001f));
             Assert.That(Vector2.Distance(At(1), end), Is.LessThan(.001f));
             Assert.That(Vector2.Distance(At(.9f), At(1)), Is.GreaterThan(Vector2.Distance(At(.1f), At(.2f))));
+        }
+
+        [UnityTest]
+        public IEnumerator 비행음은_다가올수록_커지고_일시정지와_스킵에_따라_멈춘다()
+        {
+            Component boss = Spawn();
+            yield return null;
+            IEnumerator playback = Begin(boss);
+            Component entrance = (Component)Object.FindObjectOfType(Entrance);
+            var sources = entrance.GetComponentsInChildren<AudioSource>();
+            Assert.That(sources.Length, Is.EqualTo(4));
+            foreach (var source in sources)
+            {
+                Assert.That(source.clip, Is.Not.Null);
+                Assert.That(source.clip.channels, Is.EqualTo(1));
+                Assert.That(source.playOnAwake, Is.False);
+                Assert.That(source.ignoreListenerVolume, Is.False);
+            }
+            AudioSource approach = sources.Single(s => s.name == "Approach");
+            yield return new WaitForSeconds(1.3f);
+            Assert.That(approach.isPlaying, Is.True);
+            float distantVolume = approach.volume;
+            yield return new WaitForSeconds(.3f);
+            Assert.That(approach.volume, Is.GreaterThan(distantVolume));
+            Pause(true);
+            yield return null;
+            yield return null;
+            int sample = approach.timeSamples;
+            yield return new WaitForSecondsRealtime(.12f);
+            Assert.That(approach.timeSamples, Is.EqualTo(sample));
+            Pause(false);
+            yield return null; // 메뉴를 닫은 프레임은 InteractionLock이 입력을 막는다.
+            Entrance.GetMethod("Skip").Invoke(null, null);
+            yield return null;
+            yield return null;
+            Assert.That(Playing, Is.False);
+            Assert.That(Object.FindObjectsOfType<AudioSource>().Any(s => s.transform.parent != null && s.transform.parent.name == "WorldTreeCinematicAudio"), Is.False);
+            ((IDisposable)playback).Dispose();
+        }
+
+        [UnityTest]
+        public IEnumerator 프레임이_늦어_착지로_넘어가면_지난_반짝임과_비행음은_몰아서_재생하지_않는다()
+        {
+            var host = new GameObject("AudioTest");
+            objects.Add(host);
+            object audio = Activator.CreateInstance(Runtime("Combat.Enemies.WorldTreeCinematicAudio"), new object[] { host.transform });
+            audio.GetType().GetMethod("Entrance").Invoke(audio, new object[] { 2.2f, .5f });
+            var sources = host.GetComponentsInChildren<AudioSource>();
+            Assert.That(sources.Single(s => s.name == "Flash").isPlaying, Is.False);
+            Assert.That(sources.Single(s => s.name == "Approach").isPlaying, Is.False);
+            Assert.That(sources.Single(s => s.name == "Landing").isPlaying, Is.True);
+            audio.GetType().GetMethod("Stop").Invoke(audio, null);
+            yield return null;
+            Assert.That(host.GetComponentsInChildren<AudioSource>(), Is.Empty);
+        }
+
+        [UnityTest]
+        public IEnumerator 본체_응집음과_등장음은_시간배율과_취소를_따른다()
+        {
+            var host = new GameObject("CoreAudioTest");
+            objects.Add(host);
+            object audio = Activator.CreateInstance(Runtime("Combat.Enemies.WorldTreeCinematicAudio"), new object[] { host.transform });
+            audio.GetType().GetMethod("Transition").Invoke(audio, new object[] { 1.1f, .5f });
+            var sources = host.GetComponentsInChildren<AudioSource>();
+            Assert.That(sources.Single(s => s.name == "Landing").isPlaying, Is.False, "지나간 외피 붕괴음을 다시 내지 않는다");
+            Assert.That(sources.Single(s => s.name == "CoreRise").isPlaying, Is.True);
+            audio.GetType().GetMethod("Transition").Invoke(audio, new object[] { 1.75f, .5f });
+            Assert.That(sources.Single(s => s.name == "Flash").isPlaying, Is.True);
+            Time.timeScale = .5f;
+            audio.GetType().GetMethod("SetPaused").Invoke(audio, new object[] { false });
+            Assert.That(sources.All(s => Mathf.Abs(s.pitch - .5f) < .001f), Is.True);
+            audio.GetType().GetMethod("Stop").Invoke(audio, null);
+            yield return null;
+            Assert.That(host.GetComponentsInChildren<AudioSource>(), Is.Empty);
         }
 
         [UnityTest]
