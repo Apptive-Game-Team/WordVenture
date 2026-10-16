@@ -1,0 +1,234 @@
+[
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_01.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 417,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_02.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 177,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_03.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 252,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_04.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 221,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_05.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 316,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_06.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 208,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_07.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 368,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  },
+  {
+    "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_08.png",
+    "size": [
+      176,
+      171
+    ],
+    "removed": 400,
+    "remaining_rgb_changed": 0,
+    "removed_colors": [
+      [
+        183,
+        93,
+        10,
+        255
+      ],
+      [
+        211,
+        114,
+        6,
+        255
+      ],
+      [
+        236,
+        139,
+        4,
+        255
+      ]
+    ]
+  }
+]

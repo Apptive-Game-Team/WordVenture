@@ -10,7 +10,7 @@
 
 - 내장 imagegen의 background-extraction 편집과 실제 투명 배경 출력을 사용했다. 입력은 `*-reference.png`, 결과 원본은 `*-generated.png`, 프롬프트는 `prompts.json`에 보관했다.
 - 생성 결과의 내부 명암/색 변경은 게임에 적용하지 않았다. 원본 f9e0d79의 RGB를 유지하고, 프레임마다 누끼를 정렬해 외곽 1 art pixel 안의 투명 경계만 적용했다. 떨어진 작은 마력/눈발/불티 입자는 보존했다.
-- 48개 프레임에서 경계 픽셀 10,329개를 투명하게 정리했다. 남아 있는 불투명 픽셀의 RGB 변경 0개, 새 불투명 픽셀 0개다. 프레임 크기, 피벗/PPU/필터/GUID와 프리팹 연결은 그대로다.
+- 1차 정리에서 48개 프레임의 경계 픽셀 10,329개를 투명 처리했다. 남아 있는 불투명 픽셀의 RGB 변경 0개, 새 불투명 픽셀 0개다. 프레임 크기, 피벗/PPU/필터/GUID와 프리팹 연결은 그대로다.
 - 알파는 기존처럼 0/255만 사용한다. 프레임당 최대 64색이며 기존 픽셀 격자를 유지했다.
 
 `apply-generated-mattes.cjs`는 결과를 보수적으로 통합하는 재현 스크립트다. Node와 sharp가 필요하며 저장소 루트에서 실행한다. 기본 실행은 Logs 아래에 미리보기만 쓰고, `--apply`를 붙이면 에셋에 반영한다. `WORDVENTURE_SHARP`로 설치된 sharp 모듈 경로를 지정할 수 있다. 원본은 고정된 Git 커밋 f9e0d79에서 읽는다.
@@ -23,3 +23,7 @@
 Unity 2022.3.62f3 검증 사본에서 전체 EditMode 308 통과/1 GPU 검사 생략, PlayMode 실제 전투 캡처 2개 통과. `-batchmode -nographics -runTests -testPlatform EditMode`, 캡처는 그래픽을 켜고 `-testPlatform PlayMode -testFilter WordVenture.Tests.WorldTreeEntranceCaptures.세계수_먼_반짝임부터_착지까지_실제_전장_캡처;WordVenture.Tests.WorldTreeEntranceCaptures.지역_보스_예고와_세계수_모방_상태_캡처`로 실행했다.
 
 `battle-*.png` 6장을 수동 확인했다. 게임 코드 변경이 없어 전체 PlayMode 행동 검사는 이번에 다시 실행하지 않았다. 결과 요약은 `unity-validation.json`에 있다. Draft를 Ready로 바꾸기 전에 실제 플레이에서 8프레임의 경계가 자연스러운지 최종 확인한다.
+
+## 세계수의 붉은 잎 경계 후속
+
+사용자 확인에서 남은 붉은 주황색 선이 발견돼 세계수 8프레임에 2,359픽셀을 추가 정리했다. 현재 세계수 전후 비교는 이 후속 결과까지 포함한다. 상세 비교와 프롬프트/원본 대조는 `worldtree-red-fringe/`에 있다. 재현할 때는 1차 스크립트 다음에 해당 폴더의 `refine.cjs --apply`를 실행한다.
