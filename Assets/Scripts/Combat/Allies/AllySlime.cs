@@ -75,7 +75,7 @@ namespace Combat.Allies
             var status = GetComponent<FriendlyElementalStatus>();
             if (status != null && status.BeginAction()) return;
             FriendlyElementalStatus.ConsumeAttack(this);
-            slimeAnimator.Attack();
+            slimeAnimator.RangeAttack();
             switch (Element)
             {
                 case MagicType.Holy:
@@ -176,6 +176,17 @@ namespace Combat.Allies
         {
             transform.DOKill();
             transform.DOMove(position, MoveSeconds);
+        }
+
+        // 흡수 그림은 별도 사본으로 이동한다. 실제 아군은 즉시 대열에서 빼서 방어하거나 공격하지 않는다.
+        public void Absorb()
+        {
+            if (!IsAlive) return;
+            hp = 0;
+            transform.DOKill();
+            Died?.Invoke(this);
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         void OnDestroy()

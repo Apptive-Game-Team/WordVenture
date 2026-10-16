@@ -212,6 +212,107 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
+        public IEnumerator 접목은_소환_아군을_예고_흡수하고_대열을_정리한_뒤_그_속성으로_공격한다()
+        {
+            Component front = SpawnAlly("Fire");
+            Component behind = SpawnAlly("Rock");
+            int before = AllyHp(behind);
+            float oldFrontX = front.transform.position.x;
+            Component boss = CreateEnemy("GraftBoss", 6, 180, 10, "Rock");
+            yield return null;
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(Property(boss, "MarkedAlly"), Is.EqualTo(front));
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(Property(front, "IsAlive"), Is.False);
+            Assert.That(Property(boss, "AbsorbedElement").ToString(), Is.EqualTo("Fire"));
+            Assert.That(Property(FormationType.GetProperty("Current").GetValue(null) as Component, "Front"), Is.EqualTo(behind));
+            yield return new WaitForSeconds(1.15f);
+            Assert.That(behind.transform.position.x, Is.EqualTo(oldFrontX).Within(.02f));
+            Assert.That(Property(Intent(boss), "Icon").ToString(), Is.EqualTo("Shoot"));
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(AllyHp(behind), Is.EqualTo(before), "속성 탄이 닿기 전에 피해를 주지 않는다");
+            Assert.That(Object.FindObjectsOfType(Runtime("Combat.Enemies.EnemyMagicVisual")), Is.Not.Empty);
+            yield return new WaitForSeconds(.7f);
+            Assert.That(AllyHp(behind), Is.LessThan(before));
+            Assert.That(behind.GetComponent(Runtime("Combat.Allies.FriendlyElementalStatus")), Is.Not.Null);
+            Assert.That(Property(boss, "AbsorbedElement"), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator 지목된_소환_아군이_죽으면_남은_아군을_바로_흡수하지_않고_다시_예고한다()
+        {
+            Component front = SpawnAlly("Ice");
+            Component behind = SpawnAlly("Holy");
+            Component boss = CreateEnemy("GraftBoss", 6, 180, 10, "Rock");
+            yield return null;
+            Call(boss, "PlayTurnAction", 12f);
+            Call(front, "TakeSpellDamage", 9999);
+            yield return new WaitForSeconds(.3f);
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(Property(boss, "MarkedAlly"), Is.EqualTo(behind));
+            Assert.That(Property(boss, "AbsorbedElement"), Is.Null);
+            Assert.That(Property(boss, "IsAbsorbing"), Is.False);
+            Assert.That(Property(behind, "IsAlive"), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator 근접_실제_데이터는_거리3에서_접근하고_붙은_다음_턴에_공격한다()
+        {
+            GameObject instance = (GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy").Invoke(null, new object[] { 17, Player.transform.position.x + 3f });
+            Component enemy = instance.GetComponent(Runtime("Combat.Enemies.Enemy"));
+            yield return null;
+            int before = PlayerHp;
+            Call(enemy, "PlayTurnAction", 3f);
+            Assert.That(PlayerHp, Is.EqualTo(before));
+            yield return new WaitForSeconds(1.15f);
+            Assert.That(FrontLineDistance(enemy), Is.EqualTo(1.2f).Within(.02f));
+            Assert.That(PlayerHp, Is.EqualTo(before));
+            Call(enemy, "PlayTurnAction", FrontLineDistance(enemy));
+            Assert.That(PlayerHp, Is.LessThan(before));
+        }
+
+        [UnityTest]
+        public IEnumerator 원거리_실제_데이터는_멀리서_탄을_쏘고_탄이_닿을_때_피해를_준다()
+        {
+            GameObject instance = (GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy").Invoke(null, new object[] { 16, Player.transform.position.x + 6f });
+            Component enemy = instance.GetComponent(Runtime("Combat.Enemies.Enemy"));
+            yield return null;
+            int before = PlayerHp;
+            Call(enemy, "PlayTurnAction", 6f);
+            Assert.That(PlayerHp, Is.EqualTo(before));
+            Assert.That(Object.FindObjectsOfType(Runtime("Combat.Enemies.EnemyProjectile")), Is.Not.Empty);
+            yield return new WaitForSeconds(.85f);
+            Assert.That(PlayerHp, Is.LessThan(before));
+        }
+
+        [UnityTest]
+        public IEnumerator 뿌리를_뻗던_접목이_죽으면_원거리_피해를_취소한다()
+        {
+            Component boss = CreateEnemy("GraftBoss", 6, 180, 10, "Rock");
+            yield return null;
+            int before = PlayerHp;
+            Call(boss, "PlayTurnAction", 12f);
+            yield return new WaitForSeconds(.2f);
+            Call(boss, "Kill");
+            yield return new WaitForSeconds(.7f);
+            Assert.That(PlayerHp, Is.EqualTo(before));
+            Assert.That(GameObject.Find("AdvancingRoots"), Is.Null);
+        }
+
+        [UnityTest]
+        public IEnumerator 접목_대상이_없으면_뿌리가_앞줄에_닿아야_피해를_준다()
+        {
+            Component boss = CreateEnemy("GraftBoss", 6, 180, 10, "Rock");
+            yield return null;
+            int before = PlayerHp;
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(PlayerHp, Is.EqualTo(before));
+            Assert.That(GameObject.Find("AdvancingRoots"), Is.Not.Null);
+            yield return new WaitForSeconds(.7f);
+            Assert.That(PlayerHp, Is.EqualTo(before - 10));
+        }
+
+        [UnityTest]
         public IEnumerator 접목은_예고_흡수_기술_순서이고_흡수한_기술은_한번만_쓴다()
         {
             Component boss = CreateEnemy("GraftBoss", 6, 180, 10, "Undead");
@@ -225,6 +326,7 @@ namespace WordVenture.Tests
             Assert.That(target.gameObject.activeSelf, Is.False);
             Assert.That(Property(boss, "AbsorbedEnemyId"), Is.EqualTo(21));
             Assert.That(PlayerHp, Is.EqualTo(before));
+            yield return new WaitForSeconds(1.15f);
             Call(boss, "PlayTurnAction", FrontLineDistance(boss));
             yield return new WaitForSeconds(0.4f);
             Assert.That(PlayerHp, Is.EqualTo(before - 10));
@@ -245,6 +347,56 @@ namespace WordVenture.Tests
             Assert.That(Property(boss, "AbsorbedEnemyId"), Is.EqualTo(-1));
             Assert.That(EnemyHp(boss), Is.EqualTo(160));
         }
+        [UnityTest]
+        public IEnumerator 접목_대상의_모습이_보스로_끌려가_작아진_뒤_기술_예고로_바뀐다()
+        {
+            Component boss = CreateEnemy("GraftBoss", 7, 180, 10, "Undead");
+            Component target = CreateEnemy("MortarSlime", 2, 30, 10, "Rock");
+            Runtime("Combat.Enemies.Enemy").GetField("id", AnyInstance).SetValue(target, 20);
+            yield return null;
+            Call(boss, "PlayTurnAction", 12f);
+            Call(boss, "PlayTurnAction", 12f);
+            Assert.That(Property(boss, "IsAbsorbing"), Is.True);
+            Component effect = (Component)Object.FindObjectOfType(Runtime("Combat.Enemies.GraftAbsorptionVfx"));
+            Transform clone = (Transform)Property(effect, "AbsorbedBody");
+            float startX = clone.position.x, scale = Mathf.Abs(clone.lossyScale.x);
+            Assert.That(target.gameObject.activeSelf, Is.False, "사본은 중복 공격하거나 웨이브 적으로 남지 않는다");
+            Assert.That(Property(Intent(boss), "Icon").ToString(), Is.EqualTo("Absorb"));
+            yield return new WaitForSeconds(.45f);
+            Assert.That(clone.position.x, Is.GreaterThan(startX + .2f));
+            Assert.That(Mathf.Abs(clone.lossyScale.x), Is.LessThan(scale));
+            yield return new WaitForSeconds(.75f);
+            Assert.That(Property(boss, "IsAbsorbing"), Is.False);
+            Assert.That(effect == null, Is.True);
+            Assert.That(Property(Intent(boss), "Icon").ToString(), Is.EqualTo("Drop"));
+            Assert.That(Property(boss, "HasMarker"), Is.True);
+        }
+
+        [UnityTest]
+        public IEnumerator 접목_흡수를_기다리는_동안_턴이_넘어가지_않고_사망하면_사본을_정리한다()
+        {
+            Component boss = CreateEnemy("GraftBoss", 7, 180, 10, "Undead");
+            Component target = CreateEnemy("ChargeSlime", 2, 30, 10, "Lightning");
+            Runtime("Combat.Enemies.Enemy").GetField("id", AnyInstance).SetValue(target, 21);
+            yield return null;
+            Component battle = (Component)Object.FindObjectOfType(Runtime("Battle.Turns.TurnBattleSystem"));
+            int turn = (int)Property(battle, "TurnNumber");
+            try
+            {
+                Time.timeScale = .5f;
+                Call(boss, "PlayTurnAction", 12f); Call(boss, "PlayTurnAction", 12f);
+                Call(battle, "StartEnemyTurnCounter");
+                yield return new WaitForSecondsRealtime(1.2f);
+                Assert.That(Property(boss, "IsAbsorbing"), Is.True);
+                Assert.That(Property(battle, "TurnNumber"), Is.EqualTo(turn));
+                Call(boss, "Kill");
+                yield return null;
+                Assert.That(Object.FindObjectOfType(Runtime("Combat.Enemies.GraftAbsorptionVfx")), Is.Null);
+                Assert.That(Runtime("Combat.Enemies.GraftBossEnemy").GetProperty("IsAbsorbingAny").GetValue(null), Is.False);
+            }
+            finally { Time.timeScale = 1; }
+        }
+
         [UnityTest]
         public IEnumerator 진행중인_적턴_타이머는_세계수_등장_중_턴을_넘기지_않는다()
         {
@@ -362,6 +514,7 @@ namespace WordVenture.Tests
             yield return null;
             Call(boss, "PlayTurnAction", 12f);
             Call(boss, "PlayTurnAction", 12f);
+            yield return new WaitForSeconds(1.15f);
             Assert.That(Property(own, "Icon").ToString(), Is.EqualTo("Drop"));
         }
 

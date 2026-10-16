@@ -23,6 +23,7 @@ namespace Combat.Enemies
         }
         protected override void TakeTurnAction(float distanceToFrontLine)
         {
+            if (GetComponent<EnemyFrontAttack>() != null) return;
             if (!rootsReady)
             {
                 rootsReady = true;
@@ -33,7 +34,7 @@ namespace Combat.Enemies
             rootsReady = false;
             Animator.EndWindup();
             Animator.RangeAttack();
-            AllyFormation.HitFrontLine(AttackDamage, transform.position.x);
+            EnemyFrontAttack.Begin(this, AttackDamage);
             BossIntent.Show(ref tell, transform, BossIntent.ActionIcon.Roots, "뿌리 공격 준비", new Color(1f, 0.85f, 0.4f));
         }
         protected override void Death()

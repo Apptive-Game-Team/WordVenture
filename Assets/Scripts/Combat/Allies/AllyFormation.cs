@@ -15,7 +15,7 @@ namespace Combat.Allies
         public const int SlotCount = 3;
         const string AllySlimePrefabPath = "Combat/AllySlime";
 
-        // 맨 앞 칸은 워드에서 4.2만큼 앞이다. 근접 적은 맨 앞 칸에서 사거리(3)만큼 떨어져 멈추므로,
+        // 맨 앞 칸은 워드에서 4.2만큼 앞이다. 근접 적은 맨 앞 칸에서 사거리(1.2)만큼 떨어져 멈추므로,
         // 적이 생성되는 x=6~8 지점과 워드(x=-7.17) 사이에 세 칸과 적이 모두 들어간다.
         const float FrontSlotOffset = 4.2f;
         const float SlotSpacing = 1.4f;

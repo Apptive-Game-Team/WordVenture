@@ -456,7 +456,7 @@
     {"ko": "공격하지 않는다. 설인 슬라임이 키우는 눈덩이로, 파괴하면 성장 단계에 따라 설인 슬라임에 8, 16, 28 피해를 준다.", "en": "Does not attack. The Yeti Slime grows this snowball. Destroying it deals 8, 16, or 28 damage to the Yeti based on its growth stage."},
     {"ko": "한 턴 예고한 뒤 앞줄의 한 대상에게 돌진한다. 돌진 다음 턴은 탈진하여 행동하지 않는다.", "en": "Telegraphs for one turn, then charges one target in the front line. Takes no action on the following turn due to exhaustion."},
     {"ko": "주문이나 아군 슬라임의 직접 타격마다 열기가 1 쌓이고 최대 3까지 오른다. 다음 공격은 열기마다 3 추가 피해를 주고 열기를 모두 소모한다. 화상은 열기를 쌓지 않는다.", "en": "Gains 1 heat per direct spell or allied slime hit, up to 3. Its next attack deals 3 extra damage per heat and consumes all heat. Burn does not add heat."},
-    {"ko": "곡사 또는 돌진 슬라임 하나를 지목하고 다음 턴에 흡수한다. 그 다음 턴에 흡수한 적의 포격이나 돌진을 한 번 쓴다. 지목한 적을 먼저 쓰러뜨리면 흡수가 취소된다.", "en": "Marks a Mortar or Charge Slime and absorbs it next turn, then uses its mortar or charge once on the following turn. Defeating the marked slime cancels absorption."},
+    {"ko": "곡사나 돌진 슬라임을 우선 지목하고, 없으면 워드의 맨 앞 소환 아군을 지목해 다음 턴에 흡수한다. 다음 턴에 훔친 기술이나 아군의 속성 마법을 한 번 쓰며, 대상이 먼저 죽으면 흡수를 취소하고 대상이 없으면 뿌리로 앞줄을 공격한다.", "en": "Marks a mortar or charge slime first, or Word's front summoned ally if neither exists, and absorbs it next turn. Uses the stolen skill or ally's element once the following turn; a defeated target cancels absorption, and without a target roots strike the front line."},
     {"ko": "마지막으로 사용한 Shoot, Drop, Explode를 다음 턴에 따라 한다. Spawn은 기억하지 않고, 공격 주문을 쓰지 않은 턴에는 앞줄을 공격한다.", "en": "Copies the last Shoot, Drop, or Explode on its next turn. Does not remember Spawn. Attacks the front line if no offensive spell was used."},
     {"ko": "세계수의 심장 · 나무를 닮은 슬라임", "en": "Heart of the World Tree: A Slime Shaped Like a Tree"},
     {"ko": "세계수 뿌리 사이에 나무를 닮은 거대한 슬라임이 웅크리고 있었다. 몸속에서는 노란 마력이 물처럼 빛났다.", "en": "A giant slime shaped like a tree crouched among the World Tree roots. Inside it, yellow magic shimmered like water."},
@@ -492,6 +492,8 @@
     {"ko": "한 턴 예고한 뒤 앞줄의 한 대상에게 돌진한다. 돌진 다음 턴은 탈진하여 행동하지 않는다. 회복하면 뒤로 뛰어 다음 돌진을 준비한다.", "en": "Warns for one turn, then charges one front target. It spends the next turn exhausted. On recovery it leaps backward and prepares the next charge."},
     {"ko": "탈진 중 다음 턴 후방 도약", "en": "Exhausted: leap back next turn"},
     {"ko": "마법 축적 중", "en": "Gathering magic"},
-    {"ko": "축적", "en": "Stored"}
+    {"ko": "축적", "en": "Stored"},
+    {"ko": "다음 턴 접목 마법", "en": "Grafted magic next turn"},
+    {"ko": "흡수 중", "en": "Absorbing"}
   ]
 }

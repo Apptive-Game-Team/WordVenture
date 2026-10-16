@@ -112,6 +112,8 @@ namespace WordVenture.Tests
             Assert.That(Property(Shell, "RootsReady"), Is.True);
             Assert.That(PlayerHp, Is.EqualTo(before));
             Call(Shell, "PlayTurnAction", 10f);
+            Assert.That(PlayerHp, Is.EqualTo(before), "뿌리가 도착하기 전에는 피해가 없다");
+            yield return new WaitForSeconds(.7f);
             Assert.That(PlayerHp, Is.EqualTo(before - expectedDamage));
             Assert.That(Property(Shell, "RootsReady"), Is.False);
         }

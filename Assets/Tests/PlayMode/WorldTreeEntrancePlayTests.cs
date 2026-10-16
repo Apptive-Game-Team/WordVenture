@@ -305,7 +305,7 @@ namespace WordVenture.Tests
             yield return null;
             Capture("11-graft-mark.png");
             Call(boss, "PlayTurnAction", 12f);
-            yield return null;
+            yield return new WaitForSeconds(1.15f);
             Capture("12-graft-mortar.png");
             Clear("WorldTreeHeart");
             boss = Spawn(29, 6);
@@ -435,6 +435,95 @@ namespace WordVenture.Tests
                 if (frame == 4) Capture("25-bomb-body-centered.png");
                 yield return null;
             }
+        }
+
+        [UnityTest]
+        public IEnumerator 접목_대상이_보스_몸으로_끌려가는_흡수_연출_캡처()
+        {
+            var wave = (MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
+            wave.StopAllCoroutines();
+            foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy"))) enemy.gameObject.SetActive(false);
+            GameObject.Find("PlainBackground").GetComponent<SpriteRenderer>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Battle/Backgrounds/ActTwo/TwistedForest.png");
+            Component Spawn(int id, float x) => ((GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy")
+                .Invoke(null, new object[] { id, x })).GetComponent(Runtime("Combat.Enemies.Enemy"));
+            void Act(Component target) => target.GetType().GetMethod("PlayTurnAction").Invoke(target, new object[] { 12f });
+            Component boss = Spawn(33, 7);
+            Spawn(20, 2);
+            yield return null;
+            Act(boss);
+            yield return null;
+            Capture("27-graft-mark-before-pull.png");
+            Time.captureFramerate = 30;
+            Act(boss);
+            for (int frame = 0; frame < 43; frame++)
+            {
+                Capture("graft-frames/" + frame.ToString("D3") + ".png", 960, 540);
+                if (frame == 13) Capture("28-graft-pull.png");
+                if (frame == 27) Capture("29-graft-merge.png");
+                if (frame == 39) Capture("30-graft-technique-ready.png");
+                yield return null;
+            }
+        }
+
+        [UnityTest, Explicit("실제 전투 화면 캡처"), Category("WorldTreeEntranceCaptures")]
+        public IEnumerator 소환_아군_흡수와_원거리_뿌리_근접_접근_캡처()
+        {
+            var wave = (MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
+            wave.StopAllCoroutines();
+            foreach (Component enemy in Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy"))) enemy.gameObject.SetActive(false);
+            GameObject.Find("PlainBackground").GetComponent<SpriteRenderer>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Battle/Backgrounds/ActTwo/TwistedForest.png");
+            Component Spawn(int id, float x) => ((GameObject)Runtime("Combat.Enemies.BattleWaveController").GetMethod("SpawnExtraEnemy")
+                .Invoke(null, new object[] { id, x })).GetComponent(Runtime("Combat.Enemies.Enemy"));
+            void Act(Component target, float distance = 12) => target.GetType().GetMethod("PlayTurnAction").Invoke(target, new object[] { distance });
+            Component player = (Component)Runtime("Combat.Enemies.Player").GetMethod("PlayerInt").Invoke(null, null);
+            object formation = Runtime("Combat.Allies.AllyFormation").GetMethod("GetOrCreate").Invoke(null, new object[] { player.transform });
+            object fire = Enum.Parse(Runtime("Cards.MagicType"), "Fire");
+            object ice = Enum.Parse(Runtime("Cards.MagicType"), "Ice");
+            var affinity = AssetDatabase.LoadAssetAtPath<Object>("Assets/ScriptableObjects/Combat/Magic Affinity Table.asset");
+            formation.GetType().GetMethod("Spawn").Invoke(formation, new[] { fire, affinity });
+            formation.GetType().GetMethod("Spawn").Invoke(formation, new[] { ice, affinity });
+            Component boss = Spawn(33, 7);
+            yield return null;
+            Act(boss);
+            yield return null;
+            Capture("31-graft-ally-marked.png");
+            Act(boss);
+            Time.captureFramerate = 30;
+            for (int frame = 0; frame < 42; frame++)
+            {
+                Capture("ally-graft-frames/" + frame.ToString("D3") + ".png", 960, 540);
+                if (frame == 17) Capture("32-graft-ally-pull.png");
+                if (frame == 39) Capture("33-graft-ally-magic-ready.png");
+                yield return null;
+            }
+            Act(boss);
+            for (int frame = 0; frame < 26; frame++)
+            {
+                Capture("ally-graft-frames/" + (frame + 42).ToString("D3") + ".png", 960, 540);
+                if (frame == 12) Capture("34-graft-ally-magic.png");
+                yield return null;
+            }
+            boss.gameObject.SetActive(false);
+            Object.Destroy(((Component)formation).gameObject);
+            yield return null;
+            Component shell = Spawn(35, 5);
+            yield return null;
+            Act(shell); Act(shell);
+            for (int frame = 0; frame < 28; frame++)
+            {
+                Capture("root-frames/" + frame.ToString("D3") + ".png", 960, 540);
+                if (frame == 13) Capture("35-worldtree-roots.png");
+                yield return null;
+            }
+            shell.gameObject.SetActive(false);
+            Component melee = Spawn(17, player.transform.position.x + 3);
+            yield return null;
+            Capture("36-melee-before-approach.png");
+            Act(melee, 3);
+            yield return new WaitForSeconds(1.15f);
+            Act(melee, 1.2f);
+            yield return null;
+            Capture("37-melee-contact.png");
         }
 
         static void Capture(string filename, int width = 1920, int height = 1080)
