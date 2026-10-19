@@ -18,4 +18,4 @@ MonoBehaviour:
   waveData:
     enemyWaves:
     - {fileID: 11400000, guid: 34ea254454f7436f940147354e8f7eba, type: 2}
-  music: {fileID: 8300000, guid: 3ae6ac071f570bc4ca7bcfbc3beb5d1a, type: 3}
+  music: {fileID: 8300000, guid: 1029cfee0e8241b5b7aaf474e1a66a2d, type: 3}
