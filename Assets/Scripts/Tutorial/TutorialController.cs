@@ -167,8 +167,7 @@ namespace Tutorial
             overlay.ClearGuidance();
             TutorialChatData data = tutorialScript.GetScriptData(currentFlag);
             SetChatWindowVisible(true);
-            // 튜토리얼은 워드가 할아버지의 기록을 읽는 장면이라 이름 없이 나레이션으로 보여 준다.
-            // 이름이 비면 공통 대화창이 초상화를 지우므로, 마법서를 펼친 워드는 대사를 넣은 뒤에 설정한다.
+            // 기록의 화자 이름을 표시하고, 읽고 있는 워드의 초상화는 대사를 넣은 뒤에 설정한다.
             tutorialChatWindow.UpdateChatStream(data.name, data.text);
             tutorialChatWindow.SetSpeakerImage(tutorialScript.GetSprite(data.portraitID));
             tutorialChatWindow.SetAnyKeyPromptVisible(false);

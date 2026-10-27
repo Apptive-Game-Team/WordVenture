@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Passed" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:36Z" duration="13.7914794">
+  <test-suite type="TestSuite" id="1000" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="161" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:36Z" duration="13.791479" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1193" name="WordVenture.Tests.PlayMode.dll" fullname="C:/Users/jys09/Projects/WordVenture/Library/ScriptAssemblies/WordVenture.Tests.PlayMode.dll" runstate="Runnable" testcasecount="161" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:36Z" duration="13.776423" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="30988" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1194" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="161" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:36Z" duration="13.772321" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1195" name="Tests" fullname="WordVenture.Tests" runstate="Runnable" testcasecount="161" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:36Z" duration="13.769259" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1121" name="SharedDialoguePlayTests" fullname="WordVenture.Tests.SharedDialoguePlayTests" classname="WordVenture.Tests.SharedDialoguePlayTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:35Z" duration="12.720388" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1123" name="EndingUsesTheSameNarrationWindow" fullname="WordVenture.Tests.SharedDialoguePlayTests.EndingUsesTheSameNarrationWindow" methodname="EndingUsesTheSameNarrationWindow" classname="WordVenture.Tests.SharedDialoguePlayTests" runstate="Runnable" seed="68509118" result="Passed" start-time="2026-10-27 03:31:22Z" end-time="2026-10-27 03:31:26Z" duration="3.755121" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+            </test-case>
+            <test-case id="1122" name="StoryAndTutorialShareStyleAndKeepTheirOwnPortraitModes" fullname="WordVenture.Tests.SharedDialoguePlayTests.StoryAndTutorialShareStyleAndKeepTheirOwnPortraitModes" methodname="StoryAndTutorialShareStyleAndKeepTheirOwnPortraitModes" classname="WordVenture.Tests.SharedDialoguePlayTests" runstate="Runnable" seed="1325998628" result="Passed" start-time="2026-10-27 03:31:26Z" end-time="2026-10-27 03:31:35Z" duration="8.943590" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1139" name="StageMusicPlayTests" fullname="WordVenture.Tests.StageMusicPlayTests" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:36Z" duration="1.038824" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1148" name="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" fullname="WordVenture.Tests.StageMusicPlayTests.결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.120496" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1144" name="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(0)" fullname="WordVenture.Tests.StageMusicPlayTests.결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(0)" methodname="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="1584533483" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.084180" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1145" name="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(4)" fullname="WordVenture.Tests.StageMusicPlayTests.결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(4)" methodname="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="1182306057" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.003296" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1146" name="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(5)" fullname="WordVenture.Tests.StageMusicPlayTests.결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(5)" methodname="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="1455451870" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.027353" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1147" name="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(9)" fullname="WordVenture.Tests.StageMusicPlayTests.결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(9)" methodname="결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="704046232" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.003497" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+            <test-case id="1143" name="대화는_지역곡을_재생하고_닫으면_맵음악을_복귀시킨다" fullname="WordVenture.Tests.StageMusicPlayTests.대화는_지역곡을_재생하고_닫으면_맵음악을_복귀시킨다" methodname="대화는_지역곡을_재생하고_닫으면_맵음악을_복귀시킨다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="299574987" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:35Z" duration="0.007381" asserts="0">
+              <properties />
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1142" name="일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다" fullname="WordVenture.Tests.StageMusicPlayTests.일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:36Z" duration="0.906133" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1140" name="일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다(&quot;BossStage&quot;,15)" fullname="WordVenture.Tests.StageMusicPlayTests.일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다(&quot;BossStage&quot;,15)" methodname="일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="1818744782" result="Passed" start-time="2026-10-27 03:31:35Z" end-time="2026-10-27 03:31:36Z" duration="0.896563" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1141" name="일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다(&quot;WorldTreeHeartStage&quot;,35)" fullname="WordVenture.Tests.StageMusicPlayTests.일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다(&quot;WorldTreeHeartStage&quot;,35)" methodname="일반적은_지역곡을_유지하고_보스는_전용곡으로_한번만_전환한다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="1897846209" result="Passed" start-time="2026-10-27 03:31:36Z" end-time="2026-10-27 03:31:36Z" duration="0.007470" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+            <test-case id="1149" name="전용곡이_없는_지역의_보스는_기존곡을_유지한다" fullname="WordVenture.Tests.StageMusicPlayTests.전용곡이_없는_지역의_보스는_기존곡을_유지한다" methodname="전용곡이_없는_지역의_보스는_기존곡을_유지한다" classname="WordVenture.Tests.StageMusicPlayTests" runstate="Runnable" seed="54164581" result="Passed" start-time="2026-10-27 03:31:36Z" end-time="2026-10-27 03:31:36Z" duration="0.001623" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

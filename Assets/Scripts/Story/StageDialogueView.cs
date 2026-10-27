@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core;
 using TMPro;
 using UnityEngine;
@@ -49,6 +50,7 @@ namespace Story
         bool finishing;
         bool closeWhenDone = true;
         bool speakerAppeared;
+        readonly List<AudioSource> pausedMusic = new List<AudioSource>();
 
         public void Begin(StageDialogueData data, StageDialogueChapter dialogue, Action onCompleted,
             bool closeOnFinish = true)
@@ -58,9 +60,33 @@ namespace Story
             dialogueData = data;
             completed = onCompleted;
             Build(data);
+            PlayDialogueMusic();
             ownsLock = true;
             InteractionLock.IsLocked = true;
             ShowLine();
+        }
+
+        void PlayDialogueMusic()
+        {
+            // Wave 대화와 안내 기록은 기존 전투/보스 음악을 그대로 둔다.
+            if (chapter.music == null || chapter.moment == StageDialogueMoment.Wave) return;
+            AudioSource[] sources = FindObjectsOfType<AudioSource>();
+            // 결과 씬이 이미 지역 곡을 재생하면 그대로 쓴다. 대화 시작/종료가 곡을 끊지 않는다.
+            foreach (AudioSource source in sources)
+                if (source.isPlaying && source.loop && source.clip == chapter.music) return;
+            foreach (AudioSource source in sources)
+            {
+                if (!source.isPlaying || !source.loop) continue;
+                source.Pause();
+                pausedMusic.Add(source);
+            }
+            var music = gameObject.AddComponent<AudioSource>();
+            music.playOnAwake = false;
+            music.clip = chapter.music;
+            music.loop = true;
+            music.spatialBlend = 0f;
+            music.volume = 0.1f; // 맵과 전투 BGM의 기본 음량에 맞춘다.
+            music.Play();
         }
 
         void Build(StageDialogueData data)
@@ -164,6 +190,9 @@ namespace Story
 
         void OnDestroy()
         {
+            // 씬 전환으로 함께 사라진 소스는 건너뛰고, 같은 씬에 남은 음악만 이어 재생한다.
+            foreach (AudioSource source in pausedMusic)
+                if (source != null) source.UnPause();
             if (ownsLock) InteractionLock.IsLocked = false;
         }
     }

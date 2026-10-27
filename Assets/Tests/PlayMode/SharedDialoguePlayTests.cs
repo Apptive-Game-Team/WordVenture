@@ -111,6 +111,18 @@ namespace WordVenture.Tests
             Assert.That(Property(prompt, "text"), Is.EqualTo("클릭 / 아무 키 · 다음"));
             Capture("shared-dialogue-tutorial.png");
 
+            // 기록 본문은 할아버지의 글임을 표시하고, 워드를 화자로 강조하지 않는다.
+            Call(tutorial, "AcknowledgeDialogue");
+            Call(chat, "CompleteStream");
+            yield return null;
+            var recordName = (Component)Property(tutorialView, "NameLabel");
+            Assert.That(recordName.gameObject.activeSelf, Is.True);
+            Assert.That(Property(recordName, "text"), Is.EqualTo("할아버지의 기록"));
+            var style = Resources.Load<ScriptableObject>("Story/DialogueWindowStyle");
+            Color listenerColor = (Color)style.GetType().GetField("listenerColor").GetValue(style);
+            Assert.That(((Image)Property(tutorialView, "LeftPortrait")).color, Is.EqualTo(listenerColor));
+            Capture("shared-dialogue-tutorial-record.png");
+
             // 기록을 펼치는 나레이션 다음에 첫 기록이 나오고, 그 기록을 넘기면 행동 안내 단계가 된다.
             for (int i = 0; i < 6 && tutorialView.gameObject.activeInHierarchy; i++)
             {

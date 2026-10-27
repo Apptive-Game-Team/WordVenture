@@ -9,6 +9,29 @@ namespace WordVenture.Tests
     {
         static IEnumerable<string> Stages() => ProjectAssets.StagePaths();
 
+        [Test]
+        public void 전후_대화는_지역곡이_연결되고_전투중_대화는_음악을_바꾸지_않는다()
+        {
+            var musicByStage = new Dictionary<int, Object>();
+            foreach (string path in Stages())
+            {
+                SerializedObject stage = ProjectAssets.Load(path);
+                musicByStage.Add(stage.FindProperty("stageID").intValue,
+                    stage.FindProperty("music").objectReferenceValue);
+            }
+            SerializedProperty chapters = ProjectAssets.Load("Assets/Resources/Story/ActOneDialogues.asset")
+                .FindProperty("chapters");
+            for (int i = 0; i < chapters.arraySize; i++)
+            {
+                SerializedProperty chapter = chapters.GetArrayElementAtIndex(i);
+                Object music = chapter.FindPropertyRelative("music").objectReferenceValue;
+                if (chapter.FindPropertyRelative("moment").intValue == 2)
+                    Assert.That(music, Is.Null);
+                else
+                    Assert.That(music, Is.EqualTo(musicByStage[chapter.FindPropertyRelative("stageID").intValue]));
+            }
+        }
+
         [Test, TestCaseSource(nameof(Stages))]
         public void 모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(string path)
         {
@@ -23,7 +46,8 @@ namespace WordVenture.Tests
             if (id == 4 || id == 9)
             {
                 Assert.That(boss, Is.Not.Null, path);
-                Assert.That(AssetDatabase.GetAssetPath(boss), Does.Contain("-boss-v1.ogg"));
+                Assert.That(AssetDatabase.GetAssetPath(boss), Does.EndWith(
+                    id == 4 ? "12 Pixel Tracks/Pixel 5.wav" : "09-world-tree-boss-v5.ogg"));
                 Assert.That(boss, Is.Not.EqualTo(music));
             }
             else Assert.That(boss, Is.Null, path);

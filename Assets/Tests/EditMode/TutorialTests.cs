@@ -64,6 +64,7 @@ namespace WordVenture.Tests
                 SerializedProperty line = script.GetArrayElementAtIndex(i);
                 flags[i] = line.FindPropertyRelative("tutorialFlag").intValue;
                 Assert.That(line.FindPropertyRelative("text").stringValue, Is.Not.Empty);
+                Assert.That(line.FindPropertyRelative("name").stringValue, Is.EqualTo("할아버지의 기록"));
                 int portrait = line.FindPropertyRelative("portraitID").intValue;
                 Assert.That(portrait, Is.InRange(0, portraits.arraySize - 1));
                 Assert.That(portraits.GetArrayElementAtIndex(portrait).objectReferenceValue, Is.Not.Null);

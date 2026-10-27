@@ -91,6 +91,74 @@ namespace WordVenture.Tests
         }
 
         [Test]
+        public void 대화는_지역곡을_재생하고_닫으면_맵음악을_복귀시킨다()
+        {
+            var map = new GameObject("MapMusicTest");
+            objects.Add(map);
+            var mapMusic = map.AddComponent<AudioSource>();
+            var clip = AudioClip.Create("DialogueMusicTest", 44100, 1, 44100, false);
+            objects.Add(clip);
+            mapMusic.clip = clip;
+            mapMusic.loop = true;
+            mapMusic.Play();
+            mapMusic.timeSamples = 1000;
+
+            var data = Resources.Load<ScriptableObject>("Story/ActOneDialogues");
+            var chapters = (Array)data.GetType().GetField("chapters").GetValue(data);
+            object chapter = chapters.GetValue(0);
+            var dialogue = new GameObject("DialogueMusicTest", typeof(RectTransform));
+            objects.Add(dialogue);
+            var view = dialogue.AddComponent(Runtime("Story.StageDialogueView"));
+            view.GetType().GetMethod("Begin").Invoke(view, new object[] { data, chapter, null, true });
+            var music = dialogue.GetComponent<AudioSource>();
+            Assert.That(music, Is.Not.Null);
+            Assert.That(music.clip, Is.EqualTo(chapter.GetType().GetField("music").GetValue(chapter)));
+            Assert.That(music.isPlaying, Is.True);
+            Assert.That(music.loop, Is.True);
+            Assert.That(mapMusic.isPlaying, Is.False, "맵 음악이 대화 BGM과 겹치지 않는다");
+            Object.DestroyImmediate(dialogue);
+            Assert.That(mapMusic.isPlaying, Is.True);
+            Assert.That(mapMusic.timeSamples, Is.GreaterThanOrEqualTo(1000), "처음부터 재시작하지 않는다");
+        }
+
+        [TestCase(0)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(9)]
+        public void 결과_음악은_대화가_열리고_닫혀도_재시작하거나_사라지지_않는다(int stageID)
+        {
+            var result = new GameObject("ResultMusicTest");
+            objects.Add(result);
+            var controller = (Behaviour)result.AddComponent(Runtime("Scenes.GameClearController"));
+            controller.enabled = false;
+            controller.GetType().GetMethod("PlayResultMusic", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(controller, new object[] { stageID });
+            AudioSource music = result.GetComponent<AudioSource>();
+            Assert.That(music, Is.Not.Null);
+            Assert.That(music.isPlaying, Is.True);
+            Assert.That(music.loop, Is.True);
+            music.timeSamples = 48000;
+
+            var data = Resources.Load<ScriptableObject>("Story/ActOneDialogues");
+            var chapters = (Array)data.GetType().GetField("chapters").GetValue(data);
+            object chapter = chapters.Cast<object>().First(c =>
+                (int)c.GetType().GetField("stageID").GetValue(c) == stageID
+                && Convert.ToInt32(c.GetType().GetField("moment").GetValue(c)) == 0);
+            var dialogue = new GameObject("ResultDialogueTest", typeof(RectTransform));
+            objects.Add(dialogue);
+            Component view = dialogue.AddComponent(Runtime("Story.StageDialogueView"));
+            view.GetType().GetMethod("Begin").Invoke(view, new object[] { data, chapter, null, true });
+            Assert.That(music.clip, Is.EqualTo(chapter.GetType().GetField("music").GetValue(chapter)));
+            Assert.That(dialogue.GetComponent<AudioSource>(), Is.Null, "같은 곡의 소스를 중복 생성하지 않는다");
+            Assert.That(music.timeSamples, Is.GreaterThanOrEqualTo(48000));
+            Object.DestroyImmediate(dialogue);
+            Assert.That(music.isPlaying, Is.True, "대화 뒤 결과와 새 카드 화면에서도 음악을 유지한다");
+            Assert.That(music.timeSamples, Is.GreaterThanOrEqualTo(48000));
+            Object.DestroyImmediate(result);
+            Assert.That(music == null, Is.True, "씬 소유 오브젝트가 제거되면 음악 소스도 제거된다");
+        }
+
+        [Test]
         public void 전용곡이_없는_지역의_보스는_기존곡을_유지한다()
         {
             var root = new GameObject("NoBossMusicTest");

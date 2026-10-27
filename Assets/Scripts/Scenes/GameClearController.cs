@@ -38,6 +38,7 @@ namespace Scenes
         private void Start()
         {
             sceneName = SceneManager.GetActiveScene().name;
+            PlayResultMusic(StageDataSingleton.Instance != null ? StageDataSingleton.Instance.stagePosition : 0);
             if (sceneName == "GameClearScene")
             {
                 text.SetActive(false);
@@ -45,6 +46,22 @@ namespace Scenes
                 talking = true;
                 StartCoroutine(ShowClearDialogue());
             }
+        }
+
+        void PlayResultMusic(int stageID)
+        {
+            // 읽음 여부와 무관하게 승리/패배 씬 전체에서 지역 곡을 재생한다.
+            // 대화창이 닫혀도 결과와 새 카드 보상 화면까지 이 소스가 남는다.
+            var data = Resources.Load<StageDialogueData>("Story/ActOneDialogues");
+            StageDialogueChapter chapter = data != null ? data.FindChapter(stageID, StageDialogueMoment.Clear, 0) : null;
+            if (chapter == null || chapter.music == null) return;
+            var music = gameObject.AddComponent<AudioSource>();
+            music.playOnAwake = false;
+            music.clip = chapter.music;
+            music.loop = true;
+            music.spatialBlend = 0f;
+            music.volume = 0.1f;
+            music.Play();
         }
 
         void Update()

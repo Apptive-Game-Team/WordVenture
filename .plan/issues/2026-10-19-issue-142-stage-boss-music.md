@@ -40,3 +40,8 @@ Unity 2022.3.62f3. 반복용 OGG를 사용한다. 루프는 요청 BPM 기반 �
 - git diff --check 통과. Hindsight는 home:8888 연결 시간 초과로 조회/기록하지 못했다.
 - 실제 스피커 청취와 전체 전투 진행을 통한 루프 감상은 자동 테스트 범위 밖이다. 기존 청취 페이지에 반복용 초안으로 공개된 편집을 그대로 적용했다.
 - 테스트 첫 실행 중 중복 실행 하나는 프로젝트 잠금으로 종료됐다. 원래 실행은 EditMode 10개 통과했고, 이후 PlayMode도 종료 코드 0이다.
+## 2026-10-27 후속 변경
+사용자 승인으로 기존 PR #143에 튜토리얼 화자·기록 연결 문구, 전후 스토리와 승패·새 카드 화면 BGM을 포함한다. 마왕 등장 곡은 기존 Pixel 5.wav, 세계수 보스는 v5, 마력 응축은 A로 확정했다. 생성 후보와 로컬 청취 페이지는 커밋하지 않는다. 기존 Non-goals의 다른 장면 음악 제외는 이 후속 요청으로 변경되었다.
+
+검증: 최신 Unity EditMode/PlayMode 집중 테스트 결과를 PR 본문과 별도 music-update 결과 XML로 기록한다. 과거 Results는 최초 커밋의 결과이며 최신 코드 통과를 의미하지 않는다.
+최신 결과: Unity 2022.3.62f3 EditMode 24/24, PlayMode 10/10 통과. 튜토리얼 기록 화면은 .plan/assets/stage-boss-music/tutorial-record.png에 보존. git diff --cached --check 통과.
