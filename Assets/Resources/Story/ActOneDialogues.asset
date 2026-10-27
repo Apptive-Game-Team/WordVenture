@@ -44,6 +44,7 @@ MonoBehaviour:
   chapters:
   - stageID: 0
     moment: 0
+    music: {fileID: 8300000, guid: da43d31205ff414d912c4e77d3f6d98b, type: 3}
     wave: 0
     title: "평원 · 돌아갈 집"
     speakerName: "평원 마을 주민"
@@ -57,7 +58,7 @@ MonoBehaviour:
     - wordSpeaking: 0
       narration: 1
       gesture: 0
-      text: "할아버지의 기록이 끝난 뒤에도, 워드는 한참 동안 그 자리를 떠나지 못했다."
+      text: "워드는 잠시 기록에서 눈을 떼고, 할아버지가 남긴 말을 되새겼다."
     - wordSpeaking: 0
       narration: 0
       gesture: 0
@@ -104,6 +105,7 @@ MonoBehaviour:
       text: "워드는 짧게 고개를 숙여 인사하고, 해안 쪽으로 걸음을 옮겼다."
   - stageID: 1
     moment: 0
+    music: {fileID: 8300000, guid: a187240780d0417faef818c7b8d1f471, type: 3}
     wave: 0
     title: "해안 · 뒤집힌 배"
     speakerName: "해안 어부"
@@ -148,6 +150,7 @@ MonoBehaviour:
       text: "워드는 고개를 끄덕이고, 손주를 업고 떠나는 어부의 뒷모습을 끝까지 지켜보았다."
   - stageID: 2
     moment: 0
+    music: {fileID: 8300000, guid: 2ccbf166819d4c8eaf5963e02d97c278, type: 3}
     wave: 0
     title: "고원 · 놓친 손"
     speakerName: "고원 양치기 소년"
@@ -184,6 +187,7 @@ MonoBehaviour:
       text: "워드는 소년의 머리를 쓰다듬으며 천천히 고개를 끄덕였다."
   - stageID: 3
     moment: 0
+    music: {fileID: 8300000, guid: 3c79c25ba61043b3afd7fb726da56003, type: 3}
     wave: 0
     title: "빗길 · 끝내야 하는 이유"
     speakerName: "빗길 경비병"
@@ -224,6 +228,7 @@ MonoBehaviour:
       text: "…그럼 길은 내가 지키겠다. 살아서 돌아와라, 마법사."
   - stageID: 4
     moment: 1
+    music: {fileID: 8300000, guid: 4276016d282f4085837515215461ba2e, type: 3}
     wave: 0
     title: "마왕 성 · 드디어"
     speakerName: ""
@@ -332,6 +337,7 @@ MonoBehaviour:
       text: "크하하… 그렇다면 함께 썩어 가자, 꼬마 마법사!"
   - stageID: 4
     moment: 0
+    music: {fileID: 8300000, guid: 4276016d282f4085837515215461ba2e, type: 3}
     wave: 0
     title: "마왕을 쓰러뜨린 뒤 · 남쪽 마을"
     speakerName: "평원 마을 주민"
@@ -380,6 +386,7 @@ MonoBehaviour:
       text: "고향에 먼저 다녀오신다고요? 네, 기다릴게요. 꼭 들러요."
   - stageID: 5
     moment: 1
+    music: {fileID: 8300000, guid: 6fd4756195df4159a088e10a886fa2ae, type: 3}
     wave: 0
     title: "서리 마을 · 얼어붙은 길"
     speakerName: "서리 마을 주민"
@@ -412,6 +419,7 @@ MonoBehaviour:
       text: "마왕은 이미 쓰러졌는데. 워드는 잠시 고개를 갸웃했지만, 곧 주민에게 손바닥을 펴 보였다. 여기서 기다리라는 뜻이었다."
   - stageID: 5
     moment: 0
+    music: {fileID: 8300000, guid: 6fd4756195df4159a088e10a886fa2ae, type: 3}
     wave: 0
     title: "서리 마을 · 할아버지가 맡긴 카드"
     speakerName: "서리 마을 주민"
@@ -456,6 +464,7 @@ MonoBehaviour:
       text: "워드는 카드를 품에 넣고, 남쪽을 바라보며 고개를 끄덕였다."
   - stageID: 6
     moment: 1
+    music: {fileID: 8300000, guid: 1029cfee0e8241b5b7aaf474e1a66a2d, type: 3}
     wave: 0
     title: "벼락 협곡 · 끊긴 길"
     speakerName: "협곡 순찰대원"
@@ -484,6 +493,7 @@ MonoBehaviour:
       text: "워드는 불러낸 슬라임들을 앞으로 내보내고, 멀리서 바위를 던지는 슬라임을 똑바로 가리켰다."
   - stageID: 6
     moment: 0
+    music: {fileID: 8300000, guid: 1029cfee0e8241b5b7aaf474e1a66a2d, type: 3}
     wave: 0
     title: "벼락 협곡 · 다시 열린 길"
     speakerName: "협곡 순찰대원"
@@ -508,6 +518,7 @@ MonoBehaviour:
       text: "얼음도 번개도 같은 마력 때문일지 몰랐다. 워드는 동쪽으로 발걸음을 돌렸다."
   - stageID: 7
     moment: 1
+    music: {fileID: 8300000, guid: 6c9eb46417f14e7bb2da664d75c5e2d2, type: 3}
     wave: 0
     title: "잿빛 유적 · 재 속의 기록"
     speakerName: "유적 연구자"
@@ -556,6 +567,7 @@ MonoBehaviour:
       text: "워드가 앞을 가리키자, 불러낸 슬라임들이 앞으로 나서 길을 막았다."
   - stageID: 7
     moment: 0
+    music: {fileID: 8300000, guid: 6c9eb46417f14e7bb2da664d75c5e2d2, type: 3}
     wave: 0
     title: "잿빛 유적 · 뿌리 아래의 기록"
     speakerName: "유적 연구자"
@@ -592,6 +604,7 @@ MonoBehaviour:
       text: "워드는 잠시 숲 쪽을 바라보다가, 망설임 없이 걸음을 옮겼다. 숲에도 아직 빠져나오지 못한 사람들이 있을 것이다."
   - stageID: 8
     moment: 1
+    music: {fileID: 8300000, guid: 2e214f64a35c496a9e9952828641c9b0, type: 3}
     wave: 0
     title: "뒤틀린 숲 · 숲을 빠져나온 아이"
     speakerName: "숲 피난민"
@@ -632,6 +645,7 @@ MonoBehaviour:
       text: "워드는 고개를 끄덕이고, 뒤에 있는 분홍 슬라임을 향해 카드를 들었다."
   - stageID: 8
     moment: 0
+    music: {fileID: 8300000, guid: 2e214f64a35c496a9e9952828641c9b0, type: 3}
     wave: 0
     title: "뒤틀린 숲 · 혼자 가는 길"
     speakerName: "숲 피난민"
@@ -660,6 +674,7 @@ MonoBehaviour:
       text: "워드는 아이의 머리를 쓰다듬고 새끼손가락을 내밀었다. 꼭 돌아오겠다는 약속이었다."
   - stageID: 9
     moment: 1
+    music: {fileID: 8300000, guid: 26f6fb0fe8874ec8a7817ae5a4ca3dc9, type: 3}
     wave: 0
     title: "세계수의 심장 · 나무를 닮은 슬라임"
     speakerName: ""
@@ -716,6 +731,7 @@ MonoBehaviour:
       text: "워드는 천천히 고개를 저었다. 마법은 빼앗기 위한 힘이 아니었다. 돌아가기를 기다리는 사람들이 아직 있었다."
   - stageID: 9
     moment: 0
+    music: {fileID: 8300000, guid: 26f6fb0fe8874ec8a7817ae5a4ca3dc9, type: 3}
     wave: 0
     title: "세계수의 심장 · 다시 초록빛으로"
     speakerName: ""

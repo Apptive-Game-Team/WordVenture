@@ -1,4 +1,5 @@
 using Core;
+using Combat.Stage;
 using UnityEngine;
 
 namespace Combat.Enemies
@@ -14,6 +15,8 @@ namespace Combat.Enemies
             EnemyData enemyData = enemyDataContainer.GetGearData(id);
             GameObject enemy = Instantiate(enemyData.prefab, new Vector3(positionX, -3, positionZ), Quaternion.identity);
             enemy.GetComponent<Enemy>().InitEnemyData(enemyData);
+            StageManager stageManager = FindObjectOfType<StageManager>();
+            if (stageManager != null) stageManager.OnEnemySpawned(enemy.GetComponent<Enemy>());
             SaveLoadController.MarkSlimeSeen(id);
             return enemy;
         }

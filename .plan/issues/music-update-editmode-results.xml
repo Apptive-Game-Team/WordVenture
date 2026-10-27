@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="24" result="Passed" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.6417775">
+  <test-suite type="TestSuite" id="1387" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="320" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.641778" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1771" name="WordVenture.Tests.EditMode.dll" fullname="C:/Users/jys09/Projects/WordVenture/Library/ScriptAssemblies/WordVenture.Tests.EditMode.dll" runstate="Runnable" testcasecount="320" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.616055" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="12020" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1772" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="320" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.611005" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1773" name="Tests" fullname="WordVenture.Tests" runstate="Runnable" testcasecount="320" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.606702" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1662" name="StageMusicAssetTests" fullname="WordVenture.Tests.StageMusicAssetTests" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="1.199450" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1674" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.519077" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1664" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/AshenRuinsStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/AshenRuinsStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1078733300" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.085280" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1665" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/BossStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/BossStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1316506773" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.009707" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1666" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/FrostVillageStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/FrostVillageStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1042679096" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.050111" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1667" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/HighlandStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/HighlandStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1195142660" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.048497" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1668" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/PlainStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/PlainStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1614444397" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.046247" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1669" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/RainStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/RainStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1515786336" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.050131" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1670" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/SeaStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/SeaStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1287227001" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.048358" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1671" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/ThunderCanyonStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/ThunderCanyonStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1363515559" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.045924" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1672" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/TwistedForestStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/TwistedForestStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1662344789" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.051018" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1673" name="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/WorldTreeHeartStage.asset&quot;)" fullname="WordVenture.Tests.StageMusicAssetTests.모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다(&quot;Assets/ScriptableObjects/Stages/WorldTreeHeartStage.asset&quot;)" methodname="모든_스테이지에_새_음악이_연결되고_두_최종전에만_보스곡이_있다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1835024233" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:31Z" duration="0.073957" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+            <test-case id="1663" name="전후_대화는_지역곡이_연결되고_전투중_대화는_음악을_바꾸지_않는다" fullname="WordVenture.Tests.StageMusicAssetTests.전후_대화는_지역곡이_연결되고_전투중_대화는_음악을_바꾸지_않는다" methodname="전후_대화는_지역곡이_연결되고_전투중_대화는_음악을_바꾸지_않는다" classname="WordVenture.Tests.StageMusicAssetTests" runstate="Runnable" seed="1707276951" result="Passed" start-time="2026-10-27 03:30:31Z" end-time="2026-10-27 03:30:32Z" duration="0.666296" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1686" name="TutorialTests" fullname="WordVenture.Tests.TutorialTests" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.393036" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1698" name="모든_대사_단계가_한번씩_있고_초상화가_연결되어_있다" fullname="WordVenture.Tests.TutorialTests.모든_대사_단계가_한번씩_있고_초상화가_연결되어_있다" methodname="모든_대사_단계가_한번씩_있고_초상화가_연결되어_있다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="892558502" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.026078" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="1697" name="속성_배치에는_마법도_필요하고_카드를_회수하면_기다린다" fullname="WordVenture.Tests.TutorialTests.속성_배치에는_마법도_필요하고_카드를_회수하면_기다린다" methodname="속성_배치에는_마법도_필요하고_카드를_회수하면_기다린다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="194748124" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.002907" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="1699" name="스킵_UI는_blocker_위에_있고_안내는_입력을_막지_않는다" fullname="WordVenture.Tests.TutorialTests.스킵_UI는_blocker_위에_있고_안내는_입력을_막지_않는다" methodname="스킵_UI는_blocker_위에_있고_안내는_입력을_막지_않는다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="304734650" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.340264" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="1700" name="종료_선택은_저장되고_새_게임에서_초기화된다" fullname="WordVenture.Tests.TutorialTests.종료_선택은_저장되고_새_게임에서_초기화된다" methodname="종료_선택은_저장되고_새_게임에서_초기화된다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1732111843" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.005891" asserts="0">
+              <properties />
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1696" name="행동_전에는_진행하지_않고_완료하면_진행한다" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.014305" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1687" name="행동_전에는_진행하지_않고_완료하면_진행한다(1,&quot;battleStarted&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(1,&quot;battleStarted&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="964475232" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.001500" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1688" name="행동_전에는_진행하지_않고_완료하면_진행한다(2,&quot;handReady&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(2,&quot;handReady&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="326054810" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000607" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1689" name="행동_전에는_진행하지_않고_완료하면_진행한다(4,&quot;combineOpen&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(4,&quot;combineOpen&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="231609062" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000891" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1690" name="행동_전에는_진행하지_않고_완료하면_진행한다(5,&quot;hasSpell&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(5,&quot;hasSpell&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1203472647" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000556" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1691" name="행동_전에는_진행하지_않고_완료하면_진행한다(7,&quot;castStarted&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(7,&quot;castStarted&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1277146649" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000522" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1692" name="행동_전에는_진행하지_않고_완료하면_진행한다(8,&quot;castStarted&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(8,&quot;castStarted&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1735862159" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000438" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1693" name="행동_전에는_진행하지_않고_완료하면_진행한다(9,&quot;targetSelected&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(9,&quot;targetSelected&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="215589752" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000436" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1694" name="행동_전에는_진행하지_않고_완료하면_진행한다(10,&quot;turnEnded&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(10,&quot;turnEnded&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1425668558" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000438" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1695" name="행동_전에는_진행하지_않고_완료하면_진행한다(11,&quot;battleCleared&quot;)" fullname="WordVenture.Tests.TutorialTests.행동_전에는_진행하지_않고_완료하면_진행한다(11,&quot;battleCleared&quot;)" methodname="행동_전에는_진행하지_않고_완료하면_진행한다" classname="WordVenture.Tests.TutorialTests" runstate="Runnable" seed="1447176389" result="Passed" start-time="2026-10-27 03:30:32Z" end-time="2026-10-27 03:30:32Z" duration="0.000495" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

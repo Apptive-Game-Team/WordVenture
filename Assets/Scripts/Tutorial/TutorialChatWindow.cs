@@ -44,7 +44,8 @@ namespace Tutorial
 
         public void SetSpeakerImage(Sprite image)
         {
-            SetPortraits(image, null, true);
+            // 워드는 할아버지가 남긴 기록을 읽는 사람이므로 화자처럼 밝히지 않는다.
+            SetPortraits(image, null, false, false);
         }
     }
 
