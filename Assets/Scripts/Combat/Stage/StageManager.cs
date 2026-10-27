@@ -47,8 +47,7 @@ namespace Combat.Stage
         void SetBackground(StageData stageData, int stagePosition)
         {
             GameObject backgroundObject = GameObject.Find("PlainBackground");
-            audioSource.clip = stageData.music != null ? stageData.music : audioClips[stagePosition];
-            audioSource.Play();
+            PlayMusic(stageData.music != null ? stageData.music : audioClips[stagePosition]);
             if (stagePosition == 3)
             {
                 backgroundObject.SetActive(false);
@@ -68,6 +67,22 @@ namespace Combat.Stage
                     renderer.sprite = stageData.background;
                 }
             }
+        }
+
+        public void OnEnemySpawned(Enemy enemy)
+        {
+            if (enemy is BossEnemy && currentStageData != null && currentStageData.bossMusic != null)
+                PlayMusic(currentStageData.bossMusic);
+        }
+
+        void PlayMusic(AudioClip clip)
+        {
+            // 세계수 외피에서 본체로 바뀌어도 같은 보스 곡을 처음부터 다시 틀지 않는다.
+            if (audioSource == null || clip == null || audioSource.clip == clip) return;
+            audioSource.clip = clip;
+            audioSource.loop = true;
+            audioSource.pitch = 1f;
+            audioSource.Play();
         }
     }
 

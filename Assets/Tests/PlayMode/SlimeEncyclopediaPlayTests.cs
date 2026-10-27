@@ -20,7 +20,7 @@ namespace WordVenture.Tests
         readonly string[] keys =
         {
             "TutorialEnded", "StagePosition", "ShowsActOneMap", "ActOneDialogueSeen", "ActTwoDialogueSeen",
-            "SeenSlimes0", "SeenSlimes1", "Language"
+            "SeenSlimes0", "SeenSlimes1", "Language", "SeenTips"
         };
         int[] values;
         bool[] existed;
@@ -56,6 +56,7 @@ namespace WordVenture.Tests
             values = keys.Select(k => PlayerPrefs.GetInt(k)).ToArray();
             oldPosition = (int)StagePosition.GetValue(null);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.DeleteKey("SeenSlimes0");
             PlayerPrefs.DeleteKey("SeenSlimes1");
             SharedDialoguePlayTests.SetLanguage("Korean");
@@ -118,11 +119,11 @@ namespace WordVenture.Tests
         {
             yield return LoadMap(8);
 
-            int[] cleared = { 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
+            int[] cleared = { 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 30, 31, 32, 34 };
             foreach (int id in cleared) Assert.That(HasSeen(id), Is.True, "깬 스테이지의 적 " + id + " 이(가) 기록되지 않았다");
             Assert.That(HasSeen(25), Is.True, "잿빛 유적의 분열 슬라임이 나누어진 작은 분열 슬라임이 기록되지 않았다");
-            // 2 는 어느 스테이지에도 없고, 26~29 는 아직 깨지 않은 뒤틀린 숲(8)과 세계수의 심장(9)에만 나온다.
-            foreach (int id in new[] { 2, 26, 27, 28, 29 })
+            // 2와 교체된 정예18은 웨이브에 없고, 나머지는 아직 깨지 않은 뒤틀린 숲과 세계수에 나온다.
+            foreach (int id in new[] { 2, 18, 26, 27, 28, 29, 33, 35 })
                 Assert.That(HasSeen(id), Is.False, "만나지 않은 적 " + id + " 이(가) 기록되었다");
         }
 

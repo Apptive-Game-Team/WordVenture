@@ -1,0 +1,99 @@
+{
+  "EditMode-boss-feedback": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "14.804831"
+  },
+  "PlayMode-boss-feedback": {
+    "total": "42",
+    "passed": "41",
+    "failed": "1",
+    "skipped": "0",
+    "duration": "122.2082195"
+  },
+  "PlayMode-boss-feedback-pass": {
+    "total": "42",
+    "passed": "42",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "106.4775601"
+  },
+  "PlayMode-boss-feedback-full": {
+    "total": "140",
+    "passed": "128",
+    "failed": "0",
+    "skipped": "12",
+    "duration": "217.0997454"
+  },
+  "PlayMode-boss-feedback-captures": {
+    "total": "4",
+    "passed": "4",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "22.9758886"
+  },
+  "PlayMode-boss-feedback-final": {
+    "total": "16",
+    "passed": "16",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "71.7452948"
+  },
+  "notes": {
+    "first_failure": "후방 도약의 화면 내 착지 제한과 초기 위치 6의 기대값 충돌. 화면 안 초기 위치 3으로 수정하고 화면 밖 제한은 별도 검사로 유지.",
+    "full_skips": "명시적 검사 12개 중 화면 캡처 4개는 별도 실행해 통과. 그 외 명시적 개발용 검사는 미실행.",
+    "final_change": "낙하 명중 후 바닥 예고 제거. 관련 전투 12개와 캡처 4개 재실행 모두 통과.",
+    "graft_and_range": "최종 EditMode 308 통과/1 GPU 생략. 전체 PlayMode 136 통과/14 명시적 생략. 뿌리 그림 수정 후 관련 전투 31개와 새 실제 캡처 1개를 다시 실행해 32 통과. 기존 화면 캡처 5개는 이전 실행에서 통과."
+  },
+  "PlayMode-graft-absorption": {
+    "total": "20",
+    "passed": "20",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "51.275749"
+  },
+  "EditMode-graft-absorption": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "6.4539543"
+  },
+  "PlayMode-graft-ally-range": {
+    "total": "31",
+    "passed": "31",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "55.5515765"
+  },
+  "PlayMode-graft-range-full": {
+    "total": "150",
+    "passed": "136",
+    "failed": "0",
+    "skipped": "14",
+    "duration": "209.6362994"
+  },
+  "PlayMode-ally-root-captures": {
+    "total": "1",
+    "passed": "1",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "3.8149355"
+  },
+  "PlayMode-graft-range-final": {
+    "total": "32",
+    "passed": "32",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "58.6781377"
+  },
+  "EditMode-graft-range-final": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "6.4113562"
+  }
+}

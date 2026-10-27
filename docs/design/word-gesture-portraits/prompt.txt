@@ -23,3 +23,38 @@ Files:
 6. `WordPalmOut.png` - "wait here": one arm extended forward toward the viewer's RIGHT with the open palm facing outward like a gentle stop sign, calm reassuring face with a very slight soft smile. The other hand holds the staff.
 
 When done, reply with the six file names.
+
+=== WordReadBook ===
+Use your built-in image generation tool in EDIT mode. The base image is `reference-word.png` in this directory: the existing dialogue portrait of Word, the heroine of this game. `reference-book.png` shows the spellbook (her late grandfather's old record book) as it already appears in the game; use it only as a reference for the book's look. Create exactly one file, `WordReadBook.png`, in this directory. Do not create, edit, or delete anything else.
+
+The most important rule: Word must look like the SAME drawing as `reference-word.png`, not a new drawing of a similar girl. Keep EXACTLY the same face shape and jawline, the same eye shape and spacing, the same crimson-pink eye color, the same small nose and mouth, the same hair silhouette and bangs, the same yellow ribbon headband, the same black hooded cloak, red bow and dark blue dress, the same chunky pixel clusters, 2-tone cel shading, dark outlines and colors, the same three-quarter view turned slightly to the viewer's RIGHT, and the same size and position on the canvas. Her face must not become rounder, younger, or cuter. Change ONLY arms, hands, the prop, head angle, eyelids, eyebrows, and mouth. Mouth closed.
+
+`WordReadBook.png` - quietly READING her grandfather's record: she holds the old spellbook OPEN with both hands at chest height, tilted toward HERSELF so the pages face her, not the viewer. From the viewer's side we see the worn dark-brown leather back of the book at a slight angle and only a thin sliver of cream page edges along the top. Her head is bowed slightly forward and down toward the book, eyelids lowered, eyes looking down at the pages, eyebrows gently drawn up: calm, a little sad, absorbed. No staff. The book's top edge is below her chin.
+
+Output: square 1024 x 1024 canvas, solid flat magenta (#FF00FF) background everywhere outside the character. No magenta inside the character. No text, letters, speech bubbles, motion lines, scenery, or other characters. Hands and book stay inside the canvas.
+
+When done, reply with the file name.
+
+=== WordReadBook 시선 ===
+Use your built-in image generation tool in EDIT mode. The base image is `base-readbook.png` in this directory. Create exactly one file, `WordReadBook2.png`, in this directory. Do not create, edit, or delete anything else.
+
+Keep EVERYTHING in `base-readbook.png` exactly the same — the same face shape, hair, ribbon, cloak, hands, the open book held toward herself, the pixel size, colors, outlines, canvas size and position, and the solid magenta (#FF00FF) background — and change ONLY her eyes, eyelids and the angle of her head so she is clearly READING the book:
+- head bowed a little forward and down toward the book,
+- upper eyelids lowered so the eyes are half closed,
+- irises moved to the BOTTOM of the eyes, looking down at the pages she holds,
+- eyebrows gently drawn up: calm, a little sad, absorbed.
+Mouth stays closed. No text, no other changes.
+
+When done, reply with the file name.
+
+=== WordReadBook 눈 다시 그리기 (최종) ===
+Use your built-in image generation tool in EDIT mode. The base image is `base-v1.png` in this directory (Word holding an open book toward herself). `reference-word.png` is her original portrait: her eyes must keep exactly that eye shape, size, color, highlight and lash line. Create exactly one file, `WordReadBook3.png`, in this directory. Do not create, edit, or delete anything else.
+
+Keep EVERYTHING in `base-v1.png` exactly the same — face shape, hair, ribbon, cloak, hands, the open book held toward herself, pixel size, colors, outlines, canvas size and position, and the solid magenta (#FF00FF) background — and change ONLY her eyes and a slight head tilt so she is gently READING:
+- tilt her head down very slightly toward the book,
+- keep her eyes OPEN and natural, the same size and shape as in `reference-word.png`; only move the irises down so they look at the pages below,
+- do NOT narrow the eyes, do NOT make them half-lidded, sleepy, squinting, smug or glaring; no heavy upper lids,
+- eyebrows relaxed and soft, a calm, gentle, slightly wistful expression,
+- mouth closed and neutral.
+
+When done, reply with the file name.

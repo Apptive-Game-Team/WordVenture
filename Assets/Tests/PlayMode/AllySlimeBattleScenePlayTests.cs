@@ -16,7 +16,7 @@ namespace WordVenture.Tests
     public sealed class AllySlimeBattleScenePlayTests
     {
         const int Stage = 1;
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -43,6 +43,7 @@ namespace WordVenture.Tests
             hadSingleton = singleton != null;
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, false);
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
@@ -99,6 +100,8 @@ namespace WordVenture.Tests
                 "Resources/Combat/AllySlime prefab을 불러오지 못했다");
             Call(formation, "Spawn", Enum.Parse(Runtime("Cards.MagicType"), "Holy"), affinity);
             FieldInfo playerHp = Runtime("Combat.Enemies.Player").GetField("Hp", BindingFlags.Instance | BindingFlags.NonPublic);
+            // 회복은 최대 HP를 넘지 않으므로 먼저 다치게 해 둔다.
+            Call(player, "TakeHit", 10);
             int playerHpBefore = (int)playerHp.GetValue(player);
 
             Component battle = (Component)Runtime("Battle.Turns.TurnBattleSystem").GetField("Instance").GetValue(null);
@@ -108,11 +111,14 @@ namespace WordVenture.Tests
             int hpBefore = EnemyHp(front);
 
             Call(battle, "TurnEndButton");
-            yield return new WaitForSeconds(0.2f);
+            // 투사체가 날아가는 시간이 있으므로 도착할 때까지 기다린다.
+            float attackDeadline = Time.time + 3f;
+            while (EnemyHp(front) >= hpBefore && Time.time < attackDeadline) yield return null;
             Assert.That(EnemyHp(front), Is.LessThan(hpBefore), "아군 슬라임이 턴 종료 때 공격하지 않았다");
 
-            // 두 번째 슬라임은 0.4초 뒤에 행동하고, 적 턴은 그 뒤 0.4초가 지나야 시작한다.
-            yield return new WaitForSeconds(0.4f);
+            // 신성 슬라임은 두 번째로 움직이고, 회복 투사체가 워드에 닿아야 한다.
+            float healDeadline = Time.time + 3f;
+            while ((int)playerHp.GetValue(player) == playerHpBefore && Time.time < healDeadline) yield return null;
             Assert.That((int)playerHp.GetValue(player), Is.EqualTo(playerHpBefore + 4),
                 "신성 슬라임이 워드를 회복하지 않았다");
         }

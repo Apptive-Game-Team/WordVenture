@@ -41,6 +41,8 @@ namespace Story
         ShowCover,
         // 목을 짚어 말할 수 없다고 알린다.
         TouchThroat,
+        // 할아버지의 기록을 내려다보며 읽는다. 튜토리얼과 안내에서 쓴다.
+        ReadBook,
     }
 
     [Serializable]
@@ -72,6 +74,8 @@ namespace Story
         public Sprite speakerPortrait;
         [Tooltip("비워 두면 배경 그림 없이 지금 화면 위에 대화창을 띄운다.")]
         public Sprite background;
+        [Tooltip("스테이지 전후 대화의 지역 BGM. 비우면 현재 씬의 음악을 유지한다.")]
+        public AudioClip music;
         public StageDialogueLine[] lines;
 
         // 읽음 기록 비트: 장마다 클리어 0~4, 입장 5~9, wave 10~29. 기존 세이브의 1부 비트를 유지한다.

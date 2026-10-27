@@ -29,6 +29,8 @@ namespace WordVenture.Tests
         [TestCase("Lightning", 7)]
         [TestCase("Undead", 8)]
         [TestCase("Spawn", 9)]
+        [TestCase("Water", 10)]
+        [TestCase("Plant", 11)]
         public void MagicType_값이_저장된_정수와_같다(string name, int value)
         {
             Assert.That((int)Enum.Parse(TypeOf("Cards.MagicType"), name), Is.EqualTo(value));
@@ -62,8 +64,8 @@ namespace WordVenture.Tests
             Assert.That(prefab.GetComponent(TypeOf("Combat.Allies.AllySlime")), Is.Not.Null);
             Assert.That(prefab.GetComponent(TypeOf("Combat.Enemies.Enemy")), Is.Null,
                 "Enemy가 붙으면 적 턴에 행동하고 주문 대상이 된다");
-            Assert.That(prefab.GetComponent(TypeOf("Combat.Enemies.SelectableObject")), Is.Null,
-                "아군 슬라임은 주문 대상으로 고를 수 없다");
+            Assert.That(prefab.GetComponent(TypeOf("Combat.Enemies.SelectableObject")), Is.Not.Null,
+                "아군은 적과 별개로 신성 주문의 대상으로 선택할 수 있어야 한다");
             Assert.That(prefab.CompareTag("Enemy"), Is.False);
             Assert.That(prefab.transform.localScale.x, Is.GreaterThan(0), "아군 슬라임은 적이 있는 오른쪽을 본다");
 

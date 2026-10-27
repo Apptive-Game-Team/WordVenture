@@ -311,6 +311,230 @@
           "guid": "936f91f20cf9426f974f82fe7a0faf86"
         }
       ]
+    },
+    "SnowBoss": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_01.png",
+          "guid": "27de297d9ddf4510b6430ac946c749f9"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_02.png",
+          "guid": "326da68ccc824a4fbeda7d8f749b5134"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_03.png",
+          "guid": "dca7ace5188a470faa068d2ae6b2e943"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_04.png",
+          "guid": "b79045bd0e334bdbba7cf3e078cc5d2e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_05.png",
+          "guid": "0dfd86f9e950421e9c772e2a10b118de"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_06.png",
+          "guid": "090c502a1e09453392e11f7c7e023f97"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_07.png",
+          "guid": "38737fb394234dadbeb83190c7e786c1"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/SnowBoss/SnowBossSlime_08.png",
+          "guid": "cd9c8f9fc8c94587af54d81d3b47d5c0"
+        }
+      ]
+    },
+    "ThunderBoss": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_01.png",
+          "guid": "6a37ec069c3b411483a70b087e9541a5"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_02.png",
+          "guid": "de18554720f2449b9c8032715c94a1a9"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_03.png",
+          "guid": "b5c9b1fda5c54b708bdd23655e57a36f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_04.png",
+          "guid": "d4abbeaa19384b25aab03e32c88d763e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_05.png",
+          "guid": "ae78d2a4a70b4795b9a98d45a3084c27"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_06.png",
+          "guid": "4e27ac59687f4cd3824824c12b610568"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_07.png",
+          "guid": "50bcebd5bda8495084949237d34bd668"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss/ThunderBossSlime_08.png",
+          "guid": "6c97086923344ccea2128c7418cd8fb4"
+        }
+      ]
+    },
+    "FurnaceBoss": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_01.png",
+          "guid": "8a87a25d2b9641bb8fed12609c2ebd3e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_02.png",
+          "guid": "c3d31f74e4544b45900a4d70b6cd2a6a"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_03.png",
+          "guid": "7c2c6b91be54452bb34d81d284abda2d"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_04.png",
+          "guid": "b21ba1ce14be48989873776b60f55a80"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_05.png",
+          "guid": "b9fe0824c05e46718dec85e84c8b1b86"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_06.png",
+          "guid": "1317adaca3c44f7790cc343e6774888b"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_07.png",
+          "guid": "de84ab9eaf3446729a0a5b247d287754"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss/FurnaceBossSlime_08.png",
+          "guid": "78e3415bf135456a8437960350c0632d"
+        }
+      ]
+    },
+    "GraftBoss": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_01.png",
+          "guid": "313482ed95cf402f95c669851459b59c"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_02.png",
+          "guid": "d8ee3eef5b1546e2bb367412404a71ea"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_03.png",
+          "guid": "de9890317bc548ce8eef9f30d253292e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_04.png",
+          "guid": "404d45e61b2043cc8ec593dcb411ef4d"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_05.png",
+          "guid": "86863c041d0b45c29970acebdf3e11a0"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_06.png",
+          "guid": "5a529a06f9a44324b5f737494543279d"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_07.png",
+          "guid": "bc0428be7d344251a2f638196057e6d9"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/GraftBoss/GraftBossSlime_08.png",
+          "guid": "394d5953bd6949389fc8ea05f68b06b3"
+        }
+      ]
+    },
+    "Snowball": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/Snowball/Snowball_01.png",
+          "guid": "c8548a4c337e4b23acc7bfb8eac33777"
+        }
+      ]
+    },
+    "WorldTreeShell": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_01.png",
+          "guid": "4e4cb59901724a64b88e3c435e57f3e0"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_02.png",
+          "guid": "6adff2b5bd6e48ce91deeb972b2f67c3"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_03.png",
+          "guid": "952ebe1cb95243f3a58b59d7b4e74cce"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_04.png",
+          "guid": "eda488ce5ae9415295aa51007a5a6fde"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_05.png",
+          "guid": "4b3abec783e54ce7a6bdc62411cb68a7"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_06.png",
+          "guid": "9586b0df0b764b70ad2a5ad8bdb591f4"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_07.png",
+          "guid": "b5b1d39d152c4346b48b904d93a0b2e4"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss/WorldTreeBossSlime_08.png",
+          "guid": "f77767a0789247de8f2d3db659a05505"
+        }
+      ]
+    },
+    "WorldTreeCore": {
+      "frames": [
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_01.png",
+          "guid": "403fba48b43f4bb38544fa8b89aaa72e"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_02.png",
+          "guid": "3dc2099413c94b4e9df138a0426d677d"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_03.png",
+          "guid": "f653577d58d54270b1158dacbd455a4a"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_04.png",
+          "guid": "bc473265207d4ccfa38cf7211ac9d8af"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_05.png",
+          "guid": "e183b69fb9a04a129b0f59cdbb826fb4"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_06.png",
+          "guid": "c7547fe513c94ea0bda6d39e790b896f"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_07.png",
+          "guid": "a0f86c227a0e4c8bb894b47c09ac9253"
+        },
+        {
+          "path": "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore/WorldTreeCoreSlime_08.png",
+          "guid": "fe87111faa3141528a34b09864553e80"
+        }
+      ]
     }
   },
   "folders": {
@@ -323,6 +547,13 @@
     "Assets/Art/Combat/Enemies/ActTwo/Split": "af28fef5296b4c59beb716d1f645befd",
     "Assets/Art/Combat/Enemies/ActTwo/Explode": "8bd5df653bf44c68a4eec5b50864325d",
     "Assets/Art/Combat/Enemies/ActTwo/Heal": "5fe5d1a54b034bbc8d294e92f28f91cd",
-    "Assets/Art/Combat/Enemies/ActTwo/Surge": "ec2b654614474dc4b5543aec78426781"
+    "Assets/Art/Combat/Enemies/ActTwo/Surge": "ec2b654614474dc4b5543aec78426781",
+    "Assets/Art/Combat/Enemies/ActTwo/SnowBoss": "55655b9a1a004b7c874a06aac043264f",
+    "Assets/Art/Combat/Enemies/ActTwo/ThunderBoss": "711c28965f4c43958d778558fb7acd46",
+    "Assets/Art/Combat/Enemies/ActTwo/FurnaceBoss": "a0c8ecce83194ffaa95691d8ea7ea16f",
+    "Assets/Art/Combat/Enemies/ActTwo/GraftBoss": "117e9c98049b4fa08b289832eab6d7b2",
+    "Assets/Art/Combat/Enemies/ActTwo/Snowball": "2d812e4dcea44290b212b94bc4ea3a13",
+    "Assets/Art/Combat/Enemies/ActTwo/WorldTreeBoss": "bb54bc5840754c29a84b186658bbb968",
+    "Assets/Art/Combat/Enemies/ActTwo/WorldTreeCore": "5da887cb14a44f889ff0bbde19e7fe65"
   }
 }

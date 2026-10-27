@@ -1,0 +1,122 @@
+[
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_01.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_02.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_03.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_04.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_05.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_06.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_07.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  },
+  {
+    "path": "C:\\Users\\jys09\\Projects\\WordVenture\\Assets\\Art\\Combat\\Enemies\\ActTwo\\WorldTreeBoss\\WorldTreeBossSlime_08.png",
+    "size": [
+      126,
+      126
+    ],
+    "colors": 48,
+    "alpha": [
+      0,
+      255
+    ],
+    "ppu": 24.57,
+    "pivotY": 0.10317460317460317,
+    "pivotRule": "13 art pixels above shared trimmed union floor"
+  }
+]

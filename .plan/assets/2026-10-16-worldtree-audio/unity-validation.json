@@ -1,0 +1,24 @@
+{
+  "PlayMode-worldtree-audio": {
+    "total": "13",
+    "passed": "12",
+    "failed": "1",
+    "skipped": "0",
+    "duration": "52.6248635"
+  },
+  "PlayMode-worldtree-audio-final": {
+    "total": "13",
+    "passed": "13",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "20.9471916"
+  },
+  "EditMode-worldtree-audio": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "14.4594698"
+  },
+  "initial_failure": "첫 실행은 메뉴를 닫은 동일 프레임에 Skip을 호출한 fixture가 실패했다. InteractionLock의 resumedFrame 보호를 유지하고 다음 프레임에 스킵하도록 검사만 수정한 뒤 13개 통과."
+}

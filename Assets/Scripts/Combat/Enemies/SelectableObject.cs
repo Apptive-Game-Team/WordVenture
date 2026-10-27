@@ -7,12 +7,9 @@ namespace Combat.Enemies
 
     public class SelectableObject : MonoBehaviour
     {
-        private Vector3 scale;
-
-        private void Start()
-        {
-            scale = transform.localScale;
-        }
+        // 분노 등으로 커진 현재 크기를 호버 종료 시 그대로 복원한다.
+        private Vector3 scaleBeforeHover;
+        private bool enlarged;
 
         // 주문을 시전할 때 고를 수 있는 대상을 미리 모아 두면, 그 사이에 다음 wave 로
         // 나온 적은 목록에 없어 클릭해도 대상이 되지 않았다. 그러면 주문이 대상을 끝없이
@@ -48,10 +45,15 @@ namespace Combat.Enemies
 
         private void ChangeSize(bool bigSide)
         {
+            if (bigSide == enlarged) return;
+            enlarged = bigSide;
             if (bigSide)
-                transform.localScale = scale * 1.2f;
+            {
+                scaleBeforeHover = transform.localScale;
+                transform.localScale = scaleBeforeHover * 1.2f;
+            }
             else
-                transform.localScale = scale;
+                transform.localScale = scaleBeforeHover;
         }
     }
 

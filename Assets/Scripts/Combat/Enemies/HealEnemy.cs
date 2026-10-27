@@ -10,7 +10,7 @@ namespace Combat.Enemies
             Enemy target = FindMostWounded();
             if (target == null) return;
             Animator.RangeAttack();
-            target.Heal(AttackDamage);
+            target.Heal(UnragedAttackDamage);
         }
 
         Enemy FindMostWounded()

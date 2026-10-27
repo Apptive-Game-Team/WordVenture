@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.0863773">
+  <test-suite type="TestSuite" id="1000" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.086377" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="1199" name="WordVenture.Tests.PlayMode.dll" fullname="C:/Users/jys09/.codex/worktrees/resolve-deploy-conflicts/WordVenture/Library/ScriptAssemblies/WordVenture.Tests.PlayMode.dll" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.073272" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="42428" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+      </properties>
+      <test-suite type="TestSuite" id="1200" name="WordVenture" fullname="WordVenture" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.069717" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1201" name="Tests" fullname="WordVenture.Tests" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.067071" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1150" name="TargetSelectionMergeTests" fullname="WordVenture.Tests.TargetSelectionMergeTests" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.062153" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1151" name="대기_시작_후_생성된_대상도_선택한다" fullname="WordVenture.Tests.TargetSelectionMergeTests.대기_시작_후_생성된_대상도_선택한다" methodname="대기_시작_후_생성된_대상도_선택한다" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" seed="320386050" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.028771" asserts="0">
+              <properties />
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1154" name="아군은_살아있을_때만_대상으로_선택한다" fullname="WordVenture.Tests.TargetSelectionMergeTests.아군은_살아있을_때만_대상으로_선택한다" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.013270" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1152" name="아군은_살아있을_때만_대상으로_선택한다(0,True)" fullname="WordVenture.Tests.TargetSelectionMergeTests.아군은_살아있을_때만_대상으로_선택한다(0,True)" methodname="아군은_살아있을_때만_대상으로_선택한다" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" seed="910848531" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.009778" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="1153" name="아군은_살아있을_때만_대상으로_선택한다(5,False)" fullname="WordVenture.Tests.TargetSelectionMergeTests.아군은_살아있을_때만_대상으로_선택한다(5,False)" methodname="아군은_살아있을_때만_대상으로_선택한다" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" seed="63136353" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.000961" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+            <test-case id="1155" name="호버_종료는_분노로_커진_크기를_복원한다" fullname="WordVenture.Tests.TargetSelectionMergeTests.호버_종료는_분노로_커진_크기를_복원한다" methodname="호버_종료는_분노로_커진_크기를_복원한다" classname="WordVenture.Tests.TargetSelectionMergeTests" runstate="Runnable" seed="1506643469" result="Passed" start-time="2026-10-27 05:00:26Z" end-time="2026-10-27 05:00:26Z" duration="0.002317" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

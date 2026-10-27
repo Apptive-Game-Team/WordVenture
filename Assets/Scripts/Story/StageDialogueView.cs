@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,9 @@ namespace Story
     public sealed class StageDialogueView : MonoBehaviour
     {
         const string DialogueResource = "Story/ActOneDialogues";
+        // 1920x1080 기준. 설정 메뉴 버튼의 오른쪽 끝은 112다. 메뉴 Canvas 는 높이에만 맞춰 커지고 대화창은 너비와 높이를
+        // 반씩 따르므로, 4:3이나 5:4 화면에서는 대화창이 더 작아진다. 그때도 겹치지 않도록 여유를 두었다.
+        const float TitleLeftInset = 160f;
 
         // 아직 보지 않은 대화만 돌려준다. 없으면 null.
         public static StageDialogueChapter FindUnseen(int stageID, StageDialogueMoment moment, int wave,
@@ -46,6 +50,7 @@ namespace Story
         bool finishing;
         bool closeWhenDone = true;
         bool speakerAppeared;
+        readonly List<AudioSource> pausedMusic = new List<AudioSource>();
 
         public void Begin(StageDialogueData data, StageDialogueChapter dialogue, Action onCompleted,
             bool closeOnFinish = true)
@@ -55,9 +60,33 @@ namespace Story
             dialogueData = data;
             completed = onCompleted;
             Build(data);
+            PlayDialogueMusic();
             ownsLock = true;
             InteractionLock.IsLocked = true;
             ShowLine();
+        }
+
+        void PlayDialogueMusic()
+        {
+            // Wave 대화와 안내 기록은 기존 전투/보스 음악을 그대로 둔다.
+            if (chapter.music == null || chapter.moment == StageDialogueMoment.Wave) return;
+            AudioSource[] sources = FindObjectsOfType<AudioSource>();
+            // 결과 씬이 이미 지역 곡을 재생하면 그대로 쓴다. 대화 시작/종료가 곡을 끊지 않는다.
+            foreach (AudioSource source in sources)
+                if (source.isPlaying && source.loop && source.clip == chapter.music) return;
+            foreach (AudioSource source in sources)
+            {
+                if (!source.isPlaying || !source.loop) continue;
+                source.Pause();
+                pausedMusic.Add(source);
+            }
+            var music = gameObject.AddComponent<AudioSource>();
+            music.playOnAwake = false;
+            music.clip = chapter.music;
+            music.loop = true;
+            music.spatialBlend = 0f;
+            music.volume = 0.1f; // 맵과 전투 BGM의 기본 음량에 맞춘다.
+            music.Play();
         }
 
         void Build(StageDialogueData data)
@@ -82,8 +111,10 @@ namespace Story
                 new Color(0.04f, 0.03f, 0.09f, 0.35f));
             // 대화 중 클릭이 뒤의 맵이나 전투로 전달되지 않게 막는다.
             shade.raycastTarget = true;
-            Label("ChapterTitle", transform, new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.97f),
+            TMP_Text title = Label("ChapterTitle", transform, new Vector2(0f, 0.89f), new Vector2(0.95f, 0.97f),
                 Localization.Translate(chapter.title), data.font, 38, UiPalette.Text);
+            // 왼쪽 위의 설정 메뉴 버튼(x 24~112)을 피해 그 오른쪽에서 시작한다.
+            title.rectTransform.offsetMin = new Vector2(TitleLeftInset, 0f);
 
             var window = new GameObject("ChatWindow", typeof(RectTransform));
             window.transform.SetParent(transform, false);
@@ -159,6 +190,9 @@ namespace Story
 
         void OnDestroy()
         {
+            // 씬 전환으로 함께 사라진 소스는 건너뛰고, 같은 씬에 남은 음악만 이어 재생한다.
+            foreach (AudioSource source in pausedMusic)
+                if (source != null) source.UnPause();
             if (ownsLock) InteractionLock.IsLocked = false;
         }
     }

@@ -15,8 +15,8 @@ namespace WordVenture.Tests
 {
     public sealed class TutorialPlayTests
     {
-        bool hadTutorial, hadStage;
-        int savedTutorial, savedStage;
+        bool hadTutorial, hadStage, hadTips;
+        int savedTutorial, savedStage, savedTips;
         static Type RuntimeType(string name) => AppDomain.CurrentDomain.GetAssemblies()
             .Select(assembly => assembly.GetType(name)).First(type => type != null);
         static object Call(object target, string name, params object[] args) => target.GetType()
@@ -36,7 +36,10 @@ namespace WordVenture.Tests
             hadStage = PlayerPrefs.HasKey("StagePosition");
             savedTutorial = PlayerPrefs.GetInt("TutorialEnded");
             savedStage = PlayerPrefs.GetInt("StagePosition");
+            hadTips = PlayerPrefs.HasKey("SeenTips");
+            savedTips = PlayerPrefs.GetInt("SeenTips");
             PlayerPrefs.DeleteKey("TutorialEnded");
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             PlayerPrefs.SetInt("StagePosition", 0);
             RuntimeType("Map.MapMove").GetField("StagePosition").SetValue(null, 0);
             if (Object.FindObjectOfType(RuntimeType("Combat.Stage.StageDataSingleton")) == null)
@@ -58,6 +61,7 @@ namespace WordVenture.Tests
             yield return null;
             if (hadTutorial) PlayerPrefs.SetInt("TutorialEnded", savedTutorial); else PlayerPrefs.DeleteKey("TutorialEnded");
             if (hadStage) PlayerPrefs.SetInt("StagePosition", savedStage); else PlayerPrefs.DeleteKey("StagePosition");
+            if (hadTips) PlayerPrefs.SetInt("SeenTips", savedTips); else PlayerPrefs.DeleteKey("SeenTips");
             PlayerPrefs.Save();
         }
 

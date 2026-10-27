@@ -19,7 +19,7 @@ namespace WordVenture.Tests
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         const string SlimeFolder = "Assets/Prefabs/Combat/Enemies/Slime/";
         const string AffinityTablePath = "Assets/ScriptableObjects/Combat/Magic Affinity Table.asset";
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         readonly List<GameObject> spawned = new List<GameObject>();
         int[] values;
         bool[] existed;
@@ -56,6 +56,7 @@ namespace WordVenture.Tests
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             else singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, 1);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
             yield return SceneManager.LoadSceneAsync("TurnBattleScene");
@@ -181,7 +182,7 @@ namespace WordVenture.Tests
             Call(charger, "PlayTurnAction", FrontLineDistance(charger));
             yield return new WaitForSeconds(0.5f);
             Assert.That(charger.transform.position.x, Is.EqualTo(frontX + 1.2f).Within(0.05f));
-            Assert.That(AllyHp(ally), Is.EqualTo(0), "공격력 10의 두 배가 HP 8을 넘는다");
+            Assert.That(AllyHp(ally), Is.EqualTo(2), "바위 아군은 HP 16에서 돌진 피해 20을 30% 줄인 14를 받는다");
             Assert.That(Property(charger, "IsCharging"), Is.False);
         }
 

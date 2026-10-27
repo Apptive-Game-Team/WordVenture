@@ -1,0 +1,16 @@
+{
+  "EditMode-boss-cutouts": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "34.4315929"
+  },
+  "PlayMode-boss-cutout-captures": {
+    "total": "2",
+    "passed": "2",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "35.2454618"
+  }
+}

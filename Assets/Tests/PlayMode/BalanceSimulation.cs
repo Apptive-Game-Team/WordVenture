@@ -33,7 +33,8 @@ namespace WordVenture.Tests
         static readonly int[] Stages = ReadStages();
         static readonly int RunsPerCase = ReadRuns();
 
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "ActOneDialogueSeen", "ActTwoDialogueSeen", "SeenSlimes0", "SeenSlimes1",
+            "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -51,6 +52,15 @@ namespace WordVenture.Tests
         {
             string value = Environment.GetEnvironmentVariable("BALANCE_RUNS");
             return int.TryParse(value, out int runs) && runs > 0 ? runs : 3;
+        }
+
+        // BALANCE_UPGRADES(공격력,최대 HP,손패 상한,아군 슬라임 단계)로 업그레이드 단계를 고정한다. 없으면 공격력만
+        // 스테이지 / 2 단계로 둔다. 주문 피해가 예전 자동 상승(10 + 5 × (스테이지 / 2))과 같아서 기록을 비교할 수 있다.
+        static int[] UpgradeLevels(int stage)
+        {
+            string value = Environment.GetEnvironmentVariable("BALANCE_UPGRADES");
+            if (string.IsNullOrEmpty(value)) return new[] { stage / 2, 0, 0, 0 };
+            return value.Split(',').Select(int.Parse).ToArray();
         }
 
         static Type Runtime(string name) => AppDomain.CurrentDomain.GetAssemblies()
@@ -139,15 +149,22 @@ namespace WordVenture.Tests
             public int finalHp;
             public int spawnsCast;
             public int spellsCast;
+            public int discards;
+            public string upgrades;
         }
 
         IEnumerator PlayBattle(BattleResult result)
         {
             UnityEngine.Random.InitState(result.seed);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             // 지역 대화는 자동 전투에서 넘기므로 이미 본 것으로 둔다.
             PlayerPrefs.SetInt("ActOneDialogueSeen", int.MaxValue);
             PlayerPrefs.SetInt("ActTwoDialogueSeen", int.MaxValue);
+            int[] upgrades = UpgradeLevels(result.stage);
+            string[] upgradeKeys = { "UpgradeLevelAttack", "UpgradeLevelMaxHp", "UpgradeLevelHandLimit", "UpgradeLevelAlly" };
+            for (int i = 0; i < upgradeKeys.Length; i++) PlayerPrefs.SetInt(upgradeKeys[i], i < upgrades.Length ? upgrades[i] : 0);
+            result.upgrades = string.Join(",", upgrades);
             var singleton = Object.FindObjectOfType(Runtime("Combat.Stage.StageDataSingleton"));
             if (singleton == null) singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, result.stage);
@@ -161,14 +178,17 @@ namespace WordVenture.Tests
             for (result.turns = 1; result.turns <= MaxTurns && InBattle; result.turns++)
             {
                 yield return SkipDialogue();
+                int castsThisTurn = 0;
                 for (int cast = 0; cast < CastsPerTurn && InBattle; cast++)
                 {
                     bool casted = false;
                     yield return CastBestAction(result, done => casted = done);
                     if (!casted) break;
+                    castsThisTurn++;
                     TrackHp(result, ref lastHp);
                 }
                 if (!InBattle) break;
+                if (castsThisTurn == 0 && TryDiscardUnusable(PlayerUpgradesHandLimit)) result.discards++;
                 Call(Battle, "TurnEndButton");
                 yield return WaitForPlayerTurn();
                 TrackHp(result, ref lastHp);
@@ -213,7 +233,8 @@ namespace WordVenture.Tests
                 yield return SkipDialogue();
                 if (!InBattle || Battle == null) yield break;
                 bool ending = (bool)Get(Battle, "IsEndingPlayerTurn");
-                if (!ending && Get(Battle, "currentTurn") == playerTurn) break;
+                    bool transforming = (bool)StaticGet("Combat.Enemies.WorldTreeTransition", "IsPlaying");
+                    if (!ending && !transforming && Get(Battle, "currentTurn") == playerTurn) break;
                 yield return null;
             }
             // 적 이동과 상태 처리가 끝나도록 잠시 기다린다.
@@ -231,6 +252,7 @@ namespace WordVenture.Tests
 
         IEnumerator CastBestAction(BattleResult result, Action<bool> done)
         {
+            while (InBattle && (bool)StaticGet("Combat.Enemies.WorldTreeTransition", "IsPlaying")) yield return null;
             Candidate? best = ChooseAction(result.useSpawn);
             if (best == null)
             {
@@ -325,6 +347,27 @@ namespace WordVenture.Tests
                 }
             }
             return best;
+        }
+
+        static int PlayerUpgradesHandLimit => (int)Runtime("Core.PlayerUpgrades").GetProperty("HandLimit").GetValue(null);
+
+        // 이번 턴에 낼 수 있는 조합이 없고 손패가 가득 차 있을 때 가장 쓸모없는 카드 한 장을 버린다.
+        // Spawn 마법, 체력이 충분할 때의 Holy 속성, 그 외 아무 카드 순서다.
+        static bool TryDiscardUnusable(int handLimit)
+        {
+            if (!InBattle) return false;
+            object manager = StaticGet("Cards.CardManager", "Inst");
+            var hand = ((IEnumerable)Get(manager, "HandCards")).Cast<Component>()
+                .Where(card => card != null && card.gameObject.activeInHierarchy).ToList();
+            // 한도는 주문 카드와 속성 카드에 반씩 걸린다. 어느 쪽이든 가득 찼으면 새 카드가 타므로 버린다.
+            int perKind = handLimit / 2;
+            bool spellsFull = hand.Count(card => card.CompareTag("Spell")) >= perKind;
+            bool elementsFull = hand.Count(card => card.CompareTag("MagicType")) >= perKind;
+            if (!spellsFull && !elementsFull) return false;
+            Component victim = hand.FirstOrDefault(card => CardType(card) == "Spawn")
+                ?? hand.FirstOrDefault(card => CardType(card) == "Holy" && PlayerHp > HealBelowHp)
+                ?? hand.FirstOrDefault(card => card.CompareTag(spellsFull ? "Spell" : "MagicType"));
+            return victim != null && (bool)Call(manager, "TryDiscard", victim);
         }
 
         static string CardType(Component card) => Get(card, "cardType").ToString();

@@ -19,7 +19,7 @@ namespace WordVenture.Tests
         const BindingFlags AnyInstance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         const string SlimeFolder = "Assets/Prefabs/Combat/Enemies/Slime/";
         const string AffinityTablePath = "Assets/ScriptableObjects/Combat/Magic Affinity Table.asset";
-        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         readonly List<GameObject> spawned = new List<GameObject>();
         int[] values;
         bool[] existed;
@@ -95,6 +95,7 @@ namespace WordVenture.Tests
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             else singleton = new GameObject("StageData").AddComponent(Runtime("Combat.Stage.StageDataSingleton"));
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").SetValue(singleton, 1);
             Runtime("Map.MapMove").GetField("StagePosition").SetValue(null, 1);
             yield return SceneManager.LoadSceneAsync("TurnBattleScene");
@@ -154,6 +155,20 @@ namespace WordVenture.Tests
 
         static Component[] AliveEnemiesNamed(string prefabName) => Object.FindObjectsOfType(Runtime("Combat.Enemies.Enemy"))
             .Cast<Component>().Where(e => e.name.StartsWith(prefabName + "(") && (bool)Property(e, "IsAlive")).ToArray();
+
+        [UnityTest]
+        public IEnumerator 분열_슬라임이_사거리_끝에_멈추면_다음_턴에_워드를_때린다()
+        {
+            float frontLineX = (float)FormationType.GetMethod("FrontLineX").Invoke(null, new object[] { Player.transform.position.x });
+            Component split = CreateEnemy("SplitSlime", frontLineX + 3f, 40, 10, "Fire");
+            yield return null;
+            int before = PlayerHp;
+
+            Call(split, "PlayTurnAction", FrontLineDistance(split));
+            yield return null;
+
+            Assert.That(PlayerHp, Is.LessThan(before), "사거리 3에 선 근접 적이 공격 동작만 하고 피해를 주지 않는다");
+        }
 
         [UnityTest]
         public IEnumerator 분열_슬라임이_쓰러지면_작은_슬라임_두_마리가_웨이브에_더해진다()
@@ -235,28 +250,95 @@ namespace WordVenture.Tests
         }
 
         [UnityTest]
-        public IEnumerator 최종_보스는_포격을_번갈아_쓰고_HP가_절반_아래면_분열_슬라임을_부른다()
+        public IEnumerator 세계수는_턴별_마지막_속성_마법을_저장하고_3턴에_연속_시전한다()
         {
             Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
             yield return null;
             int hp = PlayerHp;
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Shoot"), 1f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Ice"), Magic("Drop"), 1f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Spawn"), 1f, 1f);
+            Assert.That(Property(boss, "RememberedSpell"), Is.EqualTo(Magic("Drop")));
+            Assert.That(Property(boss, "RememberedElement"), Is.EqualTo(Magic("Ice")));
+            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            var stored = (IList)Property(boss, "StoredSpells");
+            Assert.That(stored.Count, Is.EqualTo(1));
+            Assert.That(stored[0].GetType().GetField("Element").GetValue(stored[0]), Is.EqualTo(Magic("Ice")));
+            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            Assert.That(stored.Count, Is.EqualTo(1), "무주문 턴에도 저장분을 보존한다");
+            Assert.That(PlayerHp, Is.EqualTo(hp), "첫 두 턴에는 축적한다");
+            Call(boss, "TakeSpellHit", Magic("Lightning"), Magic("Explode"), 1f, 1f);
+            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            Assert.That(Property(boss, "IsCasting"), Is.True);
+            float deadline = Time.realtimeSinceStartup + 6;
+            while ((bool)Property(boss, "IsCasting") && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(Property(boss, "IsCasting"), Is.False);
+            Assert.That(PlayerHp, Is.LessThan(hp));
+            Assert.That(stored.Count, Is.Zero);
+            Assert.That(Property(boss, "ChargeTurns"), Is.EqualTo(0));
+            Component status = Player.GetComponent(Runtime("Combat.Allies.FriendlyElementalStatus"));
+            object elemental = Property(status, "Status");
+            Assert.That(elemental.GetType().GetProperty("ShockTurns").GetValue(elemental), Is.EqualTo(2));
+            Assert.That(AliveEnemiesNamed("SplitSlimeSmall").Length, Is.Zero);
+        }
 
-            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            Assert.That(Property(boss, "HasMarker"), Is.True);
-            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            yield return new WaitForSeconds(0.8f);
-            Assert.That(PlayerHp, Is.EqualTo(hp - 12), "아군이 없으면 포격은 워드에게 떨어진다");
-
-            Call(boss, "TakeHit", 60);
-            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+        [UnityTest]
+        public IEnumerator 세계수_연속_폭발은_약화를_적용하고_아군이_있으면_워드를_때리지_않는다()
+        {
+            Component front = SpawnAlly("Fire"), middle = SpawnAlly("Rock"), rear = SpawnAlly("Ice");
+            Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
             yield return null;
-            Assert.That(Property(boss, "HasSummoned"), Is.True);
-            Component[] children = AliveEnemiesNamed("SplitSlimeSmall");
-            Assert.That(children.Length, Is.EqualTo(2));
-            foreach (GameObject go in children.Select(c => c.gameObject)) spawned.Add(go);
+            int hp = PlayerHp;
+            Call(boss, "TakeSpellHit", Magic("Lightning"), Magic("Shoot"), 1f, 1f);
+            Call(boss, "TakeSpellHit", Magic("Ice"), Magic("Shoot"), 1f, 1f);
+            Call(boss, "Remember", Magic("Explode"));
+            for (int i = 0; i < 3; i++) Call(boss, "PlayTurnAction", FrontLineDistance(boss));
+            float deadline = Time.realtimeSinceStartup + 4;
+            while ((bool)Property(boss, "IsCasting") && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(AllyHp(front), Is.EqualTo(6));
+            Assert.That(AllyHp(rear), Is.EqualTo(6), "약화된 공격력 8의 절반에 폭발 배율을 적용해 2 피해");
+            Assert.That(AllyHp(middle), Is.EqualTo(15), "바위는 2 피해를 30% 줄인 1을 받는다");
+            Assert.That(PlayerHp, Is.EqualTo(hp));
+        }
 
-            Call(boss, "PlayTurnAction", FrontLineDistance(boss));
-            Assert.That(AliveEnemiesNamed("SplitSlimeSmall").Length, Is.EqualTo(2), "부르기는 한 번뿐이다");
+        [UnityTest]
+        public IEnumerator 세계수는_같은턴의_새_주문만_덮어쓰고_아군_공격은_기억하지_않는다()
+        {
+            Component boss = CreateEnemy("SurgeBoss", 6f, 100, 12, "Undead");
+            yield return null;
+            Call(boss, "RememberElement", Magic("Drop"), Magic("Fire"));
+            Assert.That(Property(boss, "HasMarker"), Is.True);
+            Call(boss, "RememberElement", Magic("Shoot"), Magic("Ice"));
+            Assert.That(Property(boss, "HasMarker"), Is.False);
+            Call(boss, "TakeSpellHit", Magic("Fire"), Magic("Spawn"), 4f, 1f);
+            Assert.That(Property(boss, "RememberedSpell"), Is.EqualTo(Magic("Shoot")));
+            Assert.That(Property(boss, "RememberedElement"), Is.EqualTo(Magic("Ice")));
+        }
+
+        [UnityTest]
+        public IEnumerator 새_보스의_발_피벗에서도_실제_Shoot와_Drop이_몸에_명중한다()
+        {
+            var wave = (MonoBehaviour)Object.FindObjectOfType(Runtime("Combat.Enemies.BattleWaveController"));
+            wave.StopAllCoroutines();
+            Component zone = (Component)Runtime("Combat.UI.CombineZone").GetField("Instance").GetValue(null);
+            Object affinity = AssetDatabase.LoadAssetAtPath<Object>(AffinityTablePath);
+            foreach (string prefab in new[] { "SnowBoss", "ThunderBoss", "FurnaceBoss", "GraftBoss", "SurgeBoss", "TreeShellBoss" })
+            {
+                Component boss = CreateEnemy(prefab, 6f, 1000, 10, "Undead");
+                Component selectable = boss.GetComponent(Runtime("Combat.Enemies.SelectableObject"));
+                yield return null;
+                foreach (string spell in new[] { "Shoot", "Drop" })
+                {
+                    int before = EnemyHp(boss);
+                    GameObject runner = (GameObject)zone.GetType().GetField(spell.ToLowerInvariant()).GetValue(zone);
+                    Call(runner.GetComponent(Runtime("Combat.Spells." + spell)), "Run", Magic("Fire"), selectable, affinity);
+                    yield return new WaitForSeconds(2f);
+                    Assert.That(EnemyHp(boss), Is.LessThan(before), prefab + " " + spell + "이 실제 충돌체에 명중해야 한다");
+                    foreach (Component projectile in Object.FindObjectsOfType(Runtime("Combat.Spells.SpellObj"))) Object.Destroy(projectile.gameObject);
+                    yield return null;
+                }
+                boss.gameObject.SetActive(false);
+            }
         }
     }
 }

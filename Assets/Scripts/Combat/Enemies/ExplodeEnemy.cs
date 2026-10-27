@@ -9,8 +9,10 @@ namespace Combat.Enemies
     {
         const float BlastRadius = 2.5f;
         const float WindupTrembleDistance = 0.05f;
-        // 폭발 그림의 가로 길이는 피해 범위의 지름과 같다.
+        // 피해 범위는 그대로 두고 폭발 그림은 보이는 몸 폭의 두 배 이상으로 키운다.
         const float BlastDiameter = BlastRadius * 2f;
+        // 폭발 그림(FireExplode) 한 칸은 256px, PPU 256 이라 1 unit 이다. 여백을 잘라낸 스프라이트라 bounds 로는 알 수 없다.
+        const float BlastFrameWidth = 1f;
 
         [SerializeField] Sprite[] blastFrames;
 
@@ -27,14 +29,14 @@ namespace Combat.Enemies
             if (primed)
             {
                 exploding = true;
-                Animator.RangeAttack();
                 PlayBlast();
+                Animator.RangeAttack();
                 AllyFormation.HitAllAllies(AttackDamage);
                 Kill();
                 return;
             }
 
-            if (distanceToFrontLine <= attackRange)
+            if (IsInAttackRange(distanceToFrontLine))
             {
                 primed = true;
                 Windup.Play(0f, WindupTrembleDistance);
@@ -50,12 +52,12 @@ namespace Combat.Enemies
             bool blastEnemies = primed && !exploding;
             primed = false;
             Windup.Stop();
-            base.Death();
             if (blastEnemies)
             {
                 PlayBlast();
                 DamageNearbyEnemies();
             }
+            base.Death();
         }
 
         WindupMotion Windup => windup != null ? windup : windup = gameObject.AddComponent<WindupMotion>();
@@ -63,7 +65,21 @@ namespace Combat.Enemies
         // 슬라임은 곧 꺼지므로 폭발 그림은 슬라임과 따로 재생한다.
         void PlayBlast()
         {
-            BlastVfx.Spawn(transform.position, blastFrames, BlastDiameter, GetComponent<SpriteRenderer>());
+            SpriteRenderer body = GetComponent<SpriteRenderer>();
+            Vector3 center = transform.position;
+            float diameter = BlastDiameter;
+            if (body != null && body.sprite != null)
+            {
+                Bounds visible = ElementalStatusVfx.GetVisibleBodyBounds(body.sprite);
+                Vector3 localCenter = visible.center;
+                if (body.flipX) localCenter.x = -localCenter.x;
+                if (body.flipY) localCenter.y = -localCenter.y;
+                center = body.transform.TransformPoint(localCenter);
+                diameter = Mathf.Max(diameter, visible.size.x * Mathf.Abs(body.transform.lossyScale.x) * 2f);
+            }
+            BlastVfx.Spawn(center, blastFrames, diameter, BlastFrameWidth, body);
+            HitImpact.Play(HitStrength.Normal);
+            EnemyMagicVisual.PlayImpactSound(center, .7f);
         }
 
         void DamageNearbyEnemies()

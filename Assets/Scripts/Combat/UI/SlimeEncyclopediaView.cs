@@ -310,7 +310,7 @@ namespace Combat.UI
         static string Join(List<string> items) => items.Count > 0 ? string.Join(", ", items) : T("없음");
         static string Number(float value) => value.ToString("0.#", CultureInfo.InvariantCulture);
 
-        static string Multiplier(float value) => Localization.Current == Language.Korean
+        public static string Multiplier(float value) => Localization.Current == Language.Korean
             ? Number(value) + "배"
             : "x" + Number(value);
 
@@ -324,6 +324,8 @@ namespace Combat.UI
                 case MagicType.Lightning: return "<color=#FFFF77>" + T("번개") + "</color>";
                 case MagicType.Holy: return "<color=#FFF4C8>" + T("신성") + "</color>";
                 case MagicType.Undead: return "<color=#CCAAFF>" + T("언데드") + "</color>";
+                case MagicType.Water: return "<color=#66AAFF>" + T("물") + "</color>";
+                case MagicType.Plant: return "<color=#88DD77>" + T("풀") + "</color>";
                 default: return type.ToString();
             }
         }

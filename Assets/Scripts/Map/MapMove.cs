@@ -104,6 +104,24 @@ namespace Map
             InitChapterSwitchButton();
             SlimeEncyclopediaView.RecordClearedStages(stageDataList, enemyDataContainer, StagePosition);
             SlimeEncyclopediaView.CreateOpenButton(OpenEncyclopedia);
+            UpgradeView.CreateOpenButton(OpenUpgrades);
+            StartCoroutine(ShowUpgradeTips());
+        }
+
+        // 마력 조각이 처음 생겼거나 아군 슬라임 업그레이드가 처음 열렸을 때 한 번만 설명한다.
+        IEnumerator ShowUpgradeTips()
+        {
+            var tips = new List<GameTip>();
+            if (PlayerUpgrades.Shards > 0) tips.Add(GameTip.Upgrade);
+            if (PlayerUpgrades.IsUnlocked(UpgradeKind.Ally)) tips.Add(GameTip.AllyUpgrade);
+            if (tips.Count == 0) yield break;
+            yield return GameTips.ShowOnce(tips.ToArray());
+        }
+
+        void OpenUpgrades()
+        {
+            if (enteringStage) return;
+            UpgradeView.Open();
         }
 
         void OpenEncyclopedia()
@@ -198,6 +216,12 @@ namespace Map
             if (Input.GetKeyDown(KeyCode.E))
             {
                 OpenEncyclopedia();
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                OpenUpgrades();
                 return;
             }
 

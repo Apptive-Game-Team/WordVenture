@@ -1,0 +1,23 @@
+{
+  "EditMode-intent-icons-pass": {
+    "total": "309",
+    "passed": "308",
+    "failed": "0",
+    "skipped": "1",
+    "duration": "12.0724766"
+  },
+  "PlayMode-intent-icons": {
+    "total": "43",
+    "passed": "43",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "113.8594215"
+  },
+  "PlayMode-intent-icons-final": {
+    "total": "17",
+    "passed": "17",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "44.1282731"
+  }
+}

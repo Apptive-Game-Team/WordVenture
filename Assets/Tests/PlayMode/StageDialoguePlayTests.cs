@@ -15,7 +15,7 @@ namespace WordVenture.Tests
 {
     public sealed class StageDialoguePlayTests
     {
-        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1" };
+        readonly string[] keys = { "ActOneDialogueSeen", "TutorialEnded", "StagePosition", "SeenSlimes0", "SeenSlimes1", "SeenTips" };
         int[] values;
         bool[] existed;
         int oldPosition;
@@ -42,6 +42,7 @@ namespace WordVenture.Tests
             if (hadSingleton) oldStage = (int)Runtime("Combat.Stage.StageDataSingleton").GetField("stagePosition").GetValue(singleton);
             PlayerPrefs.SetInt("ActOneDialogueSeen", 0);
             PlayerPrefs.SetInt("TutorialEnded", 1);
+            PlayerPrefs.SetInt("SeenTips", int.MaxValue); // 안내 대사가 입력을 잡지 않게 한다.
             Runtime("Core.InteractionLock").GetProperty("IsLocked").SetValue(null, false);
             yield return SceneManager.LoadSceneAsync("TitleScene");
             yield return null;
@@ -109,6 +110,30 @@ namespace WordVenture.Tests
             yield return null;
             Assert.That(View, Is.Null);
             Assert.That(Locked, Is.False);
+        }
+
+        static Rect ScreenRect(RectTransform rect)
+        {
+            var corners = new Vector3[4];
+            rect.GetWorldCorners(corners);
+            return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
+        }
+
+        [UnityTest]
+        public IEnumerator 지역_대화_제목은_설정_메뉴_버튼에_가려지지_않는다()
+        {
+            yield return ClearStage(1);
+            yield return null;
+            Assert.That(View, Is.Not.Null);
+            var title = (RectTransform)View.transform.Find("ChapterTitle");
+            GameObject menuButton = GameObject.Find("MenuButton");
+            Assert.That(menuButton, Is.Not.Null, "클리어 화면에 설정 메뉴 버튼이 없다");
+            Rect titleRect = ScreenRect(title);
+            Rect buttonRect = ScreenRect((RectTransform)menuButton.transform);
+            Assert.That(titleRect.Overlaps(buttonRect), Is.False, $"제목 {titleRect} 이 메뉴 버튼 {buttonRect} 과 겹친다");
+            Call(View, "Advance");
+            SharedDialoguePlayTests.Capture("dialogue-title-menu.png");
+            yield return FinishDialogue();
         }
 
         [UnityTest]
@@ -319,7 +344,7 @@ namespace WordVenture.Tests
                 Object.Destroy(view.gameObject);
                 yield return null;
             }
-            Assert.That(narrationLines, Is.EqualTo(66));
+            Assert.That(narrationLines, Is.EqualTo(67));
             Assert.That(gestureLines, Is.EqualTo(33));
             Assert.That(Locked, Is.False);
         }

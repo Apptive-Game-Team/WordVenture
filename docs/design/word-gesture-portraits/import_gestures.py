@@ -30,6 +30,7 @@ GESTURES = {
     "WordPointWorried.png": ("WordPointWorriedDialogue.png", "ee1daf037c4e49b58018a3de2fd2b433"),
     "WordShowCover.png": ("WordShowCoverDialogue.png", "2893518f1c344927b7e4547cc52875f5"),
     "WordTouchThroat.png": ("WordTouchThroatDialogue.png", "ca6e1f029377475990077d7e067cf7c9"),
+    "WordReadBook.png": ("WordReadBookDialogue.png", "fbbda2c859ba4701af1298c38aa6856c"),
 }
 
 

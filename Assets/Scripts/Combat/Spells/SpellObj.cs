@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cards;
+using Combat.Allies;
 using Combat.Enemies;
-using Map;
+using Core;
 using UnityEngine;
 
 namespace Combat.Spells
@@ -19,6 +20,8 @@ namespace Combat.Spells
         readonly HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
         string targetTag;
         bool hitPlayer;
+        readonly HashSet<AllySlime> hitAllies = new HashSet<AllySlime>();
+        const string AllyTag = "Ally";
         bool initialized;
         static int activeSpells;
         public static bool HasActiveSpells => activeSpells > 0;
@@ -37,6 +40,7 @@ namespace Combat.Spells
             this.target = target;
             targetTag = target.gameObject.tag;
             initialized = true;
+            FriendlyElementalStatus.ConsumeAttack(Player.PlayerInt());
             activeSpells++;
 
             if (this.spellType == MagicType.Explode)
@@ -51,6 +55,14 @@ namespace Combat.Spells
             } else if (this.spellType == MagicType.Shoot)
             {
                 moveVector = new Vector3(speed, 0, 0);
+                // 아군은 몸 위치로, 거대 나무형 보스는 큰 충돌체의 중심으로 조준한다.
+                if (targetTag == AllyTag || target.GetComponent<TreeShellBossEnemy>() != null)
+                {
+                    Vector3 toTarget = targetTag == AllyTag ? target.transform.position : target.GetComponent<Collider2D>().bounds.center;
+                    toTarget -= transform.position;
+                    toTarget.z = 0;
+                    moveVector = toTarget.normalized * speed;
+                }
             }
 
             if (this.spellType == MagicType.Shoot || this.spellType == MagicType.Drop)
@@ -77,7 +89,13 @@ namespace Combat.Spells
         }
         float speed = 10;
         Vector3 moveVector;
-        int damage = 10 + 5 * (MapMove.StagePosition / 2);
+        int damage;
+
+        // PlayerPrefs 는 MonoBehaviour 생성자(필드 초기화)에서 읽을 수 없다. InitProjectileDamage 는 Awake 뒤에 불린다.
+        void Awake()
+        {
+            damage = CurrentPlayerDamage;
+        }
 
         public void InitProjectileDamage(int damage)
         {
@@ -93,6 +111,21 @@ namespace Combat.Spells
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            // 폭발은 누구를 골랐든 범위에 닿은 적과 아군을 모두 맞힌다. 신성 폭발은 양쪽을 모두 회복한다.
+            if (initialized && spellType == MagicType.Explode)
+            {
+                if (collision.CompareTag("Enemy")) HitEnemy(collision.GetComponentInParent<Enemy>());
+                else if (collision.CompareTag(AllyTag)) HitAlly(collision.GetComponentInParent<AllySlime>());
+                return;
+            }
+            if (initialized && targetTag == AllyTag && collision.CompareTag(AllyTag))
+            {
+                AllySlime ally = collision.GetComponentInParent<AllySlime>();
+                if (ally == null || ally.gameObject != target.gameObject) return;
+                moveVector = Vector3.zero;
+                if (HitAlly(ally)) StartCoroutine(DestoryCounter());
+                return;
+            }
             if (initialized && collision.CompareTag(targetTag))
             {
                 Enemy enemy = collision.GetComponentInParent<Enemy>();
@@ -109,8 +142,7 @@ namespace Combat.Spells
                 if (animator != null) animator.SetTrigger("Hit");
                 if (collision.CompareTag("Enemy"))
                 {
-                    enemy.TakeSpellHit(magicType, spellType, GetBaseDamage(damage, spellType),
-                        magicAffinityTable.GetAffinity(magicType, enemy.enemyType));
+                    ApplyToEnemy(enemy);
                 } else
                 {
                     collision.GetComponent<Player>().TakeHit(CalculateDamage(damage, MagicType.Holy));
@@ -119,6 +151,31 @@ namespace Combat.Spells
                 StartCoroutine(DestoryCounter());
             }
         }
+        void HitEnemy(Enemy enemy)
+        {
+            if (enemy == null || !enemy.IsAlive || !hitEnemies.Add(enemy)) return;
+            if (animator != null) animator.SetTrigger("Hit");
+            ApplyToEnemy(enemy);
+        }
+
+        void ApplyToEnemy(Enemy enemy)
+        {
+            enemy.TakeSpellHit(magicType, spellType, GetBaseDamage(damage, spellType),
+                magicAffinityTable.GetAffinity(magicType, enemy.enemyType));
+        }
+
+        // 신성은 아군을 회복하고(최대 HP까지), 나머지 속성은 아군에게 실제 피해를 준다.
+        // 아군에는 상성표가 없으므로 상성 1배를 쓴다. 한 주문은 같은 아군에게 한 번만 들어간다.
+        bool HitAlly(AllySlime ally)
+        {
+            if (ally == null || !ally.IsAlive || !hitAllies.Add(ally)) return false;
+            if (animator != null) animator.SetTrigger("Hit");
+            int amount = Mathf.FloorToInt(GetScaledDamage(damage, spellType));
+            if (magicType == MagicType.Holy) ally.Heal(amount);
+            else ally.TakeSpellDamage(amount);
+            return true;
+        }
+
         IEnumerator DestoryCounter()
         {
             yield return new WaitForSeconds(0.5f);
@@ -152,7 +209,9 @@ namespace Combat.Spells
 
         public static float GetBaseDamage(int damage, MagicType spellType) => GetScaledDamage(damage, spellType);
 
-        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(10 + 5 * (MapMove.StagePosition / 2), spellType);
+        static int CurrentPlayerDamage => Mathf.FloorToInt(PlayerUpgrades.SpellBaseDamage
+            * (Player.PlayerInt() != null ? FriendlyElementalStatus.AttackMultiplier(Player.PlayerInt()) : 1f));
+        public static float GetCurrentBaseDamage(MagicType spellType) => GetBaseDamage(CurrentPlayerDamage, spellType);
 
     }
 
