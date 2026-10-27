@@ -30,44 +30,17 @@ namespace Combat.UI
 
         public Transform GetTutorialTarget()
         {
-            foreach (SelectableObject selectable in allSelectableObjects)
-                if (selectable != null && selectable.gameObject.activeInHierarchy
-                    && selectable.CompareTag("Enemy") && selectable.GetSelectable())
-                    return selectable.transform;
+            if (!IsAwaitingTarget) return null;
+            foreach (GameObject enemyObject in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                Enemy enemy = enemyObject.GetComponent<Enemy>();
+                if (enemy != null && enemy.IsAlive) return enemyObject.transform;
+            }
             return null;
         }
 
         public List<GameObject> spellCards = new List<GameObject>();
         public List<GameObject> magicTypeCards = new List<GameObject>();
-
-        private List<SelectableObject> allSelectableObjects = new List<SelectableObject>();
-
-        void InitSelectableObjectList()
-        {
-            allSelectableObjects.Clear();
-
-            GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject gameObject in gameObjects)
-            {
-                allSelectableObjects.Add(gameObject.GetComponent<SelectableObject>());
-            }
-            foreach (GameObject allyObject in GameObject.FindGameObjectsWithTag("Ally"))
-            {
-                AllySlime ally = allyObject.GetComponent<AllySlime>();
-                SelectableObject selectable = allyObject.GetComponent<SelectableObject>();
-                if (ally != null && ally.IsAlive && selectable != null) allSelectableObjects.Add(selectable);
-            }
-            allSelectableObjects.Add(GameObject.FindGameObjectWithTag("Me").GetComponent<SelectableObject>());
-        }
-
-        void SetAllSelectable(bool selectable)
-        {
-            foreach (SelectableObject gameObject in allSelectableObjects)
-            {
-                if (gameObject == null) continue;
-                gameObject.SetSelectable(selectable);
-            }
-        }
 
         [SerializeField] MagicAffinityTable magicAffinityTable;
         public MagicAffinityTable AffinityTable => magicAffinityTable;
@@ -190,8 +163,6 @@ namespace Combat.UI
                 yield break;
             }
 
-            InitSelectableObjectList();
-            SetAllSelectable(true);
             IsAwaitingTarget = true;
 
             // 대상을 고를 때까지 기다린다. 0.01초는 프레임 간격보다 짧아 어차피 한
@@ -222,8 +193,6 @@ namespace Combat.UI
             {
                 explode.GetComponent<Explode>().Run(magicType, target, magicAffinityTable);
             }
-            SetAllSelectable(false);
-
             target = null;
             isCasting = false;
         }
@@ -245,8 +214,7 @@ namespace Combat.UI
 
         public void SetTarget(SelectableObject selectableObject)
         {
-            if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null
-                || !selectableObject.GetSelectable()) return;
+            if (InteractionLock.IsLocked || !IsAwaitingTarget || selectableObject == null) return;
             Enemy selectedEnemy = selectableObject.GetComponent<Enemy>();
             if (selectedEnemy != null && !selectedEnemy.IsAlive) return;
             AllySlime selectedAlly = selectableObject.GetComponent<AllySlime>();
